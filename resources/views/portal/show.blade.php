@@ -39,7 +39,7 @@
     <div class="portal-metrics">
         <article class="card"><span>Turmas ativas</span><strong>{{ $student->enrollments->where('status', 'active')->count() }}</strong></article>
         <article class="card"><span>Presenças recentes</span><strong>{{ $attendanceSummary['present'] }}/{{ $attendanceSummary['total'] }}</strong></article>
-        <article class="card"><span>Cobranças em aberto</span><strong>{{ $student->charges->whereIn('status', ['open', 'overdue'])->count() }}</strong></article>
+        <article class="card"><span>Cobranças em aberto</span><strong>{{ $student->charges->whereIn('status', \App\Models\Charge::OUTSTANDING_STATUSES)->count() }}</strong></article>
         <article class="card"><span>Documentos</span><strong>{{ $student->documents->count() }}</strong></article>
     </div>
     @if($canEditContact)

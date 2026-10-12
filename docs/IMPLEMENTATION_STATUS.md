@@ -70,8 +70,8 @@ O backlog pós-roadmap prioriza início e navegação por perfil, chamada móvel
 
 ## Evidência técnica vigente
 
-- SQLite: 133 testes, 710 asserções, 1 teste condicionado ao ambiente ignorado;
-- MySQL 8.4: 133 testes, 715 asserções;
+- SQLite: 136 testes, 722 asserções, 1 teste condicionado ao ambiente ignorado (12/10/2026, após correções financeiras);
+- MySQL 8.4: executado pelo CI do GitHub Actions a cada push (`.github/workflows/ci.yml`); última contagem manual: 133 testes, 715 asserções;
 - Pint aprovado;
 - migrations 1–23 aplicadas em homologação Docker;
 - detalhes da última consolidação em `SPRINT21_VALIDATION.md`.

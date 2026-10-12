@@ -173,6 +173,9 @@ class FinancialBenefitService
             if ($locked->status !== $expected) {
                 throw ValidationException::withMessages(['decision' => 'Esta solicitação não está na etapa esperada.']);
             }
+            if ($data['decision'] === 'approved' && $locked->requested_by === $user->id) {
+                throw ValidationException::withMessages(['decision' => 'Quem solicitou a gratuidade não pode aprová-la.']);
+            }
             if ($stage === 'association' && $locked->dojo_approver_id === $user->id) {
                 throw ValidationException::withMessages(['decision' => 'A aprovação da associação deve ser feita por outra pessoa.']);
             }

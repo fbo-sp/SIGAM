@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-10-12 — Correções financeiras
+
+- cobrança parcialmente paga com vencimento passado passa a contar como vencida no resumo da central de cobranças, na inadimplência dos dashboards e na notificação `charge.overdue`; o resumo "em aberto" passa a incluir parciais ainda no prazo;
+- escopos `Charge::pastDue()` e `Charge::notYetDue()` centralizam a regra; o status `partially_paid` não muda;
+- o portal conta cobranças parciais entre as cobranças em aberto;
+- quem solicitou uma gratuidade não pode mais aprová-la na etapa do dojo nem na da associação;
+- testes de regressão em `PaymentsAndReportsTest` e `FinancialPlansAndBenefitsTest`.
+
 ## 2026-10-11 — Backlog de experiência móvel
 
 - backlog canônico pós-roadmap criado em `IMPROVEMENT_BACKLOG.md`;
