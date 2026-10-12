@@ -148,7 +148,6 @@ Route::middleware(['auth', 'active', 'association.context'])->group(function ():
         Route::get('/alunos', [StudentController::class, 'index'])->middleware('permission:student.view')->name('students.index');
         Route::get('/alunos/novo', [DirectRegistrationController::class, 'createAssociationStudent'])->middleware('permission:student.manage')->name('students.create');
         Route::post('/alunos/cadastro-direto', [DirectRegistrationController::class, 'storeAssociationStudent'])->middleware('permission:student.manage')->name('students.direct.store');
-        Route::post('/alunos', [StudentController::class, 'store'])->middleware('permission:student.manage')->name('students.store');
         Route::get('/alunos/{student}', [StudentController::class, 'show'])->middleware('permission:student.view')->name('students.show');
         Route::post('/alunos/{student}/responsaveis', [StudentController::class, 'addGuardian'])->middleware('permission:student.manage')->name('students.guardians.store');
         Route::post('/alunos/{student}/ativar', [StudentController::class, 'activate'])->middleware('permission:student.manage')->name('students.activate');
@@ -156,7 +155,6 @@ Route::middleware(['auth', 'active', 'association.context'])->group(function ():
         Route::get('/professores', [TeacherController::class, 'index'])->middleware('permission:teacher.view')->name('teachers.index');
         Route::get('/professores/novo', [DirectRegistrationController::class, 'createTeacher'])->middleware('permission:teacher.manage')->name('teachers.create');
         Route::post('/professores/cadastro-direto', [DirectRegistrationController::class, 'storeTeacher'])->middleware('permission:teacher.manage')->name('teachers.direct.store');
-        Route::post('/professores', [TeacherController::class, 'store'])->middleware('permission:teacher.manage')->name('teachers.store');
         Route::post('/professores/{teacher}/convites', [TeacherInvitationManagementController::class, 'store'])->middleware('permission:teacher.manage')->name('teacher-invitations.store');
         Route::post('/professores/convites/{invitation}/reenviar', [TeacherInvitationManagementController::class, 'reissue'])->middleware('permission:teacher.manage')->name('teacher-invitations.reissue');
         Route::post('/professores/convites/{invitation}/revogar', [TeacherInvitationManagementController::class, 'revoke'])->middleware('permission:teacher.manage')->name('teacher-invitations.revoke');

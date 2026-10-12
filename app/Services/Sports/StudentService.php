@@ -3,10 +3,7 @@
 namespace App\Services\Sports;
 
 use App\Models\Association;
-use App\Models\Dojo;
-use App\Models\MartialArt;
 use App\Models\Person;
-use App\Models\Rank;
 use App\Models\Student;
 use App\Models\StudentGuardian;
 use App\Services\AuditService;
@@ -16,36 +13,6 @@ use Illuminate\Validation\ValidationException;
 class StudentService
 {
     public function __construct(private readonly AuditService $audit) {}
-
-    public function create(Association $association, array $data): Student
-    {
-        $this->assertAssociationActive($association);
-
-        return DB::transaction(function () use ($association, $data): Student {
-            $person = $this->personInAssociation($association, (int) $data['person_id']);
-            $dojo = Dojo::query()->where('association_id', $association->id)->whereKey($data['primary_dojo_id'])->where('status', 'active')->firstOrFail();
-            $martialArt = MartialArt::query()->where(fn ($query) => $query->whereNull('association_id')->orWhere('association_id', $association->id))->whereKey($data['martial_art_id'])->where('status', 'active')->firstOrFail();
-            $rank = isset($data['rank_id']) ? Rank::query()->where('martial_art_id', $martialArt->id)->whereKey($data['rank_id'])->firstOrFail() : null;
-
-            $student = Student::query()->create([
-                'association_id' => $association->id,
-                'person_id' => $person->id,
-                'registration_number' => $data['registration_number'],
-                'entry_date' => $data['entry_date'],
-                'primary_dojo_id' => $dojo->id,
-                'status' => 'pre_registration',
-                'notes' => $data['notes'] ?? null,
-            ]);
-            $student->dojoHistory()->create(['dojo_id' => $dojo->id, 'start_date' => $data['entry_date'], 'is_primary' => true]);
-            $studentMartialArt = $student->martialArts()->create(['martial_art_id' => $martialArt->id, 'start_date' => $data['entry_date'], 'status' => 'active', 'current_rank_id' => $rank?->id]);
-            if ($rank !== null) {
-                $studentMartialArt->rankHistory()->create(['rank_id' => $rank->id, 'achieved_at' => $data['entry_date'], 'source_type' => 'initial_registration']);
-            }
-            $this->audit->record('student.created', 'created', $student, null, ['status' => $student->status, 'registration_number' => $student->registration_number]);
-
-            return $student;
-        });
-    }
 
     public function addGuardian(Association $association, Student $student, array $data): StudentGuardian
     {

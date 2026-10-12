@@ -43,7 +43,7 @@ Os papéis semeados são `dojo_operator` (`scope_type=dojo`) e `dojo_teacher` (`
 - models `DojoRoleAssignment`, `TeacherAssociationMembership` e `DojoTeacherAssignment`;
 - `OperationalScope` compõe autorização e consultas restritas;
 - `AccessAdministration` usa transações, locks, valida associação/período e audita `dojo_access.granted|revoked` e `dojo_teacher.linked|revoked`;
-- `TeacherService` cria idempotentemente o vínculo institucional no cadastro associativo;
+- `DirectRegistrationService::registerTeacher` cria idempotentemente o vínculo institucional no cadastro associativo;
 - comandos `sigam:access:backfill-teachers` e `sigam:operation:audit-origins` são simulação por padrão.
 
 ## Testes de manutenção

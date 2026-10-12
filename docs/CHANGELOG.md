@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-10-12 — Remoção das rotas antigas de cadastro
+
+- removidas as rotas `POST /associacoes/{association}/alunos` e `POST /associacoes/{association}/professores`, que criavam aluno e professor sem idempotência, sem as validações do cadastro direto e, no caso do professor, podiam sobrescrever o registro de um perfil compartilhado;
+- removido o código sem uso que as atendia: `StudentController::create/store`, `TeacherController::create/store`, `StudentService::create`, `TeacherService`, `StudentRequest`, `TeacherRequest` e as views `sports/students/create` e `sports/teachers/create`;
+- a criação de aluno e professor passa a existir somente pelo cadastro direto; os testes de `SportsRegistryTest` foram migrados para ele e um novo teste garante que as rotas antigas não aceitam mais envios.
+
 ## 2026-10-12 — Usuários e perfis da associação
 
 - perfis fixos Gestor da Associação, Financeiro da Associação e Portal do aluno/responsável (`AssociationRoleCatalog`, `AssociationRolesSeeder`);
