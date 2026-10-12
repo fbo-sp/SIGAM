@@ -1,0 +1,11 @@
+@extends('layouts.app')
+@section('title', 'Usuários — '.$association->trade_name)
+@section('content')
+@php($statusLabels = ['active' => 'Ativa', 'pending' => 'Aguardando ativação', 'inactive' => 'Inativa'])
+<nav class="breadcrumbs" aria-label="Navegação estrutural"><a href="{{ route('associations.show', $association) }}">{{ $association->trade_name }}</a><span>/</span><span>Usuários</span></nav>
+<div class="page-heading"><div><span class="eyebrow">Segurança</span><h1>Usuários</h1><p>Contas de acesso da associação e seus perfis. Acessos por dojo ficam em @if(auth()->user()->hasPermission('role.manage', $association->id))<a href="{{ route('dojo-access.index', $association) }}">Acessos aos dojos</a>@else Acessos aos dojos @endif.</p></div><a class="button button-primary" href="{{ route('associations.users.create', $association) }}">Nova conta</a></div>
+<form class="card filter-bar" method="get"><div class="field filter-grow"><label for="q">Nome ou e-mail</label><input id="q" name="q" value="{{ request('q') }}" placeholder="Digite parte do nome ou do e-mail"></div><div class="field"><label for="status">Situação</label><select id="status" name="status"><option value="">Todas</option>@foreach($statusLabels as $value => $label)<option value="{{ $value }}" @selected(request('status') === $value)>{{ $label }}</option>@endforeach</select></div><button class="button button-secondary" type="submit">Buscar</button></form>
+<div class="toolbar"><span>{{ $users->total() }} {{ $users->total() === 1 ? 'conta encontrada' : 'contas encontradas' }}</span></div>
+<div class="card list-card">@forelse($users as $account)<a class="list-row" href="{{ route('associations.users.show', [$association, $account]) }}"><span><strong>{{ $account->name }}</strong><small>{{ $account->email }} · {{ $account->roles->map(fn ($role) => $definitions[$role->code]['name'] ?? $role->name)->join(', ') ?: 'Sem perfil associativo' }}</small></span><span class="status-pill {{ $account->status !== 'active' ? 'status-inactive' : '' }}">{{ $statusLabels[$account->status] ?? $account->status }}</span></a>@empty<div class="empty-state"><h2>Nenhuma conta encontrada</h2><p>Confira a busca ou crie uma nova conta.</p></div>@endforelse</div>
+{{ $users->links() }}
+@endsection

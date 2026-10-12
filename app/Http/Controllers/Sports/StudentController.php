@@ -41,7 +41,7 @@ class StudentController extends Controller
     public function show(Request $request, Association $association, Student $student): View
     {
         $this->ensureStudent($association, $student);
-        $student->load(['person', 'primaryDojo', 'guardians.person', 'martialArts.martialArt', 'martialArts.currentRank', 'martialArts.rankHistory.rank', 'federationMemberships.federation', 'federationMemberships.martialArt', 'federationMemberships.rank', 'championshipRegistrations.championship', 'championshipRegistrations.result', 'championshipRegistrations.charge']);
+        $student->load(['person.user', 'primaryDojo', 'guardians.person.user', 'martialArts.martialArt', 'martialArts.currentRank', 'martialArts.rankHistory.rank', 'federationMemberships.federation', 'federationMemberships.martialArt', 'federationMemberships.rank', 'championshipRegistrations.championship', 'championshipRegistrations.result', 'championshipRegistrations.charge']);
         $guardianCandidates = Person::query()->whereHas('associations', fn ($query) => $query->whereKey($association->id))->whereKeyNot($student->person_id)->orderBy('full_name')->limit(200)->get();
         $historyFilters = ['year' => $request->filled('history_year') ? $request->integer('history_year') : null, 'martial_art_id' => $request->filled('history_martial_art_id') ? $request->integer('history_martial_art_id') : null];
 

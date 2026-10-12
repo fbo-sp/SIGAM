@@ -19,6 +19,7 @@
     <article class="card quick-card is-muted"><span class="status-pill">Próxima etapa</span><h2>Perfis esportivos</h2><p>Alunos, responsáveis e professores serão vinculados às pessoas.</p></article>
 </section>
 <section class="section-block"><div class="section-heading"><h2>Cadastros esportivos</h2><p>Configure as modalidades antes de criar alunos e professores.</p></div><div class="action-list">
+    @if(auth()->user()->hasPermission('user.manage', $association->id))<a href="{{ route('associations.users.index', $association) }}"><strong>Usuários</strong><span>Contas, perfis, convites e portal</span></a>@endif
     @if(auth()->user()->hasPermission('role.manage', $association->id))<a href="{{ route('dojo-access.index', $association) }}"><strong>Acessos aos dojos</strong><span>Conceda acesso por função, unidade e período</span></a>@endif
     @if(auth()->user()->hasPermission('martial_art.view', $association->id))<a href="{{ route('associations.catalog.index', $association) }}"><strong>Modalidades e graduações</strong><span>Faixas, níveis e regras configuráveis</span></a>@endif
     @if(auth()->user()->hasPermission('student.view', $association->id))<a href="{{ route('associations.students.index', $association) }}"><strong>Alunos</strong><span>Pré-cadastro, responsáveis e ativação</span></a>@endif

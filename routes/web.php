@@ -4,7 +4,9 @@ use App\Http\Controllers\Access\DojoAccessController;
 use App\Http\Controllers\Access\DojoChampionshipController;
 use App\Http\Controllers\Access\DojoFinanceController;
 use App\Http\Controllers\Access\OperationalController;
+use App\Http\Controllers\Access\UserController;
 use App\Http\Controllers\Attendance\AttendanceController;
+use App\Http\Controllers\Auth\AccountActivationController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
@@ -44,6 +46,11 @@ Route::middleware('guest')->group(function (): void {
     Route::post('/redefinir-senha', [ResetPasswordController::class, 'store'])->middleware('throttle:5,1')->name('password.update');
 });
 
+Route::middleware('guest')->group(function (): void {
+    Route::get('/ativar-conta/{token}', [AccountActivationController::class, 'show'])->middleware('throttle:30,1')->name('account-activation.show');
+    Route::post('/ativar-conta/{token}', [AccountActivationController::class, 'store'])->middleware('throttle:5,1')->name('account-activation.store');
+});
+
 Route::get('/convites/professor/{token}', [TeacherInvitationController::class, 'show'])->middleware('throttle:30,1')->name('teacher-invitations.show');
 Route::post('/convites/professor/{token}/aceitar', [TeacherInvitationController::class, 'accept'])->middleware('throttle:5,1')->name('teacher-invitations.accept');
 Route::post('/convites/professor/{token}/recusar', [TeacherInvitationController::class, 'decline'])->middleware('throttle:5,1')->name('teacher-invitations.decline');
@@ -73,6 +80,17 @@ Route::middleware(['auth', 'active', 'association.context'])->group(function ():
         Route::get('/campeonatos/{championship}', [DojoChampionshipController::class, 'show'])->name('championships.show');
         Route::post('/campeonatos/{championship}/inscricoes', [DojoChampionshipController::class, 'register'])->name('championships.register');
     });
+    Route::prefix('/associacoes/{association}/usuarios')->name('associations.users.')->middleware('permission:user.manage')
+        ->controller(UserController::class)->group(function (): void {
+            Route::get('/', 'index')->name('index');
+            Route::get('/novo', 'create')->name('create');
+            Route::post('/', 'store')->name('store');
+            Route::get('/{user}', 'show')->name('show');
+            Route::put('/{user}/perfis', 'updateRoles')->name('roles.update');
+            Route::post('/{user}/inativar', 'deactivate')->name('deactivate');
+            Route::post('/{user}/reativar', 'reactivate')->name('reactivate');
+            Route::post('/{user}/reenviar-convite', 'resendInvitation')->middleware('throttle:5,1')->name('invitation.resend');
+        });
     Route::prefix('/associacoes/{association}/acessos-dojos')->name('dojo-access.')->middleware('permission:role.manage')
         ->controller(DojoAccessController::class)->group(function (): void {
             Route::get('/', 'index')->name('index');

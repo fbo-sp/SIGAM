@@ -9,6 +9,7 @@ Este documento é um índice de manutenção. `routes/web.php`, `routes/console.
 | `/entrar` | criação de sessão | CSRF, throttle, regeneração e mensagem genérica |
 | `/recuperar-senha`, `/redefinir-senha` | recuperação não enumerável | throttle e token descartável |
 | `/convites/professor/{token}` | visualizar, aceitar ou recusar convite | throttle, GET sem mutação e POST transacional |
+| `/ativar-conta/{token}` | definir a senha de conta criada pela tela de usuários | somente visitante, throttle, token de 72 h de uso único e conta pendente |
 | `/up` | saúde do processo | não substitui teste de banco/SMTP |
 
 ## Rotas autenticadas por contexto
@@ -22,6 +23,7 @@ Este documento é um índice de manutenção. `routes/web.php`, `routes/console.
 | `/portal` | `PortalController` | titularidade ou responsabilidade vigente |
 | `/meus-dojos` | `OperationalController` | dojos concedidos ou administração associativa |
 | `/operacao/dojos/{dojo}` | `OperationalController`, `DirectRegistrationController`, `DojoFinanceController`, `DojoChampionshipController` | `OperationalScope`; recursos sempre filtrados pelo dojo |
+| `/associacoes/{association}/usuarios` | `Access\UserController` | `user.manage` associativo; regras em `UserAccountService` |
 | `/associacoes/{association}/acessos-dojos` | `DojoAccessController` | `role.manage` associativo |
 | `/associacoes/{association}` | controllers administrativos | permissão associativa específica + validação do recurso |
 

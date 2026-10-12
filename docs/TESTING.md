@@ -37,6 +37,8 @@ Na consolidação pós-Sprint 21, a suíte registrou 133 testes: SQLite com 710 
 
 Em 12/10/2026, as correções de cobrança parcial vencida e de segregação na gratuidade elevaram a suíte para 136 testes (SQLite: 722 assertions). Desde então, o CI do GitHub Actions executa Pint, SQLite, MySQL 8.4 e `composer audit` em cada push e pull request.
 
+Com a tela de usuários, a suíte chegou a 144 testes (SQLite: 816 assertions). `UserAccountManagementTest` cobre: convite sem senha conhecida, ativação e expiração do link, reenvio que invalida o link anterior, permissão e escopo, bloqueio de escalonamento, último gestor, conta do administrador do sistema, inativação que derruba sessões e liberação do portal pela ficha do aluno.
+
 ## Hardening e recuperação
 
 `ProductionHardeningTest` cobre regressões de segurança, preservação de bootstrap, concorrência intercalada de entrega, revogação de acesso a notificações e preflight negativo. Inclui ensaio sequencial de dashboard com mil alunos; resultados variam por máquina. Não confundir com teste de carga HTTP concorrente.
