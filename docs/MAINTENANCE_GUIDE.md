@@ -51,7 +51,7 @@ Se um plano antigo disser “futuro”, mas código, teste e documentação do m
 | Identidade | `Auth/*Controller` | middleware ativo/associação, `TeacherInvitationService` | `AuthenticationTest`, `TeacherInvitationTest` |
 | Organização/Pessoas | `Organization/*`, `People/*` | `AssociationService`, `DojoService`, `PersonService` | `OrganizationManagementTest`, `PersonManagementTest` |
 | Acesso local | `Access/OperationalController`, `DojoAccessController` | `OperationalScope`, `AccessAdministration` | `OperationalContextAuthorizationTest` |
-| Cadastro esportivo | `Sports/*Controller` | `CatalogService`, `StudentService`, `TeacherService` | `SportsRegistryTest` |
+| Cadastro esportivo | `Sports/*Controller` | `CatalogService`, `DirectRegistrationService`, `StudentService` | `SportsRegistryTest`, `DirectRegistrationTest` |
 | Cadastro direto | `DirectRegistrationController` | `DirectRegistrationService`, `DocumentService` | `DirectRegistrationTest` |
 | Turmas/aulas | `ClassGroupController`, `AttendanceController` | `ClassGroupService`, `FutureSessionMaintainer`, `AttendanceService`, `SessionVisitorService` | `ClassManagementTest`, `AttendanceTest`, `Sprint18Test`, `Sprint20Test` |
 | Importação | `AssistedImportController` | `AssistedImportService` e serviços canônicos dos módulos | `AssistedImportTest` |

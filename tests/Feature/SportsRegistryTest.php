@@ -12,6 +12,7 @@ use App\Models\Role;
 use App\Models\Student;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Str;
 use Tests\TestCase;
 
 class SportsRegistryTest extends TestCase
@@ -89,16 +90,30 @@ class SportsRegistryTest extends TestCase
     {
         [$association, $user, $person, $dojo, $martialArt, $rank] = $this->sportsContext(['student.view', 'student.manage'], '2000-01-01');
 
-        $this->actingAs($user)->post(route('associations.students.store', $association), [
-            'person_id' => $person->id, 'registration_number' => 'alu-001', 'entry_date' => '2026-08-30', 'primary_dojo_id' => $dojo->id, 'martial_art_id' => $martialArt->id, 'rank_id' => $rank->id,
+        $this->actingAs($user)->post(route('associations.students.direct.store', $association), [
+            'idempotency_key' => (string) Str::uuid(), 'person_mode' => 'existing', 'person_id' => $person->id, 'confirm_existing_person' => '1',
+            'entry_date' => '2026-08-30', 'dojo_id' => $dojo->id, 'martial_art_id' => $martialArt->id, 'rank_id' => $rank->id,
+            'guardian_mode' => 'none', 'finish_action' => 'pre_registration',
         ])->assertSessionHasNoErrors();
 
         $student = Student::query()->firstOrFail();
         $this->assertSame('pre_registration', $student->status);
-        $this->assertSame('ALU-001', $student->registration_number);
         $this->assertDatabaseHas('student_dojo_history', ['student_id' => $student->id, 'dojo_id' => $dojo->id, 'is_primary' => true]);
         $this->assertDatabaseHas('student_martial_arts', ['student_id' => $student->id, 'martial_art_id' => $martialArt->id, 'current_rank_id' => $rank->id]);
         $this->assertDatabaseHas('student_rank_history', ['rank_id' => $rank->id, 'source_type' => 'initial_registration']);
+    }
+
+    public function test_legacy_store_routes_no_longer_accept_registrations(): void
+    {
+        [$association, $user, $person, $dojo, $martialArt] = $this->sportsContext(['student.manage', 'teacher.manage'], '2000-01-01');
+
+        $this->actingAs($user)->post('/associacoes/'.$association->id.'/alunos', [
+            'person_id' => $person->id, 'registration_number' => 'A1', 'entry_date' => '2026-08-30', 'primary_dojo_id' => $dojo->id, 'martial_art_id' => $martialArt->id,
+        ])->assertStatus(405);
+        $this->post('/associacoes/'.$association->id.'/professores', ['person_id' => $person->id, 'martial_art_id' => $martialArt->id])->assertStatus(405);
+
+        $this->assertDatabaseCount('students', 0);
+        $this->assertDatabaseCount('teacher_profiles', 0);
     }
 
     public function test_minor_requires_legal_guardian_before_activation(): void
@@ -126,8 +141,10 @@ class SportsRegistryTest extends TestCase
         $other = Association::query()->create(['legal_name' => 'Outra', 'trade_name' => 'Outra']);
         $otherDojo = Dojo::query()->create(['association_id' => $other->id, 'code' => 'OUT', 'name' => 'Outro']);
 
-        $this->actingAs($user)->post(route('associations.students.store', $association), [
-            'person_id' => $person->id, 'registration_number' => 'A2', 'entry_date' => '2026-08-30', 'primary_dojo_id' => $otherDojo->id, 'martial_art_id' => $martialArt->id,
+        $this->actingAs($user)->post(route('associations.students.direct.store', $association), [
+            'idempotency_key' => (string) Str::uuid(), 'person_mode' => 'existing', 'person_id' => $person->id, 'confirm_existing_person' => '1',
+            'entry_date' => '2026-08-30', 'dojo_id' => $otherDojo->id, 'martial_art_id' => $martialArt->id,
+            'guardian_mode' => 'none', 'finish_action' => 'pre_registration',
         ])->assertNotFound();
         $this->assertDatabaseCount('students', 0);
     }
@@ -136,12 +153,15 @@ class SportsRegistryTest extends TestCase
     {
         [$association, $user, $person, , $martialArt, $rank] = $this->sportsContext(['teacher.view', 'teacher.manage'], '1990-01-01');
 
-        $this->actingAs($user)->post(route('associations.teachers.store', $association), [
-            'person_id' => $person->id, 'registration_number' => 'PROF-1', 'martial_art_id' => $martialArt->id, 'rank_id' => $rank->id,
+        $this->actingAs($user)->post(route('associations.teachers.direct.store', $association), [
+            'idempotency_key' => (string) Str::uuid(), 'person_mode' => 'existing', 'person_id' => $person->id, 'confirm_existing_person' => '1',
+            'martial_art_id' => $martialArt->id, 'rank_id' => $rank->id,
         ])->assertSessionHasNoErrors();
 
-        $this->assertDatabaseHas('teacher_profiles', ['person_id' => $person->id, 'registration_number' => 'PROF-1']);
+        $this->assertDatabaseHas('teacher_profiles', ['person_id' => $person->id]);
+        $this->assertDatabaseCount('people', 1);
         $this->assertDatabaseHas('teacher_martial_arts', ['martial_art_id' => $martialArt->id, 'rank_id' => $rank->id]);
+        $this->assertDatabaseHas('teacher_association_memberships', ['association_id' => $association->id]);
     }
 
     private function sportsContext(array $permissions, string $birthDate): array

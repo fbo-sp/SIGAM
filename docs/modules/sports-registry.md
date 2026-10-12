@@ -10,7 +10,7 @@ O módulo transforma uma pessoa nova ou existente em aluno ou professor sem dupl
 - `student.view|manage`: alunos e responsáveis da associação;
 - `teacher.view|manage`: professores vinculados por pessoa à associação.
 
-Todas as rotas são aninhadas em `Association`. Controllers validam que os recursos pertencem à associação; serviços revalidam pessoa, dojo, modalidade e graduação antes de escrever. Registros globais de modalidade (`association_id = NULL`) podem ser usados, mas não editados por gestor associativo.
+Aluno e professor são criados somente pelo cadastro direto (`/alunos/cadastro-direto` e `/professores/cadastro-direto` na associação, ou `/operacao/dojos/{dojo}/alunos` no dojo). As rotas antigas `POST /associacoes/{association}/alunos` e `POST /associacoes/{association}/professores` foram removidas em 12/10/2026 porque gravavam sem idempotência nem as validações do cadastro direto. Todas as rotas são aninhadas em `Association`. Controllers validam que os recursos pertencem à associação; serviços revalidam pessoa, dojo, modalidade e graduação antes de escrever. Registros globais de modalidade (`association_id = NULL`) podem ser usados, mas não editados por gestor associativo.
 
 ## Entidades e invariantes
 
@@ -46,7 +46,7 @@ Quando `associations.requires_minor_guardian = true`, ativação de menor de 18 
 - models: `MartialArt`, `Rank`, `Student*`, `Teacher*`;
 - requests: `app/Http/Requests/Sports`;
 - controllers: `app/Http/Controllers/Sports`;
-- serviços transacionais: `CatalogService`, `StudentService`, `TeacherService`;
+- serviços transacionais: `CatalogService`, `DirectRegistrationService` (criação de aluno e professor) e `StudentService` (responsáveis e ativação);
 - catálogo opcional de templates: `app/Support/Sports/RankTemplateCatalog.php` e `resources/data/rank-templates.json`;
 - views: `resources/views/sports`;
 - comportamento progressivo do formulário: `public/js/martial-art-templates.js`;
