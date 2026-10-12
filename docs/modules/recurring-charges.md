@@ -41,6 +41,8 @@ Alterar plano, desconto, gratuidade ou configurações depois da geração não 
 
 `OverdueChargeService` altera apenas `open`. Registros pagos, parciais, cancelados ou isentos nunca são afetados pelo job de vencimento.
 
+O status de uma cobrança parcial continua `partially_paid`, porque descreve o pagamento. O atraso é derivado do vencimento: os escopos `Charge::pastDue()` (saldo positivo, status `open`/`overdue`/`partially_paid` e vencimento anterior à referência) e `Charge::notYetDue()` (saldo positivo, `open`/`partially_paid`, ainda no prazo) alimentam o resumo da central de cobranças, a inadimplência dos dashboards e a notificação `charge.overdue`. Assim, uma cobrança parcialmente paga e vencida aparece como vencida, com o saldo restante.
+
 ## Operação
 
 - `php artisan sigam:charges:generate --competence=AAAA-MM [--association=ID]`;

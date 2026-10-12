@@ -21,10 +21,10 @@ class ChargeController extends Controller
         $base = Charge::query()->where('association_id', $association->id);
         $charges = (clone $base)->with(['student.person', 'dojo'])->when($request->filled('status'), fn ($query) => $query->where('status', $request->string('status')))->when($request->filled('student_id'), fn ($query) => $query->where('student_id', $request->integer('student_id')))->when($request->filled('competence'), fn ($query) => $query->whereDate('competence', $request->string('competence').'-01'))->orderBy('due_date')->orderBy('id')->paginate(30)->withQueryString();
         $summary = [
-            'open_count' => (clone $base)->where('status', 'open')->count(),
-            'open_balance' => (string) (clone $base)->where('status', 'open')->sum('balance_amount'),
-            'overdue_count' => (clone $base)->where('status', 'overdue')->count(),
-            'overdue_balance' => (string) (clone $base)->where('status', 'overdue')->sum('balance_amount'),
+            'open_count' => (clone $base)->notYetDue()->count(),
+            'open_balance' => (string) (clone $base)->notYetDue()->sum('balance_amount'),
+            'overdue_count' => (clone $base)->pastDue()->count(),
+            'overdue_balance' => (string) (clone $base)->pastDue()->sum('balance_amount'),
         ];
         $students = Student::query()->where('association_id', $association->id)->with('person')->orderBy('registration_number')->get();
         $jobRuns = ScheduledJobRun::query()->whereIn('job_name', ['GenerateRecurringCharges', 'MarkOverdueCharges'])->latest('id')->limit(6)->get();

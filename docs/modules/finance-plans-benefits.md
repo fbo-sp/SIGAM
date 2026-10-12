@@ -13,7 +13,7 @@ O módulo financeiro configura regras de vencimento, planos, vínculos de alunos
 - plano restrito a dojo ou modalidade só aceita aluno compatível;
 - descontos possuem início e fim e não se sobrepõem no mesmo vínculo;
 - por padrão, solicitante e aprovador do desconto são pessoas diferentes; a associação pode desativar essa aprovação;
-- gratuidade exige aprovação do dojo e depois da associação, por usuários distintos;
+- gratuidade exige aprovação do dojo e depois da associação, por usuários distintos; quem solicitou não pode aprovar nenhuma das etapas (pode apenas recusar);
 - serviços usam transação, `lockForUpdate`, validação de associação e auditoria com dados minimizados.
 
 ## Vencimento — D-06

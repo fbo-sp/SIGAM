@@ -90,6 +90,36 @@ class FinancialPlansAndBenefitsTest extends TestCase
         $this->assertSame($gratuity->id, $simulation['gratuity_request_id']);
     }
 
+    public function test_gratuity_requester_cannot_approve_own_request_at_any_stage(): void
+    {
+        [$association, $student, $dojo] = $this->context();
+        $requester = $this->user($association, ['gratuity.request', 'gratuity.approve_dojo', 'gratuity.approve_association']);
+        $dojoApprover = $this->user($association, ['gratuity.approve_dojo']);
+        $service = app(FinancialBenefitService::class);
+        $plan = $service->createPlan($association, $this->planData('120.00'));
+        $service->assignPlan($association, $this->linkData($student, $plan->id));
+        $this->actingAs($requester);
+        $gratuity = $service->requestGratuity($association, $requester, ['student_id' => $student->id, 'dojo_id' => $dojo->id, 'reason' => 'Projeto social', 'justification' => 'Participação comprovada no projeto social.', 'start_date' => '2026-01-01', 'end_date' => '2026-12-31']);
+
+        try {
+            $service->decideDojo($association, $gratuity, $requester, ['decision' => 'approved']);
+            $this->fail('O solicitante não pode aprovar a etapa do dojo.');
+        } catch (ValidationException) {
+            $this->assertSame('awaiting_dojo', $gratuity->fresh()->status);
+        }
+
+        $this->actingAs($dojoApprover);
+        $service->decideDojo($association, $gratuity, $dojoApprover, ['decision' => 'approved']);
+        $this->actingAs($requester);
+        try {
+            $service->decideAssociation($association, $gratuity, $requester, ['decision' => 'approved']);
+            $this->fail('O solicitante não pode aprovar a etapa da associação.');
+        } catch (ValidationException) {
+            $this->assertSame('awaiting_association', $gratuity->fresh()->status);
+            $this->assertNull($gratuity->fresh()->association_approver_id);
+        }
+    }
+
     public function test_due_day_is_clamped_and_weekend_policy_is_applied(): void
     {
         [$association, $student] = $this->context();
