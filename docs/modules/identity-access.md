@@ -15,6 +15,14 @@ Autenticar contas, bloquear usuários inativos, definir associação atual e ver
 
 Não há cadastro público de usuário. O administrador inicial é criado por variáveis de ambiente durante o seed. Professores recebem conta exclusivamente por convite associativo: conta nova permanece pendente até definir a própria senha e aceitar; conta existente confirma sua senha sem perder papéis. Consulte `teacher-invitations.md` e ADR-008.
 
+## Contas criadas pela tela de usuários
+
+Quem tem `user.manage` abre **Usuários** na associação, escolhe uma pessoa ativa da associação que ainda não tem conta, informa o e-mail e marca os perfis fixos (ver `RBAC.md`). A conta nasce `pending`, com senha aleatória que ninguém conhece, e a pessoa recebe `AccountActivationMail` com link de 72 horas (broker `activations` em `config/auth.php`, mesma tabela `password_reset_tokens`). Em `/ativar-conta/{token}` a pessoa define a senha; só então a conta passa a `active` e `email_verified_at` é preenchido. Reenviar o convite invalida o link anterior. Se o SMTP falhar, a conta fica pendente, a falha é auditada e o gestor usa **Reenviar convite**.
+
+O botão **Liberar portal** na ficha do aluno (para o aluno e para cada responsável) abre o mesmo formulário com a pessoa e o perfil Portal já escolhidos. O que o portal mostra continua decidido por `PortalAccessService`.
+
+Inativar uma conta encerra as sessões abertas e descarta tokens de senha. Reativar devolve `active` a quem já entrou ou confirmou o e-mail; quem nunca ativou volta a `pending` e precisa de novo convite.
+
 ## Estados e escopo
 
 - `users.status = pending`: conta provisionada, mas sem autenticação até o aceite válido;
@@ -37,10 +45,11 @@ Recuperação de senha sempre responde de forma genérica. Tokens são temporár
 - sessão/recuperação: `app/Http/Controllers/Auth/`, requests em `app/Http/Requests/Auth/` e rotas públicas em `routes/web.php`;
 - autorização: `app/Http/Middleware/EnsureUserIsActive.php`, `ResolveAssociationContext.php`, `RequirePermission.php` e model `User`;
 - convites: `TeacherInvitationService`, `TeacherInvitationDeliveryService` e `teacher-invitations.md`;
-- bootstrap: `database/seeders/DatabaseSeeder.php` e `OperationalRolesSeeder.php`;
-- regressão: `AuthenticationTest`, `AssociationScopeTest`, `TeacherInvitationTest` e `OperationalContextAuthorizationTest`.
+- contas e perfis da associação: `UserAccountService`, `AssociationRoleCatalog`, `Access\UserController`, `Auth\AccountActivationController`, views em `resources/views/users/`;
+- bootstrap: `database/seeders/DatabaseSeeder.php`, `OperationalRolesSeeder.php` e `AssociationRolesSeeder.php`;
+- regressão: `AuthenticationTest`, `AssociationScopeTest`, `TeacherInvitationTest`, `OperationalContextAuthorizationTest` e `UserAccountManagementTest`.
 
 ## Invariantes de manutenção
 
-Nunca crie senha conhecida pelo gestor para professor, nunca use mensagem de recuperação para enumerar contas e nunca trate associação/papel vindo do request como autorização. Toda nova permissão exige seeder idempotente, middleware/serviço, casos positivo e negativo, tentativa fora do escopo e atualização de `RBAC.md`.
+Nunca crie senha conhecida pelo gestor para professor ou qualquer outra conta, nunca use mensagem de recuperação para enumerar contas e nunca trate associação/papel vindo do request como autorização. Toda nova permissão exige seeder idempotente, middleware/serviço, casos positivo e negativo, tentativa fora do escopo e atualização de `RBAC.md`.
 

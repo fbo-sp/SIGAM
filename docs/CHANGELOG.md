@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-10-12 — Usuários e perfis da associação
+
+- perfis fixos Gestor da Associação, Financeiro da Associação e Portal do aluno/responsável (`AssociationRoleCatalog`, `AssociationRolesSeeder`);
+- tela **Usuários** em `/associacoes/{association}/usuarios` (permissão `user.manage`) com lista, busca, situação, ficha, troca de perfis, inativação, reativação e reenvio de convite;
+- conta criada a partir de uma pessoa do cadastro central e ativada por convite de 72 horas em `/ativar-conta/{token}`, sem senha padrão;
+- botão **Liberar portal** na ficha do aluno para o aluno e cada responsável;
+- regras no serviço: sem escalonamento de perfil, sempre um gestor ativo, conta do administrador do sistema protegida, sem autoinativação, sessões encerradas ao inativar e auditoria `user_account.*`;
+- documentação de RBAC, identidade, rotas, guia do usuário, estado e testes atualizada.
+
 ## 2026-10-12 — Controle de versão, CI e dependências
 
 - projeto versionado no GitHub (`fbo-sp/SIGAM`) com workflow de CI: Pint, testes em SQLite, testes em MySQL 8.4 e `composer audit`;

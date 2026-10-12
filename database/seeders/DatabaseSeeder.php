@@ -85,6 +85,7 @@ class DatabaseSeeder extends Seeder
         $administrator->permissions()->sync($permissions->pluck('id'));
 
         $this->call(OperationalRolesSeeder::class);
+        $this->call(AssociationRolesSeeder::class);
 
         foreach (NotificationCatalog::templates() as $eventType => [$subject, $body]) {
             foreach (['internal', 'email'] as $channel) {

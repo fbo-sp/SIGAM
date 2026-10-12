@@ -17,7 +17,7 @@ Melhorias posteriores não fazem parte do estado implementado apenas por estarem
 | Área | Estado implementado |
 |---|---|
 | Identidade | login, logout, conta ativa/inativa, recuperação de senha, administrador inicial por seed e convite seguro de professor |
-| RBAC | papéis globais/associativos e concessões locais por dojo; escopo revalidado no backend |
+| RBAC | papéis globais/associativos, perfis fixos da associação (gestor, financeiro, portal) com tela de usuários e convite por e-mail, e concessões locais por dojo; escopo revalidado no backend |
 | Organização | associações, dojos, pessoas centrais, normalização, busca, inativação e CSV seguro |
 | Cadastro esportivo | modalidades, graduações, templates opcionais, alunos, responsáveis, professores, vínculos multi-dojo e históricos |
 | Cadastro direto | aluno/responsável/documento no contexto do dojo e professor/convite no contexto da associação |

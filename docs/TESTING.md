@@ -35,6 +35,8 @@ O serviço usa exclusivamente o banco `sigam_test`; `RefreshDatabase` recria as 
 
 Na consolidação pós-Sprint 21, a suíte registrou 133 testes: SQLite com 710 assertions e uma omissão condicionada ao ambiente; MySQL com 715 assertions; Pint sem divergências. Esses números são referência histórica, não substituem nova execução após qualquer alteração. A evidência detalhada fica em `SPRINT21_VALIDATION.md`.
 
+`UserAccountManagementTest` cobre a tela de usuários: convite sem senha conhecida, ativação e expiração do link, reenvio que invalida o link anterior, permissão e escopo, bloqueio de escalonamento, último gestor, conta do administrador do sistema, inativação que derruba sessões e liberação do portal pela ficha do aluno.
+
 ## Hardening e recuperação
 
 `ProductionHardeningTest` cobre regressões de segurança, preservação de bootstrap, concorrência intercalada de entrega, revogação de acesso a notificações e preflight negativo. Inclui ensaio sequencial de dashboard com mil alunos; resultados variam por máquina. Não confundir com teste de carga HTTP concorrente.

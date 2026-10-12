@@ -36,6 +36,10 @@ Revise o resumo: linhas prontas podem seguir; “Revisar” pede sua confirmaç�
 
 Ao criar a turma, marque todos os dias da semana, informe o horário comum e escolha manter 8 próximas aulas (recomendado) ou 4. O sistema já cria essas aulas e repõe as datas automaticamente. Ative **Usar horários diferentes por dia** somente se necessário. Para mudar uma turma existente, abra **Alterar agenda completa**, confira as próximas aulas mostradas e escolha uma data futura. O sistema preserva aulas realizadas e informa quantas futuras foram criadas, canceladas ou mantidas. Use **Atualizar próximas aulas** se precisar conferir a reposição naquele momento; reduzir de 8 para 4 não apaga datas já preparadas.
 
+## Usuários e perfis — gestores
+
+Na associação, abra **Usuários** para ver as contas, buscar por nome ou e-mail e filtrar pela situação. Em **Nova conta**, escolha a pessoa do cadastro, confira o e-mail e marque os perfis: Gestor da Associação, Financeiro da Associação ou Portal do aluno/responsável. A pessoa recebe um e-mail para criar a própria senha; o link vale 72 horas. Na ficha da conta é possível trocar perfis, reenviar o convite, inativar ou reativar. O sistema não deixa a associação sem gestor e não permite conceder perfil com mais poder do que o seu. Para liberar o portal, use **Liberar portal** na ficha do aluno, ao lado do aluno ou de cada responsável.
+
 ## Acessos e equipe — gestores
 
 O gestor da associação abre a associação e **Acessos aos dojos** para escolher conta, função, unidade e período. Revogar preserva histórico e não afeta outra concessão. O gestor do dojo abre **Professores** e escolhe apenas quem já está cadastrado pela associação. Vincular à equipe não cria login nem envia convite.

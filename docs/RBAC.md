@@ -20,6 +20,27 @@ Autorização exige simultaneamente autenticação, usuário ativo, permissão e
 
 Toda nova rota protegida deve possuir teste de permissão positiva, ausência de permissão e tentativa fora do escopo.
 
+## Perfis fixos da associação e tela de usuários
+
+`App\Support\Access\AssociationRoleCatalog` define três papéis globais (`association_id` nulo) de escopo `association`, atribuídos em `user_roles` sempre com a associação no pivot:
+
+| Código | Nome | Permissões |
+|---|---|---|
+| `association_manager` | Gestor da Associação | todas as permissões cadastradas, exceto as pessoais (`portal.access`, `dashboard.teacher`) |
+| `association_finance` | Financeiro da Associação | visão de associação/dojos/pessoas/alunos, planos, descontos, gratuidades (pedido e aprovação associativa), cobranças, pagamentos, estornos, relatórios financeiros e dashboard da associação |
+| `portal_user` | Portal do aluno/responsável | somente `portal.access` |
+
+O seeder `AssociationRolesSeeder` e o próprio serviço criam ou completam esses papéis sem remover permissões. Não existe editor livre de permissões: mudar um perfil exige alterar o catálogo, este documento e os testes.
+
+A tela `/associacoes/{association}/usuarios` exige `user.manage` e é servida por `UserAccountService`, que aplica:
+
+- conta da mesma associação do ator (ou ator sem associação, como o administrador do sistema); conta de outra associação responde 404;
+- ninguém concede, retira, inativa ou reativa perfil com permissões que não possui na associação. Permissões pessoais (`portal.access`, `dashboard.teacher`) não contam, por isso quem administra usuários pode liberar o portal;
+- a associação mantém pelo menos um gestor ativo; a verificação roda sob lock da associação;
+- contas com papel `system` não são alteradas pela tela;
+- ninguém inativa a própria conta; inativar apaga as sessões abertas e tokens de senha da conta;
+- toda alteração gera `audit_logs` (`user_account.*`).
+
 ## Organização e pessoas
 
 As permissões `dojo.view` e `dojo.manage` complementam as permissões de associação e pessoa. Rotas aninhadas resolvem o escopo pela associação da URL, e controllers confirmam a pertença do dojo/pessoa. Criar uma associação exige `association.manage` em papel global; a mesma permissão em papel associativo permite somente editar a associação correspondente.
