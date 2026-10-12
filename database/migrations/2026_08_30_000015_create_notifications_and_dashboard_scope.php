@@ -32,7 +32,7 @@ return new class extends Migration
             $table->string('event_type', 100)->index();
             $table->string('idempotency_key', 190);
             $table->json('context');
-            $table->timestamp('occurred_at');
+            $table->dateTime('occurred_at');
             $table->timestamps();
             $table->unique(['association_id', 'idempotency_key'], 'notification_event_idempotency_unique');
         });
@@ -50,7 +50,7 @@ return new class extends Migration
             $table->text('body');
             $table->string('status', 30)->index();
             $table->unsignedTinyInteger('attempt_count')->default(0);
-            $table->timestamp('scheduled_at')->index();
+            $table->dateTime('scheduled_at')->index();
             $table->timestamp('last_attempt_at')->nullable();
             $table->timestamp('sent_at')->nullable();
             $table->timestamp('read_at')->nullable();

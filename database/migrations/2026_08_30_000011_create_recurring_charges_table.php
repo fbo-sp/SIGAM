@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('source_id')->nullable();
             $table->string('description', 255);
             $table->date('competence');
-            $table->timestamp('issued_at');
+            $table->dateTime('issued_at');
             $table->date('due_date');
             $table->decimal('original_amount', 12, 2);
             $table->decimal('discount_amount', 12, 2)->default(0);

@@ -57,7 +57,7 @@ return new class extends Migration
             $table->date('start_date');
             $table->date('end_date');
             $table->foreignId('requested_by')->constrained('users')->restrictOnDelete();
-            $table->timestamp('requested_at');
+            $table->dateTime('requested_at');
             $table->foreignId('approved_by')->nullable()->constrained('users')->restrictOnDelete();
             $table->timestamp('approved_at')->nullable();
             $table->text('decision_notes')->nullable();
@@ -76,7 +76,7 @@ return new class extends Migration
             $table->date('start_date');
             $table->date('end_date');
             $table->foreignId('requested_by')->constrained('users')->restrictOnDelete();
-            $table->timestamp('requested_at');
+            $table->dateTime('requested_at');
             $table->foreignId('dojo_approver_id')->nullable()->constrained('users')->restrictOnDelete();
             $table->string('dojo_decision', 20)->nullable();
             $table->timestamp('dojo_decision_at')->nullable();

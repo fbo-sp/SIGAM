@@ -26,7 +26,7 @@ return new class extends Migration
             $table->timestamp('accepted_at')->nullable();
             $table->timestamp('declined_at')->nullable();
             $table->timestamp('revoked_at')->nullable();
-            $table->timestamp('expires_at')->index();
+            $table->dateTime('expires_at')->index();
             $table->string('error_message', 500)->nullable();
             $table->foreignId('invited_by_user_id')->constrained('users')->restrictOnDelete();
             $table->timestamps();

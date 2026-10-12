@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('student_id')->constrained()->restrictOnDelete();
             $table->string('status', 30)->default('authorized')->index();
             $table->foreignId('authorized_by_user_id')->constrained('users')->restrictOnDelete();
-            $table->timestamp('authorized_at');
+            $table->dateTime('authorized_at');
             $table->foreignId('revoked_by_user_id')->nullable()->constrained('users')->restrictOnDelete();
             $table->timestamp('revoked_at')->nullable();
             $table->string('revoke_reason', 500)->nullable();

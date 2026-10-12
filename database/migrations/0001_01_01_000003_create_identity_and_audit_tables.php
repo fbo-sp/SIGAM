@@ -95,7 +95,7 @@ return new class extends Migration
         Schema::create('scheduled_job_runs', function (Blueprint $table) {
             $table->id();
             $table->string('job_name', 120)->index();
-            $table->timestamp('started_at');
+            $table->dateTime('started_at');
             $table->timestamp('finished_at')->nullable();
             $table->string('status', 30)->index();
             $table->unsignedInteger('processed_count')->default(0);
