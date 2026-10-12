@@ -38,11 +38,16 @@ jobs:
       - run: php artisan test
 
   test-mysql:
-    name: Testes (MySQL 8.4)
+    name: Testes (MySQL ${{ matrix.mysql }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # 8.4 é o alvo documentado; 5.7 é a versão da hospedagem HostGator.
+        mysql: ['8.4', '5.7']
     services:
       mysql:
-        image: mysql:8.4
+        image: mysql:${{ matrix.mysql }}
         env:
           MYSQL_ROOT_PASSWORD: ci_root
           MYSQL_DATABASE: sigam_test
