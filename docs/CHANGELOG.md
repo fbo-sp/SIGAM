@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-10-12 — Compatibilidade com MySQL 5.7 (HostGator)
+
+- CI passa a rodar a suíte também em MySQL 5.7, a versão da hospedagem prevista;
+- 13 datas obrigatórias de negócio (como `payments.posted_at`, `championships.registration_open_at/close_at`, `charges.issued_at` e `teacher_invitations.expires_at`) passam de `TIMESTAMP` para `DATETIME` nas migrations. No MySQL 5.7 a criação de `championships` falhava, e as demais colunas seriam reescritas com a hora atual a cada atualização da linha;
+- alteração feita nas migrations originais porque ainda não há banco de produção; bancos de desenvolvimento existentes continuam compatíveis;
+- README, deploy, banco e testes atualizados.
+
 ## 2026-10-12 — Remoção das rotas antigas de cadastro
 
 - removidas as rotas `POST /associacoes/{association}/alunos` e `POST /associacoes/{association}/professores`, que criavam aluno e professor sem idempotência, sem as validações do cadastro direto e, no caso do professor, podiam sobrescrever o registro de um perfil compartilhado;

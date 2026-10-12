@@ -147,3 +147,7 @@ Antes da produção, revisar retenção, backup/restore e os requisitos legais d
 `import_batches` pertence simultaneamente à associação, ao dojo e ao usuário que enviou o arquivo. A unicidade `(association_id, dojo_id, import_type, file_hash)` impede replay do mesmo conteúdo no mesmo fluxo. O caminho aponta para o disco privado; `file_deleted_at` registra a aplicação da retenção sem remover o histórico.
 
 `import_rows` pertence ao lote, tem linha e hash, payload bruto/normalizado em JSON e referências técnicas opcionais do resultado. A unicidade por lote/linha e os estados persistidos sustentam retomada. `initial_status` preserva o aviso da prévia quando `status` avança para `processed`. Não há FK polimórfica de resultado: a validade é garantida pelo serviço e o histórico não bloqueia retenção dos cadastros de domínio.
+
+## Compatibilidade com MySQL 5.7
+
+A hospedagem prevista usa MySQL 5.7 (Percona). Nessa versão, com `explicit_defaults_for_timestamp` desligado (padrão), uma coluna `TIMESTAMP NOT NULL` recebe `DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP` ou um default inválido. Por isso, datas obrigatórias de negócio usam `dateTime()` nas migrations, e `timestamp()` fica restrito a colunas anuláveis (`created_at`, `updated_at`, `deleted_at` e similares). Bancos de desenvolvimento criados antes de 12/10/2026 mantêm `TIMESTAMP` nessas colunas, o que é equivalente em MySQL 8. O CI executa a suíte em MySQL 8.4 e 5.7.

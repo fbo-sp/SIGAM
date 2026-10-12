@@ -55,9 +55,9 @@ A aplicação fica em `http://localhost:8080`, o capturador de e-mail em `http:/
 
 ## Produção
 
-**NO-GO até aprovação do [checklist de release](docs/RELEASE_CHECKLIST.md).** Consulte as [evidências de validação](docs/RELEASE_VALIDATION.md), o [procedimento de publicação](docs/DEPLOYMENT.md) e o [guia rápido dos usuários](docs/USER_GUIDE.md). Docker local saudável não representa aceite de produção. MySQL 8.4 foi testado; outro banco/versão exige suíte específica.
+**NO-GO até aprovação do [checklist de release](docs/RELEASE_CHECKLIST.md).** Consulte as [evidências de validação](docs/RELEASE_VALIDATION.md), o [procedimento de publicação](docs/DEPLOYMENT.md) e o [guia rápido dos usuários](docs/USER_GUIDE.md). Docker local saudável não representa aceite de produção. MySQL 8.4 e MySQL 5.7 (versão da hospedagem prevista) são testados no CI; outro banco/versão exige suíte específica.
 
-Produção requer Linux, HTTPS, PHP 8.2+, MySQL 8/MariaDB equivalente, filesystem privado, cron e SMTP. Redis, Docker, worker persistente e Node.js não são requisitos de produção. O document root deve apontar para `public/`.
+Produção requer Linux, HTTPS, PHP 8.4 (exigido pelo `composer.lock` atual), MySQL 5.7+/MariaDB equivalente, filesystem privado, cron e SMTP. Redis, Docker, worker persistente e Node.js não são requisitos de produção. O document root deve apontar para `public/`.
 
 ## Leitura obrigatória
 
