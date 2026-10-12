@@ -20,8 +20,8 @@ return new class extends Migration
             $table->string('location_name', 255);
             $table->date('start_date');
             $table->date('end_date');
-            $table->timestamp('registration_open_at');
-            $table->timestamp('registration_close_at');
+            $table->dateTime('registration_open_at');
+            $table->dateTime('registration_close_at');
             $table->longText('rules_text')->nullable();
             $table->decimal('default_fee', 12, 2)->default(0);
             $table->boolean('allow_competitor')->default(true);

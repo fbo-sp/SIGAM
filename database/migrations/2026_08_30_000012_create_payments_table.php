@@ -15,7 +15,7 @@ return new class extends Migration
             $table->uuid('idempotency_key');
             $table->char('request_hash', 64);
             $table->date('payment_date');
-            $table->timestamp('posted_at');
+            $table->dateTime('posted_at');
             $table->decimal('amount', 12, 2);
             $table->string('payment_method', 30);
             $table->string('reference', 255)->nullable();

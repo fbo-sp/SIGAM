@@ -37,7 +37,7 @@ return new class extends Migration
             $table->foreignId('class_session_id')->constrained()->restrictOnDelete();
             $table->foreignId('student_id')->constrained()->restrictOnDelete();
             $table->string('status', 30)->index();
-            $table->timestamp('recorded_at');
+            $table->dateTime('recorded_at');
             $table->foreignId('recorded_by_user_id')->constrained('users')->restrictOnDelete();
             $table->text('notes')->nullable();
             $table->timestamps();

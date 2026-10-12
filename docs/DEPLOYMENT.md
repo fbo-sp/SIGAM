@@ -5,7 +5,7 @@ Docker é apenas homologação. A aplicação não requer Redis, worker permanen
 ## Pré-requisitos
 
 - PHP compatível com `composer.lock` (mínimo declarado 8.2); verificar extensões com `composer check-platform-reqs --no-dev`, incluindo PDO MySQL, BCMath, mbstring, fileinfo e OpenSSL.
-- MySQL compatível, conta exclusiva e não root, TLS no site, acesso de administração protegido, cron por minuto e saída SMTP autenticada.
+- MySQL 5.7 ou superior (8.4 e 5.7 testados no CI), conta exclusiva e não root, TLS no site, acesso de administração protegido, cron por minuto e saída SMTP autenticada.
 - Raiz do domínio apontando **somente para `public/`**. Se a hospedagem não permitir essa separação, não publicar sem revisão específica.
 - `storage` e `bootstrap/cache` graváveis apenas pelo usuário necessário; sem permissões universais. Documentos, logs, backups, código e configuração fora da raiz pública. Não criar link público para documentos.
 - Responsável, janela, backup recuperável, release anterior e checklist aprovados.
