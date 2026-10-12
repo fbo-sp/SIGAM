@@ -36,7 +36,7 @@ class NotificationGenerator
                 $count++;
             }
         });
-        Charge::query()->where('association_id', $association->id)->where('status', 'overdue')->with('student.person')->each(function (Charge $charge) use ($association, &$count): void {
+        Charge::query()->where('association_id', $association->id)->pastDue()->with('student.person')->each(function (Charge $charge) use ($association, &$count): void {
             if ($charge->student) {
                 $this->publishStudent($association, $charge->student, 'charge.overdue', 'charge-overdue-'.$charge->id, $charge->description, $charge->due_date->format('d/m/Y'));
                 $count++;

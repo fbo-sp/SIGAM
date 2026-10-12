@@ -35,7 +35,9 @@ O serviço usa exclusivamente o banco `sigam_test`; `RefreshDatabase` recria as 
 
 Na consolidação pós-Sprint 21, a suíte registrou 133 testes: SQLite com 710 assertions e uma omissão condicionada ao ambiente; MySQL com 715 assertions; Pint sem divergências. Esses números são referência histórica, não substituem nova execução após qualquer alteração. A evidência detalhada fica em `SPRINT21_VALIDATION.md`.
 
-`UserAccountManagementTest` cobre a tela de usuários: convite sem senha conhecida, ativação e expiração do link, reenvio que invalida o link anterior, permissão e escopo, bloqueio de escalonamento, último gestor, conta do administrador do sistema, inativação que derruba sessões e liberação do portal pela ficha do aluno.
+Em 12/10/2026, as correções de cobrança parcial vencida e de segregação na gratuidade elevaram a suíte para 136 testes (SQLite: 722 assertions). Desde então, o CI do GitHub Actions executa Pint, SQLite, MySQL 8.4 e `composer audit` em cada push e pull request.
+
+Com a tela de usuários, a suíte chegou a 144 testes (SQLite: 816 assertions). `UserAccountManagementTest` cobre: convite sem senha conhecida, ativação e expiração do link, reenvio que invalida o link anterior, permissão e escopo, bloqueio de escalonamento, último gestor, conta do administrador do sistema, inativação que derruba sessões e liberação do portal pela ficha do aluno.
 
 ## Hardening e recuperação
 

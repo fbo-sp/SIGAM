@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Carbon\CarbonInterface;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -13,6 +15,25 @@ class Charge extends Model
     protected function casts(): array
     {
         return ['competence' => 'date', 'issued_at' => 'datetime', 'due_date' => 'date', 'original_amount' => 'decimal:2', 'discount_amount' => 'decimal:2', 'final_amount' => 'decimal:2', 'paid_amount' => 'decimal:2', 'balance_amount' => 'decimal:2', 'calculation_snapshot' => 'array', 'due_policy_snapshot' => 'array'];
+    }
+
+    public const OUTSTANDING_STATUSES = ['open', 'overdue', 'partially_paid'];
+
+    /**
+     * Cobranças com saldo e vencimento anterior à referência, inclusive as parcialmente pagas.
+     * O status `partially_paid` descreve o pagamento; o atraso é derivado do vencimento.
+     */
+    public function scopePastDue(Builder $query, ?CarbonInterface $referenceDate = null): Builder
+    {
+        return $query->whereIn('status', self::OUTSTANDING_STATUSES)->where('balance_amount', '>', 0)->whereDate('due_date', '<', $referenceDate ?? today());
+    }
+
+    /**
+     * Cobranças com saldo ainda dentro do prazo, inclusive as parcialmente pagas.
+     */
+    public function scopeNotYetDue(Builder $query, ?CarbonInterface $referenceDate = null): Builder
+    {
+        return $query->whereIn('status', ['open', 'partially_paid'])->where('balance_amount', '>', 0)->whereDate('due_date', '>=', $referenceDate ?? today());
     }
 
     public function association(): BelongsTo

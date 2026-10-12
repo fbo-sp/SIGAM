@@ -11,6 +11,7 @@ use App\Models\Role;
 use App\Models\Student;
 use App\Models\User;
 use App\Services\Finance\PaymentService;
+use App\Services\Notifications\NotificationGenerator;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -74,6 +75,34 @@ class PaymentsAndReportsTest extends TestCase
 
         $this->expectException(ValidationException::class);
         $service->reverse($association, $payment, $user, 'Tentativa repetida de estorno.');
+    }
+
+    public function test_partially_paid_charge_past_due_counts_as_overdue(): void
+    {
+        [$association, $charge, $user] = $this->context(today()->subDays(3)->format('Y-m-d'));
+        app(PaymentService::class)->post($association, $charge, $user, $this->payment((string) Str::uuid(), '30.00'));
+        $this->assertSame('partially_paid', $charge->fresh()->status);
+
+        $this->assertSame(1, Charge::query()->where('association_id', $association->id)->pastDue()->count());
+        $this->assertSame(0, Charge::query()->where('association_id', $association->id)->notYetDue()->count());
+        $this->assertSame(0, Charge::query()->where('association_id', $association->id)->pastDue(today()->subDays(4))->count());
+
+        $viewer = $this->user($association, ['charge.view']);
+        $this->actingAs($viewer)->get(route('associations.charges.index', $association))->assertOk()
+            ->assertViewHas('summary', fn (array $summary) => $summary['overdue_count'] === 1 && bccomp($summary['overdue_balance'], '70.00', 2) === 0 && $summary['open_count'] === 0);
+
+        app(NotificationGenerator::class)->generate($association->id);
+        $this->assertDatabaseHas('notification_events', ['association_id' => $association->id, 'event_type' => 'charge.overdue', 'idempotency_key' => 'charge-overdue-'.$charge->id]);
+    }
+
+    public function test_partially_paid_charge_within_term_counts_as_open(): void
+    {
+        [$association, $charge, $user] = $this->context(today()->addDays(10)->format('Y-m-d'));
+        app(PaymentService::class)->post($association, $charge, $user, $this->payment((string) Str::uuid(), '30.00'));
+
+        $viewer = $this->user($association, ['charge.view']);
+        $this->actingAs($viewer)->get(route('associations.charges.index', $association))->assertOk()
+            ->assertViewHas('summary', fn (array $summary) => $summary['open_count'] === 1 && bccomp($summary['open_balance'], '70.00', 2) === 0 && $summary['overdue_count'] === 0);
     }
 
     public function test_payment_routes_validate_scope_and_financial_report_exports_csv(): void

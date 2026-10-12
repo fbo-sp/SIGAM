@@ -55,7 +55,7 @@ Aulas separam `session.view`, `session.manage`, `attendance.manage` e `attendanc
 
 Documentos separam consulta de metadados (`document.view`), alterações (`document.manage`) e acesso ao conteúdo (`document.download`). Todas exigem também o escopo da associação da rota; conhecer um ID não concede acesso.
 
-Financeiro separa leitura/simulação (`finance.view`), configuração de planos (`finance.manage`), solicitação e aprovação de desconto e as duas etapas de gratuidade. Separação de função também é validada no domínio: permissão ampla não permite que o mesmo usuário realize as duas aprovações de uma gratuidade.
+Financeiro separa leitura/simulação (`finance.view`), configuração de planos (`finance.manage`), solicitação e aprovação de desconto e as duas etapas de gratuidade. Separação de função também é validada no domínio: permissão ampla não permite que o mesmo usuário realize as duas aprovações de uma gratuidade, nem que o solicitante aprove a própria solicitação em qualquer etapa.
 
 Cobranças usam `charge.view` para central/extrato e `charge.generate` para geração manual idempotente. Execuções pelo cron não possuem usuário e ficam identificadas por `scheduled_job_runs`; cada cobrança mantém auditoria da criação.
 
