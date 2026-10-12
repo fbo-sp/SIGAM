@@ -1,0 +1,61 @@
+# RBAC e escopo
+
+Permissões administrativas continuam associativas. A Sprint 15 adicionou concessões operacionais por dojo sem ampliar as rotas antigas. A matriz por campo dos cadastros compostos ainda deve ser concluída antes da produção; ver `RELEASE_CHECKLIST.md`.
+
+Autorização exige simultaneamente autenticação, usuário ativo, permissão e escopo. A associação do recurso nunca é aceita apenas porque veio no request.
+
+## Perfis iniciais
+
+- Administrador do Sistema;
+- Gestor da Associação;
+- Financeiro da Associação;
+- Responsável/Administrativo do Dojo;
+- Professor;
+- Aluno;
+- Responsável.
+
+## Fundação implementada
+
+`roles`, `permissions`, `role_permissions` e `user_roles` separam capacidade de escopo. Permissões globais são semeadas por código. O usuário comum começa associado a uma associação; papéis globais são reservados à administração do sistema.
+
+Toda nova rota protegida deve possuir teste de permissão positiva, ausência de permissão e tentativa fora do escopo.
+
+## Organização e pessoas
+
+As permissões `dojo.view` e `dojo.manage` complementam as permissões de associação e pessoa. Rotas aninhadas resolvem o escopo pela associação da URL, e controllers confirmam a pertença do dojo/pessoa. Criar uma associação exige `association.manage` em papel global; a mesma permissão em papel associativo permite somente editar a associação correspondente.
+
+Cadastro esportivo adiciona `martial_art.*`, `student.*` e `teacher.*`. Possuir acesso à pessoa não concede automaticamente acesso ao perfil esportivo; cada rota exige a permissão específica e o mesmo escopo de associação.
+
+Turmas separam leitura (`class.view`), configuração (`class.manage`) e matrícula (`enrollment.manage`). Isso permite que uma equipe administrativa matricule alunos sem alterar agenda ou professor.
+
+Aulas separam `session.view`, `session.manage`, `attendance.manage` e `attendance.reopen`. A permissão de reabrir é deliberadamente distinta da chamada comum.
+
+`visitor.manage` autoriza incluir ou revogar participação eventual. No contexto local, gestor do dojo ou professor designado ainda precisa de concessão, vínculo e acesso à aula validado por `OperationalScope`; conhecer matrícula ou ID não basta. A permissão não concede diretório, matrícula, cadastro, documentos ou financeiro.
+
+Documentos separam consulta de metadados (`document.view`), alterações (`document.manage`) e acesso ao conteúdo (`document.download`). Todas exigem também o escopo da associação da rota; conhecer um ID não concede acesso.
+
+Financeiro separa leitura/simulação (`finance.view`), configuração de planos (`finance.manage`), solicitação e aprovação de desconto e as duas etapas de gratuidade. Separação de função também é validada no domínio: permissão ampla não permite que o mesmo usuário realize as duas aprovações de uma gratuidade.
+
+Cobranças usam `charge.view` para central/extrato e `charge.generate` para geração manual idempotente. Execuções pelo cron não possuem usuário e ficam identificadas por `scheduled_job_runs`; cada cobrança mantém auditoria da criação.
+
+Pagamentos separam baixa (`payment.manage`) de estorno (`payment.reverse`). Relatórios e CSV exigem `finance.report`. Todas as consultas e escritas validam associação no middleware, controller e/ou serviço; o filtro de dojo também é restrito à associação atual.
+
+Federações usam `federation.view` para consulta/relatório e `federation.manage` para catálogo, filiação e upload federativo. Download continua exigindo `document.download`, mantendo separação entre visualizar metadados e acessar conteúdo privado.
+
+Campeonatos separam consulta (`championship.view`), configuração (`championship.manage`), inscrição (`championship.register`), decisão (`championship.approve`) e resultado (`championship.result`). Aprovar não concede baixa financeira, e registrar resultado não concede acesso automático à cobrança.
+
+O portal usa `portal.access`, mas essa permissão isolada não libera nenhum aluno. `PortalAccessService` exige a pessoa vinculada à conta e confirma titularidade ou responsabilidade vigente. Responsável não legal tem leitura, mas não altera contatos. Downloads usam a mesma relação e não concedem a permissão administrativa global `document.download`.
+
+Dashboards usam permissões exclusivas: `dashboard.association`, `dashboard.dojo` e `dashboard.teacher`. O dojo vem de `users.dojo_id` e o professor vem de `users.person_id → teacher_profiles`; parâmetros do request não ampliam a consulta. A caixa de notificações não exige permissão adicional porque todas as ações filtram obrigatoriamente `notifications.user_id` pela conta autenticada.
+
+Convites exigem `teacher.manage` associativo na rota e novamente no serviço. O papel técnico global `teacher_account`, anexado com o `association_id` do convite, contém somente `dashboard.teacher`. Ele não satisfaz permissões de cadastro, turma, chamada ou documentos. A autoridade do emissor é revalidada no aceite; perder a permissão torna o convite inutilizável.
+
+## Contexto operacional por dojo
+
+Papéis `dojo` e `teacher` existem somente em `dojo_role_assignments`; não entram em `user_roles` e não satisfazem `User::hasPermission`. O serviço `OperationalScope` exige concessão vigente para a unidade. Professor também exige os vínculos institucional/local e designação na aula. `users.dojo_id` não concede acesso.
+
+O gestor local com `student.manage` cadastra aluno somente no dojo concedido. `student.document.manage` permite anexar um arquivo privado durante esse cadastro, sem liberar central, listagem, download amplo ou rota associativa de documentos. Configuração associativa, relatórios/CSV centrais, manutenção institucional, decisão de inscrição, estorno e aprovação associativa de gratuidade continuam negados. Operações financeiras e inscrições liberadas na Sprint 21 existem exclusivamente nas rotas locais e com filtro persistido de origem. Matriz, estados e testes estão em `modules/operational-access.md`, `modules/direct-registration.md` e `modules/finance-plans-benefits.md`.
+
+`import.manage` apenas abre o mecanismo de planilha. Cada lote exige também `student.manage` ou `attendance.manage`; ambas as permissões e o dojo são revalidados no serviço. O papel local `dojo_operator` recebe a capacidade, mas o papel `dojo_teacher` não. A listagem de lotes é filtrada pelos dojos atualmente permitidos antes da paginação.
+
+Na Sprint 21, o papel local passou a receber `charge.view`, `student_plan.manage`, `payment.manage`, `gratuity.request`, `gratuity.approve_dojo`, `championship.view` e `championship.register`. Essas permissões só funcionam nas rotas `/operacao/dojos/{dojo}` porque `User::hasPermission` continua sem aceitar papel local nas rotas associativas. Consultas filtram `dojo_id` antes de carregar ou paginar; IDs enviados não escolhem associação, dojo, pessoa, graduação ou origem. Configurar planos, aprovar gratuidade pela associação, decidir inscrições, alterar campeonato, estornar e emitir relatórios seguem associativos.

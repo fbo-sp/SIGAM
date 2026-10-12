@@ -1,0 +1,114 @@
+name: sigam
+
+services:
+  db:
+    image: mysql:8.4.10
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${SIGAM_DB_DATABASE:-sigam}
+      MYSQL_USER: ${SIGAM_DB_USERNAME:-sigam}
+      MYSQL_PASSWORD: ${SIGAM_DB_PASSWORD:-sigam_local}
+      MYSQL_ROOT_PASSWORD: ${SIGAM_DB_ROOT_PASSWORD:-sigam_root_local}
+      TZ: America/Sao_Paulo
+    ports:
+      - "127.0.0.1:${SIGAM_DB_PORT:-3307}:3306"
+    volumes:
+      - sigam_mysql_data:/var/lib/mysql
+      - ./docker/mysql/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u$${MYSQL_USER} -p$${MYSQL_PASSWORD} --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+
+  app:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    restart: unless-stopped
+    environment:
+      APP_NAME: JUDOMA
+      APP_ENV: local
+      APP_DEBUG: "true"
+      APP_URL: http://localhost:${SIGAM_APP_PORT:-8080}
+      APP_TIMEZONE: America/Sao_Paulo
+      DB_CONNECTION: mysql
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: ${SIGAM_DB_DATABASE:-sigam}
+      DB_USERNAME: ${SIGAM_DB_USERNAME:-sigam}
+      DB_PASSWORD: ${SIGAM_DB_PASSWORD:-sigam_local}
+      CACHE_STORE: database
+      SESSION_DRIVER: database
+      QUEUE_CONNECTION: sync
+      MAIL_MAILER: smtp
+      MAIL_SCHEME: null
+      MAIL_HOST: mailpit
+      MAIL_PORT: 1025
+      MAIL_USERNAME: null
+      MAIL_PASSWORD: null
+      MAIL_FROM_ADDRESS: nao-responda@sigam.local
+      MAIL_FROM_NAME: JUDOMA local
+      RUN_MIGRATIONS: "true"
+      RUN_SEEDERS: "true"
+      SIGAM_ADMIN_NAME: ${SIGAM_ADMIN_NAME:-Administrador}
+      SIGAM_ADMIN_EMAIL: ${SIGAM_ADMIN_EMAIL:-admin@sigam.local}
+      SIGAM_ADMIN_PASSWORD: ${SIGAM_ADMIN_PASSWORD:-}
+    ports:
+      - "127.0.0.1:${SIGAM_APP_PORT:-8080}:80"
+    volumes:
+      - .:/var/www/html
+      - sigam_vendor:/var/www/html/vendor
+    depends_on:
+      db:
+        condition: service_healthy
+      mailpit:
+        condition: service_started
+    healthcheck:
+      test: ["CMD-SHELL", "curl --fail --silent http://127.0.0.1/up >/dev/null"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+
+  mailpit:
+    image: axllent/mailpit:v1.31.4
+    restart: unless-stopped
+    environment:
+      MP_MAX_MESSAGES: 500
+      TZ: America/Sao_Paulo
+    ports:
+      - "127.0.0.1:${SIGAM_MAILPIT_PORT:-8025}:8025"
+
+  test:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    profiles: ["test"]
+    environment:
+      APP_NAME: JUDOMA
+      APP_ENV: testing
+      APP_DEBUG: "false"
+      DB_CONNECTION: mysql
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: sigam_test
+      DB_USERNAME: root
+      DB_PASSWORD: ${SIGAM_DB_ROOT_PASSWORD:-sigam_root_local}
+      CACHE_STORE: array
+      SESSION_DRIVER: array
+      QUEUE_CONNECTION: sync
+      MAIL_MAILER: array
+      RUN_MIGRATIONS: "false"
+    volumes:
+      - .:/var/www/html
+      - sigam_vendor:/var/www/html/vendor
+    depends_on:
+      db:
+        condition: service_healthy
+    command: ["php", "vendor/bin/phpunit", "--configuration=phpunit.mysql.xml"]
+
+volumes:
+  sigam_mysql_data:
+  sigam_vendor:

@@ -1,0 +1,15 @@
+.git
+.idea
+.tools
+.vscode
+.env
+.phpunit.cache
+database/database.sqlite
+node_modules
+public/build
+storage/framework/cache/data/*
+storage/framework/sessions/*
+storage/framework/views/*
+storage/logs/*
+vendor
+

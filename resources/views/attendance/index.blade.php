@@ -1,0 +1,8 @@
+@extends('layouts.app')
+@section('title', 'Aulas e chamada — JUDOMA')
+@section('content')
+<nav class="breadcrumbs"><a href="{{ route('associations.show', $association) }}">{{ $association->trade_name }}</a><span>/</span><span>Aulas</span></nav>
+<div class="page-heading"><div><span class="eyebrow">Presença</span><h1>Aulas e chamada</h1><p>Selecione a data e abra a aula para registrar a presença.</p></div>@if(auth()->user()->hasPermission('import.manage', $association->id))<a class="button button-secondary" href="{{ route('associations.imports.index', $association) }}">Importar presenças</a>@endif</div>
+<form class="card filter-bar"><div class="field"><label for="date">Data</label><input type="date" id="date" name="date" value="{{ request('date', now()->format('Y-m-d')) }}"></div><button class="button button-secondary">Mostrar aulas</button></form>
+<div class="card list-card">@forelse($sessions as $session)<a class="list-row" href="{{ route('associations.attendance.show', [$association,$session]) }}"><span><strong>{{ $session->classGroup->name }}</strong><small>{{ $session->session_date->format('d/m/Y') }} · {{ substr($session->start_time,0,5) }} · {{ $session->classGroup->dojo->name }} · {{ $session->visitors_count }} visitante(s)</small></span><span class="status-pill {{ $session->attendance_state === 'closed' ? '' : 'status-inactive' }}">{{ $session->status === 'cancelled' ? 'Cancelada' : ($session->attendance_state === 'closed' ? 'Chamada fechada' : 'Chamada aberta') }}</span></a>@empty<div class="empty-state"><h2>Nenhuma aula encontrada</h2><p>Gere as aulas da agenda ou escolha outra data.</p></div>@endforelse</div>{{ $sessions->links() }}
+@endsection

@@ -1,0 +1,5 @@
+@extends('layouts.app')
+@section('title', 'Nova senha — JUDOMA')
+@section('content')
+<section class="auth-shell"><div class="auth-intro"><span class="eyebrow">Recuperação segura</span><h1>Crie uma nova senha</h1><p>Use pelo menos 12 caracteres, com letras e números.</p></div><form class="card form-stack" method="post" action="{{ route('password.update') }}">@csrf<input type="hidden" name="token" value="{{ $token }}"><div><label for="email">E-mail</label><input type="email" id="email" name="email" value="{{ old('email', $email) }}" autocomplete="email" required></div><div><label for="password">Nova senha</label><input type="password" id="password" name="password" autocomplete="new-password" minlength="12" required></div><div><label for="password_confirmation">Repita a nova senha</label><input type="password" id="password_confirmation" name="password_confirmation" autocomplete="new-password" required></div><button class="button button-primary button-block">Alterar senha</button></form></section>
+@endsection

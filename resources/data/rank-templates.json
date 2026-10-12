@@ -1,0 +1,87 @@
+{
+  "judo_cbj_2023": {
+    "label": "Judô — referência CBJ 2023",
+    "default_name": "Judô",
+    "description": "Judô com sequência de graduações baseada no regulamento nacional da CBJ.",
+    "summary": "22 graduações, da faixa branca ao 10º Dan. Idades e interstícios das graduações básicas e intermediárias já preenchidos.",
+    "review_notice": "Confirme com a federação as regras vigentes para Dans, outorga e homologação.",
+    "source_name": "Confederação Brasileira de Judô — Regulamento Nacional de Promoção e Outorga de Graus",
+    "source_url": "https://cbj.com.br/public/uploads/regulamentos_esportivos/arquivo_cbj_180223310123.pdf",
+    "ranks": [
+      {"name":"iniciante","display_name":"Faixa branca — iniciante","sort_order":1,"color_name":"Branca","minimum_age":null,"minimum_months":null,"status":"active"},
+      {"name":"11-kyu","display_name":"11º Kyū — branca/cinza","sort_order":2,"color_name":"Branca/Cinza","minimum_age":4,"minimum_months":3,"status":"active"},
+      {"name":"10-kyu","display_name":"10º Kyū — cinza","sort_order":3,"color_name":"Cinza","minimum_age":5,"minimum_months":3,"status":"active"},
+      {"name":"9-kyu","display_name":"9º Kyū — cinza/azul","sort_order":4,"color_name":"Cinza/Azul","minimum_age":6,"minimum_months":6,"status":"active"},
+      {"name":"8-kyu","display_name":"8º Kyū — azul","sort_order":5,"color_name":"Azul","minimum_age":7,"minimum_months":6,"status":"active"},
+      {"name":"7-kyu","display_name":"7º Kyū — azul/amarela","sort_order":6,"color_name":"Azul/Amarela","minimum_age":8,"minimum_months":6,"status":"active"},
+      {"name":"6-kyu","display_name":"6º Kyū — amarela","sort_order":7,"color_name":"Amarela","minimum_age":9,"minimum_months":6,"status":"active"},
+      {"name":"5-kyu","display_name":"5º Kyū — amarela/laranja","sort_order":8,"color_name":"Amarela/Laranja","minimum_age":10,"minimum_months":12,"status":"active"},
+      {"name":"4-kyu","display_name":"4º Kyū — laranja","sort_order":9,"color_name":"Laranja","minimum_age":11,"minimum_months":12,"status":"active"},
+      {"name":"3-kyu","display_name":"3º Kyū — verde","sort_order":10,"color_name":"Verde","minimum_age":12,"minimum_months":12,"status":"active"},
+      {"name":"2-kyu","display_name":"2º Kyū — roxa","sort_order":11,"color_name":"Roxa","minimum_age":13,"minimum_months":12,"status":"active"},
+      {"name":"1-kyu","display_name":"1º Kyū — marrom","sort_order":12,"color_name":"Marrom","minimum_age":14,"minimum_months":12,"status":"active"},
+      {"name":"1-dan","display_name":"1º Dan — faixa preta","sort_order":13,"color_name":"Preta","minimum_age":16,"minimum_months":null,"status":"active"},
+      {"name":"2-dan","display_name":"2º Dan — faixa preta","sort_order":14,"color_name":"Preta","minimum_age":null,"minimum_months":null,"status":"active"},
+      {"name":"3-dan","display_name":"3º Dan — faixa preta","sort_order":15,"color_name":"Preta","minimum_age":null,"minimum_months":null,"status":"active"},
+      {"name":"4-dan","display_name":"4º Dan — faixa preta","sort_order":16,"color_name":"Preta","minimum_age":null,"minimum_months":null,"status":"active"},
+      {"name":"5-dan","display_name":"5º Dan — faixa preta","sort_order":17,"color_name":"Preta","minimum_age":null,"minimum_months":null,"status":"active"},
+      {"name":"6-dan","display_name":"6º Dan — faixa vermelha e branca","sort_order":18,"color_name":"Vermelha/Branca","minimum_age":null,"minimum_months":null,"status":"active"},
+      {"name":"7-dan","display_name":"7º Dan — faixa vermelha e branca","sort_order":19,"color_name":"Vermelha/Branca","minimum_age":null,"minimum_months":null,"status":"active"},
+      {"name":"8-dan","display_name":"8º Dan — faixa vermelha e branca","sort_order":20,"color_name":"Vermelha/Branca","minimum_age":null,"minimum_months":null,"status":"active"},
+      {"name":"9-dan","display_name":"9º Dan — faixa vermelha","sort_order":21,"color_name":"Vermelha","minimum_age":null,"minimum_months":null,"status":"active"},
+      {"name":"10-dan","display_name":"10º Dan — faixa vermelha","sort_order":22,"color_name":"Vermelha","minimum_age":null,"minimum_months":null,"status":"active"}
+    ]
+  },
+  "bjj_adult_cbjj_2026": {
+    "label": "Jiu-Jitsu Brasileiro adulto — CBJJ/IBJJF 2026",
+    "default_name": "Jiu-Jitsu Brasileiro",
+    "description": "Jiu-Jitsu Brasileiro com sequência adulta baseada no sistema geral da CBJJ/IBJJF.",
+    "summary": "5 faixas na sequência adulta: branca, azul, roxa, marrom e preta.",
+    "review_notice": "Confirme períodos mínimos, exceções e regras por ano de nascimento antes de exames ou competições.",
+    "source_name": "CBJJ / IBJJF — Sistema geral de graduação",
+    "source_url": "https://cbjj.com.br/graduation-system",
+    "ranks": [
+      {"name":"branca","display_name":"Faixa branca","sort_order":1,"color_name":"Branca","minimum_age":null,"minimum_months":null,"status":"active"},
+      {"name":"azul","display_name":"Faixa azul","sort_order":2,"color_name":"Azul","minimum_age":16,"minimum_months":null,"status":"active"},
+      {"name":"roxa","display_name":"Faixa roxa","sort_order":3,"color_name":"Roxa","minimum_age":16,"minimum_months":null,"status":"active"},
+      {"name":"marrom","display_name":"Faixa marrom","sort_order":4,"color_name":"Marrom","minimum_age":18,"minimum_months":null,"status":"active"},
+      {"name":"preta","display_name":"Faixa preta","sort_order":5,"color_name":"Preta","minimum_age":18,"minimum_months":null,"status":"active"}
+    ]
+  },
+  "bjj_kids_cbjj_2026": {
+    "label": "Jiu-Jitsu Brasileiro infantil — CBJJ/IBJJF 2026",
+    "default_name": "Jiu-Jitsu Brasileiro Infantil",
+    "description": "Jiu-Jitsu Brasileiro com famílias de faixas usadas nas categorias infantis da CBJJ/IBJJF.",
+    "summary": "5 famílias de faixas infantis: branca, cinza, amarela, laranja e verde.",
+    "review_notice": "Este modelo simplifica os sistemas infantis de graus. Confirme o sistema mensal, trimestral ou trianual adotado pela academia.",
+    "source_name": "CBJJ / IBJJF — Sistema de graduação infantil",
+    "source_url": "https://cbjj.com.br/graduation-system",
+    "ranks": [
+      {"name":"branca-infantil","display_name":"Faixa branca infantil","sort_order":1,"color_name":"Branca","minimum_age":null,"minimum_months":null,"status":"active"},
+      {"name":"cinza-infantil","display_name":"Faixa cinza infantil","sort_order":2,"color_name":"Cinza","minimum_age":4,"minimum_months":null,"status":"active"},
+      {"name":"amarela-infantil","display_name":"Faixa amarela infantil","sort_order":3,"color_name":"Amarela","minimum_age":7,"minimum_months":null,"status":"active"},
+      {"name":"laranja-infantil","display_name":"Faixa laranja infantil","sort_order":4,"color_name":"Laranja","minimum_age":10,"minimum_months":null,"status":"active"},
+      {"name":"verde-infantil","display_name":"Faixa verde infantil","sort_order":5,"color_name":"Verde","minimum_age":13,"minimum_months":null,"status":"active"}
+    ]
+  },
+  "karate_shotokan_cbkd_2026": {
+    "label": "Karatê Shotokan — referência CBKD 2026",
+    "default_name": "Karatê Shotokan",
+    "description": "Karatê Shotokan com sequência de cores apresentada como exemplo pela CBKD.",
+    "summary": "9 graduações, da faixa branca ao 1º Dan, incluindo o 7º Kyū opcional.",
+    "review_notice": "As cores e os critérios variam conforme estilo, escola e federação. Revise antes de usar.",
+    "source_name": "Confederação Brasileira de Karatê-Dô — O caminho das faixas",
+    "source_url": "https://cbkdkaratebrasil.com.br/modalidades",
+    "ranks": [
+      {"name":"iniciante","display_name":"Faixa branca — iniciante","sort_order":1,"color_name":"Branca","minimum_age":null,"minimum_months":null,"status":"active"},
+      {"name":"7-kyu","display_name":"7º Kyū — cinza","sort_order":2,"color_name":"Cinza","minimum_age":null,"minimum_months":null,"status":"active"},
+      {"name":"6-kyu","display_name":"6º Kyū — amarela","sort_order":3,"color_name":"Amarela","minimum_age":null,"minimum_months":null,"status":"active"},
+      {"name":"5-kyu","display_name":"5º Kyū — vermelha","sort_order":4,"color_name":"Vermelha","minimum_age":null,"minimum_months":null,"status":"active"},
+      {"name":"4-kyu","display_name":"4º Kyū — laranja","sort_order":5,"color_name":"Laranja","minimum_age":null,"minimum_months":null,"status":"active"},
+      {"name":"3-kyu","display_name":"3º Kyū — verde","sort_order":6,"color_name":"Verde","minimum_age":null,"minimum_months":null,"status":"active"},
+      {"name":"2-kyu","display_name":"2º Kyū — roxa","sort_order":7,"color_name":"Roxa","minimum_age":null,"minimum_months":null,"status":"active"},
+      {"name":"1-kyu","display_name":"1º Kyū — marrom","sort_order":8,"color_name":"Marrom","minimum_age":null,"minimum_months":null,"status":"active"},
+      {"name":"1-dan","display_name":"1º Dan — faixa preta","sort_order":9,"color_name":"Preta","minimum_age":null,"minimum_months":null,"status":"active"}
+    ]
+  }
+}
