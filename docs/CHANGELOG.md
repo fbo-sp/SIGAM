@@ -8,6 +8,12 @@
 - quem solicitou uma gratuidade não pode mais aprová-la na etapa do dojo nem na da associação;
 - testes de regressão em `PaymentsAndReportsTest` e `FinancialPlansAndBenefitsTest`.
 
+## 2026-10-12 — Controle de versão, CI e dependências
+
+- projeto versionado no GitHub (`fbo-sp/SIGAM`) com workflow de CI: Pint, testes em SQLite, testes em MySQL 8.4 e `composer audit`;
+- CI executa em PHP 8.4, versão mínima exigida pelo `composer.lock` atual (pacotes Symfony 8.1 requerem PHP >= 8.4.1);
+- `laravel/framework` 12.68.0 → 12.69.3 e `league/commonmark` 2.10.0 → 2.10.3, com dependências, para corrigir alertas de segurança apontados pelo `composer audit`.
+
 ## 2026-10-11 — Backlog de experiência móvel
 
 - backlog canônico pós-roadmap criado em `IMPROVEMENT_BACKLOG.md`;
