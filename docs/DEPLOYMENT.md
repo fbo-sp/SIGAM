@@ -16,6 +16,15 @@ O operador configura segredos diretamente no painel/cofre, sem colar em chat ou 
 
 Não copiar valores ou credenciais locais do Docker. Não executar `composer setup` em produção: é um atalho de desenvolvimento e pode gerar chave/migrar automaticamente.
 
+## Pacote pronto (hospedagem sem Composer)
+
+O workflow `.github/workflows/release.yml` ("Pacote de publicação") gera `judoma-<versão>.zip` com o código e a pasta `vendor` já instalada (`composer install --no-dev --optimize-autoloader` em PHP 8.4), mais o arquivo `.sha256`. Ficam fora do pacote: `.env`, `.git`, `.github`, testes, Docker, scripts locais, `Especificação/`, arquivos de Node/Vite e conteúdo gerado em `storage`. O arquivo `VERSAO.txt` registra a versão e o commit.
+
+- Ao enviar uma tag `v*` (ex.: `v0.1.0`), o pacote é publicado na página de Releases do GitHub.
+- Pela aba Actions ("Run workflow"), o pacote fica disponível como artefato da execução, com versão `main-<commit>`.
+
+Com o pacote, o passo 2 abaixo se reduz a extrair o zip no diretório versionado; `composer check-platform-reqs` já roda no workflow. Na atualização, preservar `.env` e `storage/` do servidor.
+
 ## Sequência de release
 
 1. Preparar diretório versionado fora da raiz pública com código revisado e `composer.lock`. Registrar identificador e hashes do artefato, data, aprovador e versão de PHP/MySQL. Preservar configuração e armazenamento compartilhados.

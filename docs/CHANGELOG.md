@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-10-16 — Pacote de publicação
+
+- novo workflow "Pacote de publicação" (`.github/workflows/release.yml`) gera um zip com código e `vendor` de produção para hospedagem compartilhada sem Composer, com hash SHA-256 e `VERSAO.txt`;
+- tags `v*` publicam o pacote na página de Releases; a execução manual gera o pacote como artefato;
+- `.env`, testes, Docker, scripts e arquivos de desenvolvimento ficam fora do pacote;
+- `DEPLOYMENT.md` descreve o uso.
+
 ## 2026-10-12 — Compatibilidade com MySQL 5.7 (HostGator)
 
 - CI passa a rodar a suíte também em MySQL 5.7, a versão da hospedagem prevista;
