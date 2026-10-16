@@ -21,7 +21,8 @@ Não copiar valores ou credenciais locais do Docker. Não executar `composer set
 O workflow `.github/workflows/release.yml` ("Pacote de publicação") gera `judoma-<versão>.zip` com o código e a pasta `vendor` já instalada (`composer install --no-dev --optimize-autoloader` em PHP 8.4), mais o arquivo `.sha256`. Ficam fora do pacote: `.env`, `.git`, `.github`, testes, Docker, scripts locais, `Especificação/`, arquivos de Node/Vite e conteúdo gerado em `storage`. O arquivo `VERSAO.txt` registra a versão e o commit.
 
 - Ao enviar uma tag `v*` (ex.: `v0.1.0`), o pacote é publicado na página de Releases do GitHub.
-- Pela aba Actions ("Run workflow"), o pacote fica disponível como artefato da execução, com versão `main-<commit>`.
+- Pela aba Actions ("Run workflow"), informando a versão (ex.: `v0.1.0`), o workflow cria a tag e publica a Release no commit escolhido. Sem versão, o pacote fica só como artefato da execução, com nome `main-<commit>`.
+- Antes de compactar, o workflow confere que há `vendor/autoload.php`, que não há `.env`, testes nem dependências de desenvolvimento, e que `php artisan --version` funciona.
 
 Com o pacote, o passo 2 abaixo se reduz a extrair o zip no diretório versionado; `composer check-platform-reqs` já roda no workflow. Na atualização, preservar `.env` e `storage/` do servidor.
 

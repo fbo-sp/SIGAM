@@ -3,7 +3,8 @@
 ## 2026-10-16 — Pacote de publicação
 
 - novo workflow "Pacote de publicação" (`.github/workflows/release.yml`) gera um zip com código e `vendor` de produção para hospedagem compartilhada sem Composer, com hash SHA-256 e `VERSAO.txt`;
-- tags `v*` publicam o pacote na página de Releases; a execução manual gera o pacote como artefato;
+- tags `v*` publicam o pacote na página de Releases; a execução manual com o campo `versao` cria a tag e a Release, e sem ele gera só o artefato;
+- o workflow confere o pacote antes de compactar (autoload, ausência de `.env`, testes e dependências de desenvolvimento, `artisan` inicializando);
 - `.env`, testes, Docker, scripts e arquivos de desenvolvimento ficam fora do pacote;
 - `DEPLOYMENT.md` descreve o uso;
 - `symfony/yaml` atualizado de 8.1.5 para 8.1.9 (alerta CVE-2026-109413 apontado pelo `composer audit`).
