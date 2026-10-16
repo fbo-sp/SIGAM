@@ -6,6 +6,11 @@ on:
   push:
     tags: ['v*']
   workflow_dispatch:
+    inputs:
+      versao:
+        description: 'Versão a publicar na página de releases (ex.: v0.1.0). Vazio gera só o artefato.'
+        required: false
+        default: ''
 
 permissions:
   contents: write
@@ -24,23 +29,37 @@ jobs:
       - run: composer install --no-dev --prefer-dist --optimize-autoloader --no-interaction --no-progress
       - run: composer check-platform-reqs --no-dev
       - name: Montar pasta do pacote
+        env:
+          INPUT_VERSAO: ${{ inputs.versao }}
         run: |
           version="${GITHUB_REF_NAME}"
-          [ "${GITHUB_REF_TYPE}" = "tag" ] || version="main-$(git rev-parse --short HEAD)"
+          if [ "${GITHUB_REF_TYPE}" != "tag" ]; then
+            version="${INPUT_VERSAO:-main-$(git rev-parse --short HEAD)}"
+          fi
+          if [ -n "${INPUT_VERSAO}" ] && ! printf '%s' "${INPUT_VERSAO}" | grep -Eq '^v[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "Versão inválida: use o formato v1.2.3"; exit 1
+          fi
           echo "VERSION=$version" >> "$GITHUB_ENV"
           mkdir -p dist/judoma
           rsync -a ./ dist/judoma/ \
             --exclude .git --exclude .github --exclude dist \
-            --exclude tests --exclude docker --exclude scripts --exclude .tools \
-            --exclude 'Especificação' --exclude node_modules \
+            --exclude /tests --exclude /docker --exclude /scripts --exclude /.tools \
+            --exclude '/Especificação' --exclude /node_modules \
             --exclude .env --exclude .env.docker.example --exclude compose.yaml \
             --exclude phpunit.xml --exclude phpunit.mysql.xml \
             --exclude package.json --exclude package-lock.json --exclude vite.config.js \
             --exclude 'storage/logs/*.log' --exclude 'storage/framework/cache/data/*' \
             --exclude 'storage/framework/sessions/*' --exclude 'storage/framework/views/*.php'
           printf '%s\n%s\n' "$version" "$(git rev-parse HEAD)" > dist/judoma/VERSAO.txt
-          test -f dist/judoma/vendor/autoload.php
-          test ! -e dist/judoma/.env
+      - name: Conferir pacote
+        working-directory: dist/judoma
+        run: |
+          ls -A
+          test -f vendor/autoload.php
+          test ! -e .env
+          test ! -d tests
+          test ! -d vendor/phpunit
+          php artisan --version
       - name: Compactar
         run: |
           cd dist
@@ -52,11 +71,14 @@ jobs:
           name: judoma-${{ env.VERSION }}
           path: dist/judoma-*.zip*
       - name: Publicar na página de releases
-        if: github.ref_type == 'tag'
+        if: github.ref_type == 'tag' || inputs.versao != ''
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          # Em execução manual, a tag é criada pela própria release no commit em uso.
+          target=()
+          [ "${GITHUB_REF_TYPE}" = "tag" ] && target=(--verify-tag) || target=(--target "$GITHUB_SHA")
           gh release create "$VERSION" dist/judoma-*.zip dist/judoma-*.zip.sha256 \
             --title "JUDOMA $VERSION" \
             --notes "Pacote para hospedagem compartilhada. Veja docs/DEPLOYMENT.md. Preserve .env e storage/ ao atualizar." \
-            --verify-tag
+            "${target[@]}"
