@@ -26,6 +26,21 @@ O workflow `.github/workflows/release.yml` ("Pacote de publicação") gera `judo
 
 Com o pacote, o passo 2 abaixo se reduz a extrair o zip no diretório versionado; `composer check-platform-reqs` já roda no workflow. Na atualização, preservar `.env` e `storage/` do servidor.
 
+### Script de instalação (`deploy/instalar.sh`)
+
+Com acesso SSH ou Terminal do cPanel, depois de extrair o pacote e criar o `.env`, rodar `bash deploy/instalar.sh` dentro da pasta da aplicação. O script usa o PHP 8.4 do cPanel (`/opt/cpanel/ea-php84/root/usr/bin/php`) ou o indicado em `PHP=...` e executa, nesta ordem:
+
+1. confere a versão do PHP, as extensões, a pasta `vendor` e se o `.env` tem `APP_ENV=production` e `APP_DEBUG=false`; aplica `chmod 600` no `.env`;
+2. cria as pastas graváveis de `storage` e `bootstrap/cache` com permissão 755;
+3. se o banco já estiver instalado, entra em manutenção;
+4. limpa os caches de configuração, rotas e views;
+5. gera `APP_KEY` **somente** quando ela está vazia e o banco ainda não foi instalado; com banco instalado e chave vazia, para e pede a chave original;
+6. roda `migrate --force` e `db:seed --force`, que são idempotentes;
+7. roda `config:cache` e `view:cache`;
+8. roda `sigam:production:check`. Só sai da manutenção quando todos os itens estão OK.
+
+O script não imprime valores do `.env` e pode ser repetido. Ele não substitui backup, pausa do cron nem os passos de go/no-go abaixo.
+
 ## Sequência de release
 
 1. Preparar diretório versionado fora da raiz pública com código revisado e `composer.lock`. Registrar identificador e hashes do artefato, data, aprovador e versão de PHP/MySQL. Preservar configuração e armazenamento compartilhados.

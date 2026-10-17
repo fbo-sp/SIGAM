@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-10-17 — Script de instalação para hospedagem compartilhada
+
+- novo `deploy/instalar.sh`, incluído no pacote de publicação: confere PHP, extensões e `.env`; prepara `storage`; gera `APP_KEY` só na primeira instalação; roda migrations, seed, caches e `sigam:production:check`;
+- em atualização, entra em manutenção e só sai quando a verificação de produção passa;
+- não usa `optimize:clear`, que falha antes das migrations porque o cache fica no banco;
+- `DEPLOYMENT.md` descreve o script.
+
 ## 2026-10-16 — Pacote de publicação
 
 - novo workflow "Pacote de publicação" (`.github/workflows/release.yml`) gera um zip com código e `vendor` de produção para hospedagem compartilhada sem Composer, com hash SHA-256 e `VERSAO.txt`;
