@@ -192,7 +192,9 @@ class TeacherInvitationService
     private function assertManager(User $actor, Association $association): void
     {
         if (! Association::query()->whereKey($association->id)->where('status', 'active')->exists()
-            || $actor->association_id !== $association->id
+            // users.association_id é ponteiro de conveniência: o administrador do sistema não tem
+            // associação e é autorizado pelo papel de escopo system em hasPermission (ADR-006).
+            || ($actor->association_id !== null && $actor->association_id !== $association->id)
             || ! $actor->hasPermission('teacher.manage', $association->id)) {
             abort(403);
         }
