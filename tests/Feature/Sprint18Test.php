@@ -86,6 +86,8 @@ class Sprint18Test extends TestCase
 
     public function test_future_schedule_change_reconciles_planned_sessions_and_preserves_attendance(): void
     {
+        // As datas abaixo pressupõem que 2026-10-19 ainda está no horizonte futuro de geração.
+        $this->travelTo(Carbon::parse('2026-10-15 08:00'));
         [$association, $user, $host, $art] = $this->context(['class.manage']);
         $group = $this->group($association, $host, $art);
         $monday = ClassSchedule::query()->create(['class_group_id' => $group->id, 'weekday' => 1, 'start_time' => '18:00', 'end_time' => '19:00', 'valid_from' => '2026-10-01', 'status' => 'active']);

@@ -31,6 +31,7 @@ Reenvio cria outro convite e invalida o anterior. Revogação não desativa a co
 ## Autorização e segurança
 
 - rotas administrativas são associativas, autenticadas e protegidas por `teacher.manage`; o serviço repete a verificação;
+- `users.association_id` não autoriza: um usuário vinculado a outra associação é recusado, e o administrador do sistema (sem associação, papel de escopo `system`) é aceito pelo `hasPermission`, como em `AccessAdministration` (ADR-006);
 - gestor de dojo não cria ou convida professor;
 - token de URL não aparece em auditoria, listagem ou mensagem de erro;
 - páginas de convite/recuperação usam `no-store` e `Referrer-Policy: no-referrer`, sem recursos externos;

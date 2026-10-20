@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use RuntimeException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Tests\TestCase;
 
 class TeacherInvitationTest extends TestCase
@@ -44,6 +45,37 @@ class TeacherInvitationTest extends TestCase
         $this->post(route('logout'))->assertRedirect(route('login'));
         $this->post(route('login.store'), ['email' => $user->email, 'password' => 'qualquer-senha'])->assertSessionHasErrors('email');
         $this->assertGuest();
+    }
+
+    public function test_system_administrator_registers_teacher_with_invitation_without_association_link(): void
+    {
+        [$association, , $art] = $this->context();
+        $admin = User::factory()->create(['association_id' => null]);
+        $role = Role::query()->create(['association_id' => null, 'name' => 'Administrador', 'code' => 'role_'.Str::random(8), 'scope_type' => 'system']);
+        $role->permissions()->sync([Permission::query()->firstOrCreate(['code' => 'teacher.manage'], ['description' => 'teacher.manage'])->id]);
+        $admin->roles()->attach($role, ['association_id' => null]);
+
+        $this->actingAs($admin)->post(route('associations.teachers.direct.store', $association), [
+            'idempotency_key' => (string) Str::uuid(),
+            'person_mode' => 'new',
+            'person' => ['full_name' => 'Professor do Admin', 'email' => 'professor.admin@example.com'],
+            'martial_art_id' => $art->id,
+            'send_invitation' => '1',
+        ])->assertSessionHasNoErrors()->assertRedirect(route('associations.teachers.index', $association));
+
+        $user = User::query()->where('email', 'professor.admin@example.com')->firstOrFail();
+        $this->assertDatabaseHas('teacher_invitations', ['user_id' => $user->id, 'association_id' => $association->id, 'status' => 'pending']);
+    }
+
+    public function test_manager_of_another_association_cannot_issue_invitation(): void
+    {
+        [$association, $manager] = $this->context();
+        [$other] = $this->context();
+        $person = $this->person($other, 'Professora Externa', 'externa@example.com');
+        $teacher = $this->teacher($other, $person);
+
+        $this->expectException(HttpException::class);
+        app(TeacherInvitationService::class)->issue($manager, $other, $teacher);
     }
 
     public function test_get_does_not_accept_and_post_activates_new_account_only_once(): void

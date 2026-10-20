@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-10-20 — Convite de professor pelo administrador do sistema
+
+- o cadastro direto de professor com envio de convite devolvia 403 para o administrador do sistema, porque `TeacherInvitationService` exigia `users.association_id` igual à associação da rota, e esse administrador não tem associação;
+- a verificação passa a seguir o padrão de `AccessAdministration`: `association_id` só recusa quando aponta para outra associação, e a autorização vem do `hasPermission` (ADR-006);
+- novos testes cobrem o administrador do sistema e o gestor de outra associação;
+- o teste de troca de horário de turma (`Sprint18Test`) passa a fixar a data, porque falhava a partir de 20/10/2026.
+
 ## 2026-10-17 — Script de instalação para hospedagem compartilhada
 
 - novo `deploy/instalar.sh`, incluído no pacote de publicação: confere PHP, extensões e `.env`; prepara `storage`; gera `APP_KEY` só na primeira instalação; roda migrations, seed, caches e `sigam:production:check`;

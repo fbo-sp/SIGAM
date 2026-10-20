@@ -39,6 +39,8 @@ Em 12/10/2026, as correções de cobrança parcial vencida e de segregação na 
 
 Com a tela de usuários, a suíte chegou a 144 testes (SQLite: 816 assertions). `UserAccountManagementTest` cobre: convite sem senha conhecida, ativação e expiração do link, reenvio que invalida o link anterior, permissão e escopo, bloqueio de escalonamento, último gestor, conta do administrador do sistema, inativação que derruba sessões e liberação do portal pela ficha do aluno.
 
+Com a correção do convite de professor pelo administrador do sistema, a suíte chegou a 147 testes (SQLite: 826 assertions).
+
 ## Hardening e recuperação
 
 `ProductionHardeningTest` cobre regressões de segurança, preservação de bootstrap, concorrência intercalada de entrega, revogação de acesso a notificações e preflight negativo. Inclui ensaio sequencial de dashboard com mil alunos; resultados variam por máquina. Não confundir com teste de carga HTTP concorrente.
