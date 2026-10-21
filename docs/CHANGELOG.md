@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-10-21 — Mensagens de validação em português
+
+- o sistema não tinha arquivos de tradução: regras sem mensagem própria apareciam como chave, por exemplo `validation.required_unless` ao cadastrar aluno com responsável sem informar a relação;
+- novo `lang/pt_BR/validation.php` com todas as mensagens padrão, nomes dos campos e mensagens próprias para as regras condicionais do cadastro direto; `lang/pt_BR/pagination.php` e `lang/pt_BR.json` traduzem a paginação;
+- o formulário de cadastro direto passa a mostrar o erro ao lado dos campos do responsável e de e-mail e celular do aluno;
+- nos cadastros diretos de aluno e professor, cada opção de "Nova pessoa", "Pessoa existente" e "Como informar" o responsável mostra só os campos que usa; os campos ocultos vão desabilitados e não são enviados (sem JavaScript, todos aparecem como antes);
+- novo teste garante a mensagem traduzida e exibida na tela.
+
 ## 2026-10-20 — Convite de professor pelo administrador do sistema
 
 - o cadastro direto de professor com envio de convite devolvia 403 para o administrador do sistema, porque `TeacherInvitationService` exigia `users.association_id` igual à associação da rota, e esse administrador não tem associação;
