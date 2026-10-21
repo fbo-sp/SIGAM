@@ -40,7 +40,7 @@ Somente `teacher.manage` associativo abre o fluxo. Pessoa, perfil, matrícula `P
 - idempotência: `DirectRegistrationRequest` com unicidade por associação, operação e chave;
 - sequência: `RegistrationCounter` bloqueado em transação e verificação contra matrículas legadas;
 - documentos: `DocumentService` valida aluno, professor, responsável e associação antes de persistir;
-- telas: `sports/students/direct.blade.php` e `sports/teachers/direct.blade.php`.
+- telas: `sports/students/direct.blade.php` e `sports/teachers/direct.blade.php`. Os blocos marcados com `data-show-when="campo:valores"` só aparecem na opção correspondente (`public/js/common.js`), e os campos ocultos vão desabilitados; o serviço continua ignorando os dados de pessoa nova quando a opção é "Pessoa existente".
 
 ## Testes de manutenção
 

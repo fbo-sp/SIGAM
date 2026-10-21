@@ -188,12 +188,13 @@ class DirectRegistrationTest extends TestCase
             ->post(route('associations.students.direct.store', $association), $payload)
             ->assertSessionHasErrors([
                 'guardian_relationship' => 'Informe a relação do responsável com o aluno.',
-                'entry_date' => 'O campo data de entrada é obrigatório.',
+                'entry_date' => 'O campo data de ingresso é obrigatório.',
             ]);
 
         $this->get(route('associations.students.create', $association))
             ->assertSee('Informe a relação do responsável com o aluno.')
-            ->assertDontSee('validation.');
+            ->assertDontSee('validation.')
+            ->assertSee('data-show-when="guardian_mode:new,existing"', false);
     }
 
     public function test_foreign_document_type_is_rejected_before_creating_student_or_file(): void

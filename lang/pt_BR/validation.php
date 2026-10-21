@@ -207,7 +207,7 @@ return [
         'emergency_contact_name' => 'contato de emergência',
         'emergency_contact_phone' => 'telefone de emergência',
         'end_date' => 'data final',
-        'entry_date' => 'data de entrada',
+        'entry_date' => 'data de ingresso',
         'expiration_date' => 'data de validade',
         'file' => 'arquivo',
         'finish_action' => 'forma de conclusão',
