@@ -62,6 +62,8 @@ class DirectStudentRegistrationRequest extends FormRequest
             'rank_id' => ['nullable', 'integer', 'exists:ranks,id'],
             'make_primary' => ['boolean'],
             'notes' => ['nullable', 'string', 'max:5000'],
+            'class_group_ids' => ['nullable', 'array', 'max:10'],
+            'class_group_ids.*' => ['integer', 'distinct'],
             'finish_action' => ['required', Rule::in(['pre_registration', 'activate'])],
             'guardian_mode' => ['required', Rule::in(['none', 'new', 'existing'])],
             'guardian_person_id' => ['nullable', 'required_if:guardian_mode,existing', 'integer', 'exists:people,id'],

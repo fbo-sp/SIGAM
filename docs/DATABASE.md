@@ -66,6 +66,8 @@ Horários de turma são versionados por `valid_from/valid_until`; uma edição n
 
 `class_groups.future_session_target` guarda somente 4 ou 8 (padrão 8). A aplicação valida o domínio e bloqueia a turma antes de contar/criar ocorrências. `class_sessions` continua sendo a fonte de verdade; a meta não é cache, não limita histórico e não autoriza excluir excesso.
 
+`class_enrollments` não é apagada: encerrar grava `status=ended`, `end_date` e `exit_reason`, e a chamada considera a matrícula até o término. `class_group_teachers` guarda os professores auxiliares por período (`role_type=assistant`), encerrados por `end_date`.
+
 `class_session_visitors` possui unicidade por aula/aluno e materializa associação, dojo anfitrião, autor, revogação e estado sem criar matrícula. `attendance.participation_type` preserva a proveniência regular/visitante. A FK histórica é restritiva; visita é revogada logicamente. Não existe relação dessa tabela com planos, cobranças ou pagamentos.
 
 ## Escopo operacional

@@ -14,7 +14,8 @@ Criar pessoa e perfil esportivo em uma única tarefa, preservando identidade cen
 4. cria ou reutiliza o perfil de aluno, o vínculo regular do dojo e a modalidade;
 5. cria o responsável na mesma transação, quando informado;
 6. salva como pré-cadastro ou ativa após validar nascimento e responsável legal de menor;
-7. opcionalmente guarda documento privado ligado ao aluno ou ao responsável.
+7. opcionalmente guarda documento privado ligado ao aluno ou ao responsável;
+8. ao ativar, matricula nas turmas marcadas em `class_group_ids` (opcional, até 10 turmas ativas do dojo escolhido, exige `enrollment.manage` no contexto). A matrícula usa `ClassGroupService::enroll`, começa na data de ingresso ou no início da turma, ignora turma em que o aluno já está e devolve o erro no campo `class_group_ids`. No pré-cadastro as turmas não são gravadas, e a mensagem final avisa quando o aluno ativado ficou sem turma.
 
 Um aluno já existente pode receber outro vínculo regular. Tornar o novo dojo principal é explícito e não encerra os demais períodos.
 

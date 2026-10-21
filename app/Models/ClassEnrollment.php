@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -22,5 +23,15 @@ class ClassEnrollment extends Model
     public function student(): BelongsTo
     {
         return $this->belongsTo(Student::class);
+    }
+
+    /**
+     * Matrícula que cobria a data, ainda ativa ou já encerrada. Encerrar não apaga
+     * o aluno das chamadas anteriores ao término.
+     */
+    public function scopeCoveringDate(Builder $query, mixed $date): Builder
+    {
+        return $query->whereIn('status', ['active', 'ended'])->whereDate('start_date', '<=', $date)
+            ->where(fn ($q) => $q->whereNull('end_date')->orWhereDate('end_date', '>=', $date));
     }
 }

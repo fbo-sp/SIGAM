@@ -47,7 +47,7 @@ As permissões `dojo.view` e `dojo.manage` complementam as permissões de associ
 
 Cadastro esportivo adiciona `martial_art.*`, `student.*` e `teacher.*`. Possuir acesso à pessoa não concede automaticamente acesso ao perfil esportivo; cada rota exige a permissão específica e o mesmo escopo de associação.
 
-Turmas separam leitura (`class.view`), configuração (`class.manage`) e matrícula (`enrollment.manage`). Isso permite que uma equipe administrativa matricule alunos sem alterar agenda ou professor.
+Turmas separam leitura (`class.view`), configuração (`class.manage`) e matrícula (`enrollment.manage`). Isso permite que uma equipe administrativa matricule alunos sem alterar agenda ou professor. No contexto do dojo, o papel `dojo_operator` recebe as duas permissões e só as usa nas turmas da própria unidade. O professor principal e os auxiliares designados em `class_group_teachers` veem as aulas da turma e fazem a chamada, mas não editam nem matriculam.
 
 Aulas separam `session.view`, `session.manage`, `attendance.manage` e `attendance.reopen`. A permissão de reabrir é deliberadamente distinta da chamada comum.
 

@@ -5,7 +5,7 @@
 <div class="page-heading"><div><span class="eyebrow">Vínculos regulares</span><h1>Alunos do dojo</h1><p>Esta lista não inclui visitantes e não exibe documentos, contatos ou dados financeiros.</p></div>@if($canManage)<a class="button button-primary" href="{{ route('operation.students.direct.create', $dojo) }}">Novo aluno</a>@endif</div>
 <div class="card list-card">
 @forelse($students as $student)
-    <div class="list-row"><span><strong>{{ $student->person->social_name ?: $student->person->full_name }}</strong><small>Matrícula {{ $student->registration_number }} · {{ $student->status === 'active' ? 'Ativo' : 'Em cadastro' }}</small></span></div>
+    <div class="list-row"><span><strong>{{ $student->person->social_name ?: $student->person->full_name }}</strong><small>Matrícula {{ $student->registration_number }} · {{ $student->status === 'active' ? 'Ativo' : 'Em cadastro' }}@if($student->enrollments->isNotEmpty()) · {{ $student->enrollments->pluck('classGroup.name')->join(', ') }}@endif</small></span>@if($student->status === 'active' && $student->enrollments->isEmpty())<span class="status-pill status-inactive">Sem turma</span>@endif</div>
 @empty
     <div class="empty-state"><h2>Nenhum aluno com vínculo regular</h2><p>Visitantes serão tratados por aula em uma etapa posterior, sem aparecer nesta relação.</p></div>
 @endforelse

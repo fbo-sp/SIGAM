@@ -13,6 +13,7 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\TeacherInvitationController;
 use App\Http\Controllers\Championship\ChampionshipController;
 use App\Http\Controllers\Classes\ClassGroupController;
+use App\Http\Controllers\Classes\DojoClassController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Documents\DocumentController;
 use App\Http\Controllers\Federation\FederationController;
@@ -62,7 +63,18 @@ Route::middleware(['auth', 'active', 'association.context'])->group(function ():
         Route::get('/alunos', 'students')->name('students');
         Route::get('/alunos/novo', [DirectRegistrationController::class, 'createDojoStudent'])->name('students.direct.create');
         Route::post('/alunos', [DirectRegistrationController::class, 'storeDojoStudent'])->name('students.direct.store');
-        Route::get('/turmas', 'classes')->name('classes');
+        Route::get('/turmas', [DojoClassController::class, 'index'])->name('classes');
+        Route::get('/turmas/nova', [DojoClassController::class, 'create'])->name('classes.create');
+        Route::post('/turmas', [DojoClassController::class, 'store'])->name('classes.store');
+        Route::get('/turmas/{classGroup}', [DojoClassController::class, 'show'])->name('classes.show');
+        Route::get('/turmas/{classGroup}/editar', [DojoClassController::class, 'edit'])->name('classes.edit');
+        Route::put('/turmas/{classGroup}', [DojoClassController::class, 'update'])->name('classes.update');
+        Route::post('/turmas/{classGroup}/matriculas', [DojoClassController::class, 'enroll'])->name('classes.enrollments.store');
+        Route::post('/turmas/{classGroup}/matriculas/{enrollment}/encerrar', [DojoClassController::class, 'endEnrollment'])->name('classes.enrollments.end');
+        Route::post('/turmas/{classGroup}/professores', [DojoClassController::class, 'assignTeacher'])->name('classes.teachers.store');
+        Route::post('/turmas/{classGroup}/professores/{assignment}/encerrar', [DojoClassController::class, 'endTeacher'])->name('classes.teachers.end');
+        Route::post('/turmas/{classGroup}/agenda/substituir', [DojoClassController::class, 'replaceScheduleSet'])->name('classes.schedules.replace-set');
+        Route::post('/turmas/{classGroup}/aulas/atualizar', [DojoClassController::class, 'refreshFutureSessions'])->name('classes.sessions.refresh');
         Route::get('/aulas', 'sessions')->name('sessions');
         Route::get('/aulas/{session}', 'session')->name('session');
         Route::post('/aulas/{session}/chamada', 'saveAttendance')->name('attendance');
@@ -151,6 +163,8 @@ Route::middleware(['auth', 'active', 'association.context'])->group(function ():
         Route::get('/alunos/{student}', [StudentController::class, 'show'])->middleware('permission:student.view')->name('students.show');
         Route::post('/alunos/{student}/responsaveis', [StudentController::class, 'addGuardian'])->middleware('permission:student.manage')->name('students.guardians.store');
         Route::post('/alunos/{student}/ativar', [StudentController::class, 'activate'])->middleware('permission:student.manage')->name('students.activate');
+        Route::post('/alunos/{student}/turmas', [StudentController::class, 'enroll'])->middleware('permission:enrollment.manage')->name('students.enrollments.store');
+        Route::post('/alunos/{student}/turmas/{enrollment}/encerrar', [StudentController::class, 'endEnrollment'])->middleware('permission:enrollment.manage')->name('students.enrollments.end');
 
         Route::get('/professores', [TeacherController::class, 'index'])->middleware('permission:teacher.view')->name('teachers.index');
         Route::get('/professores/novo', [DirectRegistrationController::class, 'createTeacher'])->middleware('permission:teacher.manage')->name('teachers.create');

@@ -34,7 +34,7 @@ Este documento é um índice de manutenção. `routes/web.php`, `routes/console.
 | `dojos` | unidades | `dojo.view`, `dojo.manage` |
 | `pessoas` | identidade central | `person.view`, `person.manage` |
 | `modalidades` | modalidades/graduações/templates | `martial_art.view`, `martial_art.manage` |
-| `alunos` | alunos/responsáveis/histórico | `student.view`, `student.manage` |
+| `alunos` | alunos/responsáveis/histórico; `alunos/{student}/turmas` matricula e `.../turmas/{enrollment}/encerrar` encerra | `student.view`, `student.manage`; turmas com `enrollment.manage` |
 | `professores` | perfil, habilitação e convites | `teacher.view`, `teacher.manage` |
 | `turmas` | agenda e matrículas | `class.view`, `class.manage`, `enrollment.manage` |
 | `aulas` | ocorrências, visitantes e chamada | `session.view`, `session.manage`, `attendance.manage`, `attendance.reopen`, `visitor.manage` |
@@ -50,6 +50,7 @@ O prefixo `/operacao/dojos/{dojo}` oferece:
 
 - alunos e cadastro direto;
 - turmas e aulas autorizadas;
+- turma no dojo: `turmas/nova`, `turmas/{classGroup}` (abas Alunos, Professores, Horários e Aulas), `turmas/{classGroup}/editar`, `PUT turmas/{classGroup}`, `turmas/{classGroup}/matriculas` e `.../matriculas/{enrollment}/encerrar` (`enrollment.manage`), `turmas/{classGroup}/professores` e `.../professores/{assignment}/encerrar`, `agenda/substituir` e `aulas/atualizar` (`class.manage`);
 - chamada e visitantes;
 - equipe de professores da associação;
 - importação assistida;

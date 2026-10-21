@@ -48,6 +48,11 @@ class ClassGroup extends Model
         return $this->hasMany(ClassEnrollment::class);
     }
 
+    public function teacherAssignments(): HasMany
+    {
+        return $this->hasMany(ClassGroupTeacher::class);
+    }
+
     public function sessions(): HasMany
     {
         return $this->hasMany(ClassSession::class);

@@ -21,7 +21,7 @@ Melhorias posteriores não fazem parte do estado implementado apenas por estarem
 | Organização | associações, dojos, pessoas centrais, normalização, busca, inativação e CSV seguro |
 | Cadastro esportivo | modalidades, graduações, templates opcionais, alunos, responsáveis, professores, vínculos multi-dojo e históricos |
 | Cadastro direto | aluno/responsável/documento no contexto do dojo e professor/convite no contexto da associação |
-| Turmas | vários dias/horários, versões de agenda, professor, capacidade, faixa etária e matrículas |
+| Turmas | vários dias/horários, versões de agenda, professor, capacidade, faixa etária e matrículas; página da turma no dojo, edição, encerramento de matrícula e professores auxiliares |
 | Aulas | meta automática de 4/8 ocorrências, reposição horária, cancelamento, reagendamento e chamada mobile |
 | Visitantes | participação gratuita por aula, somente dentro da mesma associação, sem matrícula ou cobrança |
 | Importação | CSV/XLSX de alunos e presenças, prévia, revisão, lotes retomáveis, idempotência e retenção privada |
