@@ -176,6 +176,26 @@ class DirectRegistrationTest extends TestCase
         $this->assertDatabaseHas('students', ['association_id' => $association->id, 'status' => 'pre_registration']);
     }
 
+    public function test_validation_messages_are_translated_and_shown_next_to_guardian_field(): void
+    {
+        [$association, $dojo, $art, $user] = $this->context(['student.manage']);
+        $payload = $this->studentPayload($dojo, $art);
+        $payload['guardian_mode'] = 'new';
+        $payload['guardian'] = ['full_name' => 'Responsável Teste'];
+        unset($payload['entry_date']);
+
+        $this->actingAs($user)->from(route('associations.students.create', $association))
+            ->post(route('associations.students.direct.store', $association), $payload)
+            ->assertSessionHasErrors([
+                'guardian_relationship' => 'Informe a relação do responsável com o aluno.',
+                'entry_date' => 'O campo data de entrada é obrigatório.',
+            ]);
+
+        $this->get(route('associations.students.create', $association))
+            ->assertSee('Informe a relação do responsável com o aluno.')
+            ->assertDontSee('validation.');
+    }
+
     public function test_foreign_document_type_is_rejected_before_creating_student_or_file(): void
     {
         Storage::fake('local');

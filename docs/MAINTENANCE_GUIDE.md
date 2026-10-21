@@ -34,6 +34,7 @@ Se um plano antigo disser “futuro”, mas código, teste e documentação do m
 | `routes/console.php` | agenda recorrente sem worker residente |
 | `app/Http/Controllers` | coordenação HTTP; não concentra regra crítica |
 | `app/Http/Requests` | forma, tipos e normalização da entrada |
+| `lang/pt_BR` | mensagens padrão de validação, nomes de campos (`attributes`) e mensagens de regras condicionais (`custom`); ao criar campo novo em Form Request, inclua o nome dele aqui |
 | `app/Services` | casos de uso, autorização relacional, transações e auditoria |
 | `app/Models` | relações, casts e escopos Eloquent; não substituem validação de domínio |
 | `app/Support` | normalização, dinheiro, CSV, catálogos e leitura de planilhas |
