@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Sports\DirectStudentRegistrationRequest;
 use App\Http\Requests\Sports\DirectTeacherRegistrationRequest;
 use App\Models\Association;
+use App\Models\ClassGroup;
 use App\Models\DirectRegistrationRequest;
 use App\Models\DocumentType;
 use App\Models\Dojo;
@@ -34,6 +35,7 @@ class DirectRegistrationController extends Controller
             route('associations.students.index', $association),
             $request->user()->hasPermission('document.manage', $association->id),
             true,
+            $request->user()->hasPermission('enrollment.manage', $association->id),
         ));
     }
 
@@ -46,12 +48,13 @@ class DirectRegistrationController extends Controller
         $dojo = Dojo::query()->where('association_id', $association->id)->where('status', 'active')->findOrFail($request->integer('dojo_id'));
         $canUpload = $request->user()->hasPermission('document.manage', $association->id);
         abort_if($request->hasFile('document_file') && ! $canUpload, 403);
+        abort_if($request->filled('class_group_ids') && ! $request->user()->hasPermission('enrollment.manage', $association->id), 403);
         $this->validateDocumentType($request, $association);
         $result = $registration->registerStudent($association, $dojo, $request->user(), $request->validated());
         $this->storeStudentDocument($request, $association, $result['model'], $result['request'], $documents, $canUpload);
 
         return redirect()->route('associations.students.show', [$association, $result['model']])
-            ->with('status', $result['replayed'] ? 'Cadastro já processado anteriormente; nenhum registro foi duplicado.' : 'Cadastro do aluno salvo.');
+            ->with('status', $this->studentMessage($request, $result, 'Cadastro do aluno salvo.'));
     }
 
     public function createDojoStudent(Request $request, Dojo $dojo): View
@@ -66,6 +69,7 @@ class DirectRegistrationController extends Controller
             route('operation.students', $dojo),
             $this->scope->canDojo($request->user(), $dojo, 'student.document.manage'),
             false,
+            $this->scope->canDojo($request->user(), $dojo, 'enrollment.manage'),
         ));
     }
 
@@ -79,12 +83,13 @@ class DirectRegistrationController extends Controller
         abort_unless($request->integer('dojo_id') === $dojo->id, 404);
         $canUpload = $this->scope->canDojo($request->user(), $dojo, 'student.document.manage');
         abort_if($request->hasFile('document_file') && ! $canUpload, 403);
+        abort_if($request->filled('class_group_ids') && ! $this->scope->canDojo($request->user(), $dojo, 'enrollment.manage'), 403);
         $this->validateDocumentType($request, $dojo->association);
         $result = $registration->registerStudent($dojo->association, $dojo, $request->user(), $request->validated());
         $this->storeStudentDocument($request, $dojo->association, $result['model'], $result['request'], $documents, $canUpload);
 
         return redirect()->route('operation.students', $dojo)
-            ->with('status', $result['replayed'] ? 'Cadastro já processado anteriormente; nenhum registro foi duplicado.' : 'Aluno salvo neste dojo.');
+            ->with('status', $this->studentMessage($request, $result, 'Aluno salvo neste dojo.'));
     }
 
     public function createTeacher(Request $request, Association $association): View
@@ -122,12 +127,32 @@ class DirectRegistrationController extends Controller
             ->with('status', $result['replayed'] ? 'Cadastro já processado anteriormente; nenhum registro foi duplicado.' : ($request->boolean('send_invitation') ? 'Professor cadastrado e convite preparado para envio.' : 'Professor cadastrado sem convite de acesso.'));
     }
 
-    private function studentFormData(Association $association, ?Dojo $dojo, string $postRoute, string $backRoute, bool $canUploadDocuments, bool $allowExistingSelection): array
+    private function studentMessage(Request $request, array $result, string $saved): string
     {
+        if ($result['replayed']) {
+            return 'Cadastro já processado anteriormente; nenhum registro foi duplicado.';
+        }
+        if ($request->input('finish_action') === 'activate' && $result['model']->enrollments()->where('status', 'active')->doesntExist()) {
+            return $saved.' Atenção: o aluno ainda não está em nenhuma turma. Matricule-o para que apareça na chamada.';
+        }
+        if ($request->input('finish_action') !== 'activate' && $request->filled('class_group_ids')) {
+            return $saved.' As turmas não foram gravadas no pré-cadastro: matricule o aluno depois de ativá-lo.';
+        }
+
+        return $saved;
+    }
+
+    private function studentFormData(Association $association, ?Dojo $dojo, string $postRoute, string $backRoute, bool $canUploadDocuments, bool $allowExistingSelection, bool $canEnroll): array
+    {
+        $dojos = $dojo ? collect([$dojo]) : $association->dojos()->where('status', 'active')->orderBy('name')->get();
+
         return [
             'association' => $association,
             'fixedDojo' => $dojo,
-            'dojos' => $dojo ? collect([$dojo]) : $association->dojos()->where('status', 'active')->orderBy('name')->get(),
+            'dojos' => $dojos,
+            'canEnroll' => $canEnroll,
+            'classGroups' => $canEnroll ? ClassGroup::query()->where('association_id', $association->id)->whereIn('dojo_id', $dojos->pluck('id'))
+                ->where('status', 'active')->with('martialArt:id,name')->orderBy('name')->get()->groupBy('dojo_id') : collect(),
             'people' => $allowExistingSelection ? $this->people($association) : collect(),
             'martialArts' => $this->martialArts($association),
             'documentTypes' => $this->documentTypes($association),

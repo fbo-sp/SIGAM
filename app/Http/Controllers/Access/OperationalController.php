@@ -56,20 +56,14 @@ class OperationalController extends Controller
     public function students(Request $request, Dojo $dojo)
     {
         $this->enter($request, $dojo);
-        $students = $this->scope->students($request->user(), $dojo)->with('person:id,full_name,social_name')->orderBy('registration_number')->paginate(25);
+        $students = $this->scope->students($request->user(), $dojo)->with([
+            'person:id,full_name,social_name',
+            'enrollments' => fn ($query) => $query->where('status', 'active')->whereHas('classGroup', fn ($group) => $group->where('dojo_id', $dojo->id))->with('classGroup:id,name'),
+        ])->orderBy('registration_number')->paginate(25);
 
         $canManage = $this->scope->canDojo($request->user(), $dojo, 'student.manage');
 
         return view('operation.students', compact('dojo', 'students', 'canManage'));
-    }
-
-    public function classes(Request $request, Dojo $dojo)
-    {
-        $this->enter($request, $dojo);
-        abort_unless($this->scope->canDojo($request->user(), $dojo, 'class.view') || $this->scope->canTeacher($request->user(), $dojo, 'class.view'), 403);
-        $classes = $this->scope->classes($request->user(), $dojo)->orderBy('name')->paginate(25);
-
-        return view('operation.classes', compact('dojo', 'classes'));
     }
 
     public function sessions(Request $request, Dojo $dojo)
@@ -97,7 +91,10 @@ class OperationalController extends Controller
         $canManageVisitors = $this->scope->sessions($request->user(), $dojo, 'visitor.manage')->whereKey($session->id)->exists()
             && $session->attendance_state === 'open' && $session->status === 'planned';
 
-        return view('operation.session', compact('dojo', 'session', 'roster', 'records', 'canRecord', 'canManageVisitors'));
+        $enrollUrl = $this->scope->canDojo($request->user(), $dojo, 'enrollment.manage')
+            ? route('operation.classes.show', [$dojo, $session->classGroup]).'#alunos' : null;
+
+        return view('operation.session', compact('dojo', 'session', 'roster', 'records', 'canRecord', 'canManageVisitors', 'enrollUrl'));
     }
 
     public function addVisitor(SessionVisitorRequest $request, Dojo $dojo, ClassSession $session, SessionVisitorService $service)

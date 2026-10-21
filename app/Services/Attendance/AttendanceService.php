@@ -101,8 +101,7 @@ class AttendanceService
     /** @return Collection<int, array{student: Student, type: string}> */
     public function roster(ClassSession $session): Collection
     {
-        $regular = $session->classGroup->enrollments()->where('start_date', '<=', $session->session_date)->where('status', 'active')
-            ->where(fn ($query) => $query->whereNull('end_date')->orWhere('end_date', '>=', $session->session_date))
+        $regular = $session->classGroup->enrollments()->coveringDate($session->session_date)
             ->whereHas('student', fn ($query) => $query->where('association_id', $session->classGroup->association_id))
             ->with('student.person')->get()->unique('student_id')->map(fn ($enrollment) => ['student' => $enrollment->student, 'type' => 'regular']);
         $regularIds = $regular->pluck('student.id');

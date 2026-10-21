@@ -38,9 +38,7 @@ class SessionVisitorService
 
                 throw ValidationException::withMessages(['visitor' => 'Esta participação foi revogada e não pode ser reativada sem revisão do gestor.']);
             }
-            if ($locked->classGroup->enrollments()->where('student_id', $student->id)->where('status', 'active')
-                ->whereDate('start_date', '<=', $locked->session_date)
-                ->where(fn ($query) => $query->whereNull('end_date')->orWhereDate('end_date', '>=', $locked->session_date))->exists()) {
+            if ($locked->classGroup->enrollments()->where('student_id', $student->id)->coveringDate($locked->session_date)->exists()) {
                 throw ValidationException::withMessages(['registration_number' => 'Este aluno já faz parte da lista regular desta aula.']);
             }
             if (! $student->martialArts()->where('martial_art_id', $locked->classGroup->martial_art_id)->where('status', 'active')
@@ -58,8 +56,7 @@ class SessionVisitorService
                 ->where(fn ($query) => $query->whereNull('end_date')->orWhereDate('end_date', '>=', $locked->session_date))->exists()) {
                 throw ValidationException::withMessages(['registration_number' => 'O aluno menor precisa de responsável legal vigente para participar.']);
             }
-            $regularCount = $locked->classGroup->enrollments()->where('status', 'active')->whereDate('start_date', '<=', $locked->session_date)
-                ->where(fn ($query) => $query->whereNull('end_date')->orWhereDate('end_date', '>=', $locked->session_date))->count();
+            $regularCount = $locked->classGroup->enrollments()->coveringDate($locked->session_date)->count();
             $visitorCount = $locked->visitors()->whereIn('status', ['authorized', 'attended'])->count();
             if ($locked->classGroup->capacity !== null && $regularCount + $visitorCount >= $locked->classGroup->capacity) {
                 throw ValidationException::withMessages(['visitor' => 'A aula atingiu a capacidade da turma.']);

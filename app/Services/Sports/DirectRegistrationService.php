@@ -3,6 +3,7 @@
 namespace App\Services\Sports;
 
 use App\Models\Association;
+use App\Models\ClassGroup;
 use App\Models\DirectRegistrationRequest;
 use App\Models\Dojo;
 use App\Models\MartialArt;
@@ -15,6 +16,7 @@ use App\Models\TeacherProfile;
 use App\Models\User;
 use App\Services\Access\TeacherInvitationService;
 use App\Services\AuditService;
+use App\Services\Classes\ClassGroupService;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -24,6 +26,7 @@ class DirectRegistrationService
     public function __construct(
         private readonly AuditService $audit,
         private readonly TeacherInvitationService $invitations,
+        private readonly ClassGroupService $classes,
     ) {}
 
     /** @return array{model: Student, request: DirectRegistrationRequest, replayed: bool} */
@@ -136,6 +139,9 @@ class DirectRegistrationService
             if ($data['finish_action'] === 'activate' && $student->status === 'pre_registration') {
                 $this->activateStudent($association, $student);
             }
+            if ($data['finish_action'] === 'activate') {
+                $this->enrollInClasses($association, $dojo, $student, $data['class_group_ids'] ?? [], $data['entry_date']);
+            }
 
             $submission->update(['result_type' => 'student', 'result_id' => $student->id, 'completed_at' => now()]);
             $this->audit->record('student.direct_registration_completed', $newStudent ? 'created' : 'updated', $student, null, [
@@ -232,6 +238,29 @@ class DirectRegistrationService
             'operation' => $operation,
             'idempotency_key' => $key,
         ]), false];
+    }
+
+    /** Matricula o aluno recém-ativado nas turmas escolhidas no cadastro. Turma já cursada é ignorada. */
+    private function enrollInClasses(Association $association, Dojo $dojo, Student $student, array $groupIds, string $entryDate): void
+    {
+        foreach (array_unique(array_map('intval', $groupIds)) as $groupId) {
+            $group = ClassGroup::query()->where('association_id', $association->id)->where('dojo_id', $dojo->id)
+                ->where('status', 'active')->find($groupId);
+            if ($group === null) {
+                throw ValidationException::withMessages(['class_group_ids' => 'Escolha somente turmas ativas do dojo do aluno.']);
+            }
+            if ($group->enrollments()->where('student_id', $student->id)->where('status', 'active')->exists()) {
+                continue;
+            }
+            try {
+                $this->classes->enroll($association, $group, [
+                    'student_id' => $student->id,
+                    'start_date' => max($entryDate, $group->start_date->toDateString()),
+                ]);
+            } catch (ValidationException $exception) {
+                throw ValidationException::withMessages(['class_group_ids' => "Turma {$group->name}: ".collect($exception->errors())->flatten()->first()]);
+            }
+        }
     }
 
     private function resolvePerson(Association $association, string $mode, mixed $personId, array $data, bool $confirmed, string $role, string $confirmationField): Person

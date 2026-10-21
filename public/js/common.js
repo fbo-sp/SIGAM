@@ -14,12 +14,16 @@ if (conditionalFields.length) {
         const input = [...form.querySelectorAll(`[name="${name}"]`)].find(item => item.type !== 'radio' || item.checked);
         return input ? input.value : '';
     };
-    const refresh = () => conditionalFields.forEach(field => {
-        const [name, values] = field.dataset.showWhen.split(':');
-        const visible = values.split(',').includes(currentValue(field.closest('form'), name));
-        field.hidden = !visible;
-        field.querySelectorAll('input, select, textarea').forEach(control => { control.disabled = !visible; });
-    });
+    const refresh = () => {
+        conditionalFields.forEach(field => {
+            const [name, values] = field.dataset.showWhen.split(':');
+            field.hidden = !values.split(',').includes(currentValue(field.closest('form'), name));
+        });
+        // Com blocos aninhados, o campo só vale se nenhum bloco acima dele estiver oculto.
+        document.querySelectorAll('[data-show-when] :is(input, select, textarea)').forEach(control => {
+            control.disabled = control.closest('[hidden]') !== null;
+        });
+    };
     document.addEventListener('change', event => {
         if (event.target.name) {
             refresh();

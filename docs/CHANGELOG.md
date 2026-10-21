@@ -1,5 +1,18 @@
 # Changelog
 
+## 2026-10-21 — Turma dentro do dojo
+
+- nova página da turma em `/operacao/dojos/{dojo}/turmas/{turma}`, com abas Alunos, Professores, Horários e Aulas; a lista de turmas do dojo ganha link, situação e o botão "Nova turma";
+- o gestor do dojo (`dojo_operator`) passa a criar e editar turmas e a matricular e encerrar matrículas no próprio dojo (`class.manage` e `enrollment.manage` entram em `OperationalScope::DOJO_PERMISSIONS`; o `db:seed` acrescenta as permissões ao papel existente);
+- editar turma: nome, descrição, faixa etária, capacidade (não fica abaixo das matrículas ativas), meta de aulas, término e situação. Trocar o professor principal atualiza os horários dele e as aulas futuras sem chamada; definir término ou inativar cancela as aulas futuras sem chamada e é recusado se já houver chamada depois da data;
+- encerrar matrícula grava `ended`, data e motivo, sem apagar nada: o aluno continua nas chamadas até a data de término e sai das seguintes. Não aceita data anterior a uma presença registrada;
+- professores auxiliares: o gestor designa professores vinculados ao dojo e habilitados na modalidade (`class_group_teachers`, papel `assistant`); o auxiliar vê as aulas da turma e faz a chamada, sem matricular nem editar;
+- cadastro direto de aluno pode matricular em turmas do dojo escolhido (opcional, só ao ativar, exige `enrollment.manage`); sem turma, a mensagem final avisa que o aluno não aparece na chamada;
+- a ficha do aluno mostra as turmas, com matricular e encerrar; a lista de alunos do dojo mostra a turma ou "Sem turma";
+- a chamada sem alunos matriculados explica o motivo e leva à matrícula;
+- matrícula em turma sem faixa etária não exige mais a data de nascimento;
+- novo `DojoClassHubTest`.
+
 ## 2026-10-21 — Mensagens de validação em português
 
 - o sistema não tinha arquivos de tradução: regras sem mensagem própria apareciam como chave, por exemplo `validation.required_unless` ao cadastrar aluno com responsável sem informar a relação;
