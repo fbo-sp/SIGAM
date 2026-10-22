@@ -32,7 +32,7 @@ Este documento é um índice de manutenção. `routes/web.php`, `routes/console.
 | Caminho relativo | Área | Permissões principais |
 |---|---|---|
 | `dojos` | unidades | `dojo.view`, `dojo.manage` |
-| `pessoas` | identidade central | `person.view`, `person.manage` |
+| `pessoas` | identidade central; `pessoas/{person}/editar?voltar=/caminho` volta à lista de origem (só caminho interno) | `person.view`, `person.manage` |
 | `modalidades` | modalidades/graduações/templates | `martial_art.view`, `martial_art.manage` |
 | `alunos` | alunos/responsáveis/histórico; `alunos/{student}/turmas` matricula e `.../turmas/{enrollment}/encerrar` encerra | `student.view`, `student.manage`; turmas com `enrollment.manage` |
 | `professores` | perfil, habilitação e convites | `teacher.view`, `teacher.manage` |
@@ -48,7 +48,7 @@ Este documento é um índice de manutenção. `routes/web.php`, `routes/console.
 
 O prefixo `/operacao/dojos/{dojo}` oferece:
 
-- alunos e cadastro direto;
+- alunos e cadastro direto; `alunos/{student}/dados` (GET/PUT) para o gestor com `student.manage` corrigir dados pessoais do aluno do dojo;
 - turmas e aulas autorizadas;
 - turma no dojo: `turmas/nova`, `turmas/{classGroup}` (abas Alunos, Professores, Horários e Aulas), `turmas/{classGroup}/editar`, `PUT turmas/{classGroup}`, `turmas/{classGroup}/matriculas` e `.../matriculas/{enrollment}/encerrar` (`enrollment.manage`), `turmas/{classGroup}/professores` e `.../professores/{assignment}/encerrar`, `agenda/substituir` e `aulas/atualizar` (`class.manage`);
 - chamada e visitantes;

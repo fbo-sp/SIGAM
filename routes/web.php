@@ -3,6 +3,7 @@
 use App\Http\Controllers\Access\DojoAccessController;
 use App\Http\Controllers\Access\DojoChampionshipController;
 use App\Http\Controllers\Access\DojoFinanceController;
+use App\Http\Controllers\Access\DojoStudentPersonController;
 use App\Http\Controllers\Access\OperationalController;
 use App\Http\Controllers\Access\UserController;
 use App\Http\Controllers\Attendance\AttendanceController;
@@ -63,6 +64,8 @@ Route::middleware(['auth', 'active', 'association.context'])->group(function ():
         Route::get('/alunos', 'students')->name('students');
         Route::get('/alunos/novo', [DirectRegistrationController::class, 'createDojoStudent'])->name('students.direct.create');
         Route::post('/alunos', [DirectRegistrationController::class, 'storeDojoStudent'])->name('students.direct.store');
+        Route::get('/alunos/{student}/dados', [DojoStudentPersonController::class, 'edit'])->name('students.person.edit');
+        Route::put('/alunos/{student}/dados', [DojoStudentPersonController::class, 'update'])->name('students.person.update');
         Route::get('/turmas', [DojoClassController::class, 'index'])->name('classes');
         Route::get('/turmas/nova', [DojoClassController::class, 'create'])->name('classes.create');
         Route::post('/turmas', [DojoClassController::class, 'store'])->name('classes.store');

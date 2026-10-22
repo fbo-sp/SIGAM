@@ -66,19 +66,28 @@ class PersonController extends Controller
         return view('people.show', compact('association', 'person'));
     }
 
-    public function edit(Association $association, Person $person): View
+    public function edit(Request $request, Association $association, Person $person): View
     {
         $this->ensureBelongsToAssociation($association, $person);
+        $returnTo = $this->returnPath($request->query('voltar'));
 
-        return view('people.form', compact('association', 'person'));
+        return view('people.form', compact('association', 'person', 'returnTo'));
     }
 
     public function update(PersonRequest $request, Association $association, Person $person, PersonService $service): RedirectResponse
     {
         $this->ensureBelongsToAssociation($association, $person);
         $service->update($association, $person, $request->validated());
+        $returnTo = $this->returnPath($request->input('voltar'));
 
-        return redirect()->route('associations.people.show', [$association, $person])->with('status', 'Dados da pessoa atualizados.');
+        return ($returnTo ? redirect($returnTo) : redirect()->route('associations.people.show', [$association, $person]))
+            ->with('status', 'Dados da pessoa atualizados.');
+    }
+
+    /** Aceita apenas caminho interno, para voltar à lista de origem sem permitir redirecionamento externo. */
+    private function returnPath(mixed $path): ?string
+    {
+        return is_string($path) && strlen($path) <= 500 && preg_match('#^/(?![/\\\\])[^\s\\\\]*$#', $path) === 1 ? $path : null;
     }
 
     private function query(Request $request, Association $association): Builder

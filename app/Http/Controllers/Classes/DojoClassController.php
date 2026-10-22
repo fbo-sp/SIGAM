@@ -73,7 +73,10 @@ class DojoClassController extends Controller
         $canManage = $this->scope->canDojo($user, $dojo, 'class.manage');
         $canEnroll = $this->scope->canDojo($user, $dojo, 'enrollment.manage');
 
-        $enrollments = $classGroup->enrollments()->with('student.person:id,full_name,social_name,birth_date')
+        $canEditStudents = $this->scope->canDojo($user, $dojo, 'student.manage');
+        $canEditPeople = $user->hasPermission('person.manage', $dojo->association_id);
+        $enrollments = $classGroup->enrollments()->with(['student' => fn ($query) => $query->with('person:id,full_name,social_name,birth_date')
+            ->withExists(['person as is_teacher' => fn ($person) => $person->whereHas('teacherProfile')])])
             ->orderByRaw("case when status = 'active' then 0 else 1 end")->orderByDesc('start_date')->limit(200)->get();
         $activeIds = $enrollments->where('status', 'active')->pluck('student_id');
         $assignments = $classGroup->teacherAssignments()->with('teacher.person:id,full_name')->orderByDesc('start_date')->get();
@@ -93,7 +96,7 @@ class DojoClassController extends Controller
 
         return view('operation.class', compact(
             'dojo', 'classGroup', 'enrollments', 'assignments', 'upcoming', 'past', 'candidates', 'dojoTeachers',
-            'scheduleTeachers', 'canManage', 'canEnroll',
+            'scheduleTeachers', 'canManage', 'canEnroll', 'canEditStudents', 'canEditPeople',
         ));
     }
 

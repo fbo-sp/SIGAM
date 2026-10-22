@@ -1,0 +1,2 @@
+@props(['href', 'label' => 'Editar dados'])
+<a {{ $attributes->merge(['class' => 'icon-link']) }} href="{{ $href }}" title="{{ $label }}" aria-label="{{ $label }}"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 20h9M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></a>
