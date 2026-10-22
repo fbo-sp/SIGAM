@@ -23,6 +23,8 @@ Notificações testam geração repetida, uma entrega por canal, preferências, 
 
 `TechniqueAssessmentTest` cobre gravação só do que mudou com histórico preservado, o que falta e radar, idade e tempo mínimo, quem avalia (principal, auxiliar, professor de fora, auxiliar encerrado, outra modalidade), data futura, item inativo, consulta do gestor do dojo e da associação, isolamento e aluno com duas modalidades.
 
+`SessionTechniquesTest` cobre a marcação das técnicas na aula (janela da chamada, permissão, desmarcar sem apagar) e o "trabalhado" do aluno só nas aulas com presença. `QuizTest` cobre banco de perguntas e configurações, alternativas travadas depois de respondidas, treino livre sem efeito, liberação única, uma tentativa oficial, correção no servidor, aprovação marcando itens teóricos, reprovação sem efeito, cancelamento, isolamento no portal e perguntas do modelo. `ProgressionPanelTest` cobre o painel do professor (só as próprias turmas), do gestor e da associação, "precisa x trabalhado" e o ranking. `AssessmentReminderTest` cobre o lembrete por turma e período.
+
 `Sprint20Test` cobre meta 4/8, vários dias, geração na criação, reexecução, redução sem exclusão, cancelamento sem ressurreição, aula atrasada, término curto, permissão/escopo e execução operacional. MySQL deve validar duas reposições concorrentes sobre a mesma turma; o lock e a constraint precisam resultar no máximo na meta configurada.
 
 `Sprint21Test` cobre origem obrigatória de plano, coexistência do mesmo aluno em dojos distintos, listagem financeira local, baixa idempotente, negações fora do dojo, separação das etapas de gratuidade, participação local em campeonato, inscrição derivada pelo backend e bloqueio das ações exclusivamente associativas.

@@ -1,6 +1,6 @@
 # Changelog
 
-## 2026-10-22 — Catálogo de técnicas, currículo por graduação e avaliação técnica
+## 2026-10-22 — Acompanhamento técnico rumo ao exame de graduação
 
 - novo módulo `Progression` (ADR-014, `docs/modules/progression.md`), fase 1 do acompanhamento rumo ao exame de graduação;
 - novas tabelas `technique_items` (árvore de grupos e itens por associação e modalidade, com tipo Teórico ou Prático) e `rank_curriculum_entries` (ajustes de cada graduação; o currículo efetivo herda as graduações anteriores);
@@ -14,6 +14,12 @@
 - novas permissões `assessment.view` (associação, gestor do dojo e professor) e `assessment.manage` (professor do dojo), acrescentadas aos papéis `dojo_operator` e `dojo_teacher` pelo `db:seed`;
 - botões "Avaliar"/"Acompanhamento" na turma do dojo, na lista de alunos do dojo e na ficha do aluno da associação;
 - novo `TechniqueAssessmentTest`.
+- fase 3: nova tabela `class_session_techniques`; a tela da aula no dojo ganha "Técnicas trabalhadas" (mesma janela e permissão da chamada, `POST /operacao/dojos/{dojo}/aulas/{session}/tecnicas`), e a ficha de acompanhamento mostra "Trabalhado nas aulas" contando só as aulas com presença do aluno;
+- fase 4: novas tabelas `progression_settings`, `quiz_questions`, `quiz_question_options`, `quiz_releases`, `quiz_attempts` e `quiz_attempt_answers`; banco de perguntas em `modalidades/{martialArt}/quiz` (`quiz.manage`) e configurações em `acompanhamento/configuracoes` (`curriculum.manage`); o professor que avalia libera e cancela a prova oficial na ficha do aluno; o modelo do judô traz 37 perguntas e a mensagem do modelo informa quantas foram incluídas;
+- fase 5: progresso técnico no portal (`/portal/alunos/{student}/progresso`) para o aluno e o responsável, com material de estudo, radar, aulas trabalhadas, evolução, treino livre e prova oficial corrigida no servidor; aprovado, os itens teóricos das perguntas sobem para "Adequado";
+- fase 6: painel do dojo (`/operacao/dojos/{dojo}/acompanhamento`) com radar da turma, "precisa x trabalhado" e alunos com mais itens a trabalhar, e painel da associação (`acompanhamento`) comparando dojos e professores; nova permissão `progression.report` (Gestor da Associação, `dojo_operator` e `dojo_teacher` pelo `db:seed`);
+- fase 7: lembrete `assessment.due` no gerador horário de notificações, um por turma, professor e período configurável;
+- novos `SessionTechniquesTest`, `QuizTest`, `ProgressionPanelTest` e `AssessmentReminderTest`.
 
 ## 2026-10-22 — Aulas passadas na turma e na importação
 

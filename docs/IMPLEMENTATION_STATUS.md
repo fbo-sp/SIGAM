@@ -21,7 +21,7 @@ Melhorias posteriores não fazem parte do estado implementado apenas por estarem
 | Organização | associações, dojos, pessoas centrais, normalização, busca, inativação e CSV seguro |
 | Cadastro esportivo | modalidades, graduações, templates opcionais, alunos, responsáveis, professores, vínculos multi-dojo e históricos |
 | Cadastro direto | aluno/responsável/documento no contexto do dojo e professor/convite no contexto da associação |
-| Acompanhamento técnico | fases 1 e 2: catálogo de técnicas em árvore (Teórico e Prático), currículo cumulativo por graduação, modelo do judô, avaliação pelo professor da turma e acompanhamento do aluno com o que falta e radar; técnicas da aula, quiz, portal e painéis são as próximas fases (ADR-014) |
+| Acompanhamento técnico | catálogo de técnicas em árvore (Teórico e Prático), currículo cumulativo por graduação, modelo do judô com perguntas, avaliação pelo professor da turma, acompanhamento do aluno com o que falta e radar, técnicas trabalhadas na aula, quiz de treino e prova oficial, progresso no portal, painéis do dojo e da associação e lembrete de avaliação (ADR-014). O exame de graduação fica fora |
 | Turmas | vários dias/horários, versões de agenda, professor, capacidade, faixa etária e matrículas; página da turma no dojo, edição, encerramento de matrícula e professores auxiliares |
 | Aulas | meta automática de 4/8 ocorrências, reposição horária, cancelamento, reagendamento e chamada mobile |
 | Visitantes | participação gratuita por aula, somente dentro da mesma associação, sem matrícula ou cobrança |

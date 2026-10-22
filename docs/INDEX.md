@@ -36,7 +36,7 @@ As especificações originais permanecem em `../Especificação/` como baseline 
 | Fundação/Identidade | Convite e ativação de professor disponíveis | `modules/identity-access.md`, `modules/operational-access.md`, `modules/teacher-invitations.md` |
 | Organização e Pessoas | Implementado | `modules/organization-people.md` |
 | Cadastro esportivo | Cadastro direto disponível; template revisável de graduações | `modules/sports-registry.md`, `modules/direct-registration.md`, `templates/template_carga_graduacoes.xlsx` |
-| Acompanhamento técnico | Fases 1 e 2: catálogo, currículo por graduação, avaliação pelo professor e acompanhamento do aluno | `modules/progression.md`, `adr/ADR-014-acompanhamento-tecnico-por-graduacao.md` |
+| Acompanhamento técnico | Catálogo, currículo por graduação, avaliação, técnicas da aula, quiz, portal, painéis e lembrete | `modules/progression.md`, `adr/ADR-014-acompanhamento-tecnico-por-graduacao.md` |
 | Turmas e matrículas | Agenda semanal e meta 4/8 disponíveis | `modules/classes.md` |
 | Aulas e presença | Visitantes e reposição automática disponíveis | `modules/attendance.md` |
 | Importação assistida | Alunos e presenças disponíveis por CSV/XLSX | `modules/assisted-imports.md` |

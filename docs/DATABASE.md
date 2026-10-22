@@ -156,7 +156,13 @@ Antes da produção, revisar retenção, backup/restore e os requisitos legais d
 
 `rank_curriculum_entries` guarda só os ajustes de cada graduação, únicos por `(association_id, rank_id, technique_item_id)`. `required_level` vai de 2 a 4; `NULL` significa que o item herdado deixa de ser cobrado a partir daquela graduação. O currículo efetivo é calculado pela soma das graduações anteriores da modalidade (ADR-014). As chaves estrangeiras usam `restrictOnDelete`.
 
-`technique_assessments` é só de inclusão: aluno, modalidade, item, nível (1 a 4), professor, dojo, usuário, data da avaliação e observação. O nível atual de um item é o último registro gravado (maior `id`). Índices `technique_assessments_student_item_index` (consulta do aluno) e `technique_assessments_period_index` (painéis futuros por período).
+`technique_assessments` é só de inclusão: aluno, modalidade, item, nível (1 a 4), professor, dojo, usuário, data da avaliação e observação. O nível atual de um item é o último registro gravado (maior `id`). Índices `technique_assessments_student_item_index` (consulta do aluno) e `technique_assessments_period_index` (painéis por período).
+
+`class_session_techniques` liga aula e item do catálogo, única por `(class_session_id, technique_item_id)`. Desmarcar preenche `removed_at`/`removed_by_user_id`; marcar de novo limpa os campos.
+
+`progression_settings` tem uma linha por associação (perguntas por quiz, padrão 10; nota mínima da prova oficial, padrão 70; semanas para o lembrete de avaliação, padrão 8). Sem linha, valem os padrões de `ProgressionSetting::DEFAULTS`.
+
+`quiz_questions` (graduação, item teórico opcional, enunciado, explicação, situação) e `quiz_question_options` (texto, `is_correct`, ordem) formam o banco de perguntas. `quiz_releases` guarda a liberação da prova oficial pelo professor (`open`, `used` ou `cancelled`). `quiz_attempts` guarda cada tentativa (`training` ou `official`), com `quiz_release_id` único (uma tentativa por liberação), nota, nota mínima vigente e aprovação; `quiz_attempt_answers` guarda a ordem sorteada das alternativas (`option_ids` em JSON), a alternativa escolhida e o acerto, única por `(quiz_attempt_id, quiz_question_id)`. Nada disso é apagado.
 
 ## Compatibilidade com MySQL 5.7
 

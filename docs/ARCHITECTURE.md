@@ -25,7 +25,7 @@ flowchart TB
 - `People`: cadastro central sem duplicação por papel.
 - `SportsRegistry`: aluno, responsável, professor, modalidade e graduação.
 - `Classes`: turma, agenda, matrícula, aula e presença.
-- `Progression`: catálogo de técnicas, currículo por graduação e, nas próximas fases, avaliação técnica, quiz e painéis (ADR-014); lê `SportsRegistry`.
+- `Progression`: catálogo de técnicas, currículo por graduação, avaliação técnica, técnicas da aula, quiz, painéis e lembrete (ADR-014); lê `SportsRegistry` e `Attendance`.
 - `Documents`: upload/download privado e validade.
 - `Finance`: plano, benefício, cobrança, pagamento e estorno.
 - `Federation`: catálogo federativo, filiações históricas e documentos vinculados; lê `SportsRegistry` e `Documents`.

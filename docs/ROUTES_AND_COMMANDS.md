@@ -21,6 +21,7 @@ Este documento é um índice de manutenção. `routes/web.php`, `routes/console.
 | `/sair` | `AuthenticatedSessionController` | sessão autenticada, CSRF e invalidação |
 | `/modelos/importacao/{type}/{format}` | `AssistedImportController` | conta ativa; tipo/formato em lista fechada e conteúdo fictício |
 | `/portal` | `PortalController` | titularidade ou responsabilidade vigente |
+| `/portal/alunos/{student}/progresso` e `/portal/alunos/{student}/quiz/...` | `PortalProgressionController`: progresso técnico, início (`POST quiz/{martialArt}`, `mode=training|official`), tentativa e envio (`quiz/tentativas/{attempt}`) | titularidade ou responsabilidade vigente; início e envio com limite de 20 por minuto |
 | `/meus-dojos` | `OperationalController` | dojos concedidos ou administração associativa |
 | `/operacao/dojos/{dojo}` | `OperationalController`, `DirectRegistrationController`, `DojoFinanceController`, `DojoChampionshipController` | `OperationalScope`; recursos sempre filtrados pelo dojo |
 | `/associacoes/{association}/usuarios` | `Access\UserController` | `user.manage` associativo; regras em `UserAccountService` |
@@ -36,6 +37,9 @@ Este documento é um índice de manutenção. `routes/web.php`, `routes/console.
 | `modalidades` | modalidades/graduações/templates | `martial_art.view`, `martial_art.manage` |
 | `modalidades/{martialArt}/tecnicas` | catálogo de técnicas: incluir, `{item}/editar`, `{item}/situacao`, `modelo` | leitura `martial_art.view`; escrita `curriculum.manage` |
 | `alunos/{student}/acompanhamento` | acompanhamento técnico do aluno (`?modalidade=`), só consulta | `assessment.view` |
+| `modalidades/{martialArt}/quiz` | banco de perguntas (`?graduacao=`): incluir, `{question}/editar`, PUT `{question}`, `{question}/situacao` | `quiz.manage` |
+| `acompanhamento` | painel que compara dojos e professores (`?modalidade=&de=&ate=`) | `progression.report` |
+| `acompanhamento/configuracoes` | perguntas por quiz, nota mínima e semanas do lembrete (GET/PUT) | `curriculum.manage` |
 | `modalidades/{martialArt}/curriculo` | currículo por graduação (`?graduacao=`), `curriculo/{rank}` grava exigência e `curriculo/{rank}/{item}/restaurar` desfaz o ajuste | leitura `martial_art.view`; escrita `curriculum.manage` |
 | `alunos` | alunos/responsáveis/histórico; `alunos/{student}/turmas` matricula e `.../turmas/{enrollment}/encerrar` encerra | `student.view`, `student.manage`; turmas com `enrollment.manage` |
 | `professores` | perfil, habilitação e convites | `teacher.view`, `teacher.manage` |
@@ -55,7 +59,7 @@ O prefixo `/operacao/dojos/{dojo}` oferece:
 - turmas e aulas autorizadas;
 - turma no dojo: `turmas/nova`, `turmas/{classGroup}` (abas Alunos, Professores, Horários e Aulas), `turmas/{classGroup}/editar`, `PUT turmas/{classGroup}`, `turmas/{classGroup}/matriculas` e `.../matriculas/{enrollment}/encerrar` (`enrollment.manage`), `turmas/{classGroup}/professores` e `.../professores/{assignment}/encerrar`, `agenda/substituir`, `aulas/atualizar` e `aulas/passadas` (`class.manage`);
 - chamada e visitantes; `POST aulas/{session}/reabrir` (`attendance.reopen`, motivo obrigatório) reabre a chamada finalizada;
-- acompanhamento técnico: `alunos/{student}/acompanhamento` (gestor com `assessment.view` ou professor que avalia o aluno) e `alunos/{student}/acompanhamento/{martialArt}/avaliar` (GET/POST, só professor principal ou auxiliar da turma, `assessment.manage`);
+- acompanhamento técnico: `alunos/{student}/acompanhamento` (gestor com `assessment.view` ou professor que avalia o aluno) e `alunos/{student}/acompanhamento/{martialArt}/avaliar` (GET/POST, só professor principal ou auxiliar da turma, `assessment.manage`); `POST alunos/{student}/acompanhamento/{martialArt}/quiz` libera e `POST alunos/{student}/acompanhamento/quiz/{release}/cancelar` cancela a prova oficial (mesmo professor); `POST aulas/{session}/tecnicas` grava as técnicas trabalhadas (`attendance.manage`); `acompanhamento` abre o painel das turmas (`progression.report`, `?modalidade=&turma=&de=&ate=`);
 - equipe de professores da associação;
 - importação assistida;
 - planos, gratuidades, cobranças e pagamentos do dojo;

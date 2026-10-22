@@ -2,7 +2,7 @@
 
 ## Objetivo e experiência
 
-O portal reúne, em uma tela responsiva, dados próprios e de dependentes autorizados: turmas, frequência, cobranças e pagamentos, documentos, graduações, filiações e campeonatos. A troca de dependente permanece visível no topo e as seções têm atalhos adequados para celular.
+O portal reúne, em uma tela responsiva, dados próprios e de dependentes autorizados: turmas, frequência, cobranças e pagamentos, documentos, graduações, filiações e campeonatos. Cada modalidade tem o link "Progresso técnico" (`portal/alunos/{student}/progresso`), com o que falta para a próxima graduação, material de estudo, radar, o que foi trabalhado nas aulas, a evolução (sem as observações do professor) e o quiz teórico (ver `progression.md`). A troca de dependente permanece visível no topo e as seções têm atalhos adequados para celular.
 
 Não existe cadastro público. Uma conta só acessa o portal quando possui `portal.access`, `association_id`, `person_id` e vínculo válido com o aluno.
 
