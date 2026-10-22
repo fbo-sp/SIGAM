@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Progression;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Progression\AssessmentRequest;
+use App\Http\Requests\Progression\PanelFilterRequest;
 use App\Models\ClassSession;
 use App\Models\Dojo;
 use App\Models\MartialArt;
@@ -11,6 +12,7 @@ use App\Models\QuizRelease;
 use App\Models\Student;
 use App\Services\Access\OperationalScope;
 use App\Services\Progression\AssessmentService;
+use App\Services\Progression\ProgressionPanelService;
 use App\Services\Progression\QuizService;
 use App\Services\Progression\SessionTechniqueService;
 use App\Services\Progression\StudentProgressService;
@@ -83,6 +85,31 @@ class DojoProgressionController extends Controller
 
         return redirect()->route('operation.session', [$dojo, $session])->withFragment('tecnicas')
             ->with('status', $result['added'] + $result['removed'] === 0 ? 'Técnicas sem alteração.' : 'Técnicas trabalhadas salvas.');
+    }
+
+    public function panel(PanelFilterRequest $request, Dojo $dojo, ProgressionPanelService $panels): View
+    {
+        $this->enter($request, $dojo);
+        $user = $request->user();
+        abort_unless($this->scope->canDojo($user, $dojo, 'progression.report') || $this->scope->canTeacher($user, $dojo, 'progression.report'), 403);
+        $groups = $panels->dojoClasses($user, $dojo)->with('martialArt')->orderBy('name')->get();
+        $martialArts = $groups->pluck('martialArt')->unique('id')->sortBy('name')->values();
+        $martialArt = $martialArts->firstWhere('id', $request->integer('modalidade')) ?? $martialArts->first();
+        $classes = $martialArt ? $groups->where('martial_art_id', $martialArt->id)->values() : collect();
+        $selected = $request->filled('turma') ? $classes->firstWhere('id', $request->integer('turma')) : null;
+        abort_if($request->filled('turma') && $selected === null, 404);
+        [$from, $until] = $request->period();
+
+        return view('progression.panel', [
+            'dojo' => $dojo,
+            'martialArts' => $martialArts,
+            'martialArt' => $martialArt,
+            'classes' => $classes,
+            'selected' => $selected,
+            'from' => $from,
+            'until' => $until,
+            'panel' => $martialArt && $classes->isNotEmpty() ? $panels->panel($dojo->association, $martialArt, $selected ? collect([$selected]) : $classes, $from, $until) : null,
+        ]);
     }
 
     public function releaseQuiz(Request $request, Dojo $dojo, Student $student, MartialArt $martialArt, QuizService $quiz): RedirectResponse

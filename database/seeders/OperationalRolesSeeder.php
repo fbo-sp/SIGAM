@@ -25,6 +25,7 @@ class OperationalRolesSeeder extends Seeder
                 'attendance.reopen' => 'Reabrir chamadas finalizadas',
                 'assessment.view' => 'Consultar o acompanhamento técnico dos alunos',
                 'assessment.manage' => 'Avaliar a técnica dos alunos das próprias turmas',
+                'progression.report' => 'Consultar painéis do acompanhamento técnico',
                 'import.manage' => 'Importar alunos e presenças por planilha',
                 'charge.view' => 'Consultar cobranças do dojo',
                 'student_plan.manage' => 'Vincular planos aos alunos do dojo',

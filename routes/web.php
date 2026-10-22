@@ -31,6 +31,7 @@ use App\Http\Controllers\Portal\PortalController;
 use App\Http\Controllers\Portal\PortalProgressionController;
 use App\Http\Controllers\Progression\CurriculumController;
 use App\Http\Controllers\Progression\DojoProgressionController;
+use App\Http\Controllers\Progression\ProgressionReportController;
 use App\Http\Controllers\Progression\QuizBankController;
 use App\Http\Controllers\Progression\StudentProgressionController;
 use App\Http\Controllers\Progression\TechniqueCatalogController;
@@ -72,6 +73,7 @@ Route::middleware(['auth', 'active', 'association.context'])->group(function ():
         Route::post('/alunos', [DirectRegistrationController::class, 'storeDojoStudent'])->name('students.direct.store');
         Route::get('/alunos/{student}/dados', [DojoStudentPersonController::class, 'edit'])->name('students.person.edit');
         Route::put('/alunos/{student}/dados', [DojoStudentPersonController::class, 'update'])->name('students.person.update');
+        Route::get('/acompanhamento', [DojoProgressionController::class, 'panel'])->name('progression.panel');
         Route::get('/alunos/{student}/acompanhamento', [DojoProgressionController::class, 'show'])->name('progression.show');
         Route::get('/alunos/{student}/acompanhamento/{martialArt}/avaliar', [DojoProgressionController::class, 'edit'])->name('progression.assess');
         Route::post('/alunos/{student}/acompanhamento/{martialArt}/avaliar', [DojoProgressionController::class, 'store'])->name('progression.assess.store');
@@ -188,6 +190,7 @@ Route::middleware(['auth', 'active', 'association.context'])->group(function ():
         Route::get('/modalidades/{martialArt}/quiz/{question}/editar', [QuizBankController::class, 'edit'])->middleware('permission:quiz.manage')->name('quiz.edit');
         Route::put('/modalidades/{martialArt}/quiz/{question}', [QuizBankController::class, 'update'])->middleware('permission:quiz.manage')->name('quiz.update');
         Route::post('/modalidades/{martialArt}/quiz/{question}/situacao', [QuizBankController::class, 'status'])->middleware('permission:quiz.manage')->name('quiz.status');
+        Route::get('/acompanhamento', [ProgressionReportController::class, 'index'])->middleware('permission:progression.report')->name('progression.report');
         Route::get('/acompanhamento/configuracoes', [QuizBankController::class, 'settings'])->middleware('permission:curriculum.manage')->name('progression.settings');
         Route::put('/acompanhamento/configuracoes', [QuizBankController::class, 'saveSettings'])->middleware('permission:curriculum.manage')->name('progression.settings.update');
         Route::get('/modalidades/{martialArt}/curriculo', [CurriculumController::class, 'show'])->middleware('permission:martial_art.view')->name('curriculum.show');
