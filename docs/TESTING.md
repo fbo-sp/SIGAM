@@ -21,6 +21,8 @@ Notificações testam geração repetida, uma entrega por canal, preferências, 
 
 `TechniqueCatalogTest` cobre a validade do modelo do judô frente ao template de graduações, aplicação idempotente que preserva ajustes do currículo, faixas ausentes, herança do currículo (novo, alterado, herdado, retirado e restaurado), item inativo, regras da árvore, isolamento entre associações e permissões.
 
+`TechniqueAssessmentTest` cobre gravação só do que mudou com histórico preservado, o que falta e radar, idade e tempo mínimo, quem avalia (principal, auxiliar, professor de fora, auxiliar encerrado, outra modalidade), data futura, item inativo, consulta do gestor do dojo e da associação, isolamento e aluno com duas modalidades.
+
 `Sprint20Test` cobre meta 4/8, vários dias, geração na criação, reexecução, redução sem exclusão, cancelamento sem ressurreição, aula atrasada, término curto, permissão/escopo e execução operacional. MySQL deve validar duas reposições concorrentes sobre a mesma turma; o lock e a constraint precisam resultar no máximo na meta configurada.
 
 `Sprint21Test` cobre origem obrigatória de plano, coexistência do mesmo aluno em dojos distintos, listagem financeira local, baixa idempotente, negações fora do dojo, separação das etapas de gratuidade, participação local em campeonato, inscrição derivada pelo backend e bloqueio das ações exclusivamente associativas.

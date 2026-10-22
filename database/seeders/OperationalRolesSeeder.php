@@ -23,6 +23,8 @@ class OperationalRolesSeeder extends Seeder
                 'student.document.manage' => 'Enviar documento no cadastro de aluno do dojo',
                 'visitor.manage' => 'Autorizar e revogar visitante em aula',
                 'attendance.reopen' => 'Reabrir chamadas finalizadas',
+                'assessment.view' => 'Consultar o acompanhamento técnico dos alunos',
+                'assessment.manage' => 'Avaliar a técnica dos alunos das próprias turmas',
                 'import.manage' => 'Importar alunos e presenças por planilha',
                 'charge.view' => 'Consultar cobranças do dojo',
                 'student_plan.manage' => 'Vincular planos aos alunos do dojo',

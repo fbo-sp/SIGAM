@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
             'martial_art.view' => 'Visualizar modalidades e graduações',
             'martial_art.manage' => 'Administrar modalidades e graduações',
             'curriculum.manage' => 'Administrar técnicas e currículo de graduação',
+            'assessment.view' => 'Consultar o acompanhamento técnico dos alunos',
             'student.view' => 'Visualizar alunos',
             'student.manage' => 'Administrar alunos e responsáveis',
             'teacher.view' => 'Visualizar professores',

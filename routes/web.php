@@ -29,6 +29,8 @@ use App\Http\Controllers\Organization\DojoController;
 use App\Http\Controllers\People\PersonController;
 use App\Http\Controllers\Portal\PortalController;
 use App\Http\Controllers\Progression\CurriculumController;
+use App\Http\Controllers\Progression\DojoProgressionController;
+use App\Http\Controllers\Progression\StudentProgressionController;
 use App\Http\Controllers\Progression\TechniqueCatalogController;
 use App\Http\Controllers\Sports\CatalogController;
 use App\Http\Controllers\Sports\DirectRegistrationController;
@@ -68,6 +70,9 @@ Route::middleware(['auth', 'active', 'association.context'])->group(function ():
         Route::post('/alunos', [DirectRegistrationController::class, 'storeDojoStudent'])->name('students.direct.store');
         Route::get('/alunos/{student}/dados', [DojoStudentPersonController::class, 'edit'])->name('students.person.edit');
         Route::put('/alunos/{student}/dados', [DojoStudentPersonController::class, 'update'])->name('students.person.update');
+        Route::get('/alunos/{student}/acompanhamento', [DojoProgressionController::class, 'show'])->name('progression.show');
+        Route::get('/alunos/{student}/acompanhamento/{martialArt}/avaliar', [DojoProgressionController::class, 'edit'])->name('progression.assess');
+        Route::post('/alunos/{student}/acompanhamento/{martialArt}/avaliar', [DojoProgressionController::class, 'store'])->name('progression.assess.store');
         Route::get('/turmas', [DojoClassController::class, 'index'])->name('classes');
         Route::get('/turmas/nova', [DojoClassController::class, 'create'])->name('classes.create');
         Route::post('/turmas', [DojoClassController::class, 'store'])->name('classes.store');
@@ -177,6 +182,7 @@ Route::middleware(['auth', 'active', 'association.context'])->group(function ():
         Route::get('/alunos/novo', [DirectRegistrationController::class, 'createAssociationStudent'])->middleware('permission:student.manage')->name('students.create');
         Route::post('/alunos/cadastro-direto', [DirectRegistrationController::class, 'storeAssociationStudent'])->middleware('permission:student.manage')->name('students.direct.store');
         Route::get('/alunos/{student}', [StudentController::class, 'show'])->middleware('permission:student.view')->name('students.show');
+        Route::get('/alunos/{student}/acompanhamento', [StudentProgressionController::class, 'show'])->middleware('permission:assessment.view')->name('students.progression');
         Route::post('/alunos/{student}/responsaveis', [StudentController::class, 'addGuardian'])->middleware('permission:student.manage')->name('students.guardians.store');
         Route::post('/alunos/{student}/ativar', [StudentController::class, 'activate'])->middleware('permission:student.manage')->name('students.activate');
         Route::post('/alunos/{student}/turmas', [StudentController::class, 'enroll'])->middleware('permission:enrollment.manage')->name('students.enrollments.store');

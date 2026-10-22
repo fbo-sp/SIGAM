@@ -156,6 +156,8 @@ Antes da produção, revisar retenção, backup/restore e os requisitos legais d
 
 `rank_curriculum_entries` guarda só os ajustes de cada graduação, únicos por `(association_id, rank_id, technique_item_id)`. `required_level` vai de 2 a 4; `NULL` significa que o item herdado deixa de ser cobrado a partir daquela graduação. O currículo efetivo é calculado pela soma das graduações anteriores da modalidade (ADR-014). As chaves estrangeiras usam `restrictOnDelete`.
 
+`technique_assessments` é só de inclusão: aluno, modalidade, item, nível (1 a 4), professor, dojo, usuário, data da avaliação e observação. O nível atual de um item é o último registro gravado (maior `id`). Índices `technique_assessments_student_item_index` (consulta do aluno) e `technique_assessments_period_index` (painéis futuros por período).
+
 ## Compatibilidade com MySQL 5.7
 
 A hospedagem prevista usa MySQL 5.7 (Percona). Nessa versão, com `explicit_defaults_for_timestamp` desligado (padrão), uma coluna `TIMESTAMP NOT NULL` recebe `DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP` ou um default inválido. Por isso, datas obrigatórias de negócio usam `dateTime()` nas migrations, e `timestamp()` fica restrito a colunas anuláveis (`created_at`, `updated_at`, `deleted_at` e similares). Bancos de desenvolvimento criados antes de 12/10/2026 mantêm `TIMESTAMP` nessas colunas, o que é equivalente em MySQL 8. O CI executa a suíte em MySQL 8.4 e 5.7.

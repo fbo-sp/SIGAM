@@ -65,8 +65,9 @@ class OperationalController extends Controller
 
         $canManage = $this->scope->canDojo($request->user(), $dojo, 'student.manage');
         $canEditPeople = $request->user()->hasPermission('person.manage', $dojo->association_id);
+        $canProgress = $this->scope->canDojo($request->user(), $dojo, 'assessment.view');
 
-        return view('operation.students', compact('dojo', 'students', 'canManage', 'canEditPeople'));
+        return view('operation.students', compact('dojo', 'students', 'canManage', 'canEditPeople', 'canProgress'));
     }
 
     public function sessions(Request $request, Dojo $dojo)

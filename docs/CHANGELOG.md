@@ -1,6 +1,6 @@
 # Changelog
 
-## 2026-10-22 — Catálogo de técnicas e currículo por graduação
+## 2026-10-22 — Catálogo de técnicas, currículo por graduação e avaliação técnica
 
 - novo módulo `Progression` (ADR-014, `docs/modules/progression.md`), fase 1 do acompanhamento rumo ao exame de graduação;
 - novas tabelas `technique_items` (árvore de grupos e itens por associação e modalidade, com tipo Teórico ou Prático) e `rank_curriculum_entries` (ajustes de cada graduação; o currículo efetivo herda as graduações anteriores);
@@ -8,6 +8,12 @@
 - novas telas `modalidades/{martialArt}/tecnicas` e `modalidades/{martialArt}/curriculo`, com botões na página de modalidades;
 - nova permissão `curriculum.manage` (entra no Gestor da Associação pelo `db:seed`); a leitura usa `martial_art.view`;
 - novo `TechniqueCatalogTest`.
+- fase 2: nova tabela `technique_assessments` (só inclusão; o nível atual é o último registro) e serviços `AssessmentService` e `StudentProgressService`;
+- o professor principal ou auxiliar da turma avalia os alunos dela em `operacao/dojos/{dojo}/alunos/{student}/acompanhamento/{martialArt}/avaliar`, com botões de 1 a 4 pensados para celular; só o que mudou é gravado e auditado como `technique_assessment.recorded`;
+- novo acompanhamento do aluno no dojo e na associação: próxima graduação, o que falta separado em Teórico e Prático, idade e tempo mínimo, radar por grupo em SVG (`x-radar`) e evolução;
+- novas permissões `assessment.view` (associação, gestor do dojo e professor) e `assessment.manage` (professor do dojo), acrescentadas aos papéis `dojo_operator` e `dojo_teacher` pelo `db:seed`;
+- botões "Avaliar"/"Acompanhamento" na turma do dojo, na lista de alunos do dojo e na ficha do aluno da associação;
+- novo `TechniqueAssessmentTest`.
 
 ## 2026-10-22 — Aulas passadas na turma e na importação
 

@@ -45,7 +45,7 @@ A tela `/associacoes/{association}/usuarios` exige `user.manage` e é servida po
 
 As permissões `dojo.view` e `dojo.manage` complementam as permissões de associação e pessoa. Rotas aninhadas resolvem o escopo pela associação da URL, e controllers confirmam a pertença do dojo/pessoa. Criar uma associação exige `association.manage` em papel global; a mesma permissão em papel associativo permite somente editar a associação correspondente.
 
-Acompanhamento técnico adiciona `curriculum.manage` (catálogo de técnicas e currículo por graduação, só no contexto da associação); consultar catálogo e currículo exige `martial_art.view`. O Gestor da Associação recebe a permissão pelo `db:seed`.
+Acompanhamento técnico adiciona `curriculum.manage` (catálogo de técnicas e currículo por graduação, só no contexto da associação); consultar catálogo e currículo exige `martial_art.view`. O Gestor da Associação recebe a permissão pelo `db:seed`. `assessment.view` consulta o acompanhamento do aluno (associação, e no dojo pelo papel `dojo_operator`, só para alunos regulares do dojo). `assessment.manage` existe só no papel `dojo_teacher`: o professor avalia apenas alunos com matrícula ativa em turma ativa da modalidade em que ele é principal ou auxiliar vigente; gestor do dojo e associação não avaliam.
 
 Cadastro esportivo adiciona `martial_art.*`, `student.*` e `teacher.*`. Possuir acesso à pessoa não concede automaticamente acesso ao perfil esportivo; cada rota exige a permissão específica e o mesmo escopo de associação.
 

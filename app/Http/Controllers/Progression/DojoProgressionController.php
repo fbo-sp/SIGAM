@@ -1,0 +1,87 @@
+<?php
+
+namespace App\Http\Controllers\Progression;
+
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Progression\AssessmentRequest;
+use App\Models\Dojo;
+use App\Models\MartialArt;
+use App\Models\Student;
+use App\Services\Access\OperationalScope;
+use App\Services\Progression\AssessmentService;
+use App\Services\Progression\StudentProgressService;
+use App\Support\Progression\AssessmentLevel;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
+use Illuminate\View\View;
+
+/** Acompanhamento técnico do aluno no contexto do dojo (ADR-006 e ADR-014). */
+class DojoProgressionController extends Controller
+{
+    public function __construct(private readonly OperationalScope $scope, private readonly AssessmentService $assessments, private readonly StudentProgressService $progress) {}
+
+    public function show(Request $request, Dojo $dojo, Student $student): View
+    {
+        [$martialArt, $options] = $this->resolve($request, $dojo, $student);
+        abort_if($martialArt === null, 404);
+        abort_unless($this->assessments->canViewInDojo($request->user(), $dojo, $student, $martialArt), 403);
+        $student->load('person');
+
+        return view('progression.student', [
+            'student' => $student,
+            'martialArt' => $martialArt,
+            'options' => $options,
+            'snapshot' => $this->progress->snapshot($dojo->association, $student, $martialArt),
+            'history' => $this->assessments->history($student, $martialArt),
+            'levels' => AssessmentLevel::labels(),
+            'dojo' => $dojo,
+            'association' => null,
+            'canAssess' => $this->assessments->assessorTeacherId($request->user(), $dojo, $student, $martialArt) !== null,
+            'switchUrl' => fn (int $id) => route('operation.progression.show', [$dojo, $student, 'modalidade' => $id]),
+        ]);
+    }
+
+    public function edit(Request $request, Dojo $dojo, Student $student, MartialArt $martialArt): View
+    {
+        $this->enter($request, $dojo);
+        abort_if($this->assessments->assessorTeacherId($request->user(), $dojo, $student, $martialArt) === null, 403);
+        $student->load('person');
+
+        return view('progression.assess', [
+            'dojo' => $dojo,
+            'student' => $student,
+            'martialArt' => $martialArt,
+            'snapshot' => $this->progress->snapshot($dojo->association, $student, $martialArt),
+            'levels' => AssessmentLevel::labels(),
+        ]);
+    }
+
+    public function store(AssessmentRequest $request, Dojo $dojo, Student $student, MartialArt $martialArt): RedirectResponse
+    {
+        $this->enter($request, $dojo);
+        $data = $request->validated();
+        $count = $this->assessments->record($request->user(), $dojo, $student, $martialArt, $data['levels'] ?? [], Carbon::parse($data['assessed_on']), $data['notes'] ?? null);
+
+        return redirect()->route('operation.progression.show', [$dojo, $student, 'modalidade' => $martialArt->id])
+            ->with('status', $count === 0 ? 'Nenhum nível mudou; nada foi gravado.' : "Avaliação registrada em {$count} item(ns).");
+    }
+
+    /** @return array{0: ?MartialArt, 1: Collection} */
+    private function resolve(Request $request, Dojo $dojo, Student $student): array
+    {
+        $this->enter($request, $dojo);
+        abort_unless($student->association_id === $dojo->association_id, 404);
+        $options = $this->progress->martialArts($student);
+        $link = $options->firstWhere('martial_art_id', $request->integer('modalidade')) ?? $options->first();
+
+        return [$link?->martialArt, $options];
+    }
+
+    private function enter(Request $request, Dojo $dojo): void
+    {
+        abort_unless($this->scope->canEnter($request->user(), $dojo), 403);
+        view()->share('currentAssociation', $dojo->association);
+    }
+}
