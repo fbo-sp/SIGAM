@@ -14,6 +14,7 @@ use App\Models\MartialArt;
 use App\Models\Student;
 use App\Models\TeacherProfile;
 use App\Services\Attendance\FutureSessionMaintainer;
+use App\Services\Attendance\SessionGenerator;
 use App\Services\AuditService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -25,7 +26,7 @@ class ClassGroupService
 {
     private const EDITABLE = ['name', 'description', 'main_teacher_id', 'age_group', 'minimum_age', 'maximum_age', 'capacity', 'future_session_target', 'end_date', 'status'];
 
-    public function __construct(private readonly AuditService $audit, private readonly FutureSessionMaintainer $futureSessions) {}
+    public function __construct(private readonly AuditService $audit, private readonly FutureSessionMaintainer $futureSessions, private readonly SessionGenerator $sessions) {}
 
     public function create(Association $association, array $data): ClassGroup
     {
@@ -337,6 +338,41 @@ class ClassGroupService
             $this->audit->record('class_group_teacher.ended', 'updated', $locked, $before, ['end_date' => $end->toDateString()], ['association_id' => $association->id]);
 
             return $locked;
+        });
+    }
+
+    /**
+     * Gera aulas passadas pelos horários da turma (histórico e migração). Se o período começa antes da turma,
+     * o início da turma e dos horários iniciais recua para essa data. Repetir não duplica aulas.
+     *
+     * @return array{created: int, start_date_moved: bool}
+     */
+    public function generatePastSessions(Association $association, ClassGroup $group, array $data): array
+    {
+        return DB::transaction(function () use ($association, $group, $data): array {
+            $locked = ClassGroup::query()->lockForUpdate()->findOrFail($group->id);
+            abort_unless($locked->association_id === $association->id, 404);
+            $from = Carbon::parse($data['from'])->startOfDay();
+            $until = Carbon::parse($data['until'])->startOfDay();
+            if ($until->gte(today())) {
+                throw ValidationException::withMessages(['until' => 'Use uma data até ontem. As aulas de hoje em diante são geradas automaticamente.']);
+            }
+            if ($locked->end_date !== null && $from->gt($locked->end_date)) {
+                throw ValidationException::withMessages(['from' => 'O período começa depois do término da turma.']);
+            }
+            $moved = $from->lt($locked->start_date);
+            if ($moved) {
+                $oldStart = $locked->start_date->toDateString();
+                $locked->schedules()->whereDate('valid_from', $oldStart)->whereIn('status', ['active', 'replaced'])->update(['valid_from' => $from->toDateString()]);
+                $locked->update(['start_date' => $from->toDateString()]);
+                $this->audit->record('class_group.start_moved', 'updated', $locked, ['start_date' => $oldStart], ['start_date' => $from->toDateString(), 'reason' => 'past_sessions'], ['association_id' => $association->id]);
+            }
+            $created = $this->sessions->generateForGroup($locked->fresh(), $from, $until);
+            $this->audit->record('class_sessions.past_generated', 'created', $locked, null, [
+                'from' => $from->toDateString(), 'until' => $until->toDateString(), 'sessions_created' => $created,
+            ], ['association_id' => $association->id]);
+
+            return ['created' => $created, 'start_date_moved' => $moved];
         });
     }
 

@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Association;
 use App\Models\ClassEnrollment;
 use App\Models\ClassGroup;
+use App\Models\ClassSchedule;
 use App\Models\ClassSession;
 use App\Models\Dojo;
 use App\Models\DojoRoleAssignment;
@@ -102,6 +103,40 @@ class AssistedImportTest extends TestCase
         $this->post(route('associations.imports.process', [$association, $batch]))->assertSessionHasNoErrors();
         $this->post(route('associations.imports.process', [$association, $batch]))->assertSessionHasNoErrors();
 
+        $this->assertDatabaseCount('attendance', 1);
+        $this->assertDatabaseHas('attendance', ['class_session_id' => $session->id, 'student_id' => $student->id, 'status' => 'present']);
+    }
+
+    public function test_attendance_import_creates_missing_past_session_from_class_schedule(): void
+    {
+        Storage::fake('local');
+        [$association, $dojo, $art, $user] = $this->context(['import.manage', 'attendance.manage']);
+        $group = ClassGroup::query()->create(['association_id' => $association->id, 'dojo_id' => $dojo->id, 'martial_art_id' => $art->id, 'name' => 'Adultos', 'start_date' => '2026-01-01', 'status' => 'active']);
+        ClassSchedule::query()->create(['class_group_id' => $group->id, 'weekday' => 4, 'start_time' => '18:00', 'end_time' => '19:30', 'valid_from' => '2026-01-01', 'status' => 'active']);
+        $person = Person::query()->create(['full_name' => 'Aluno', 'birth_date' => '2000-01-01']);
+        $association->people()->attach($person, ['role_type' => 'student', 'start_date' => '2026-01-01', 'status' => 'active']);
+        $student = Student::query()->create(['association_id' => $association->id, 'person_id' => $person->id, 'registration_number' => 'ALU-1', 'entry_date' => '2026-01-01', 'primary_dojo_id' => $dojo->id, 'status' => 'active']);
+        ClassEnrollment::query()->create(['class_group_id' => $group->id, 'student_id' => $student->id, 'start_date' => '2026-01-01', 'status' => 'active']);
+        $csv = implode("\n", [
+            'matricula_aluno;turma;data_aula;horario_inicio;situacao',
+            'ALU-1;Adultos;08/10/2026;18:00;presente',
+            'ALU-1;Adultos;10/12/2025;18:00;presente',
+            'ALU-1;Adultos;08/10/2026;07:00;presente',
+            'ALU-1;Adultos;'.today()->addWeek()->format('d/m/Y').';18:00;presente',
+        ]);
+
+        $this->actingAs($user)->post(route('associations.imports.store', $association), [
+            'dojo_id' => $dojo->id, 'import_type' => 'attendance', 'file' => UploadedFile::fake()->createWithContent('presencas.csv', $csv),
+        ]);
+        $batch = ImportBatch::query()->firstOrFail();
+        $this->assertSame(['invalid' => 3, 'review' => 1], ImportRow::query()->pluck('status')->countBy()->sortKeys()->all());
+        $this->assertDatabaseCount('class_sessions', 0);
+        $this->post(route('associations.imports.process', [$association, $batch]), ['confirm_reviews' => '1'])->assertSessionHasNoErrors();
+        $this->post(route('associations.imports.process', [$association, $batch]), ['confirm_reviews' => '1'])->assertSessionHasNoErrors();
+
+        $session = ClassSession::query()->sole();
+        $this->assertSame('2026-10-08', $session->session_date->toDateString());
+        $this->assertSame('19:30', substr($session->end_time, 0, 5));
         $this->assertDatabaseCount('attendance', 1);
         $this->assertDatabaseHas('attendance', ['class_session_id' => $session->id, 'student_id' => $student->id, 'status' => 'present']);
     }

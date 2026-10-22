@@ -17,6 +17,7 @@ use App\Models\User;
 use App\Rules\Cpf;
 use App\Services\Access\OperationalScope;
 use App\Services\Attendance\AttendanceService;
+use App\Services\Attendance\SessionGenerator;
 use App\Services\AuditService;
 use App\Services\Classes\ClassGroupService;
 use App\Services\Sports\DirectRegistrationService;
@@ -45,6 +46,7 @@ class AssistedImportService
         private readonly AttendanceService $attendance,
         private readonly OperationalScope $scope,
         private readonly AuditService $audit,
+        private readonly SessionGenerator $sessions,
     ) {}
 
     public function batches(Association $association, User $user): Builder
@@ -316,8 +318,19 @@ class AssistedImportService
             $errors[] = 'Use presente, falta, falta justificada, reposição ou experimental.';
         }
         $session = ($group && $date && $time) ? ClassSession::query()->where('class_group_id', $group->id)->whereDate('session_date', $date)->whereTime('start_time', $time)->first() : null;
-        if ($group && $date && $time && $session === null) {
-            $errors[] = 'A aula não foi encontrada para a turma, data e horário informados.';
+        $createSession = false;
+        if ($date !== null && Carbon::parse($date)->isAfter(today())) {
+            $errors[] = 'A aula ainda não aconteceu. Importe presenças somente de aulas até hoje.';
+        } elseif ($group && $date && $time && $session === null) {
+            // Aula passada que ainda não existe: é criada pelo horário da turma ao processar a linha.
+            $missing = $this->missingPastSession($group, $date, $time);
+            if (is_string($missing)) {
+                $errors[] = $missing;
+            } else {
+                $session = $missing;
+                $createSession = true;
+                $review[] = 'A aula será criada pelo horário da turma.';
+            }
         }
         if ($session && ($session->attendance_state !== 'open' || in_array($session->status, ['cancelled', 'rescheduled'], true))) {
             $errors[] = 'A aula está fechada, cancelada ou reagendada.';
@@ -325,7 +338,7 @@ class AssistedImportService
         if ($session && $student && ! $this->attendance->roster($session->load('classGroup'))->contains(fn ($item) => $item['student']->id === $student->id)) {
             $errors[] = 'O aluno não está matriculado nem autorizado como visitante nesta aula.';
         }
-        $key = implode('|', [$student?->id, $session?->id]);
+        $key = implode('|', [$student?->id, $group?->id, $date, $time]);
         if ($student && $session && isset($seen[$key])) {
             $errors[] = 'A presença está repetida no arquivo.';
         }
@@ -341,8 +354,26 @@ class AssistedImportService
         }
 
         return $this->rowResult($errors, $review, [
-            'student_id' => $student?->id, 'session_id' => $session?->id, 'status' => $status, 'notes' => $this->nullable($raw['observacoes'] ?? null),
+            'student_id' => $student?->id, 'session_id' => $createSession ? null : $session?->id, 'status' => $status, 'notes' => $this->nullable($raw['observacoes'] ?? null),
+            'class_group_id' => $group?->id, 'session_date' => $date, 'start_time' => $time,
         ]);
+    }
+
+    /** Aula passada ainda não gerada: devolve a aula (não salva) a criar pelo horário da turma ou o motivo do erro. */
+    private function missingPastSession(ClassGroup $group, string $date, string $time): ClassSession|string
+    {
+        $day = Carbon::parse($date);
+        if ($day->lt($group->start_date) || ($group->end_date && $day->gt($group->end_date))) {
+            return 'A data está fora do período da turma (início em '.$group->start_date->format('d/m/Y').'). Use "Gerar aulas passadas" na turma para recuar o início.';
+        }
+        $schedule = $group->schedules()->whereIn('status', ['active', 'replaced'])->where('weekday', $day->dayOfWeekIso)
+            ->whereTime('start_time', $time)->whereDate('valid_from', '<=', $date)
+            ->where(fn ($query) => $query->whereNull('valid_until')->orWhereDate('valid_until', '>=', $date))->first();
+        if ($schedule === null) {
+            return 'A turma não tem horário nesse dia da semana e início, então a aula não pode ser criada.';
+        }
+
+        return (new ClassSession(['class_group_id' => $group->id, 'session_date' => $date, 'start_time' => $schedule->start_time, 'status' => 'planned', 'attendance_state' => 'open']))->setRelation('classGroup', $group);
     }
 
     private function processStudent(Association $association, Dojo $dojo, User $user, array $data): Student
@@ -367,6 +398,12 @@ class AssistedImportService
 
     private function processAttendance(Association $association, User $user, array $data): AttendanceRecord
     {
+        if (($data['session_id'] ?? null) === null) {
+            $group = ClassGroup::query()->where('association_id', $association->id)->findOrFail($data['class_group_id']);
+            $this->sessions->generateForGroup($group, Carbon::parse($data['session_date']), Carbon::parse($data['session_date']));
+            $data['session_id'] = ClassSession::query()->where('class_group_id', $group->id)->whereDate('session_date', $data['session_date'])
+                ->whereTime('start_time', $data['start_time'])->valueOrFail('id');
+        }
         $session = ClassSession::query()->with('classGroup.dojo')->findOrFail($data['session_id']);
         $this->attendance->save($association, $session, $user, [[
             'student_id' => $data['student_id'], 'status' => $data['status'], 'notes' => $data['notes'],

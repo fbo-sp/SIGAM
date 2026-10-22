@@ -78,6 +78,7 @@ Route::middleware(['auth', 'active', 'association.context'])->group(function ():
         Route::post('/turmas/{classGroup}/professores/{assignment}/encerrar', [DojoClassController::class, 'endTeacher'])->name('classes.teachers.end');
         Route::post('/turmas/{classGroup}/agenda/substituir', [DojoClassController::class, 'replaceScheduleSet'])->name('classes.schedules.replace-set');
         Route::post('/turmas/{classGroup}/aulas/atualizar', [DojoClassController::class, 'refreshFutureSessions'])->name('classes.sessions.refresh');
+        Route::post('/turmas/{classGroup}/aulas/passadas', [DojoClassController::class, 'generatePastSessions'])->name('classes.sessions.past');
         Route::get('/aulas', 'sessions')->name('sessions');
         Route::get('/aulas/{session}', 'session')->name('session');
         Route::post('/aulas/{session}/chamada', 'saveAttendance')->name('attendance');

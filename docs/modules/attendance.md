@@ -47,7 +47,7 @@ Comando:
 
 O comando completa a meta de 4 ou 8 aulas de cada turma e ignora as opções legadas `--from`/`--until`. `FutureSessionMaintainer` conta ocorrências futuras pela data/hora, bloqueia a turma, considera as versões `active` e `replaced` dentro da vigência e cria somente o déficit com `insertOrIgnore`. O período de busca é limitado a 366 dias e ao término da turma. Cancelamentos/reagendamentos não são recriados; reduzir a meta não exclui excesso.
 
-A criação da turma e as transições de agenda/chamada executam o mesmo serviço. O scheduler horário recupera qualquer execução interrompida sem worker residente. `SessionGenerator` permanece interno para reconciliação por intervalo da agenda versionada.
+A criação da turma e as transições de agenda/chamada executam o mesmo serviço. O scheduler horário recupera qualquer execução interrompida sem worker residente. `SessionGenerator` permanece interno para reconciliação por intervalo da agenda versionada; `generateForGroup` cria aulas passadas de uma turma (ação "Gerar aulas passadas" e importação de presenças), sem duplicar.
 
 ## Mapa do código
 

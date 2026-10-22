@@ -7,6 +7,7 @@ use App\Models\AttendanceRecord;
 use App\Models\ClassEnrollment;
 use App\Models\ClassGroup;
 use App\Models\ClassGroupTeacher;
+use App\Models\ClassSchedule;
 use App\Models\ClassSession;
 use App\Models\Dojo;
 use App\Models\DojoRoleAssignment;
@@ -214,6 +215,32 @@ class DojoClassHubTest extends TestCase
         $this->assertDatabaseHas('audit_logs', ['event_type' => 'attendance.reopened']);
         $this->post(route('operation.attendance', [$this->dojo, $session]), ['records' => [['student_id' => $student->id, 'status' => 'absent']], 'close_attendance' => '1'])->assertSessionHasNoErrors();
         $this->assertDatabaseHas('attendance', ['class_session_id' => $session->id, 'student_id' => $student->id, 'status' => 'absent']);
+    }
+
+    public function test_manager_generates_past_sessions_moving_class_start_without_duplicates(): void
+    {
+        $manager = $this->dojoManager();
+        [$anaUser, $ana] = $this->teacher('Professora Ana');
+        $group = $this->group('Turma A', $ana);
+        ClassSchedule::query()->create(['class_group_id' => $group->id, 'weekday' => 1, 'start_time' => '18:00', 'end_time' => '19:00', 'valid_from' => '2026-09-01', 'status' => 'active']);
+        $url = route('operation.classes.sessions.past', [$this->dojo, $group]);
+
+        $this->actingAs($anaUser)->post($url, ['from' => '2026-08-01', 'until' => '2026-10-14'])->assertForbidden();
+        $this->actingAs($manager)->get(route('operation.classes.show', [$this->dojo, $group]))->assertOk()->assertSee('Gerar aulas passadas');
+        $this->post($url, ['from' => '2026-08-01', 'until' => '2026-10-15'])->assertSessionHasErrors('until');
+        $this->post($url, ['from' => '2026-08-01', 'until' => '2026-10-14'])->assertSessionHasNoErrors()
+            ->assertSessionHas('status', '11 aula(s) passada(s) criada(s). O início da turma passou para 01/08/2026.');
+
+        $this->assertSame('2026-08-01', $group->fresh()->start_date->toDateString());
+        $this->assertSame('2026-08-01', ClassSchedule::query()->sole()->valid_from->toDateString());
+        $sessions = ClassSession::query()->where('class_group_id', $group->id)->orderBy('session_date')->get();
+        $this->assertCount(11, $sessions);
+        $this->assertSame('2026-08-03', $sessions->first()->session_date->toDateString());
+        $this->assertSame($ana->id, $sessions->first()->planned_teacher_id);
+        $this->assertDatabaseHas('audit_logs', ['event_type' => 'class_sessions.past_generated']);
+
+        $this->post($url, ['from' => '2026-08-01', 'until' => '2026-10-14'])->assertSessionHas('status', '0 aula(s) passada(s) criada(s).');
+        $this->assertSame(11, ClassSession::query()->where('class_group_id', $group->id)->count());
     }
 
     public function test_promoting_assistant_to_main_ends_assistant_assignment_and_keeps_attendance_access(): void
