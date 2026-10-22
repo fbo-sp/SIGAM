@@ -154,7 +154,7 @@ class OperationalController extends Controller
         $data = $request->validate(['teacher_profile_id' => ['required', 'integer'], 'start_date' => ['required', 'date_format:Y-m-d'], 'end_date' => ['nullable', 'date_format:Y-m-d', 'after_or_equal:start_date']]);
         $service->linkTeacher($request->user(), $dojo, $data);
 
-        return back()->with('status', 'Professor vinculado ao dojo. Isso não cria uma conta nem concede acesso ao sistema.');
+        return back()->with('status', 'Professor vinculado ao dojo. Se ele já tem conta no sistema, o acesso de professor a este dojo foi liberado no mesmo período.');
     }
 
     public function unlinkTeacher(Request $request, Dojo $dojo, DojoTeacherAssignment $link, AccessAdministration $service)

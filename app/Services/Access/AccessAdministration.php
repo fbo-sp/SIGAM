@@ -16,7 +16,7 @@ use Illuminate\Validation\ValidationException;
 
 class AccessAdministration
 {
-    public function __construct(private readonly OperationalScope $scope, private readonly AuditService $audit) {}
+    public function __construct(private readonly OperationalScope $scope, private readonly AuditService $audit, private readonly TeacherDojoAccess $teacherAccess) {}
 
     public function authorize(User $actor, Association $association): void
     {
@@ -111,6 +111,8 @@ class AccessAdministration
             if ($link->wasRecentlyCreated) {
                 $this->audit->record('dojo_teacher.linked', 'created', $link, null, $link->only(['dojo_id', 'teacher_profile_id', 'start_date', 'end_date']));
             }
+            // O vínculo já libera o acesso de professor ao dojo no mesmo período (decisão de 22/10/2026).
+            $this->teacherAccess->grantForLink($link, $actor->id);
 
             return $link;
         });
@@ -124,6 +126,7 @@ class AccessAdministration
             if (! $locked->revoked_at) {
                 $locked->update(['revoked_at' => now()]);
                 $this->audit->record('dojo_teacher.revoked', 'updated', $locked, null, ['revoked_at' => $locked->revoked_at]);
+                $this->teacherAccess->revokeForLink($locked);
             }
         });
     }

@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-10-22 — Vínculo com o dojo libera o acesso do professor
+
+- vincular o professor ao dojo (`/operacao/dojos/{dojo}/professores`) passa a criar também a concessão "Professor do dojo" (`dojo_teacher`) no mesmo período, quando o professor tem conta ativa ou pendente na associação; antes eram dois cadastros separados e, sem a concessão, o professor não via as aulas para fazer a chamada;
+- encerrar o vínculo revoga as concessões de professor ainda ativas do usuário naquele dojo; concessões manuais existentes não são duplicadas;
+- professor sem conta recebe o acesso ao aceitar o convite (`TeacherInvitationService::accept`);
+- novo serviço `App\Services\Access\TeacherDojoAccess`, auditado como `dojo_access.granted|revoked` com origem `dojo_teacher_link`/`dojo_teacher_unlinked`;
+- novo comando `sigam:access:sync-teacher-dojos` (simulação por padrão; `--apply` cria as concessões que faltam para vínculos vigentes ou futuros, sem duplicar). O `deploy/instalar.sh` roda o comando com `--apply` depois do `db:seed`;
+- novo `TeacherDojoAccessTest`.
+
 ## 2026-10-22 — Turma: ícone de edição à esquerda e promoção de auxiliar
 
 - na página da turma no dojo e na lista de alunos do dojo, o ícone de edição fica à esquerda do nome, com a dica "Editar dados do aluno" ou "Editar dados do professor", para não ser confundido com ações sobre a matrícula ou a designação;
