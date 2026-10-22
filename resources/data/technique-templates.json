@@ -1630,6 +1630,489 @@
           3
         ]
       ]
-    }
+    },
+    "quiz": [
+      {
+        "rank": "11-kyu",
+        "item": "Conhecimento teórico > Etiqueta e dojo > Significado das saudações",
+        "statement": "Como se chama a saudação feita em pé?",
+        "options": [
+          "Ritsurei",
+          "Zarei",
+          "Hajime",
+          "Matte"
+        ],
+        "correct": 0,
+        "explanation": "Ritsurei é a saudação em pé; zarei é a saudação ajoelhado."
+      },
+      {
+        "rank": "11-kyu",
+        "item": "Conhecimento teórico > Etiqueta e dojo > Significado das saudações",
+        "statement": "O que a saudação (rei) demonstra no judô?",
+        "options": [
+          "Respeito e gratidão ao parceiro e ao professor",
+          "Que a luta acabou",
+          "Que o aluno quer desistir",
+          "Que o professor deve começar a aula"
+        ],
+        "correct": 0,
+        "explanation": "A saudação expressa respeito e gratidão, antes e depois de treinar com o parceiro."
+      },
+      {
+        "rank": "11-kyu",
+        "item": "Conhecimento teórico > Etiqueta e dojo > Regras de conduta no dojo",
+        "statement": "Ao entrar ou sair do tatame, o aluno deve:",
+        "options": [
+          "Fazer a saudação",
+          "Correr para o centro",
+          "Tirar a faixa",
+          "Pedir licença ao colega mais novo"
+        ],
+        "correct": 0,
+        "explanation": "Saudar ao entrar e sair do tatame faz parte da etiqueta do dojo."
+      },
+      {
+        "rank": "10-kyu",
+        "item": "Conhecimento teórico > Terminologia > Contagem em japonês",
+        "statement": "Como se diz \"três\" em japonês?",
+        "options": [
+          "San",
+          "Ichi",
+          "Go",
+          "Ju"
+        ],
+        "correct": 0,
+        "explanation": "Ichi (1), ni (2), san (3), shi ou yon (4), go (5)."
+      },
+      {
+        "rank": "10-kyu",
+        "item": "Conhecimento teórico > Terminologia > Contagem em japonês",
+        "statement": "Qual número corresponde a \"ju\"?",
+        "options": [
+          "10",
+          "5",
+          "8",
+          "2"
+        ],
+        "correct": 0,
+        "explanation": "Ju é dez; hachi é oito; go é cinco."
+      },
+      {
+        "rank": "10-kyu",
+        "item": "Conhecimento teórico > Etiqueta e dojo > Cuidados com o judogi e higiene",
+        "statement": "Qual destes cuidados é esperado de quem vai treinar?",
+        "options": [
+          "Unhas curtas e judogi limpo",
+          "Treinar de relógio e anel",
+          "Entrar no tatame calçado",
+          "Usar o judogi sem a faixa"
+        ],
+        "correct": 0,
+        "explanation": "Unhas curtas, judogi limpo e sem objetos protegem o próprio aluno e o parceiro."
+      },
+      {
+        "rank": "9-kyu",
+        "item": "Conhecimento teórico > História do judô > Jigoro Kano e a fundação do Kodokan (1882)",
+        "statement": "Quem criou o judô?",
+        "options": [
+          "Jigoro Kano",
+          "Mitsuyo Maeda",
+          "Kyuzo Mifune",
+          "Yasuhiro Yamashita"
+        ],
+        "correct": 0,
+        "explanation": "Jigoro Kano criou o judô e fundou o Kodokan em Tóquio."
+      },
+      {
+        "rank": "9-kyu",
+        "item": "Conhecimento teórico > História do judô > Jigoro Kano e a fundação do Kodokan (1882)",
+        "statement": "Em que ano foi fundado o Kodokan?",
+        "options": [
+          "1882",
+          "1964",
+          "1908",
+          "1920"
+        ],
+        "correct": 0,
+        "explanation": "O Kodokan foi fundado em 1882, em Tóquio."
+      },
+      {
+        "rank": "9-kyu",
+        "item": "Conhecimento teórico > História do judô > Jigoro Kano e a fundação do Kodokan (1882)",
+        "statement": "O que significa a palavra \"judô\"?",
+        "options": [
+          "Caminho suave",
+          "Luta de força",
+          "Arte do soco",
+          "Escola de guerreiros"
+        ],
+        "correct": 0,
+        "explanation": "Ju é suave e do é caminho: judô é o caminho suave."
+      },
+      {
+        "rank": "8-kyu",
+        "item": "Conhecimento teórico > Terminologia > Comandos de arbitragem (Hajime, Matte, Sono-mama, Yoshi, Osaekomi, Toketa, Sore-made)",
+        "statement": "O que o árbitro indica ao dizer \"Matte\"?",
+        "options": [
+          "Parem",
+          "Comecem",
+          "Imobilização iniciada",
+          "Fim da luta"
+        ],
+        "correct": 0,
+        "explanation": "Matte interrompe a luta; Hajime começa; Sore-made encerra."
+      },
+      {
+        "rank": "8-kyu",
+        "item": "Conhecimento teórico > Terminologia > Comandos de arbitragem (Hajime, Matte, Sono-mama, Yoshi, Osaekomi, Toketa, Sore-made)",
+        "statement": "Qual comando anuncia que uma imobilização foi desfeita?",
+        "options": [
+          "Toketa",
+          "Osaekomi",
+          "Yoshi",
+          "Hajime"
+        ],
+        "correct": 0,
+        "explanation": "Osaekomi anuncia a imobilização; Toketa indica que ela foi desfeita."
+      },
+      {
+        "rank": "8-kyu",
+        "item": "Conhecimento teórico > Sistema de graduação > Kyu e Dan, cores das faixas",
+        "statement": "Os graus \"Dan\" correspondem a:",
+        "options": [
+          "Faixa preta e acima",
+          "Faixas coloridas iniciais",
+          "Somente árbitros",
+          "Somente atletas olímpicos"
+        ],
+        "correct": 0,
+        "explanation": "Kyu são os graus das faixas coloridas; Dan começa na faixa preta."
+      },
+      {
+        "rank": "7-kyu",
+        "item": "Conhecimento teórico > Princípios > Seiryoku-zenyo (máxima eficiência)",
+        "statement": "O princípio Seiryoku-zenyo significa:",
+        "options": [
+          "Máxima eficiência com o mínimo esforço",
+          "Bem-estar e benefício mútuos",
+          "Vencer usando força máxima",
+          "Nunca cair no treino"
+        ],
+        "correct": 0,
+        "explanation": "Seiryoku-zenyo é o melhor uso da energia: máxima eficiência."
+      },
+      {
+        "rank": "7-kyu",
+        "item": "Conhecimento teórico > Princípios > Jita-kyoei (bem-estar e benefício mútuos)",
+        "statement": "O princípio Jita-kyoei significa:",
+        "options": [
+          "Bem-estar e benefício mútuos",
+          "Máxima eficiência",
+          "Ceder para vencer",
+          "Atacar primeiro"
+        ],
+        "correct": 0,
+        "explanation": "Jita-kyoei é a prosperidade mútua: crescer junto com o outro."
+      },
+      {
+        "rank": "7-kyu",
+        "item": "Conhecimento teórico > Princípios > Jita-kyoei (bem-estar e benefício mútuos)",
+        "statement": "No treino, quem aplica a técnica é chamado de:",
+        "options": [
+          "Tori",
+          "Uke",
+          "Sensei",
+          "Senpai"
+        ],
+        "correct": 0,
+        "explanation": "Tori aplica a técnica; uke recebe a técnica."
+      },
+      {
+        "rank": "6-kyu",
+        "item": "Conhecimento teórico > Regras de competição > Pontuação (Ippon, Waza-ari)",
+        "statement": "Qual é a pontuação máxima, que encerra a luta?",
+        "options": [
+          "Ippon",
+          "Waza-ari",
+          "Shido",
+          "Matte"
+        ],
+        "correct": 0,
+        "explanation": "Ippon encerra a luta; dois waza-ari também valem ippon."
+      },
+      {
+        "rank": "6-kyu",
+        "item": "Conhecimento teórico > Regras de competição > Penalidades (Shido, Hansoku-make)",
+        "statement": "Quantos shidos levam à desclassificação (hansoku-make)?",
+        "options": [
+          "Três",
+          "Um",
+          "Dois",
+          "Cinco"
+        ],
+        "correct": 0,
+        "explanation": "O terceiro shido resulta em hansoku-make."
+      },
+      {
+        "rank": "6-kyu",
+        "item": "Conhecimento teórico > História do judô > Chegada e desenvolvimento do judô no Brasil",
+        "statement": "Como o judô chegou ao Brasil?",
+        "options": [
+          "Com os imigrantes japoneses, no início do século 20",
+          "Com os Jogos Olímpicos de 1964",
+          "Pelos portugueses no século 18",
+          "Pela televisão nos anos 1990"
+        ],
+        "correct": 0,
+        "explanation": "O judô chegou com a imigração japonesa, a partir de 1908."
+      },
+      {
+        "rank": "5-kyu",
+        "item": "Conhecimento teórico > Terminologia > Nomes das técnicas exigidas na faixa",
+        "statement": "O-soto-gari é uma técnica de:",
+        "options": [
+          "Perna (ashi-waza)",
+          "Braço (te-waza)",
+          "Imobilização (osaekomi-waza)",
+          "Estrangulamento (shime-waza)"
+        ],
+        "correct": 0,
+        "explanation": "O-soto-gari é uma ceifada por fora: ashi-waza."
+      },
+      {
+        "rank": "5-kyu",
+        "item": "Conhecimento teórico > Terminologia > Nomes das técnicas exigidas na faixa",
+        "statement": "Kesa-gatame é uma técnica de:",
+        "options": [
+          "Imobilização",
+          "Projeção de quadril",
+          "Chave de braço",
+          "Sacrifício"
+        ],
+        "correct": 0,
+        "explanation": "Kesa-gatame é uma imobilização (osaekomi-waza)."
+      },
+      {
+        "rank": "5-kyu",
+        "item": "Conhecimento teórico > Terminologia > Nomes das técnicas exigidas na faixa",
+        "statement": "As três fases de uma projeção são:",
+        "options": [
+          "Kuzushi, tsukuri e kake",
+          "Hajime, matte e sore-made",
+          "Ichi, ni e san",
+          "Rei, zarei e ritsurei"
+        ],
+        "correct": 0,
+        "explanation": "Kuzushi é o desequilíbrio, tsukuri a entrada e kake a execução."
+      },
+      {
+        "rank": "4-kyu",
+        "item": "Conhecimento teórico > Regras de competição > Técnicas proibidas por idade",
+        "statement": "Em competição, as chaves (kansetsu-waza) são permitidas em qual articulação?",
+        "options": [
+          "Somente no cotovelo",
+          "Joelho e tornozelo",
+          "Ombro e punho",
+          "Pescoço"
+        ],
+        "correct": 0,
+        "explanation": "As regras de competição permitem chave apenas no cotovelo, e as categorias de base restringem chaves e estrangulamentos por idade."
+      },
+      {
+        "rank": "4-kyu",
+        "item": "Conhecimento teórico > Princípios > Ju (suavidade, ceder para vencer)",
+        "statement": "O princípio Ju ensina a:",
+        "options": [
+          "Ceder para vencer, usando a força do oponente",
+          "Resistir sempre com toda a força",
+          "Evitar o contato com o parceiro",
+          "Treinar apenas sozinho"
+        ],
+        "correct": 0,
+        "explanation": "Ju é suavidade: ceder à força do oponente e aproveitá-la."
+      },
+      {
+        "rank": "3-kyu",
+        "item": "Conhecimento teórico > Classificação das técnicas > Gokyo-no-waza",
+        "statement": "Quantos grupos (kyo) tem o Gokyo-no-waza?",
+        "options": [
+          "Cinco",
+          "Três",
+          "Oito",
+          "Dez"
+        ],
+        "correct": 0,
+        "explanation": "Gokyo significa cinco grupos; cada grupo tem oito técnicas."
+      },
+      {
+        "rank": "3-kyu",
+        "item": "Conhecimento teórico > Classificação das técnicas > Gokyo-no-waza",
+        "statement": "Qual é a primeira técnica do primeiro grupo do Gokyo?",
+        "options": [
+          "De-ashi-harai",
+          "Seoi-nage",
+          "O-goshi",
+          "Uchi-mata"
+        ],
+        "correct": 0,
+        "explanation": "O primeiro kyo começa com De-ashi-harai."
+      },
+      {
+        "rank": "3-kyu",
+        "item": "Conhecimento teórico > Classificação das técnicas > Divisão de Nage-waza e Katame-waza",
+        "statement": "As técnicas de Katame-waza se dividem em:",
+        "options": [
+          "Osaekomi-waza, shime-waza e kansetsu-waza",
+          "Te-waza, koshi-waza e ashi-waza",
+          "Ma-sutemi e yoko-sutemi",
+          "Ukemi e randori"
+        ],
+        "correct": 0,
+        "explanation": "Katame-waza reúne imobilizações, estrangulamentos e chaves."
+      },
+      {
+        "rank": "3-kyu",
+        "item": "Conhecimento teórico > Classificação das técnicas > Divisão de Nage-waza e Katame-waza",
+        "statement": "Te-waza, koshi-waza e ashi-waza fazem parte de:",
+        "options": [
+          "Tachi-waza",
+          "Sutemi-waza",
+          "Osaekomi-waza",
+          "Ate-waza"
+        ],
+        "correct": 0,
+        "explanation": "Tachi-waza (técnicas em pé) se divide em mão, quadril e perna."
+      },
+      {
+        "rank": "2-kyu",
+        "item": "Conhecimento teórico > Classificação das técnicas > Kata do Kodokan",
+        "statement": "Quantas técnicas tem o Nage-no-kata?",
+        "options": [
+          "Quinze, em cinco grupos de três",
+          "Dez, em dois grupos de cinco",
+          "Vinte, em quatro grupos de cinco",
+          "Oito, em um grupo"
+        ],
+        "correct": 0,
+        "explanation": "Nage-no-kata tem cinco grupos com três técnicas, executadas dos dois lados."
+      },
+      {
+        "rank": "2-kyu",
+        "item": "Conhecimento teórico > Sistema de graduação > Requisitos de idade e tempo de faixa",
+        "statement": "Além da técnica, o que normalmente é verificado para o exame de faixa?",
+        "options": [
+          "Idade mínima e tempo mínimo na faixa atual",
+          "Peso e altura",
+          "Número de medalhas",
+          "Tempo de inscrição no clube"
+        ],
+        "correct": 0,
+        "explanation": "Cada graduação tem idade mínima e tempo mínimo na faixa anterior."
+      },
+      {
+        "rank": "2-kyu",
+        "item": "Conhecimento teórico > Classificação das técnicas > Kata do Kodokan",
+        "statement": "O Katame-no-kata é formado por:",
+        "options": [
+          "Três grupos de cinco técnicas de controle",
+          "Cinco grupos de projeções",
+          "Golpes de mão e pé",
+          "Somente quedas"
+        ],
+        "correct": 0,
+        "explanation": "Katame-no-kata tem osaekomi-waza, shime-waza e kansetsu-waza, cinco técnicas em cada grupo."
+      },
+      {
+        "rank": "1-kyu",
+        "item": "Conhecimento teórico > História do judô > Judô olímpico",
+        "statement": "Em que edição o judô estreou nos Jogos Olímpicos?",
+        "options": [
+          "Tóquio 1964",
+          "Paris 1924",
+          "Londres 1948",
+          "Atlanta 1996"
+        ],
+        "correct": 0,
+        "explanation": "O judô masculino estreou em Tóquio 1964; o feminino passou a valer medalha em Barcelona 1992."
+      },
+      {
+        "rank": "1-kyu",
+        "item": "Conhecimento teórico > História do judô > Judô olímpico",
+        "statement": "Quem conquistou o primeiro ouro olímpico do Brasil no judô?",
+        "options": [
+          "Aurélio Miguel, em Seul 1988",
+          "Rogério Sampaio, em Barcelona 1992",
+          "Sarah Menezes, em Londres 2012",
+          "Chiaki Ishii, em Munique 1972"
+        ],
+        "correct": 0,
+        "explanation": "Aurélio Miguel foi ouro em 1988; Chiaki Ishii trouxe a primeira medalha (bronze, 1972)."
+      },
+      {
+        "rank": "1-kyu",
+        "item": "Conhecimento teórico > Classificação das técnicas > Gokyo-no-waza",
+        "statement": "Quantas técnicas tem cada grupo do Gokyo-no-waza?",
+        "options": [
+          "Oito",
+          "Cinco",
+          "Dez",
+          "Três"
+        ],
+        "correct": 0,
+        "explanation": "São cinco grupos de oito técnicas, 40 no total."
+      },
+      {
+        "rank": "1-dan",
+        "item": "Conhecimento teórico > Classificação das técnicas > Kata do Kodokan",
+        "statement": "No Nage-no-kata, cada técnica é executada:",
+        "options": [
+          "Dos dois lados, direito e esquerdo",
+          "Somente do lado direito",
+          "Três vezes do mesmo lado",
+          "Sem parceiro"
+        ],
+        "correct": 0,
+        "explanation": "No Nage-no-kata cada técnica é feita para a direita e para a esquerda."
+      },
+      {
+        "rank": "1-dan",
+        "item": "Conhecimento teórico > Regras de competição > Pontuação (Ippon, Waza-ari)",
+        "statement": "Por quanto tempo uma imobilização precisa ser mantida para valer ippon?",
+        "options": [
+          "20 segundos",
+          "10 segundos",
+          "30 segundos",
+          "5 segundos"
+        ],
+        "correct": 0,
+        "explanation": "Imobilização mantida por 20 segundos vale ippon."
+      },
+      {
+        "rank": "1-dan",
+        "item": "Conhecimento teórico > Regras de competição > Penalidades (Shido, Hansoku-make)",
+        "statement": "Uma ação contrária ao espírito do judô pode resultar diretamente em:",
+        "options": [
+          "Hansoku-make",
+          "Waza-ari para quem cometeu",
+          "Matte sem penalidade",
+          "Ippon para quem cometeu"
+        ],
+        "correct": 0,
+        "explanation": "Faltas graves ou contra o espírito do judô levam a hansoku-make direto."
+      },
+      {
+        "rank": "1-dan",
+        "item": "Conhecimento teórico > Classificação das técnicas > Gokyo-no-waza",
+        "statement": "O Gokyo-no-waza reúne técnicas de:",
+        "options": [
+          "Projeção (nage-waza)",
+          "Imobilização",
+          "Estrangulamento",
+          "Golpes traumáticos"
+        ],
+        "correct": 0,
+        "explanation": "O Gokyo organiza as projeções do judô em cinco grupos."
+      }
+    ]
   }
 }

@@ -31,7 +31,7 @@
 @endif
 
 <nav class="portal-nav" aria-label="Seções do portal">
-    <a href="#resumo">Resumo</a><a href="#turmas">Turmas</a><a href="#frequencia">Frequência</a><a href="#financeiro">Financeiro</a><a href="#documentos">Documentos</a><a href="#historico">Histórico</a><a href="#campeonatos">Campeonatos</a>
+    <a href="#resumo">Resumo</a><a href="#turmas">Turmas</a><a href="#frequencia">Frequência</a><a href="#financeiro">Financeiro</a><a href="#documentos">Documentos</a><a href="#historico">Histórico</a>@if($student->martialArts->isNotEmpty())<a href="{{ route('portal.progress', $student) }}">Progresso técnico</a>@endif<a href="#campeonatos">Campeonatos</a>
 </nav>
 
 <section id="resumo" class="section-block">
@@ -74,7 +74,7 @@
 </section>
 
 <section id="historico" class="section-block"><div class="section-heading"><h2>Histórico esportivo e federações</h2><p>Graduações, filiações e resultados consolidados.</p></div>
-    <div class="portal-history-grid">@foreach($student->martialArts as $practice)<article class="card portal-history"><h3>{{ $practice->martialArt->name }}</h3><p>Graduação atual: <strong>{{ $practice->currentRank?->display_name ?: 'Não informada' }}</strong></p><ul>@foreach($practice->rankHistory->sortByDesc('achieved_at') as $rank)<li>{{ $rank->achieved_at->format('d/m/Y') }} — {{ $rank->rank->display_name }}</li>@endforeach</ul></article>@endforeach
+    <div class="portal-history-grid">@foreach($student->martialArts as $practice)<article class="card portal-history"><h3>{{ $practice->martialArt->name }}</h3><p>Graduação atual: <strong>{{ $practice->currentRank?->display_name ?: 'Não informada' }}</strong></p><p><a href="{{ route('portal.progress', [$student, 'modalidade' => $practice->martial_art_id]) }}">Ver progresso técnico e quiz</a></p><ul>@foreach($practice->rankHistory->sortByDesc('achieved_at') as $rank)<li>{{ $rank->achieved_at->format('d/m/Y') }} — {{ $rank->rank->display_name }}</li>@endforeach</ul></article>@endforeach
     @foreach($student->federationMemberships as $membership)<article class="card portal-history"><h3>{{ $membership->federation->name }}</h3><p>{{ $membership->martialArt->name }} · registro {{ $membership->registration_number }}</p><p>Situação: {{ $membership->status === 'active' ? 'Ativa' : 'Inativa' }} · {{ $membership->points }} ponto(s)</p></article>@endforeach</div>
 </section>
 

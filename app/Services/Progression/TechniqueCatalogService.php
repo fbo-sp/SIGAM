@@ -4,6 +4,7 @@ namespace App\Services\Progression;
 
 use App\Models\Association;
 use App\Models\MartialArt;
+use App\Models\QuizQuestion;
 use App\Models\Rank;
 use App\Models\RankCurriculumEntry;
 use App\Models\TechniqueItem;
@@ -145,7 +146,7 @@ class TechniqueCatalogService
     /**
      * Copia o modelo para a associação. Repetir não duplica itens nem sobrescreve ajustes do currículo.
      *
-     * @return array{items_created: int, entries_created: int, missing_ranks: list<string>}
+     * @return array{items_created: int, entries_created: int, questions_created: int, missing_ranks: list<string>}
      */
     public function applyTemplate(Association $association, MartialArt $martialArt, string $key, User $actor): array
     {
@@ -196,11 +197,27 @@ class TechniqueCatalogService
                     $entries += $entry->wasRecentlyCreated ? 1 : 0;
                 }
             }
+            $questions = 0;
+            foreach ($template['quiz'] ?? [] as $row) {
+                $rank = $ranks->get($row['rank']);
+                if ($rank === null || QuizQuestion::query()->where('association_id', $association->id)->where('rank_id', $rank->id)->where('statement', $row['statement'])->exists()) {
+                    continue;
+                }
+                $question = QuizQuestion::query()->create([
+                    'association_id' => $association->id, 'martial_art_id' => $martialArt->id, 'rank_id' => $rank->id,
+                    'technique_item_id' => isset($row['item']) ? $byPath->get($row['item'])?->id : null,
+                    'statement' => $row['statement'], 'explanation' => $row['explanation'] ?? null, 'status' => 'active', 'created_by_user_id' => $actor->id,
+                ]);
+                foreach (array_values($row['options']) as $index => $text) {
+                    $question->options()->create(['text' => $text, 'is_correct' => $index === (int) $row['correct'], 'sort_order' => $index + 1]);
+                }
+                $questions++;
+            }
             $this->audit->record('technique_template.applied', 'created', $martialArt, null, [
-                'template_key' => $key, 'items_created' => $created, 'entries_created' => $entries, 'missing_ranks' => $missing,
+                'template_key' => $key, 'items_created' => $created, 'entries_created' => $entries, 'questions_created' => $questions, 'missing_ranks' => $missing,
             ], ['association_id' => $association->id]);
 
-            return ['items_created' => $created, 'entries_created' => $entries, 'missing_ranks' => $missing];
+            return ['items_created' => $created, 'entries_created' => $entries, 'questions_created' => $questions, 'missing_ranks' => $missing];
         });
     }
 

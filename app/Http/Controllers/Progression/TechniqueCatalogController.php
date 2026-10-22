@@ -79,7 +79,7 @@ class TechniqueCatalogController extends Controller
     {
         $this->ensureMartialArt($association, $martialArt);
         $result = $service->applyTemplate($association, $martialArt, $request->validated('template_key'), $request->user());
-        $message = "Modelo aplicado: {$result['items_created']} item(ns) e {$result['entries_created']} exigência(s) de currículo incluídos.";
+        $message = "Modelo aplicado: {$result['items_created']} item(ns), {$result['entries_created']} exigência(s) de currículo e {$result['questions_created']} pergunta(s) de quiz incluídos.";
         if ($result['missing_ranks'] !== []) {
             $message .= ' Graduações não encontradas nesta modalidade: '.implode(', ', $result['missing_ranks']).'.';
         }

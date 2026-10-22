@@ -57,6 +57,14 @@ class TechniqueTemplateCatalog
                 }
             }
         }
+        foreach ($template['quiz'] ?? [] as $question) {
+            $options = $question['options'] ?? null;
+            if (! isset($question['rank'], $question['statement'], $template['curriculum'][$question['rank']]) || ! is_array($options)
+                || count($options) < 2 || count($options) > 5 || ! array_key_exists((int) ($question['correct'] ?? -1), $options)
+                || (isset($question['item']) && ! isset($paths[$question['item']]))) {
+                throw new RuntimeException("O modelo de técnicas {$key} tem pergunta de quiz inválida.");
+            }
+        }
     }
 
     private function collectPaths(string $key, array $nodes, string $prefix, array &$paths): void

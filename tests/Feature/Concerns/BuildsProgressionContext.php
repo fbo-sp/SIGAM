@@ -102,6 +102,14 @@ trait BuildsProgressionContext
         return $user;
     }
 
+    protected function portalUser(Person $person): User
+    {
+        $user = User::factory()->create(['association_id' => $this->association->id, 'person_id' => $person->id]);
+        $user->roles()->attach($this->role('association', ['portal.access']), ['association_id' => $this->association->id]);
+
+        return $user;
+    }
+
     protected function person(string $name, ?string $birthDate = '2000-01-01'): Person
     {
         $person = Person::query()->create(['full_name' => $name, 'birth_date' => $birthDate]);

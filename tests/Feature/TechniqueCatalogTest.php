@@ -64,7 +64,7 @@ class TechniqueCatalogTest extends TestCase
         $entry = RankCurriculumEntry::query()->firstOrFail();
         $entry->update(['required_level' => 4]);
         $this->post(route('associations.techniques.template', [$this->association, $this->judo]), ['template_key' => 'judo_kodokan_2026'])
-            ->assertSessionHas('status', 'Modelo aplicado: 0 item(ns) e 0 exigência(s) de currículo incluídos.');
+            ->assertSessionHas('status', 'Modelo aplicado: 0 item(ns), 0 exigência(s) de currículo e 0 pergunta(s) de quiz incluídos.');
         $this->assertSame($items, TechniqueItem::query()->count());
         $this->assertSame($entries, RankCurriculumEntry::query()->count());
         $this->assertSame(4, $entry->fresh()->required_level);

@@ -47,6 +47,16 @@
 @endif
 @endif
 
+<section class="section-block" id="quiz"><div class="section-heading"><h2>Quiz teórico</h2><p>O aluno treina à vontade pelo portal ({{ $trainingCount }} treino(s) feitos). A prova oficial vale uma tentativa por liberação do professor; aprovada, marca os itens teóricos das perguntas como Adequado.</p></div>
+<div class="card list-card">
+@if($quizRelease)<div class="list-row"><span><strong>Prova oficial liberada para {{ $quizRelease->rank->display_name }}</strong><small>Liberada em {{ $quizRelease->created_at->format('d/m/Y') }}{{ $quizRelease->attempt ? ' · em andamento' : ' · aguardando o aluno' }}</small></span>
+@if($canAssess && ! $quizRelease->attempt)<form method="post" action="{{ route('operation.progression.quiz.cancel', [$dojo, $student, $quizRelease]) }}">@csrf<button class="button button-secondary">Cancelar liberação</button></form>@endif</div>
+@elseif($canAssess && $snapshot['next_rank'])<div class="list-row"><span><strong>Nenhuma prova oficial liberada</strong><small>Libere quando o aluno estiver pronto para a parte teórica de {{ $snapshot['next_rank']->display_name }}.</small></span><form method="post" action="{{ route('operation.progression.quiz.release', [$dojo, $student, $martialArt]) }}">@csrf<button class="button button-primary">Liberar prova oficial</button></form></div>@endif
+@error('quiz')<div class="list-row"><p class="field-error">{{ $message }}</p></div>@enderror
+@forelse($quizAttempts as $attempt)<div class="list-row"><span><strong>Prova oficial · {{ $attempt->rank->display_name }}</strong><small>{{ $attempt->finished_at->format('d/m/Y') }} · {{ $attempt->correct_count }} de {{ $attempt->question_count }} acerto(s), mínimo {{ $attempt->minimum_score }}%</small></span><span class="status-pill {{ $attempt->passed ? '' : 'status-inactive' }}">{{ $attempt->score }}% · {{ $attempt->passed ? 'Aprovado' : 'Abaixo do mínimo' }}</span></div>
+@empty @if(! $quizRelease && ! $canAssess)<div class="list-row"><span><small>Nenhuma prova oficial feita.</small></span></div>@endif @endforelse
+</div></section>
+
 <section class="section-block"><div class="section-heading"><h2>Trabalhado nas aulas</h2><p>Últimos 90 dias: {{ $worked['sessions'] }} aula(s) com presença. Conta só a aula em que o aluno estava presente.</p></div>
 @if($worked['axes']->isEmpty())<div class="card empty-state"><p>Nenhuma técnica marcada nas aulas em que o aluno esteve presente.</p></div>@else
 <div class="radar-grid">@foreach($knowledgeLabels as $type => $label)@if($worked['axes']->has($type))<div class="card list-card"><div class="list-row"><span><strong>{{ $label }}</strong></span></div>@foreach($worked['axes'][$type] as $axis)<div class="list-row"><span>{{ $axis['label'] }}</span><span class="status-pill">{{ $axis['sessions'] }} de {{ $worked['sessions'] }} aula(s)</span></div>@endforeach</div>@endif @endforeach</div>@endif

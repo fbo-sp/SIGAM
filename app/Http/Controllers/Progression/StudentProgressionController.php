@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Association;
 use App\Models\Student;
 use App\Services\Progression\AssessmentService;
+use App\Services\Progression\QuizService;
 use App\Services\Progression\StudentProgressService;
 use App\Support\Progression\AssessmentLevel;
 use Illuminate\Http\Request;
@@ -34,6 +35,7 @@ class StudentProgressionController extends Controller
             'association' => $association,
             'canAssess' => false,
             'switchUrl' => fn (int $id) => route('associations.students.progression', [$association, $student, 'modalidade' => $id]),
+            ...app(QuizService::class)->summary($student, $link->martialArt),
         ]);
     }
 }

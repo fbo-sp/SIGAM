@@ -7,9 +7,11 @@ use App\Http\Requests\Progression\AssessmentRequest;
 use App\Models\ClassSession;
 use App\Models\Dojo;
 use App\Models\MartialArt;
+use App\Models\QuizRelease;
 use App\Models\Student;
 use App\Services\Access\OperationalScope;
 use App\Services\Progression\AssessmentService;
+use App\Services\Progression\QuizService;
 use App\Services\Progression\SessionTechniqueService;
 use App\Services\Progression\StudentProgressService;
 use App\Support\Progression\AssessmentLevel;
@@ -43,6 +45,7 @@ class DojoProgressionController extends Controller
             'association' => null,
             'canAssess' => $this->assessments->assessorTeacherId($request->user(), $dojo, $student, $martialArt) !== null,
             'switchUrl' => fn (int $id) => route('operation.progression.show', [$dojo, $student, 'modalidade' => $id]),
+            ...app(QuizService::class)->summary($student, $martialArt),
         ]);
     }
 
@@ -80,6 +83,23 @@ class DojoProgressionController extends Controller
 
         return redirect()->route('operation.session', [$dojo, $session])->withFragment('tecnicas')
             ->with('status', $result['added'] + $result['removed'] === 0 ? 'Técnicas sem alteração.' : 'Técnicas trabalhadas salvas.');
+    }
+
+    public function releaseQuiz(Request $request, Dojo $dojo, Student $student, MartialArt $martialArt, QuizService $quiz): RedirectResponse
+    {
+        $this->enter($request, $dojo);
+        $release = $quiz->release($request->user(), $dojo, $student, $martialArt);
+
+        return redirect()->route('operation.progression.show', [$dojo, $student, 'modalidade' => $martialArt->id])
+            ->with('status', 'Prova oficial do quiz liberada para '.$release->rank->display_name.'. O aluno faz pelo portal.');
+    }
+
+    public function cancelQuiz(Request $request, Dojo $dojo, Student $student, QuizRelease $release, QuizService $quiz): RedirectResponse
+    {
+        $this->enter($request, $dojo);
+        $quiz->cancelRelease($request->user(), $dojo, $student, $release);
+
+        return back()->with('status', 'Liberação da prova oficial cancelada.');
     }
 
     /** @return array{0: ?MartialArt, 1: Collection} */
