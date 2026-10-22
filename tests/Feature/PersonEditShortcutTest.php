@@ -44,7 +44,7 @@ class PersonEditShortcutTest extends TestCase
 
         $viewer = $this->associationUser(['person.view', 'student.view', 'teacher.view']);
         $this->actingAs($viewer)->get(route('associations.students.index', $this->association))->assertOk()->assertDontSee($editUrl, false);
-        $this->get(route('associations.teachers.index', $this->association))->assertOk()->assertDontSee('Editar dados de');
+        $this->get(route('associations.teachers.index', $this->association))->assertOk()->assertDontSee('Editar dados do aluno');
         $this->get($editUrl)->assertForbidden();
     }
 
@@ -97,7 +97,7 @@ class PersonEditShortcutTest extends TestCase
         $this->actingAs($manager)->get(route('operation.students.person.edit', [$this->dojo, $foreign]))->assertNotFound();
         $this->get(route('operation.students.person.edit', [$this->dojo, $teaching]))->assertForbidden();
         $this->get(route('operation.students', $this->dojo))->assertOk()->assertDontSee(route('operation.students.person.edit', [$this->dojo, $teaching]), false);
-        $this->actingAs($reader)->get(route('operation.students', $this->dojo))->assertOk()->assertDontSee('Editar dados de');
+        $this->actingAs($reader)->get(route('operation.students', $this->dojo))->assertOk()->assertDontSee('Editar dados do aluno');
         $this->put(route('operation.students.person.update', [$this->dojo, $teaching]), ['full_name' => 'X', 'country' => 'BR'])->assertForbidden();
     }
 

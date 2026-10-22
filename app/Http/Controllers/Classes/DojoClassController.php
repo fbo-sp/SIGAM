@@ -110,9 +110,14 @@ class DojoClassController extends Controller
     public function update(ClassGroupUpdateRequest $request, Dojo $dojo, ClassGroup $classGroup, ClassGroupService $service): RedirectResponse
     {
         $this->authorizeManage($request, $dojo, 'class.manage', $classGroup);
+        $newTeacherId = $request->filled('main_teacher_id') ? $request->integer('main_teacher_id') : null;
+        $promoted = $newTeacherId !== null && $newTeacherId !== $classGroup->main_teacher_id && $classGroup->teacherAssignments()
+            ->where('teacher_profile_id', $newTeacherId)->where(fn ($query) => $query->whereNull('end_date')->orWhereDate('end_date', '>=', today()))->exists();
         $service->update($dojo->association, $classGroup, $request->validated());
 
-        return redirect()->route('operation.classes.show', [$dojo, $classGroup])->with('status', 'Turma atualizada.');
+        return redirect()->route('operation.classes.show', [$dojo, $classGroup])->with('status', $promoted
+            ? 'Turma atualizada. O professor passou de auxiliar a principal, e a designação de auxiliar foi encerrada.'
+            : 'Turma atualizada.');
     }
 
     public function enroll(EnrollmentRequest $request, Dojo $dojo, ClassGroup $classGroup, ClassGroupService $service): RedirectResponse

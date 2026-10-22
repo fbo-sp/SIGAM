@@ -182,6 +182,31 @@ class DojoClassHubTest extends TestCase
         $this->assertSame('2026-10-15', $assignment->fresh()->end_date->toDateString());
     }
 
+    public function test_promoting_assistant_to_main_ends_assistant_assignment_and_keeps_attendance_access(): void
+    {
+        $manager = $this->dojoManager();
+        [, $ana] = $this->teacher('Professora Ana');
+        [$biaUser, $bia] = $this->teacher('Professora Bia');
+        $group = $this->group('Turma A', $ana);
+        $student = $this->student('A-1');
+        $this->enroll($group, $student);
+        $pending = $this->classSession($group, '2026-10-13', $ana);
+        $future = $this->classSession($group, '2026-10-22', $ana);
+        $assignment = ClassGroupTeacher::query()->create(['class_group_id' => $group->id, 'teacher_profile_id' => $bia->id, 'role_type' => 'assistant', 'start_date' => '2026-10-01']);
+
+        $this->actingAs($manager)->post(route('operation.classes.teachers.store', [$this->dojo, $group]), ['teacher_profile_id' => $ana->id, 'start_date' => '2026-10-15'])
+            ->assertSessionHasErrors('teacher_profile_id');
+        $this->put(route('operation.classes.update', [$this->dojo, $group]), $this->updatePayload($group, ['main_teacher_id' => $bia->id]))
+            ->assertSessionHasNoErrors()->assertSessionHas('status', fn ($message) => str_contains($message, 'designação de auxiliar foi encerrada'));
+
+        $this->assertSame('2026-10-14', $assignment->fresh()->end_date->toDateString());
+        $this->assertSame($bia->id, $future->fresh()->planned_teacher_id);
+        $this->assertDatabaseHas('audit_logs', ['event_type' => 'class_group_teacher.ended']);
+        $this->actingAs($biaUser)->get(route('operation.session', [$this->dojo, $future]))->assertOk();
+        $this->post(route('operation.attendance', [$this->dojo, $pending]), ['records' => [['student_id' => $student->id, 'status' => 'present']]])->assertRedirect();
+        $this->assertDatabaseHas('attendance', ['class_session_id' => $pending->id, 'student_id' => $student->id]);
+    }
+
     public function test_class_from_another_dojo_is_not_found(): void
     {
         $manager = $this->dojoManager();

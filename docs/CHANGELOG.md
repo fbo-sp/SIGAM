@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-10-22 — Turma: ícone de edição à esquerda e promoção de auxiliar
+
+- na página da turma no dojo e na lista de alunos do dojo, o ícone de edição fica à esquerda do nome, com a dica "Editar dados do aluno" ou "Editar dados do professor", para não ser confundido com ações sobre a matrícula ou a designação;
+- escolher como principal um professor que é auxiliar da turma encerra a designação de auxiliar (término no dia anterior, ou no próprio início se ele ainda não começou), auditada como `class_group_teacher.ended` com motivo `promoted_to_main`. As aulas anteriores continuam cobertas pela designação encerrada, então a chamada pendente segue acessível, e as próximas aulas passam a ser dele como principal;
+- o professor principal continua sem poder ser designado auxiliar da mesma turma;
+- novo teste em `DojoClassHubTest`.
+
 ## 2026-10-22 — Painel do professor abre a chamada no dojo
 
 - "Próximas aulas" no painel do professor levava à tela de aulas da associação, que exige `session.view` associativo; o professor, que só tem acesso pelo dojo (ADR-006), recebia 403;

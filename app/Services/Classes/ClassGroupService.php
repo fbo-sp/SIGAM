@@ -221,13 +221,27 @@ class ClassGroupService
                     ->where(fn ($query) => $query->whereNull('planned_teacher_id')->when($oldTeacherId, fn ($q) => $q->orWhere('planned_teacher_id', $oldTeacherId)))
                     ->update(['planned_teacher_id' => $newTeacherId]);
             }
+            // Auxiliar promovido a principal: a designação de auxiliar termina e vale a de principal.
+            // Até ontem ela continua cobrindo as aulas anteriores, então a chamada pendente segue acessível.
+            $promoted = 0;
+            if ($teacherChanged && $newTeacherId !== null) {
+                $assistant = $locked->teacherAssignments()->where('teacher_profile_id', $newTeacherId)
+                    ->where(fn ($query) => $query->whereNull('end_date')->orWhereDate('end_date', '>=', today()))->lockForUpdate()->get();
+                foreach ($assistant as $assignment) {
+                    $end = $assignment->start_date->copy()->max(today()->subDay())->toDateString();
+                    $before = ['end_date' => $assignment->end_date?->toDateString()];
+                    $assignment->update(['end_date' => $end]);
+                    $this->audit->record('class_group_teacher.ended', 'updated', $assignment, $before, ['end_date' => $end, 'reason' => 'promoted_to_main'], ['association_id' => $association->id]);
+                    $promoted++;
+                }
+            }
             $cancelled = $closingFrom === null ? 0 : $this->openFutureSessions($locked, $closingFrom)->update([
                 'status' => 'cancelled',
                 'cancellation_reason' => $status === 'active' ? 'Turma encerrada antes desta data.' : 'Turma inativada.',
             ]);
 
             $this->audit->record('class_group.updated', 'updated', $locked, $before, [
-                ...$locked->only(self::EDITABLE), 'sessions_reassigned' => $reassigned, 'sessions_cancelled' => $cancelled,
+                ...$locked->only(self::EDITABLE), 'sessions_reassigned' => $reassigned, 'sessions_cancelled' => $cancelled, 'assistant_assignments_ended' => $promoted,
             ], ['association_id' => $association->id]);
             if ($status === 'active') {
                 $this->futureSessions->maintain($locked->id);
