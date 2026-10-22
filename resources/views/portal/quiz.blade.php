@@ -8,7 +8,7 @@
 <p>{{ $attempt->question_count }} pergunta(s).@if($attempt->mode === 'official') Nota mínima {{ $attempt->minimum_score }}%. Uma tentativa: ao enviar, não dá para refazer.@else Treino não conta para o acompanhamento.@endif</p></div></div>
 
 @if($finished)
-<div class="card"><p class="quiz-score">{{ $attempt->score }}%</p><p>{{ $attempt->correct_count }} de {{ $attempt->question_count }} acerto(s).@if($attempt->mode === 'official') {{ $attempt->passed ? 'Aprovado: os itens teóricos das perguntas foram registrados como Adequado.' : 'Abaixo da nota mínima. Fale com o professor para uma nova liberação.' }}@endif</p>
+<div class="card quiz-result"><p class="quiz-score">{{ $attempt->score }}%</p><p>{{ $attempt->correct_count }} de {{ $attempt->question_count }} acerto(s).@if($attempt->mode === 'official') {{ $attempt->passed ? 'Aprovado: os itens teóricos das perguntas foram registrados como Adequado.' : 'Abaixo da nota mínima. Fale com o professor para uma nova liberação.' }}@endif</p>
 <a class="button button-secondary" href="{{ route('portal.progress', [$student, 'modalidade' => $attempt->martial_art_id]) }}">Voltar ao progresso</a></div>
 @foreach($attempt->answers->sortBy('sort_order') as $answer)
 @php($options = collect($answer->option_ids)->map(fn ($id) => $answer->question->options->firstWhere('id', $id))->filter())

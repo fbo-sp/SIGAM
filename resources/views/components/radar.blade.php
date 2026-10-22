@@ -19,6 +19,6 @@
 <figcaption><span class="radar-key radar-key-current"></span>Nível atual <span class="radar-key radar-key-required"></span>Exigido</figcaption>
 </figure>
 @endif
-<table class="radar-table @if($count >= 3) sr-only @endif"><caption class="sr-only">{{ $label }}</caption><thead><tr><th>Grupo</th><th>Atual</th><th>Exigido</th></tr></thead><tbody>
+<div @class(["radar-table-wrap", "sr-only" => $count >= 3])><table class="radar-table"><caption class="sr-only">{{ $label }}</caption><thead><tr><th>Grupo</th><th>Atual</th><th>Exigido</th></tr></thead><tbody>
 @foreach($axes as $axis)<tr><td>{{ $axis['label'] }}</td><td>{{ number_format($axis['current'], 1, ',', '') }}</td><td>{{ number_format($axis['required'], 1, ',', '') }}</td></tr>@endforeach
-</tbody></table>
+</tbody></table></div>
