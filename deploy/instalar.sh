@@ -69,6 +69,9 @@ passo "Aplicando migrations"
 passo "Carregando dados básicos (permissões, perfis, modelos)"
 "$PHP" artisan db:seed --force
 
+passo "Liberando o acesso dos professores aos dojos em que estão vinculados"
+"$PHP" artisan sigam:access:sync-teacher-dojos --apply
+
 passo "Gerando caches"
 "$PHP" artisan config:cache
 "$PHP" artisan view:cache

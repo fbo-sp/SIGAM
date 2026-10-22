@@ -22,7 +22,7 @@ Entregar ao professor uma conta individual sem senha padrão e sem ampliar acess
 
 ### Aceite ou recusa
 
-O GET não escreve. No POST, `TeacherInvitationService::accept` bloqueia convite e conta, valida uso único/prazo e repete todas as verificações de identidade, escopo e autoridade. Conta nova fornece senha de no mínimo 12 caracteres com letras e números; conta ativa fornece sua senha atual. E-mail verificado e aceite são gravados separadamente. `decline` preserva cadastro e conta.
+O GET não escreve. No POST, `TeacherInvitationService::accept` bloqueia convite e conta, valida uso único/prazo e repete todas as verificações de identidade, escopo e autoridade. Conta nova fornece senha de no mínimo 12 caracteres com letras e números; conta ativa fornece sua senha atual. E-mail verificado e aceite são gravados separadamente. Depois do aceite, os vínculos vigentes ou futuros do professor com dojos geram a concessão `dojo_teacher` que ainda faltar (`TeacherDojoAccess::grantForTeacher`). `decline` preserva cadastro e conta.
 
 ### Reenvio, revogação e recuperação
 

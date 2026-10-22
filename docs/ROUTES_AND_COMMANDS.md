@@ -71,6 +71,7 @@ O papel `dojo_teacher` recebe apenas funções de aula designada. O papel `dojo_
 | `sigam:teacher-invitations:send` | entregar convites | reserva, revalidação e até cinco tentativas |
 | `sigam:imports:purge-files` | aplicar retenção da planilha privada | ignora arquivos já eliminados |
 | `sigam:access:backfill-teachers` | inferir vínculo institucional comprovado | dry-run; `--apply` não cria conta/acesso local |
+| `sigam:access:sync-teacher-dojos` | criar a concessão `dojo_teacher` para vínculos de professor vigentes ou futuros sem acesso | dry-run; `--apply` idempotente, não altera concessões existentes |
 | `sigam:operation:audit-origins` | diagnosticar origem financeira legada | dry-run; `--apply` apenas evidência inequívoca |
 | `sigam:production:check` | preflight sem imprimir segredos | código não zero bloqueia liberação técnica |
 

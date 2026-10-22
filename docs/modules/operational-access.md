@@ -35,7 +35,8 @@ Os papéis semeados são `dojo_operator` (`scope_type=dojo`) e `dojo_teacher` (`
 - `/operacao/dojos/{dojo}/alunos/novo`: cadastro composto restrito por `student.manage`; upload contextual exige `student.document.manage`;
 - `/associacoes/{association}/acessos-dojos`: criar e revogar concessões, exige `role.manage` associativo;
 - cadastro institucional de professor continua nas rotas da associação;
-- vínculo local de professor escolhe somente `teacher_association_memberships` ativos.
+- vínculo local de professor escolhe somente `teacher_association_memberships` ativos;
+- o vínculo local libera automaticamente a concessão `dojo_teacher` no mesmo período quando o professor já tem conta (ativa ou pendente) na associação, e encerrar o vínculo revoga as concessões de professor ativas daquele usuário no dojo (`TeacherDojoAccess`, decisão de 22/10/2026). Professor sem conta recebe a concessão ao aceitar o convite.
 
 ## Persistência e serviços
 
@@ -44,7 +45,8 @@ Os papéis semeados são `dojo_operator` (`scope_type=dojo`) e `dojo_teacher` (`
 - `OperationalScope` compõe autorização e consultas restritas;
 - `AccessAdministration` usa transações, locks, valida associação/período e audita `dojo_access.granted|revoked` e `dojo_teacher.linked|revoked`;
 - `DirectRegistrationService::registerTeacher` cria idempotentemente o vínculo institucional no cadastro associativo;
-- comandos `sigam:access:backfill-teachers` e `sigam:operation:audit-origins` são simulação por padrão.
+- `TeacherDojoAccess` concede e revoga o acesso de professor a partir do vínculo local, sem duplicar concessão existente;
+- comandos `sigam:access:backfill-teachers`, `sigam:access:sync-teacher-dojos` e `sigam:operation:audit-origins` são simulação por padrão.
 
 ## Testes de manutenção
 

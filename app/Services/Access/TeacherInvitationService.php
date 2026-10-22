@@ -17,7 +17,7 @@ use Illuminate\Validation\ValidationException;
 
 class TeacherInvitationService
 {
-    public function __construct(private readonly AuditService $audit) {}
+    public function __construct(private readonly AuditService $audit, private readonly TeacherDojoAccess $teacherAccess) {}
 
     /** @return array{invitation: TeacherInvitation, token: string} */
     public function issue(User $actor, Association $association, TeacherProfile $teacher): array
@@ -148,6 +148,8 @@ class TeacherInvitationService
                 'status' => 'accepted',
                 'user_id' => $user->id,
             ], ['association_id' => $invitation->association_id]);
+            // Vínculos com dojos feitos antes do aceite passam a valer agora que a conta existe.
+            $this->teacherAccess->grantForTeacher($invitation->association_id, $invitation->teacher_profile_id, $invitation->invited_by_user_id);
 
             return $user;
         }, 3);

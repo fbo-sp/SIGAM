@@ -35,7 +35,7 @@ Com acesso SSH ou Terminal do cPanel, depois de extrair o pacote e criar o `.env
 3. se o banco já estiver instalado, entra em manutenção;
 4. limpa os caches de configuração, rotas e views;
 5. gera `APP_KEY` **somente** quando ela está vazia e o banco ainda não foi instalado; com banco instalado e chave vazia, para e pede a chave original;
-6. roda `migrate --force` e `db:seed --force`, que são idempotentes;
+6. roda `migrate --force` e `db:seed --force`, que são idempotentes, e `sigam:access:sync-teacher-dojos --apply`, que libera o acesso de professor nos dojos em que ele já está vinculado sem duplicar concessões;
 7. roda `config:cache` e `view:cache`;
 8. roda `sigam:production:check`. Só sai da manutenção quando todos os itens estão OK.
 
