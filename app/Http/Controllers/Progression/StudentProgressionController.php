@@ -28,6 +28,7 @@ class StudentProgressionController extends Controller
             'options' => $options,
             'snapshot' => $progress->snapshot($association, $student, $link->martialArt),
             'history' => $assessments->history($student, $link->martialArt),
+            'worked' => $progress->worked($association, $student, $link->martialArt, today()->subDays(90), today()),
             'levels' => AssessmentLevel::labels(),
             'dojo' => null,
             'association' => $association,

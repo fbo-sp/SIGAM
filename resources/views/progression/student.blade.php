@@ -47,6 +47,11 @@
 @endif
 @endif
 
+<section class="section-block"><div class="section-heading"><h2>Trabalhado nas aulas</h2><p>Últimos 90 dias: {{ $worked['sessions'] }} aula(s) com presença. Conta só a aula em que o aluno estava presente.</p></div>
+@if($worked['axes']->isEmpty())<div class="card empty-state"><p>Nenhuma técnica marcada nas aulas em que o aluno esteve presente.</p></div>@else
+<div class="radar-grid">@foreach($knowledgeLabels as $type => $label)@if($worked['axes']->has($type))<div class="card list-card"><div class="list-row"><span><strong>{{ $label }}</strong></span></div>@foreach($worked['axes'][$type] as $axis)<div class="list-row"><span>{{ $axis['label'] }}</span><span class="status-pill">{{ $axis['sessions'] }} de {{ $worked['sessions'] }} aula(s)</span></div>@endforeach</div>@endif @endforeach</div>@endif
+</section>
+
 <section class="section-block"><div class="section-heading"><h2>Evolução</h2><p>Cada avaliação fica registrada; o nível atual é o último registro de cada item.</p></div>
 <div class="card list-card">@forelse($history as $record)<div class="list-row"><span><strong>{{ $record->item->name }}</strong><small>{{ $record->assessed_on->format('d/m/Y') }} · {{ $record->teacher?->person?->social_name ?: $record->teacher?->person?->full_name ?: 'Professor' }}@if($record->notes) · {{ $record->notes }}@endif</small></span><span class="status-pill">{{ $levels[$record->level] }}</span></div>@empty<div class="empty-state"><h2>Nenhuma avaliação ainda</h2><p>Os professores das turmas do aluno registram as avaliações pelo botão Avaliar.</p></div>@endforelse</div>
 </section>

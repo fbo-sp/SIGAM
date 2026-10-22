@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Progression;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Progression\AssessmentRequest;
+use App\Models\ClassSession;
 use App\Models\Dojo;
 use App\Models\MartialArt;
 use App\Models\Student;
 use App\Services\Access\OperationalScope;
 use App\Services\Progression\AssessmentService;
+use App\Services\Progression\SessionTechniqueService;
 use App\Services\Progression\StudentProgressService;
 use App\Support\Progression\AssessmentLevel;
 use Illuminate\Http\RedirectResponse;
@@ -35,6 +37,7 @@ class DojoProgressionController extends Controller
             'options' => $options,
             'snapshot' => $this->progress->snapshot($dojo->association, $student, $martialArt),
             'history' => $this->assessments->history($student, $martialArt),
+            'worked' => $this->progress->worked($dojo->association, $student, $martialArt, today()->subDays(90), today()),
             'levels' => AssessmentLevel::labels(),
             'dojo' => $dojo,
             'association' => null,
@@ -66,6 +69,17 @@ class DojoProgressionController extends Controller
 
         return redirect()->route('operation.progression.show', [$dojo, $student, 'modalidade' => $martialArt->id])
             ->with('status', $count === 0 ? 'Nenhum nível mudou; nada foi gravado.' : "Avaliação registrada em {$count} item(ns).");
+    }
+
+    public function saveTechniques(Request $request, Dojo $dojo, ClassSession $session, SessionTechniqueService $service): RedirectResponse
+    {
+        $this->enter($request, $dojo);
+        abort_unless($this->scope->sessions($request->user(), $dojo)->whereKey($session->id)->exists(), 404);
+        $data = $request->validate(['techniques' => ['nullable', 'array', 'max:500'], 'techniques.*' => ['integer']]);
+        $result = $service->sync($request->user(), $dojo, $session, $data['techniques'] ?? []);
+
+        return redirect()->route('operation.session', [$dojo, $session])->withFragment('tecnicas')
+            ->with('status', $result['added'] + $result['removed'] === 0 ? 'Técnicas sem alteração.' : 'Técnicas trabalhadas salvas.');
     }
 
     /** @return array{0: ?MartialArt, 1: Collection} */
