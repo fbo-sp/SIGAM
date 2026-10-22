@@ -65,8 +65,9 @@ class ProgressionPanelTest extends TestCase
     public function test_association_compares_dojos_and_teachers(): void
     {
         [$anaUser, $ana] = $this->teacher('Professora Ana');
-        $this->enroll($this->group($ana), $this->student('A-1'));
-        TechniqueAssessment::query()->create(['association_id' => $this->association->id, 'student_id' => 1, 'martial_art_id' => $this->art->id, 'technique_item_id' => $this->items['kano']->id, 'level' => 2, 'teacher_profile_id' => $ana->id, 'dojo_id' => $this->dojo->id, 'assessed_by_user_id' => $anaUser->id, 'assessed_on' => '2026-10-10']);
+        $student = $this->student('A-1');
+        $this->enroll($this->group($ana), $student);
+        TechniqueAssessment::query()->create(['association_id' => $this->association->id, 'student_id' => $student->id, 'martial_art_id' => $this->art->id, 'technique_item_id' => $this->items['kano']->id, 'level' => 2, 'teacher_profile_id' => $ana->id, 'dojo_id' => $this->dojo->id, 'assessed_by_user_id' => $anaUser->id, 'assessed_on' => '2026-10-10']);
 
         $comparison = app(ProgressionPanelService::class)->comparison($this->association, $this->art, today()->subDays(90), today());
         $this->assertSame('Dojo Norte', $comparison['dojos'][0]['label']);
