@@ -7,6 +7,8 @@ use App\Models\Charge;
 use App\Models\ClassGroup;
 use App\Models\ClassSession;
 use App\Models\Dojo;
+use App\Models\DojoRoleAssignment;
+use App\Models\DojoTeacherAssignment;
 use App\Models\MartialArt;
 use App\Models\Notification;
 use App\Models\NotificationTemplate;
@@ -14,6 +16,7 @@ use App\Models\Permission;
 use App\Models\Person;
 use App\Models\Role;
 use App\Models\Student;
+use App\Models\TeacherAssociationMembership;
 use App\Models\TeacherProfile;
 use App\Models\User;
 use App\Services\Notifications\NotificationService;
@@ -119,6 +122,31 @@ class NotificationsAndDashboardTest extends TestCase
         $this->assertSame(1, $dashboard['metrics']['today_classes']);
         $this->assertSame(1, $dashboard['metrics']['pending_attendance']);
         $this->actingAs($user)->get(route('dashboard'))->assertOk()->assertSee('Painel do professor')->assertSee('Turma da manhã');
+    }
+
+    public function test_teacher_dashboard_links_next_sessions_to_the_dojo_attendance_screen(): void
+    {
+        [$association, $dojo] = $this->context();
+        $person = Person::query()->create(['full_name' => 'Professora com chamada']);
+        $association->people()->attach($person, ['role_type' => 'teacher', 'start_date' => today(), 'status' => 'active']);
+        $teacher = TeacherProfile::query()->create(['person_id' => $person->id, 'registration_number' => 'PROF-2', 'status' => 'active']);
+        TeacherAssociationMembership::query()->create(['association_id' => $association->id, 'teacher_profile_id' => $teacher->id, 'status' => 'active']);
+        $art = MartialArt::query()->create(['association_id' => $association->id, 'name' => 'Judô', 'status' => 'active']);
+        $group = ClassGroup::query()->create(['association_id' => $association->id, 'dojo_id' => $dojo->id, 'martial_art_id' => $art->id, 'name' => 'Turma da tarde', 'main_teacher_id' => $teacher->id, 'start_date' => today(), 'status' => 'active']);
+        $session = ClassSession::query()->create(['class_group_id' => $group->id, 'session_date' => today()->addDay(), 'start_time' => '15:00', 'end_time' => '16:00', 'planned_teacher_id' => $teacher->id, 'status' => 'planned', 'attendance_state' => 'open']);
+        $user = $this->user($association, $person, ['dashboard.teacher']);
+
+        $this->actingAs($user)->get(route('dashboard'))->assertOk()->assertSee('peça ao gestor acesso de professor ao dojo')
+            ->assertDontSee(route('associations.attendance.show', [$association, $session]), false);
+
+        $role = Role::query()->create(['association_id' => $association->id, 'name' => 'Professor', 'code' => 'teacher_'.uniqid(), 'scope_type' => 'teacher']);
+        $role->permissions()->sync(collect(['dojo.access', 'class.view', 'session.view', 'attendance.manage'])->map(fn ($code) => Permission::query()->firstOrCreate(['code' => $code], ['description' => $code])->id));
+        DojoRoleAssignment::query()->create(['association_id' => $association->id, 'dojo_id' => $dojo->id, 'user_id' => $user->id, 'role_id' => $role->id, 'start_date' => today(), 'created_by_user_id' => $user->id]);
+        DojoTeacherAssignment::query()->create(['association_id' => $association->id, 'dojo_id' => $dojo->id, 'teacher_profile_id' => $teacher->id, 'start_date' => today(), 'created_by_user_id' => $user->id]);
+
+        $link = route('operation.session', [$dojo, $session]);
+        $this->get(route('dashboard'))->assertOk()->assertSee($link, false);
+        $this->get($link)->assertOk()->assertSee('Turma da tarde');
     }
 
     private function context(array $permissions = ['portal.access']): array

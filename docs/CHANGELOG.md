@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-10-22 — Painel do professor abre a chamada no dojo
+
+- "Próximas aulas" no painel do professor levava à tela de aulas da associação, que exige `session.view` associativo; o professor, que só tem acesso pelo dojo (ADR-006), recebia 403;
+- a lista passa a vir de `OperationalScope::sessions` nos dojos em que o professor tem concessão vigente, inclui aulas como auxiliar ou substituto e abre `/operacao/dojos/{dojo}/aulas/{session}`;
+- sem concessão de dojo, a lista explica que é preciso pedir acesso ao gestor;
+- novo teste em `NotificationsAndDashboardTest`.
+
 ## 2026-10-22 — Atalho para editar dados da pessoa nas listas
 
 - listas de Pessoas, Alunos e Professores da associação, alunos e professores do dojo e abas da turma ganham um ícone de lápis que abre a edição dos dados da pessoa; a ficha do aluno ganha "Editar dados pessoais" e o ícone ao lado de cada responsável;

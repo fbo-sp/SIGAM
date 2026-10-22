@@ -36,7 +36,7 @@ O scheduler gera eventos a cada hora e tenta e-mails a cada cinco minutos. Em ho
 
 1. `dashboard.association`: associação completa;
 2. `dashboard.dojo`: somente `users.dojo_id`;
-3. `dashboard.teacher`: somente turmas cujo professor principal corresponde à pessoa da conta;
+3. `dashboard.teacher`: somente turmas cujo professor principal corresponde à pessoa da conta. "Próximas aulas" vem de `OperationalScope::sessions` nos dojos com concessão vigente e leva à chamada do dojo (`operation.session`); só quem tem `session.view` associativo recebe também o link da associação. Sem concessão, a lista explica que é preciso pedir acesso ao dojo;
 4. visão pessoal com atalhos permitidos.
 
 Associação/dojo exibem alunos ativos, entradas, desligamentos, frequência do mês, inadimplência, receita prevista/recebida, benefícios, filiações e campeonatos. Professor vê aulas de hoje/próximas, chamadas pendentes, alunos, faltas consecutivas e campeonatos abertos. As consultas são agregadas sobre tabelas indexadas e não aceitam escopo do navegador.
