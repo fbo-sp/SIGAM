@@ -129,6 +129,8 @@ class Sprint18Test extends TestCase
         $this->assertDatabaseCount('class_enrollments', 1);
         $this->assertSame($financialBefore, Charge::query()->count());
 
+        // A chamada só abre no dia da aula.
+        $this->travelTo($session->session_date->setTime(18, 30));
         $this->post(route('associations.attendance.store', [$association, $session]), ['records' => [
             ['student_id' => $regular->id, 'status' => 'present'],
             ['student_id' => $visitor->id, 'status' => 'present'],

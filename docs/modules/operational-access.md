@@ -10,7 +10,7 @@ Permitir que uma conta trabalhe em um ou mais dojos sem receber visão associati
 |---|---|---|
 | Gestor da associação | administrar concessões e manter visão consolidada conforme seus papéis associativos | conceder conta externa, papel fora da associação ou sobrescrever histórico |
 | Gestor do dojo | consultar e cadastrar alunos regulares, corrigir dados pessoais desses alunos (sem CPF e documentos), criar e editar turmas, matricular e encerrar matrículas, designar professores auxiliares, operar aulas/chamadas, escolher professores elegíveis, administrar cobranças locais e inscrever seus alunos em campeonatos da associação | cadastrar professor institucional, acessar outro dojo, central/download amplo de documentos, configurar catálogo financeiro/campeonato, exports e administração associativa |
-| Professor do dojo | ver turmas/aulas designadas (como principal, previsto, substituto ou auxiliar) e registrar/finalizar a chamada correspondente | ver diretório de alunos, aula alheia, reabrir/cancelar/reagendar, documentos, financeiro ou rotas associativas |
+| Professor do dojo | ver turmas/aulas designadas (como principal, previsto, substituto ou auxiliar) registrar/finalizar a chamada correspondente a partir do dia da aula e reabri-la com motivo | ver diretório de alunos, aula alheia, cancelar/reagendar, documentos, financeiro ou rotas associativas |
 | Aluno/responsável | continua no portal por relacionamento | concessão de dojo não é usada pelo portal |
 
 Os papéis semeados são `dojo_operator` (`scope_type=dojo`) e `dojo_teacher` (`scope_type=teacher`). Alterações futuras nas capacidades devem ser explícitas; o seeder não sobrescreve papel já existente.

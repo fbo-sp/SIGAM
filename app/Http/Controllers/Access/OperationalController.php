@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Access;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Attendance\ReopenAttendanceRequest;
 use App\Http\Requests\Attendance\SessionVisitorRequest;
 use App\Models\ClassSession;
 use App\Models\ClassSessionVisitor;
@@ -89,14 +90,16 @@ class OperationalController extends Controller
         $roster = $attendance->roster($session);
         $records = $session->records()->whereIn('student_id', $roster->pluck('student.id'))->get()->keyBy('student_id');
         $canRecord = $this->scope->sessions($request->user(), $dojo, 'attendance.manage')->whereKey($session->id)->exists()
-            && $session->attendance_state === 'open' && ! in_array($session->status, ['cancelled', 'rescheduled'], true);
+            && $session->attendance_state === 'open' && ! in_array($session->status, ['cancelled', 'rescheduled'], true)
+            && ! $session->isBeforeAttendanceDay();
+        $canReopen = $session->attendance_state === 'closed' && $this->scope->sessions($request->user(), $dojo, 'attendance.reopen')->whereKey($session->id)->exists();
         $canManageVisitors = $this->scope->sessions($request->user(), $dojo, 'visitor.manage')->whereKey($session->id)->exists()
             && $session->attendance_state === 'open' && $session->status === 'planned';
 
         $enrollUrl = $this->scope->canDojo($request->user(), $dojo, 'enrollment.manage')
             ? route('operation.classes.show', [$dojo, $session->classGroup]).'#alunos' : null;
 
-        return view('operation.session', compact('dojo', 'session', 'roster', 'records', 'canRecord', 'canManageVisitors', 'enrollUrl'));
+        return view('operation.session', compact('dojo', 'session', 'roster', 'records', 'canRecord', 'canReopen', 'canManageVisitors', 'enrollUrl'));
     }
 
     public function addVisitor(SessionVisitorRequest $request, Dojo $dojo, ClassSession $session, SessionVisitorService $service)
@@ -130,6 +133,15 @@ class OperationalController extends Controller
         $service->save($dojo->association, $session, $request->user(), $data['records'], $request->boolean('close_attendance'));
 
         return redirect()->route('operation.session', [$dojo, $session])->with('status', 'Chamada salva.');
+    }
+
+    public function reopenAttendance(ReopenAttendanceRequest $request, Dojo $dojo, ClassSession $session, AttendanceService $service)
+    {
+        $this->enter($request, $dojo);
+        abort_unless($this->scope->sessions($request->user(), $dojo, 'attendance.reopen')->whereKey($session->id)->exists(), 404);
+        $service->reopen($dojo->association, $session, $request->user(), $request->validated('reason'));
+
+        return redirect()->route('operation.session', [$dojo, $session])->with('status', 'Chamada reaberta. Revise as presenças e finalize de novo.');
     }
 
     public function teachers(Request $request, Dojo $dojo)

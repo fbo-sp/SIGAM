@@ -15,9 +15,9 @@ use Illuminate\Database\Eloquent\Builder;
 
 class OperationalScope
 {
-    public const DOJO_PERMISSIONS = ['dojo.access', 'student.view', 'student.manage', 'student.document.manage', 'class.view', 'class.manage', 'enrollment.manage', 'session.view', 'attendance.manage', 'visitor.manage', 'teacher.view', 'teacher.assign', 'import.manage', 'charge.view', 'student_plan.manage', 'payment.manage', 'gratuity.request', 'gratuity.approve_dojo', 'championship.view', 'championship.register'];
+    public const DOJO_PERMISSIONS = ['dojo.access', 'student.view', 'student.manage', 'student.document.manage', 'class.view', 'class.manage', 'enrollment.manage', 'session.view', 'attendance.manage', 'attendance.reopen', 'visitor.manage', 'teacher.view', 'teacher.assign', 'import.manage', 'charge.view', 'student_plan.manage', 'payment.manage', 'gratuity.request', 'gratuity.approve_dojo', 'championship.view', 'championship.register'];
 
-    public const TEACHER_PERMISSIONS = ['dojo.access', 'class.view', 'session.view', 'attendance.manage', 'visitor.manage'];
+    public const TEACHER_PERMISSIONS = ['dojo.access', 'class.view', 'session.view', 'attendance.manage', 'attendance.reopen', 'visitor.manage'];
 
     public function grants(User $user, Dojo $dojo, string $permission, string $scope = 'dojo'): Builder
     {

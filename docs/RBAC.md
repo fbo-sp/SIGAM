@@ -49,7 +49,7 @@ Cadastro esportivo adiciona `martial_art.*`, `student.*` e `teacher.*`. Possuir 
 
 Turmas separam leitura (`class.view`), configuração (`class.manage`) e matrícula (`enrollment.manage`). Isso permite que uma equipe administrativa matricule alunos sem alterar agenda ou professor. No contexto do dojo, o papel `dojo_operator` recebe as duas permissões e só as usa nas turmas da própria unidade. O professor principal e os auxiliares designados em `class_group_teachers` veem as aulas da turma e fazem a chamada, mas não editam nem matriculam.
 
-Aulas separam `session.view`, `session.manage`, `attendance.manage` e `attendance.reopen`. A permissão de reabrir é deliberadamente distinta da chamada comum.
+Aulas separam `session.view`, `session.manage`, `attendance.manage` e `attendance.reopen`. A permissão de reabrir é deliberadamente distinta da chamada comum. No dojo, `attendance.reopen` faz parte dos papéis `dojo_operator` (aulas do dojo) e `dojo_teacher` (aulas designadas ao professor); a reabertura exige motivo e é auditada. Nenhum perfil registra ou finaliza chamada antes do dia da aula.
 
 `visitor.manage` autoriza incluir ou revogar participação eventual. No contexto local, gestor do dojo ou professor designado ainda precisa de concessão, vínculo e acesso à aula validado por `OperationalScope`; conhecer matrícula ou ID não basta. A permissão não concede diretório, matrícula, cadastro, documentos ou financeiro.
 

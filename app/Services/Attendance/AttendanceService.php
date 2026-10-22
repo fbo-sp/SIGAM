@@ -25,6 +25,9 @@ class AttendanceService
             if ($locked->attendance_state !== 'open') {
                 throw ValidationException::withMessages(['attendance' => 'A chamada está fechada. Reabra antes de alterar.']);
             }
+            if ($locked->isBeforeAttendanceDay()) {
+                throw ValidationException::withMessages(['attendance' => 'Esta aula ainda não aconteceu. A chamada abre no dia '.$locked->session_date->format('d/m/Y').'.']);
+            }
             $roster = $this->roster($locked)->keyBy(fn (array $row) => $row['student']->id);
             foreach ($records as $record) {
                 $row = $roster->get((int) $record['student_id']);
@@ -58,7 +61,7 @@ class AttendanceService
         DB::transaction(function () use ($association, $session, $user, $reason): void {
             $locked = ClassSession::query()->lockForUpdate()->with('classGroup')->findOrFail($session->id);
             $this->assertSession($association, $locked);
-            abort_unless($user->hasPermission('attendance.reopen', $association->id), 403);
+            abort_unless($user->hasPermission('attendance.reopen', $association->id) || app(OperationalScope::class)->canSession($user, $locked, 'attendance.reopen'), 403);
             if ($locked->attendance_state !== 'closed') {
                 throw ValidationException::withMessages(['attendance' => 'A chamada já está aberta.']);
             }

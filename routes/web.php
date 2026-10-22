@@ -81,6 +81,7 @@ Route::middleware(['auth', 'active', 'association.context'])->group(function ():
         Route::get('/aulas', 'sessions')->name('sessions');
         Route::get('/aulas/{session}', 'session')->name('session');
         Route::post('/aulas/{session}/chamada', 'saveAttendance')->name('attendance');
+        Route::post('/aulas/{session}/reabrir', 'reopenAttendance')->name('attendance.reopen');
         Route::post('/aulas/{session}/visitantes', 'addVisitor')->name('visitors.store');
         Route::post('/aulas/{session}/visitantes/{visitor}/revogar', 'revokeVisitor')->name('visitors.revoke');
         Route::get('/professores', 'teachers')->name('teachers');
