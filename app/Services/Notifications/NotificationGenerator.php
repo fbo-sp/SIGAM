@@ -6,16 +6,20 @@ use App\Models\Association;
 use App\Models\AttendanceRecord;
 use App\Models\Championship;
 use App\Models\Charge;
+use App\Models\ClassGroup;
 use App\Models\ClassSession;
 use App\Models\Document;
 use App\Models\FederationMembership;
 use App\Models\GratuityRequest;
+use App\Models\ProgressionSetting;
 use App\Models\Student;
+use App\Models\TechniqueAssessment;
 use App\Models\User;
+use App\Services\Access\OperationalScope;
 
 class NotificationGenerator
 {
-    public function __construct(private readonly NotificationService $notifications, private readonly NotificationRecipientResolver $recipients) {}
+    public function __construct(private readonly NotificationService $notifications, private readonly NotificationRecipientResolver $recipients, private readonly OperationalScope $scope) {}
 
     public function generate(?int $associationId = null): int
     {
@@ -79,6 +83,43 @@ class NotificationGenerator
                 $count++;
             }
         });
+
+        $count += $this->assessmentsDue($association);
+
+        return $count;
+    }
+
+    /**
+     * Lembrete ao professor (requisito D11): alunos da turma sem avaliação técnica na modalidade há mais de N
+     * semanas, contadas da última avaliação ou do início da matrícula. Um aviso por turma, professor e período.
+     */
+    private function assessmentsDue(Association $association): int
+    {
+        $weeks = ProgressionSetting::for($association->id)->assessment_reminder_weeks;
+        $limit = today()->subWeeks($weeks);
+        $period = intdiv((int) today()->diffInDays('2026-01-01', true), $weeks * 7);
+        $count = 0;
+        ClassGroup::query()->where('association_id', $association->id)->where('status', 'active')->whereNotNull('main_teacher_id')
+            ->with(['dojo', 'mainTeacher', 'teacherAssignments' => fn ($query) => $query->where('role_type', 'assistant')->current()->with('teacher'),
+                'enrollments' => fn ($query) => $query->where('status', 'active')->whereDate('start_date', '<=', $limit)
+                    ->where(fn ($q) => $q->whereNull('end_date')->orWhereDate('end_date', '>=', today()))])
+            ->each(function (ClassGroup $group) use ($association, $weeks, $limit, $period, &$count): void {
+                $studentIds = Student::query()->whereKey($group->enrollments->pluck('student_id'))->where('status', 'active')->pluck('id');
+                $recent = TechniqueAssessment::query()->whereIn('student_id', $studentIds)->where('martial_art_id', $group->martial_art_id)
+                    ->whereDate('assessed_on', '>', $limit)->distinct()->pluck('student_id');
+                $due = $studentIds->diff($recent)->count();
+                if ($due === 0) {
+                    return;
+                }
+                $personIds = collect([$group->mainTeacher?->person_id])->merge($group->teacherAssignments->map(fn ($assignment) => $assignment->teacher?->person_id))->filter()->unique();
+                $users = User::query()->where('association_id', $association->id)->whereIn('person_id', $personIds)->get()
+                    ->filter(fn (User $user) => $this->scope->canTeacher($user, $group->dojo, 'assessment.manage'));
+                foreach ($users as $user) {
+                    $this->notifications->publish($association, 'assessment.due', 'assessment-due-'.$group->id.'-'.$user->id.'-'.$period,
+                        ['item' => $group->name, 'count' => $due, 'weeks' => $weeks, 'date' => '', 'student_name' => ''], [$user]);
+                    $count++;
+                }
+            });
 
         return $count;
     }

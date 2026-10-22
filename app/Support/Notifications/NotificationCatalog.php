@@ -14,6 +14,7 @@ class NotificationCatalog
         'gratuity.awaiting_approval' => 'Gratuidade aguardando aprovação',
         'class.cancelled' => 'Aula cancelada',
         'attendance.consecutive_absences' => 'Faltas consecutivas',
+        'assessment.due' => 'Avaliação técnica pendente',
     ];
 
     public static function templates(): array
@@ -28,6 +29,7 @@ class NotificationCatalog
             'gratuity.awaiting_approval' => ['Gratuidade aguardando decisão', 'A solicitação de gratuidade de {{student_name}} aguarda sua análise no JUDOMA.'],
             'class.cancelled' => ['Aula cancelada', 'A aula “{{item}}” de {{date}} foi cancelada. Consulte o JUDOMA para detalhes.'],
             'attendance.consecutive_absences' => ['Atenção à frequência', '{{student_name}} possui três faltas consecutivas registradas. Procure a associação se precisar de ajuda.'],
+            'assessment.due' => ['Avaliação técnica pendente', 'Olá, {{recipient_name}}. Na turma “{{item}}”, {{count}} aluno(s) estão sem avaliação técnica há mais de {{weeks}} semanas. Registre pelo acompanhamento técnico no JUDOMA.'],
         ];
     }
 }
