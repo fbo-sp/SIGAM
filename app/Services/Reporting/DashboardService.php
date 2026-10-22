@@ -9,16 +9,22 @@ use App\Models\Charge;
 use App\Models\ClassGroup;
 use App\Models\ClassSession;
 use App\Models\Discount;
+use App\Models\Dojo;
+use App\Models\DojoRoleAssignment;
 use App\Models\FederationMembership;
 use App\Models\GratuityRequest;
 use App\Models\Payment;
 use App\Models\Student;
 use App\Models\TeacherProfile;
 use App\Models\User;
+use App\Services\Access\OperationalScope;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 
 class DashboardService
 {
+    public function __construct(private readonly OperationalScope $scope) {}
+
     public function for(User $user): array
     {
         if (! $user->association_id) {
@@ -85,6 +91,34 @@ class DashboardService
             return $latest->count() === 3 && $latest->every(fn (string $status) => $status === 'absent');
         })->count();
 
-        return ['kind' => 'teacher', 'metrics' => ['today_classes' => (clone $todaySessions)->count(), 'pending_attendance' => (clone $todaySessions)->where('status', '!=', 'cancelled')->where('attendance_state', 'open')->count(), 'students' => $studentIds->unique()->count(), 'recurring_absences' => $recurring], 'lists' => ['next_classes' => ClassSession::query()->whereIn('class_group_id', $groupIds)->whereBetween('session_date', [today(), today()->addDays(7)])->where('status', '!=', 'cancelled')->with('classGroup')->orderBy('session_date')->orderBy('start_time')->limit(8)->get(), 'classes' => (clone $groups)->withCount(['enrollments' => fn (Builder $query) => $query->where('status', 'active')])->get(), 'championships' => Championship::query()->where('association_id', $user->association_id)->where('status', 'open')->where('registration_close_at', '>=', now())->orderBy('start_date')->limit(5)->get()]];
+        return ['kind' => 'teacher', 'metrics' => ['today_classes' => (clone $todaySessions)->count(), 'pending_attendance' => (clone $todaySessions)->where('status', '!=', 'cancelled')->where('attendance_state', 'open')->count(), 'students' => $studentIds->unique()->count(), 'recurring_absences' => $recurring], 'lists' => ['next_classes' => $this->teacherNextSessions($user, $groupIds), 'classes' => (clone $groups)->withCount(['enrollments' => fn (Builder $query) => $query->where('status', 'active')])->get(), 'championships' => Championship::query()->where('association_id', $user->association_id)->where('status', 'open')->where('registration_close_at', '>=', now())->orderBy('start_date')->limit(5)->get()]];
+    }
+
+    /**
+     * Próximas aulas com o link que o professor consegue abrir: no dojo, pelas concessões vigentes
+     * (ADR-006); na associação, só se ele tiver `session.view` associativo.
+     *
+     * @return Collection<int, array{session: ClassSession, url: string}>
+     */
+    private function teacherNextSessions(User $user, Collection $groupIds): Collection
+    {
+        $window = [today()->toDateString(), today()->addDays(7)->toDateString()];
+        $dojoIds = DojoRoleAssignment::query()->where('user_id', $user->id)->where('association_id', $user->association_id)
+            ->whereNull('revoked_at')->whereDate('start_date', '<=', today())
+            ->where(fn (Builder $query) => $query->whereNull('end_date')->orWhereDate('end_date', '>=', today()))
+            ->distinct()->pluck('dojo_id');
+        $items = Dojo::query()->whereIn('id', $dojoIds)->where('status', 'active')->get()
+            ->flatMap(fn (Dojo $dojo) => $this->scope->sessions($user, $dojo)->whereBetween('session_date', $window)
+                ->whereNotIn('status', ['cancelled', 'rescheduled'])->with('classGroup')->orderBy('session_date')->orderBy('start_time')->limit(8)->get()
+                ->map(fn (ClassSession $session) => ['session' => $session, 'url' => route('operation.session', [$dojo, $session])]));
+
+        if ($user->hasPermission('session.view', $user->association_id)) {
+            $known = $items->pluck('session.id');
+            $items = $items->concat(ClassSession::query()->whereIn('class_group_id', $groupIds)->whereNotIn('id', $known)->whereBetween('session_date', $window)
+                ->whereNotIn('status', ['cancelled', 'rescheduled'])->with('classGroup')->orderBy('session_date')->orderBy('start_time')->limit(8)->get()
+                ->map(fn (ClassSession $session) => ['session' => $session, 'url' => route('associations.attendance.show', [$user->association_id, $session])]));
+        }
+
+        return $items->sortBy(fn (array $item) => $item['session']->session_date->format('Y-m-d').' '.$item['session']->start_time)->take(8)->values();
     }
 }
