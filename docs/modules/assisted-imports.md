@@ -2,7 +2,7 @@
 
 ## Objetivo e limites
 
-O módulo importa alunos ou presenças por CSV/XLSX sem criar dependências de infraestrutura. Os fluxos são independentes: presença nunca cria pessoa, aluno, matrícula, turma ou aula; aluno nunca registra presença. Os arquivos ficam no disco privado `local`, não têm rota de download e são removidos após 30 dias pelo scheduler. Payloads de planilha também são expurgados; número da linha, estado, mensagem, referências de resultado e auditoria permanecem.
+O módulo importa alunos ou presenças por CSV/XLSX sem criar dependências de infraestrutura. Os fluxos são independentes: presença nunca cria pessoa, aluno, matrícula ou turma, e cria somente a aula passada prevista pelo horário da turma; aluno nunca registra presença. Os arquivos ficam no disco privado `local`, não têm rota de download e são removidos após 30 dias pelo scheduler. Payloads de planilha também são expurgados; número da linha, estado, mensagem, referências de resultado e auditoria permanecem.
 
 ## Componentes
 
@@ -28,7 +28,7 @@ O lote começa em `reviewing`, passa a `processing` e termina em `completed`. Lo
 
 Alunos: `nome_completo`, `cpf`, `data_nascimento`, `email`, `celular`, `data_entrada`, `modalidade`, `graduacao`, `turma`, `ativar`, dados do responsável e `observacoes`. Nome, nascimento, entrada e modalidade são obrigatórios; turma/graduação/responsável são opcionais conforme regra de ativação.
 
-Presenças: `matricula_aluno`, `turma`, `data_aula`, `horario_inicio`, `situacao`, `observacoes`. Situações aceitas: presente, falta, falta justificada, reposição e experimental. A combinação turma/data/início precisa localizar exatamente uma aula aberta.
+Presenças: `matricula_aluno`, `turma`, `data_aula`, `horario_inicio`, `situacao`, `observacoes`. Situações aceitas: presente, falta, falta justificada, reposição e experimental. A combinação turma/data/início precisa localizar exatamente uma aula aberta. Se a aula ainda não existe, a data é até hoje, está dentro do período da turma e há horário da turma nesse dia da semana e início, a linha fica em revisão e a aula é criada ao processar (`SessionGenerator::generateForGroup`). Datas futuras são recusadas.
 
 Os modelos oficiais ficam em `resources/imports`. O XLSX contém instruções e listas de escolha. O relatório CSV usa `CsvWriter`, neutralizando células que poderiam virar fórmula.
 

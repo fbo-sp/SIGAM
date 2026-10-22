@@ -9,6 +9,7 @@ use App\Http\Requests\Classes\ClassTeacherRequest;
 use App\Http\Requests\Classes\EndEnrollmentRequest;
 use App\Http\Requests\Classes\EnrollmentRequest;
 use App\Http\Requests\Classes\FutureSessionsRequest;
+use App\Http\Requests\Classes\PastSessionsRequest;
 use App\Http\Requests\Classes\ScheduleSetRequest;
 use App\Models\ClassEnrollment;
 use App\Models\ClassGroup;
@@ -20,6 +21,7 @@ use App\Models\TeacherProfile;
 use App\Services\Access\OperationalScope;
 use App\Services\Attendance\FutureSessionMaintainer;
 use App\Services\Classes\ClassGroupService;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -170,6 +172,18 @@ class DojoClassController extends Controller
         $result = $maintainer->updateTarget($classGroup, $request->integer('future_session_target'));
 
         return back()->with('status', "Agenda atualizada: {$result['created']} aula(s) criada(s).");
+    }
+
+    public function generatePastSessions(PastSessionsRequest $request, Dojo $dojo, ClassGroup $classGroup, ClassGroupService $service): RedirectResponse
+    {
+        $this->authorizeManage($request, $dojo, 'class.manage', $classGroup);
+        $result = $service->generatePastSessions($dojo->association, $classGroup, $request->validated());
+        $message = "{$result['created']} aula(s) passada(s) criada(s).";
+        if ($result['start_date_moved']) {
+            $message .= ' O início da turma passou para '.Carbon::parse($request->validated('from'))->format('d/m/Y').'.';
+        }
+
+        return redirect()->to(route('operation.classes.show', [$dojo, $classGroup]).'#aulas')->with('status', $message);
     }
 
     private function formOptions(Dojo $dojo): array

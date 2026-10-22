@@ -23,6 +23,7 @@ Há dois contextos (ADR-006). Na associação, o escopo vem da rota e `ClassGrou
 - professor, quando informado, pertence à associação e possui habilitação ativa na modalidade;
 - uma turma possui de um a sete dias no conjunto semanal; cada dia/horário é uma linha;
 - uma turma mantém 4 ou 8 próximas aulas, com padrão 8, contando todos os dias em conjunto;
+- aulas passadas (histórico e migração) são geradas por período em "Gerar aulas passadas" (`ClassGroupService::generatePastSessions`, até ontem); data inicial anterior ao início da turma recua o início da turma e dos horários iniciais, com auditoria;
 - alteração de agenda encerra todas as linhas atuais no dia anterior à nova vigência e cria outro conjunto;
 - término posterior ao início, dia único no conjunto e conflito de horário do professor são validados;
 - aulas futuras sem histórico são reconciliadas; aulas realizadas, com presença ou exceção manual são preservadas;

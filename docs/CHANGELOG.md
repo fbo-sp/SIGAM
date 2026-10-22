@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-10-22 — Aulas passadas na turma e na importação
+
+- a aba Aulas da turma no dojo ganha "Gerar aulas passadas" (`POST /operacao/dojos/{dojo}/turmas/{classGroup}/aulas/passadas`, `class.manage`): cria as aulas de um período até ontem pelos horários vigentes em cada data, sem duplicar (`SessionGenerator::generateForGroup`, chave única da aula). Se a data inicial é anterior ao início da turma, o início da turma e dos horários iniciais recua para essa data, auditado como `class_group.start_moved`; a geração audita `class_sessions.past_generated`;
+- a importação de presenças cria a aula passada que ainda não existe quando a turma tem horário naquele dia da semana e início, dentro do período da turma; a linha fica em revisão com o aviso "A aula será criada pelo horário da turma". Data futura, data fora do período da turma ou sem horário correspondente ficam inválidas com a explicação;
+- novos testes em `DojoClassHubTest` e `AssistedImportTest`.
+
 ## 2026-10-22 — Chamada só no dia da aula e reabertura pelo dojo
 
 - a chamada de uma aula só pode ser registrada ou finalizada a partir do dia da aula (`ClassSession::isBeforeAttendanceDay`). A regra fica em `AttendanceService::save` e vale para professor, gestor do dojo, associação e importação; a tela da aula futura mostra quando a chamada abre e esconde o formulário;
