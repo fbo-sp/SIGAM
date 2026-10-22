@@ -35,7 +35,7 @@ Há dois contextos (ADR-006). Na associação, o escopo vem da rota e `ClassGrou
 - trocar o professor principal confere conflito de agenda e atualiza os horários dele e as aulas futuras abertas, sem presença, sem professor previsto ou com o anterior;
 - término ou inativação cancela as aulas futuras abertas e sem presença a partir do dia seguinte (inativar: a partir de amanhã) e é recusado se já houver chamada depois disso;
 - encerrar matrícula grava `status=ended`, `end_date` e `exit_reason`; a data fica entre o início e hoje e não pode ser anterior a uma presença registrada. O roster usa `ClassEnrollment::coveringDate`, então a matrícula encerrada continua nas chamadas até o término;
-- professor auxiliar (`class_group_teachers`, `role_type=assistant`) precisa estar ativo na associação, habilitado na modalidade, com vínculo vigente com o dojo, não ser o principal e não ter período sobreposto na mesma turma; o encerramento é lógico por `end_date`.
+- professor auxiliar (`class_group_teachers`, `role_type=assistant`) precisa estar ativo na associação, habilitado na modalidade, com vínculo vigente com o dojo, não ser o principal e não ter período sobreposto na mesma turma; o encerramento é lógico por `end_date`. Quando um auxiliar é escolhido como principal, a designação de auxiliar é encerrada no dia anterior (ou no próprio início, se for futura), preservando o acesso às chamadas anteriores.
 
 ## Fluxos
 
