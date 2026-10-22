@@ -26,6 +26,8 @@ O módulo implementa associação, dojo e cadastro central de pessoa. Perfis de 
 - `association_person_roles`: mantém o vínculo por período. A criação inicial usa `registered_person`, sem conceder login ou papel esportivo.
 - associação inativa não aceita criação de dojo nem novo vínculo de pessoa;
 - edição usa mudança de `status`; não há ação de exclusão física na interface;
+- as listas mostram um ícone de edição só para quem tem `person.manage`; o parâmetro `voltar` aceita apenas caminho interno e devolve o usuário à lista de origem;
+- no dojo, o gestor edita parte dos dados dos alunos da unidade (`DojoStudentPersonController`, `DojoStudentPersonRequest::FIELDS`), sem CPF, documento, situação ou observações;
 - e-mails são salvos em minúsculas e CPF/CNPJ/telefones/CEP somente com dígitos.
 
 ## Fluxos

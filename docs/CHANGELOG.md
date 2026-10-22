@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-10-22 — Atalho para editar dados da pessoa nas listas
+
+- listas de Pessoas, Alunos e Professores da associação, alunos e professores do dojo e abas da turma ganham um ícone de lápis que abre a edição dos dados da pessoa; a ficha do aluno ganha "Editar dados pessoais" e o ícone ao lado de cada responsável;
+- o ícone só aparece para quem pode editar: na associação, `person.manage`; no dojo, o gestor com `student.manage` edita os alunos com vínculo vigente na unidade;
+- nova tela `/operacao/dojos/{dojo}/alunos/{student}/dados`: o gestor do dojo corrige nome, nome social, nascimento, contatos, endereço e contato de emergência. CPF, documento, situação e observações continuam com a associação, e aluno que também é professor é editado só pela associação. A gravação passa por `PersonService::update` e audita `person.updated`;
+- a edição da associação aceita `voltar` (só caminho interno) para retornar à lista de origem depois de salvar ou cancelar;
+- novo `PersonEditShortcutTest`.
+
 ## 2026-10-21 — Turma dentro do dojo
 
 - nova página da turma em `/operacao/dojos/{dojo}/turmas/{turma}`, com abas Alunos, Professores, Horários e Aulas; a lista de turmas do dojo ganha link, situação e o botão "Nova turma";

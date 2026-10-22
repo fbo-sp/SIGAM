@@ -14,7 +14,7 @@
 @endif
 <div class="card list-card">
 @forelse($links as $link)
-    <div class="list-row context-row"><span><strong>{{ $link->teacher->person->full_name }}</strong><small>{{ $link->start_date->format('d/m/Y') }} até {{ $link->end_date?->format('d/m/Y') ?? 'sem data final' }} · {{ $link->revoked_at ? 'Encerrado' : 'Vigente conforme período' }}</small></span>@if($canAssign && !$link->revoked_at)<form method="post" action="{{ route('operation.teachers.unlink', [$dojo, $link]) }}">@csrf<button class="button button-secondary">Encerrar vínculo</button></form>@endif</div>
+    <div class="list-row context-row"><span><strong>{{ $link->teacher->person->full_name }}</strong><small>{{ $link->start_date->format('d/m/Y') }} até {{ $link->end_date?->format('d/m/Y') ?? 'sem data final' }} · {{ $link->revoked_at ? 'Encerrado' : 'Vigente conforme período' }}</small></span><div class="row-actions">@if($canEditPeople)<x-edit-link :href="route('associations.people.edit', [$dojo->association_id, $link->teacher->person_id, 'voltar' => request()->getRequestUri()])" :label="'Editar dados de '.$link->teacher->person->full_name" />@endif @if($canAssign && !$link->revoked_at)<form method="post" action="{{ route('operation.teachers.unlink', [$dojo, $link]) }}">@csrf<button class="button button-secondary">Encerrar vínculo</button></form>@endif</div></div>
 @empty
     <div class="empty-state"><h2>Nenhum professor vinculado</h2><p>Escolha um professor já aprovado pela associação.</p></div>
 @endforelse

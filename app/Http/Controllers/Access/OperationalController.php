@@ -59,11 +59,13 @@ class OperationalController extends Controller
         $students = $this->scope->students($request->user(), $dojo)->with([
             'person:id,full_name,social_name',
             'enrollments' => fn ($query) => $query->where('status', 'active')->whereHas('classGroup', fn ($group) => $group->where('dojo_id', $dojo->id))->with('classGroup:id,name'),
-        ])->orderBy('registration_number')->paginate(25);
+        ])->withExists(['person as is_teacher' => fn ($query) => $query->whereHas('teacherProfile')])
+            ->orderBy('registration_number')->paginate(25);
 
         $canManage = $this->scope->canDojo($request->user(), $dojo, 'student.manage');
+        $canEditPeople = $request->user()->hasPermission('person.manage', $dojo->association_id);
 
-        return view('operation.students', compact('dojo', 'students', 'canManage'));
+        return view('operation.students', compact('dojo', 'students', 'canManage', 'canEditPeople'));
     }
 
     public function sessions(Request $request, Dojo $dojo)
@@ -140,7 +142,9 @@ class OperationalController extends Controller
             ->with('teacher.person:id,full_name')->orderByDesc('start_date')->paginate(25);
         $canAssign = $this->scope->canDojo($request->user(), $dojo, 'teacher.assign');
 
-        return view('operation.teachers', compact('dojo', 'teachers', 'links', 'canAssign'));
+        $canEditPeople = $request->user()->hasPermission('person.manage', $dojo->association_id);
+
+        return view('operation.teachers', compact('dojo', 'teachers', 'links', 'canAssign', 'canEditPeople'));
     }
 
     public function linkTeacher(Request $request, Dojo $dojo, AccessAdministration $service)
