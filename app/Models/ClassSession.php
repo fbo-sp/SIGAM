@@ -15,6 +15,12 @@ class ClassSession extends Model
         return ['session_date' => 'date', 'closed_at' => 'datetime', 'reopened_at' => 'datetime'];
     }
 
+    /** A chamada só pode ser registrada ou fechada a partir do dia da aula. */
+    public function isBeforeAttendanceDay(): bool
+    {
+        return $this->session_date->isAfter(today());
+    }
+
     public function classGroup(): BelongsTo
     {
         return $this->belongsTo(ClassGroup::class);

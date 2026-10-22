@@ -182,6 +182,40 @@ class DojoClassHubTest extends TestCase
         $this->assertSame('2026-10-15', $assignment->fresh()->end_date->toDateString());
     }
 
+    public function test_attendance_opens_on_the_session_day_and_teacher_with_permission_reopens(): void
+    {
+        [$anaUser, $ana] = $this->teacher('Professora Ana');
+        $group = $this->group('Turma A', $ana);
+        $session = $this->classSession($group, today()->addDay()->toDateString(), $ana);
+        $student = $this->student('A-1');
+        $this->enroll($group, $student);
+        $records = ['records' => [['student_id' => $student->id, 'status' => 'present']]];
+
+        $this->actingAs($anaUser)->get(route('operation.session', [$this->dojo, $session]))->assertOk()
+            ->assertSee('Esta aula ainda não aconteceu')->assertDontSee('Finalizar chamada');
+        $this->post(route('operation.attendance', [$this->dojo, $session]), $records)->assertSessionHasErrors('attendance');
+        $this->post(route('operation.attendance', [$this->dojo, $session]), [...$records, 'close_attendance' => '1'])->assertSessionHasErrors('attendance');
+        $this->actingAs($this->dojoManager())->post(route('operation.attendance', [$this->dojo, $session]), [...$records, 'close_attendance' => '1'])->assertSessionHasErrors('attendance');
+        $this->assertDatabaseCount('attendance', 0);
+        $this->assertSame('open', $session->fresh()->attendance_state);
+
+        $this->travelTo($session->session_date->setTime(7, 0));
+        $this->actingAs($anaUser)->get(route('operation.session', [$this->dojo, $session]))->assertOk()->assertSee('Finalizar chamada');
+        $this->post(route('operation.attendance', [$this->dojo, $session]), [...$records, 'close_attendance' => '1'])->assertSessionHasNoErrors();
+        $this->assertSame('closed', $session->fresh()->attendance_state);
+        $this->get(route('operation.session', [$this->dojo, $session]))->assertDontSee('Reabrir chamada');
+        $this->post(route('operation.attendance.reopen', [$this->dojo, $session]), ['reason' => 'Corrigir a presença do aluno.'])->assertNotFound();
+
+        $this->grant($anaUser, $this->role('teacher', ['dojo.access', 'session.view', 'attendance.reopen']));
+        $this->get(route('operation.session', [$this->dojo, $session]))->assertOk()->assertSee('Reabrir chamada');
+        $this->post(route('operation.attendance.reopen', [$this->dojo, $session]), ['reason' => 'curto'])->assertSessionHasErrors('reason');
+        $this->post(route('operation.attendance.reopen', [$this->dojo, $session]), ['reason' => 'Corrigir a presença do aluno.'])->assertSessionHasNoErrors();
+        $this->assertSame('open', $session->fresh()->attendance_state);
+        $this->assertDatabaseHas('audit_logs', ['event_type' => 'attendance.reopened']);
+        $this->post(route('operation.attendance', [$this->dojo, $session]), ['records' => [['student_id' => $student->id, 'status' => 'absent']], 'close_attendance' => '1'])->assertSessionHasNoErrors();
+        $this->assertDatabaseHas('attendance', ['class_session_id' => $session->id, 'student_id' => $student->id, 'status' => 'absent']);
+    }
+
     public function test_promoting_assistant_to_main_ends_assistant_assignment_and_keeps_attendance_access(): void
     {
         $manager = $this->dojoManager();

@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-10-22 — Chamada só no dia da aula e reabertura pelo dojo
+
+- a chamada de uma aula só pode ser registrada ou finalizada a partir do dia da aula (`ClassSession::isBeforeAttendanceDay`). A regra fica em `AttendanceService::save` e vale para professor, gestor do dojo, associação e importação; a tela da aula futura mostra quando a chamada abre e esconde o formulário;
+- `attendance.reopen` entra em `OperationalScope::DOJO_PERMISSIONS` e `TEACHER_PERMISSIONS`. O `db:seed` acrescenta a permissão aos papéis `dojo_operator` e `dojo_teacher`: o gestor reabre as chamadas do dojo e o professor reabre as das aulas dele, sempre com motivo (10 caracteres ou mais) e auditoria `attendance.reopened`;
+- nova rota `POST /operacao/dojos/{dojo}/aulas/{session}/reabrir` (`operation.attendance.reopen`);
+- novo teste em `DojoClassHubTest`; `Sprint18Test` passa a registrar a chamada no dia da aula.
+
 ## 2026-10-22 — Vínculo com o dojo libera o acesso do professor
 
 - vincular o professor ao dojo (`/operacao/dojos/{dojo}/professores`) passa a criar também a concessão "Professor do dojo" (`dojo_teacher`) no mesmo período, quando o professor tem conta ativa ou pendente na associação; antes eram dois cadastros separados e, sem a concessão, o professor não via as aulas para fazer a chamada;

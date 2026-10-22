@@ -51,7 +51,7 @@ O prefixo `/operacao/dojos/{dojo}` oferece:
 - alunos e cadastro direto; `alunos/{student}/dados` (GET/PUT) para o gestor com `student.manage` corrigir dados pessoais do aluno do dojo;
 - turmas e aulas autorizadas;
 - turma no dojo: `turmas/nova`, `turmas/{classGroup}` (abas Alunos, Professores, Horários e Aulas), `turmas/{classGroup}/editar`, `PUT turmas/{classGroup}`, `turmas/{classGroup}/matriculas` e `.../matriculas/{enrollment}/encerrar` (`enrollment.manage`), `turmas/{classGroup}/professores` e `.../professores/{assignment}/encerrar`, `agenda/substituir` e `aulas/atualizar` (`class.manage`);
-- chamada e visitantes;
+- chamada e visitantes; `POST aulas/{session}/reabrir` (`attendance.reopen`, motivo obrigatório) reabre a chamada finalizada;
 - equipe de professores da associação;
 - importação assistida;
 - planos, gratuidades, cobranças e pagamentos do dojo;
