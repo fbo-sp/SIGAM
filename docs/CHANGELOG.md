@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-10-22 — Catálogo de técnicas e currículo por graduação
+
+- novo módulo `Progression` (ADR-014, `docs/modules/progression.md`), fase 1 do acompanhamento rumo ao exame de graduação;
+- novas tabelas `technique_items` (árvore de grupos e itens por associação e modalidade, com tipo Teórico ou Prático) e `rank_curriculum_entries` (ajustes de cada graduação; o currículo efetivo herda as graduações anteriores);
+- modelo do judô em `resources/data/technique-templates.json` (`judo_kodokan_2026`), aplicado pela tela de técnicas, idempotente e sem sobrescrever ajustes;
+- novas telas `modalidades/{martialArt}/tecnicas` e `modalidades/{martialArt}/curriculo`, com botões na página de modalidades;
+- nova permissão `curriculum.manage` (entra no Gestor da Associação pelo `db:seed`); a leitura usa `martial_art.view`;
+- novo `TechniqueCatalogTest`.
+
 ## 2026-10-22 — Aulas passadas na turma e na importação
 
 - a aba Aulas da turma no dojo ganha "Gerar aulas passadas" (`POST /operacao/dojos/{dojo}/turmas/{classGroup}/aulas/passadas`, `class.manage`): cria as aulas de um período até ontem pelos horários vigentes em cada data, sem duplicar (`SessionGenerator::generateForGroup`, chave única da aula). Se a data inicial é anterior ao início da turma, o início da turma e dos horários iniciais recua para essa data, auditado como `class_group.start_moved`; a geração audita `class_sessions.past_generated`;

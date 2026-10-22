@@ -28,6 +28,8 @@ use App\Http\Controllers\Organization\AssociationController;
 use App\Http\Controllers\Organization\DojoController;
 use App\Http\Controllers\People\PersonController;
 use App\Http\Controllers\Portal\PortalController;
+use App\Http\Controllers\Progression\CurriculumController;
+use App\Http\Controllers\Progression\TechniqueCatalogController;
 use App\Http\Controllers\Sports\CatalogController;
 use App\Http\Controllers\Sports\DirectRegistrationController;
 use App\Http\Controllers\Sports\StudentController;
@@ -161,6 +163,15 @@ Route::middleware(['auth', 'active', 'association.context'])->group(function ():
         Route::put('/modalidades/{martialArt}', [CatalogController::class, 'updateMartialArt'])->middleware('permission:martial_art.manage')->name('martial-arts.update');
         Route::post('/modalidades/{martialArt}/graduacoes', [CatalogController::class, 'storeRank'])->middleware('permission:martial_art.manage')->name('ranks.store');
         Route::put('/modalidades/{martialArt}/graduacoes/{rank}', [CatalogController::class, 'updateRank'])->middleware('permission:martial_art.manage')->name('ranks.update');
+        Route::get('/modalidades/{martialArt}/tecnicas', [TechniqueCatalogController::class, 'index'])->middleware('permission:martial_art.view')->name('techniques.index');
+        Route::post('/modalidades/{martialArt}/tecnicas', [TechniqueCatalogController::class, 'store'])->middleware('permission:curriculum.manage')->name('techniques.store');
+        Route::post('/modalidades/{martialArt}/tecnicas/modelo', [TechniqueCatalogController::class, 'applyTemplate'])->middleware('permission:curriculum.manage')->name('techniques.template');
+        Route::get('/modalidades/{martialArt}/tecnicas/{item}/editar', [TechniqueCatalogController::class, 'edit'])->middleware('permission:curriculum.manage')->name('techniques.edit');
+        Route::put('/modalidades/{martialArt}/tecnicas/{item}', [TechniqueCatalogController::class, 'update'])->middleware('permission:curriculum.manage')->name('techniques.update');
+        Route::post('/modalidades/{martialArt}/tecnicas/{item}/situacao', [TechniqueCatalogController::class, 'status'])->middleware('permission:curriculum.manage')->name('techniques.status');
+        Route::get('/modalidades/{martialArt}/curriculo', [CurriculumController::class, 'show'])->middleware('permission:martial_art.view')->name('curriculum.show');
+        Route::post('/modalidades/{martialArt}/curriculo/{rank}', [CurriculumController::class, 'store'])->middleware('permission:curriculum.manage')->name('curriculum.store');
+        Route::post('/modalidades/{martialArt}/curriculo/{rank}/{item}/restaurar', [CurriculumController::class, 'restore'])->middleware('permission:curriculum.manage')->name('curriculum.restore');
 
         Route::get('/alunos', [StudentController::class, 'index'])->middleware('permission:student.view')->name('students.index');
         Route::get('/alunos/novo', [DirectRegistrationController::class, 'createAssociationStudent'])->middleware('permission:student.manage')->name('students.create');

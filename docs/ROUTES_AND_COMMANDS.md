@@ -34,6 +34,8 @@ Este documento é um índice de manutenção. `routes/web.php`, `routes/console.
 | `dojos` | unidades | `dojo.view`, `dojo.manage` |
 | `pessoas` | identidade central; `pessoas/{person}/editar?voltar=/caminho` volta à lista de origem (só caminho interno) | `person.view`, `person.manage` |
 | `modalidades` | modalidades/graduações/templates | `martial_art.view`, `martial_art.manage` |
+| `modalidades/{martialArt}/tecnicas` | catálogo de técnicas: incluir, `{item}/editar`, `{item}/situacao`, `modelo` | leitura `martial_art.view`; escrita `curriculum.manage` |
+| `modalidades/{martialArt}/curriculo` | currículo por graduação (`?graduacao=`), `curriculo/{rank}` grava exigência e `curriculo/{rank}/{item}/restaurar` desfaz o ajuste | leitura `martial_art.view`; escrita `curriculum.manage` |
 | `alunos` | alunos/responsáveis/histórico; `alunos/{student}/turmas` matricula e `.../turmas/{enrollment}/encerrar` encerra | `student.view`, `student.manage`; turmas com `enrollment.manage` |
 | `professores` | perfil, habilitação e convites | `teacher.view`, `teacher.manage` |
 | `turmas` | agenda e matrículas | `class.view`, `class.manage`, `enrollment.manage` |

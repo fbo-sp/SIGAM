@@ -19,6 +19,8 @@ Notificações testam geração repetida, uma entrega por canal, preferências, 
 
 `AssistedImportTest` cobre o XLSX oficial, criação e replay de aluno, confirmação para CPF existente, presença em aula aberta sem duplicação e associação externa. Inclua ainda arquivos malformados/fórmulas e chamada fechada ao ampliar o leitor ou estados. O teste usa `Storage::fake('local')`; a suíte MySQL valida as tabelas JSON, índices e transações.
 
+`TechniqueCatalogTest` cobre a validade do modelo do judô frente ao template de graduações, aplicação idempotente que preserva ajustes do currículo, faixas ausentes, herança do currículo (novo, alterado, herdado, retirado e restaurado), item inativo, regras da árvore, isolamento entre associações e permissões.
+
 `Sprint20Test` cobre meta 4/8, vários dias, geração na criação, reexecução, redução sem exclusão, cancelamento sem ressurreição, aula atrasada, término curto, permissão/escopo e execução operacional. MySQL deve validar duas reposições concorrentes sobre a mesma turma; o lock e a constraint precisam resultar no máximo na meta configurada.
 
 `Sprint21Test` cobre origem obrigatória de plano, coexistência do mesmo aluno em dojos distintos, listagem financeira local, baixa idempotente, negações fora do dojo, separação das etapas de gratuidade, participação local em campeonato, inscrição derivada pelo backend e bloqueio das ações exclusivamente associativas.

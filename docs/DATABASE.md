@@ -150,6 +150,12 @@ Antes da produção, revisar retenção, backup/restore e os requisitos legais d
 
 `import_rows` pertence ao lote, tem linha e hash, payload bruto/normalizado em JSON e referências técnicas opcionais do resultado. A unicidade por lote/linha e os estados persistidos sustentam retomada. `initial_status` preserva o aviso da prévia quando `status` avança para `processed`. Não há FK polimórfica de resultado: a validade é garantida pelo serviço e o histórico não bloqueia retenção dos cadastros de domínio.
 
+## Acompanhamento técnico
+
+`technique_items` guarda a árvore de técnicas por associação e modalidade (`parent_id` aponta para o grupo; `kind` é `group` ou `item`; `knowledge_type` é `theoretical` ou `practical`, herdado do grupo principal; `status` ativo ou inativo, sem exclusão física). O índice `technique_items_tree_index` cobre a leitura por associação, modalidade e grupo.
+
+`rank_curriculum_entries` guarda só os ajustes de cada graduação, únicos por `(association_id, rank_id, technique_item_id)`. `required_level` vai de 2 a 4; `NULL` significa que o item herdado deixa de ser cobrado a partir daquela graduação. O currículo efetivo é calculado pela soma das graduações anteriores da modalidade (ADR-014). As chaves estrangeiras usam `restrictOnDelete`.
+
 ## Compatibilidade com MySQL 5.7
 
 A hospedagem prevista usa MySQL 5.7 (Percona). Nessa versão, com `explicit_defaults_for_timestamp` desligado (padrão), uma coluna `TIMESTAMP NOT NULL` recebe `DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP` ou um default inválido. Por isso, datas obrigatórias de negócio usam `dateTime()` nas migrations, e `timestamp()` fica restrito a colunas anuláveis (`created_at`, `updated_at`, `deleted_at` e similares). Bancos de desenvolvimento criados antes de 12/10/2026 mantêm `TIMESTAMP` nessas colunas, o que é equivalente em MySQL 8. O CI executa a suíte em MySQL 8.4 e 5.7.
