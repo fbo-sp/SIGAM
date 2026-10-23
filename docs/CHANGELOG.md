@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-10-23 — Catálogo de técnicas em árvore
+
+- a tela `modalidades/{martialArt}/tecnicas` passa a mostrar o catálogo como árvore: grupos que abrem e fecham, linhas ligando cada item ao grupo, quantidade de técnicas por grupo, item inativo riscado, filtro por nome e "Expandir tudo"/"Recolher tudo";
+- o menu "⋯" de cada linha reúne Editar, Inativar/Reativar e o novo "Incluir aqui dentro", que abre o cadastro com o grupo já escolhido (`?dentro={grupo}`);
+- a escolha das técnicas na tela da aula usa a mesma árvore, com caixa de marcação em cada grupo e técnica e a quantidade marcada por grupo;
+- `TechniqueCatalogService::tree` substitui `flatten`; novo `public/js/technique-tree.js`; novo `TechniqueTreeTest`.
+
 ## 2026-10-22 — Acompanhamento técnico rumo ao exame de graduação
 
 - novo módulo `Progression` (ADR-014, `docs/modules/progression.md`), fase 1 do acompanhamento rumo ao exame de graduação;

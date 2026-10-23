@@ -51,24 +51,23 @@ class TechniqueCatalogService
     }
 
     /**
-     * Árvore achatada em ordem de leitura, com a profundidade de cada nó.
+     * Árvore aninhada para exibição; `count` é o número de técnicas (não grupos) abaixo do nó.
      *
      * @param  Collection<int, TechniqueItem>  $items
-     * @return list<array{item: TechniqueItem, depth: int}>
+     * @return list<array{item: TechniqueItem, children: list<array>, count: int}>
      */
-    public function flatten(Collection $items): array
+    public function tree(Collection $items): array
     {
         $children = $items->groupBy(fn (TechniqueItem $item) => (int) $item->parent_id);
-        $rows = [];
-        $walk = function (int $parentId, int $depth) use (&$walk, &$rows, $children): void {
-            foreach ($children->get($parentId, collect()) as $item) {
-                $rows[] = ['item' => $item, 'depth' => $depth];
-                $walk($item->id, $depth + 1);
-            }
-        };
-        $walk(0, 0);
+        $build = function (int $parentId) use (&$build, $children): array {
+            return $children->get($parentId, collect())->map(function (TechniqueItem $item) use ($build): array {
+                $nodes = $build($item->id);
 
-        return $rows;
+                return ['item' => $item, 'children' => $nodes, 'count' => array_sum(array_map(fn (array $node) => $node['item']->kind === 'item' ? 1 : $node['count'], $nodes))];
+            })->values()->all();
+        };
+
+        return $build(0);
     }
 
     /** Itens cujo próprio status ou de algum ancestral é inativo. @return array<int, true> */

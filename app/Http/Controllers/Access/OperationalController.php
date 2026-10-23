@@ -106,7 +106,7 @@ class OperationalController extends Controller
         $catalog = app(TechniqueCatalogService::class);
         $catalogItems = $catalog->items($dojo->association, $session->classGroup->martialArt);
         $inactive = $catalog->inactiveIds($catalogItems);
-        $techniqueTree = collect($catalog->flatten($catalogItems))->reject(fn (array $row) => isset($inactive[$row['item']->id]))->values();
+        $techniqueTree = collect($catalog->tree($catalogItems->reject(fn ($item) => isset($inactive[$item->id]))));
         $markedTechniques = $techniqueService->marked($session);
         $canMarkTechniques = $techniqueTree->isNotEmpty() && $techniqueService->canMark($request->user(), $dojo, $session);
 
