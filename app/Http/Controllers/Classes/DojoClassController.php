@@ -21,6 +21,7 @@ use App\Models\TeacherProfile;
 use App\Services\Access\OperationalScope;
 use App\Services\Attendance\FutureSessionMaintainer;
 use App\Services\Classes\ClassGroupService;
+use App\Services\Progression\AssessmentService;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -95,10 +96,12 @@ class DojoClassController extends Controller
                 ->where('dojo_id', $dojo->id)->whereNull('revoked_at')->where(fn ($q) => $q->whereNull('end_date')->orWhereDate('end_date', '>=', today())))
             ->whereKeyNot($classGroup->main_teacher_id ?? 0)->with('person:id,full_name')->get()->sortBy('person.full_name') : collect();
         $scheduleTeachers = $canManage ? $this->formOptions($dojo)['teachers'] : collect();
+        $canAssess = app(AssessmentService::class)->teachesClass($user, $dojo, $classGroup);
+        $canProgress = $canAssess || $this->scope->canDojo($user, $dojo, 'assessment.view');
 
         return view('operation.class', compact(
             'dojo', 'classGroup', 'enrollments', 'assignments', 'upcoming', 'past', 'candidates', 'dojoTeachers',
-            'scheduleTeachers', 'canManage', 'canEnroll', 'canEditStudents', 'canEditPeople',
+            'scheduleTeachers', 'canManage', 'canEnroll', 'canEditStudents', 'canEditPeople', 'canAssess', 'canProgress',
         ));
     }
 

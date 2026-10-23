@@ -16,6 +16,8 @@ use App\Services\Access\AccessAdministration;
 use App\Services\Access\OperationalScope;
 use App\Services\Attendance\AttendanceService;
 use App\Services\Attendance\SessionVisitorService;
+use App\Services\Progression\SessionTechniqueService;
+use App\Services\Progression\TechniqueCatalogService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -65,8 +67,9 @@ class OperationalController extends Controller
 
         $canManage = $this->scope->canDojo($request->user(), $dojo, 'student.manage');
         $canEditPeople = $request->user()->hasPermission('person.manage', $dojo->association_id);
+        $canProgress = $this->scope->canDojo($request->user(), $dojo, 'assessment.view');
 
-        return view('operation.students', compact('dojo', 'students', 'canManage', 'canEditPeople'));
+        return view('operation.students', compact('dojo', 'students', 'canManage', 'canEditPeople', 'canProgress'));
     }
 
     public function sessions(Request $request, Dojo $dojo)
@@ -86,7 +89,7 @@ class OperationalController extends Controller
     {
         $this->enter($request, $dojo);
         abort_unless($this->scope->sessions($request->user(), $dojo)->whereKey($session->id)->exists(), 404);
-        $session->load('classGroup.dojo');
+        $session->load('classGroup.dojo', 'classGroup.martialArt');
         $roster = $attendance->roster($session);
         $records = $session->records()->whereIn('student_id', $roster->pluck('student.id'))->get()->keyBy('student_id');
         $canRecord = $this->scope->sessions($request->user(), $dojo, 'attendance.manage')->whereKey($session->id)->exists()
@@ -99,7 +102,15 @@ class OperationalController extends Controller
         $enrollUrl = $this->scope->canDojo($request->user(), $dojo, 'enrollment.manage')
             ? route('operation.classes.show', [$dojo, $session->classGroup]).'#alunos' : null;
 
-        return view('operation.session', compact('dojo', 'session', 'roster', 'records', 'canRecord', 'canReopen', 'canManageVisitors', 'enrollUrl'));
+        $techniqueService = app(SessionTechniqueService::class);
+        $catalog = app(TechniqueCatalogService::class);
+        $catalogItems = $catalog->items($dojo->association, $session->classGroup->martialArt);
+        $inactive = $catalog->inactiveIds($catalogItems);
+        $techniqueTree = collect($catalog->flatten($catalogItems))->reject(fn (array $row) => isset($inactive[$row['item']->id]))->values();
+        $markedTechniques = $techniqueService->marked($session);
+        $canMarkTechniques = $techniqueTree->isNotEmpty() && $techniqueService->canMark($request->user(), $dojo, $session);
+
+        return view('operation.session', compact('dojo', 'session', 'roster', 'records', 'canRecord', 'canReopen', 'canManageVisitors', 'enrollUrl', 'techniqueTree', 'markedTechniques', 'canMarkTechniques'));
     }
 
     public function addVisitor(SessionVisitorRequest $request, Dojo $dojo, ClassSession $session, SessionVisitorService $service)

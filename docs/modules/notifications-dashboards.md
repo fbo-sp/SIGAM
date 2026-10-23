@@ -20,7 +20,7 @@ A V1 oferece caixa interna e e-mail. A separação evento → template → entre
 
 ## Eventos iniciais
 
-O comando `sigam:notifications:generate` detecta cobrança próxima/vencida (inclusive parcialmente paga com saldo após o vencimento), documento e filiação vencendo, campeonato aberto/prazo próximo, gratuidade pendente, aula cancelada e três faltas consecutivas. Destinatários de aluno são o próprio usuário e responsáveis vigentes autorizados a receber comunicação. Aprovações usam a permissão adequada e o escopo do dojo.
+O comando `sigam:notifications:generate` detecta cobrança próxima/vencida (inclusive parcialmente paga com saldo após o vencimento), documento e filiação vencendo, campeonato aberto/prazo próximo, gratuidade pendente, aula cancelada, três faltas consecutivas e avaliação técnica pendente (`assessment.due`, ao professor da turma; ver `progression.md`). Destinatários de aluno são o próprio usuário e responsáveis vigentes autorizados a receber comunicação. Aprovações usam a permissão adequada e o escopo do dojo.
 
 Eventos de varredura usam chaves derivadas do recurso e marco relevante. Os módulos podem chamar `NotificationService` diretamente em evoluções futuras sem conhecer canal ou template.
 

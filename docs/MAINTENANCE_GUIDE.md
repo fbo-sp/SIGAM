@@ -53,6 +53,7 @@ Se um plano antigo disser “futuro”, mas código, teste e documentação do m
 | Organização/Pessoas | `Organization/*`, `People/*` | `AssociationService`, `DojoService`, `PersonService` | `OrganizationManagementTest`, `PersonManagementTest` |
 | Acesso local | `Access/OperationalController`, `DojoAccessController` | `OperationalScope`, `AccessAdministration` | `OperationalContextAuthorizationTest` |
 | Cadastro esportivo | `Sports/*Controller` | `CatalogService`, `DirectRegistrationService`, `StudentService` | `SportsRegistryTest`, `DirectRegistrationTest` |
+| Acompanhamento técnico | `Progression/*Controller` | `TechniqueCatalogService`, `CurriculumService`, `TechniqueTemplateCatalog`, `AssessmentService`, `StudentProgressService`, `SessionTechniqueService`, `QuizService`, `ProgressionPanelService` | `TechniqueCatalogTest`, `TechniqueAssessmentTest`, `SessionTechniquesTest`, `QuizTest`, `ProgressionPanelTest`, `AssessmentReminderTest` |
 | Cadastro direto | `DirectRegistrationController` | `DirectRegistrationService`, `DocumentService` | `DirectRegistrationTest` |
 | Turmas/aulas | `ClassGroupController`, `AttendanceController` | `ClassGroupService`, `FutureSessionMaintainer`, `AttendanceService`, `SessionVisitorService` | `ClassManagementTest`, `AttendanceTest`, `Sprint18Test`, `Sprint20Test` |
 | Importação | `AssistedImportController` | `AssistedImportService` e serviços canônicos dos módulos | `AssistedImportTest` |

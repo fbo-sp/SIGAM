@@ -1,0 +1,84 @@
+# Acompanhamento técnico (Progression)
+
+## Objetivo e limites
+
+Acompanha a preparação do aluno para o próximo exame de graduação, separando Conhecimento Teórico e Conhecimento Prático. Decisão de arquitetura: ADR-014. Requisito e plano por fases: `/mnt/project-files/sigam/requisito-acompanhamento-graduacao.md` e `plano-acompanhamento-graduacao.md`.
+
+Entregue: catálogo de técnicas e currículo por graduação com modelo do judô (fase 1), avaliação pelo professor e acompanhamento do aluno (fase 2), técnicas trabalhadas na aula (fase 3), quiz teórico (fase 4), progresso e quiz no portal (fase 5), painéis (fase 6) e lembrete de avaliação (fase 7). O exame de graduação em si está fora do requisito.
+
+## Telas
+
+Em **Modalidades**, cada modalidade tem os botões **Técnicas** e **Currículo por graduação**.
+
+- `modalidades/{martialArt}/tecnicas`: árvore do catálogo em duas seções (Teórico e Prático). Com `curriculum.manage`: aplicar ou completar com o modelo, incluir grupo ou item, editar (mover de grupo, renomear, trocar tipo, descrição, link de vídeo, ordem), inativar e reativar.
+- `modalidades/{martialArt}/curriculo?graduacao={rank}`: currículo efetivo da graduação escolhida. Cada linha mostra o nível exigido e a origem: "Novo nesta graduação", "Nível alterado nesta graduação" ou "Herdado de {faixa}". Com `curriculum.manage`: incluir ou alterar exigência, deixar de cobrar a partir da faixa e desfazer o ajuste da faixa.
+
+### Acompanhamento do aluno (fase 2)
+
+- `operacao/dojos/{dojo}/alunos/{student}/acompanhamento?modalidade=`: próxima graduação, o que falta (Teórico e Prático), idade e tempo mínimo, radar por grupo, currículo completo com o nível atual e a evolução (registros de avaliação). Entram por aqui o gestor do dojo (`assessment.view`, aluno regular do dojo) e o professor que avalia o aluno. Na turma, cada aluno ganha o botão "Avaliar" (professor da turma) ou "Acompanhamento" (gestor); na lista de alunos do dojo, "Acompanhamento".
+- `operacao/dojos/{dojo}/alunos/{student}/acompanhamento/{martialArt}/avaliar`: formulário para celular com os itens da próxima graduação agrupados, botões de 1 a 4, data (não futura) e observação. Só o que mudou é gravado.
+- `associacoes/{association}/alunos/{student}/acompanhamento`: a mesma consulta para a associação (`assessment.view`), com link na ficha do aluno. A associação não avalia.
+
+### Técnicas da aula (fase 3)
+
+Na tela da aula (`operacao/dojos/{dojo}/aulas/{session}`), o bloco "Técnicas trabalhadas" mostra os grupos principais e os grupos logo abaixo como botões, e os itens mais internos dentro de "Técnicas de {grupo}". Grava em `POST aulas/{session}/tecnicas`. Na ficha de acompanhamento, "Trabalhado nas aulas" mostra, nos últimos 90 dias, em quantas aulas com presença do aluno cada grupo foi trabalhado.
+
+### Quiz (fases 4 e 5)
+
+- `modalidades/{martialArt}/quiz` (`quiz.manage`): perguntas por graduação, com 2 a 5 alternativas, a correta, o item teórico avaliado (opcional) e uma explicação mostrada depois da resposta. Inativar tira a pergunta dos próximos sorteios.
+- `acompanhamento/configuracoes` (`curriculum.manage`): perguntas por quiz, nota mínima da prova oficial e semanas do lembrete.
+- No acompanhamento do aluno no dojo, o professor que avalia libera ("Liberar prova oficial") ou cancela a liberação ainda não iniciada; a ficha mostra as provas oficiais e quantos treinos o aluno fez.
+- No portal (`portal/alunos/{student}/progresso`), o aluno ou responsável treina quando quiser e faz a prova oficial liberada. A tela da tentativa mostra as perguntas com as alternativas na ordem sorteada; o resultado mostra acertos, a correta e a explicação.
+
+### Painéis (fase 6)
+
+- `operacao/dojos/{dojo}/acompanhamento` (`progression.report`): filtros de modalidade, turma e período (padrão 90 dias, até um ano). Números do período, radar médio por tipo de conhecimento, "precisa x trabalhado" por grupo (alunos abaixo do exigido e aulas em que o grupo foi trabalhado, destacando grupo com alunos abaixo e nenhuma aula) e os alunos com mais itens a trabalhar, com link para a ficha. Gestor vê todas as turmas ativas; professor, só as dele.
+- `associacoes/{association}/acompanhamento` (`progression.report`): por dojo e por professor principal, turmas, alunos, prontos no currículo, média de itens que faltam por aluno (Teórico e Prático), aulas com técnicas registradas e, por professor, avaliações no período.
+
+## Regras
+
+- O tipo de conhecimento é escolhido no grupo principal; itens internos herdam e, quando o grupo muda de tipo, os itens dentro mudam junto.
+- Só grupos recebem filhos; um grupo com filhos não vira item; um grupo não entra dentro de si mesmo; nomes são únicos (sem diferenciar maiúsculas) dentro do mesmo grupo.
+- Inativar um grupo inativa tudo dentro dele. Reativar um item exige o grupo ativo. Nada é apagado; item inativo some do currículo efetivo, mas a exigência gravada continua.
+- O currículo de uma faixa é o que é cobrado no exame para chegar a ela. Ele herda as faixas anteriores da mesma modalidade (ordem `sort_order`). `required_level` 2 a 4 inclui ou altera; `NULL` deixa de cobrar a partir daquela faixa. "Desfazer ajuste" remove a linha da própria faixa e o item volta a seguir as anteriores.
+- O modelo é idempotente pelo caminho do item ("Nage-waza > Te-waza > ...") e pela chave única de exigência; não sobrescreve ajustes. Faixas do modelo que não existem na modalidade são informadas na mensagem.
+- Links de vídeo aceitam só `http` e `https`.
+- Avalia quem é professor principal ou auxiliar vigente (`class_group_teachers.role_type = assistant`) de turma ativa da modalidade no dojo, com matrícula ativa do aluno, e tem `assessment.manage` na concessão de professor do dojo. Substituto eventual não avalia.
+- O nível atual é o último registro gravado por item; sem registro, conta como "Não iniciado". O item falta quando o nível atual é menor que o exigido.
+- Próxima graduação: a primeira graduação ativa com `sort_order` maior que a atual; sem graduação atual, a primeira da modalidade.
+- Tempo mínimo conta a partir do último registro da faixa atual em `student_rank_history` (ou do início na modalidade).
+- Técnicas da aula: mesma janela e permissão da chamada (a partir do dia da aula, chamada aberta, aula não cancelada nem reagendada, `attendance.manage`). Só itens ativos do catálogo da modalidade da turma. Desmarcar preenche `removed_at`.
+- Sorteio do quiz: perguntas ativas da graduação seguinte do aluno; se faltarem, completa com as das graduações anteriores. O treino retoma a tentativa em andamento. A prova oficial é da graduação da liberação, uma tentativa por liberação; abrir de novo retoma a mesma tentativa.
+- Correção só no servidor; alternativa fora das sorteadas conta como sem resposta. Reenviar uma tentativa finalizada não muda o resultado. Nota = acertos / perguntas, arredondada; aprovado quando a nota é maior ou igual à mínima gravada na tentativa.
+- Prova oficial aprovada: cada item teórico ativo ligado às perguntas sorteadas que está abaixo de "Adequado" recebe um registro "Adequado" em nome do professor que liberou, com a observação "Quiz oficial: nota N%". Nunca rebaixa. Reprovação não grava nada; o professor libera de novo.
+- Pergunta já respondida mantém as alternativas; enunciado, explicação, graduação e item podem mudar.
+- Lembrete: um aviso por turma ativa, professor (principal ou auxiliar vigente, com acesso de professor no dojo) e período de N semanas, quando há aluno ativo matriculado há mais de N semanas sem avaliação na modalidade nas últimas N semanas.
+- Radar: eixos são os grupos principais de cada tipo; com um só grupo principal (o bloco teórico do modelo), os grupos dentro dele. Valor é a média do nível atual e do exigido. Com menos de três eixos, mostra só a tabela.
+
+## Serviços
+
+- `TechniqueCatalogService`: `items`, `paths`, `flatten`, `inactiveIds`, `save`, `setStatus`, `applyTemplate`.
+- `CurriculumService`: `effective`, `set`, `restore`, `ownEntries`.
+- `AssessmentService`: `assessorTeacherId`, `teachesClass`, `canViewInDojo`, `current`, `history`, `record`.
+- `StudentProgressService`: `martialArts`, `snapshot` (próxima graduação, linhas do currículo com nível atual, o que falta, requisitos e radar), `axes`, `worked`.
+- `SessionTechniqueService`: `canMark`, `marked`, `sync`, `workedByStudent`.
+- `QuizService`: `saveQuestion`, `setQuestionStatus`, `saveSettings`, `release`, `cancelRelease`, `openReleases`, `start`, `submit`, `attempts`, `summary`.
+- `ProgressionPanelService`: `dojoClasses`, `panel`, `comparison`.
+- `NotificationGenerator::assessmentsDue`: lembrete `assessment.due`.
+- `TechniqueTemplateCatalog`: lê e valida `resources/data/technique-templates.json` (chaves obrigatórias, tipo no grupo principal, nomes únicos entre irmãos, caminhos e níveis do currículo).
+
+## Auditoria
+
+`technique_item.saved`, `technique_item.status_changed`, `technique_template.applied`, `rank_curriculum.saved`, `rank_curriculum.restored`, `technique_assessment.recorded`, `class_session.techniques_saved`, `quiz_question.saved`, `quiz_question.status_changed`, `progression_settings.saved`, `quiz_release.created`, `quiz_release.cancelled`, `quiz_attempt.started` e `quiz_attempt.finished` (só a prova oficial; treino não é auditado).
+
+## Modelo do judô
+
+Chave `judo_kodokan_2026`: fundamentos (Kihon), Nage-waza (Tachi-waza e Sutemi-waza pela classificação Kodokan), Ouyou-waza (renraku, renzoku, kaeshi), Katame-waza, Ate-waza, Nage-no-kata e Katame-no-kata, mais o bloco teórico. O programa por faixa vai de 11º Kyū a 1º Dan e é uma sugestão que a associação revisa. O modelo traz também perguntas de quiz por faixa (lista `quiz`), ligadas aos itens teóricos; reaplicar não duplica perguntas com o mesmo enunciado na mesma faixa.
+
+## Testes
+
+`TechniqueCatalogTest`: validade do modelo frente ao template de graduações, aplicação idempotente que preserva ajustes, faixas ausentes, herança (novo, alterado, herdado, retirado, restaurado), item inativo, regras da árvore, isolamento entre associações e permissões.
+
+`SessionTechniquesTest`, `QuizTest`, `ProgressionPanelTest` e `AssessmentReminderTest`: ver `docs/TESTING.md`.
+
+`TechniqueAssessmentTest`: gravação só do que mudou e histórico preservado, o que falta e radar, idade e tempo mínimo, quem avalia (principal, auxiliar, outro professor, auxiliar encerrado, outra modalidade), data futura e item inativo, gestor do dojo e associação só consultam, isolamento entre associações e aluno com duas modalidades.

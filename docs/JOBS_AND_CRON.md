@@ -14,7 +14,7 @@ Produção deverá chamar `php artisan schedule:run` a cada minuto quando a hosp
 
 ## Notificações
 
-`php artisan sigam:notifications:generate` varre eventos notificáveis e pode receber `--association`. Chaves únicas tornam a reexecução segura. A agenda padrão é horária.
+`php artisan sigam:notifications:generate` varre eventos notificáveis e pode receber `--association`. Chaves únicas tornam a reexecução segura. A agenda padrão é horária. O evento `assessment.due` avisa o professor principal e os auxiliares vigentes de cada turma quando há alunos sem avaliação técnica na modalidade há mais de N semanas (`progression_settings`); a chave inclui turma, usuário e o período de N semanas, então o aviso se repete no máximo uma vez por período.
 
 `php artisan sigam:notifications:send --limit=50` entrega e-mails pendentes em lote. Falha deixa a entrega como `failed`, guarda mensagem resumida e agenda nova tentativa exponencial; após cinco tentativas, ela permanece visível para diagnóstico e não é selecionada automaticamente. A agenda padrão é a cada cinco minutos. Caixa interna não depende de SMTP.
 

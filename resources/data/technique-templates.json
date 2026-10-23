@@ -1,0 +1,2118 @@
+{
+  "judo_kodokan_2026": {
+    "label": "Judô — técnicas Kodokan e programa sugerido de faixas",
+    "description": "Catálogo com fundamentos, Nage-waza, Ouyou-waza, Katame-waza, Ate-waza, Kata e conteúdo teórico, e programa de exame da faixa branca/cinza ao 1º Dan.",
+    "review_notice": "Programa sugerido para revisão. Ajuste as técnicas e os níveis de cada faixa ao padrão da sua associação e federação.",
+    "source_name": "Classificação Kodokan (Gokyo-no-waza e Kata) organizada pelo JUDOMA",
+    "source_url": "https://kodokanjudoinstitute.org/en/waza/",
+    "rank_template": "judo_cbj_2023",
+    "items": [
+      {
+        "name": "Conhecimento teórico",
+        "kind": "group",
+        "children": [
+          {
+            "name": "História do judô",
+            "kind": "group",
+            "children": [
+              {
+                "name": "Jigoro Kano e a fundação do Kodokan (1882)",
+                "kind": "item"
+              },
+              {
+                "name": "Chegada e desenvolvimento do judô no Brasil",
+                "kind": "item"
+              },
+              {
+                "name": "Judô olímpico",
+                "kind": "item"
+              }
+            ]
+          },
+          {
+            "name": "Princípios",
+            "kind": "group",
+            "children": [
+              {
+                "name": "Seiryoku-zenyo (máxima eficiência)",
+                "kind": "item"
+              },
+              {
+                "name": "Jita-kyoei (bem-estar e benefício mútuos)",
+                "kind": "item"
+              },
+              {
+                "name": "Ju (suavidade, ceder para vencer)",
+                "kind": "item"
+              }
+            ]
+          },
+          {
+            "name": "Etiqueta e dojo",
+            "kind": "group",
+            "children": [
+              {
+                "name": "Regras de conduta no dojo",
+                "kind": "item"
+              },
+              {
+                "name": "Cuidados com o judogi e higiene",
+                "kind": "item"
+              },
+              {
+                "name": "Significado das saudações",
+                "kind": "item"
+              }
+            ]
+          },
+          {
+            "name": "Terminologia",
+            "kind": "group",
+            "children": [
+              {
+                "name": "Contagem em japonês",
+                "kind": "item"
+              },
+              {
+                "name": "Nomes das partes do corpo e posições",
+                "kind": "item"
+              },
+              {
+                "name": "Comandos de arbitragem (Hajime, Matte, Sono-mama, Yoshi, Osaekomi, Toketa, Sore-made)",
+                "kind": "item"
+              },
+              {
+                "name": "Nomes das técnicas exigidas na faixa",
+                "kind": "item"
+              }
+            ]
+          },
+          {
+            "name": "Sistema de graduação",
+            "kind": "group",
+            "children": [
+              {
+                "name": "Kyu e Dan, cores das faixas",
+                "kind": "item"
+              },
+              {
+                "name": "Requisitos de idade e tempo de faixa",
+                "kind": "item"
+              }
+            ]
+          },
+          {
+            "name": "Regras de competição",
+            "kind": "group",
+            "children": [
+              {
+                "name": "Pontuação (Ippon, Waza-ari)",
+                "kind": "item"
+              },
+              {
+                "name": "Penalidades (Shido, Hansoku-make)",
+                "kind": "item"
+              },
+              {
+                "name": "Técnicas proibidas por idade",
+                "kind": "item"
+              }
+            ]
+          },
+          {
+            "name": "Classificação das técnicas",
+            "kind": "group",
+            "children": [
+              {
+                "name": "Gokyo-no-waza",
+                "kind": "item"
+              },
+              {
+                "name": "Divisão de Nage-waza e Katame-waza",
+                "kind": "item"
+              },
+              {
+                "name": "Kata do Kodokan",
+                "kind": "item"
+              }
+            ]
+          }
+        ],
+        "description": "Conteúdo cobrado em quiz ou arguição oral.",
+        "knowledge": "theoretical"
+      },
+      {
+        "name": "Kihon (fundamentos)",
+        "kind": "group",
+        "children": [
+          {
+            "name": "Rei-ho (saudação)",
+            "kind": "group",
+            "children": [
+              {
+                "name": "Ritsu-rei (em pé)",
+                "kind": "item"
+              },
+              {
+                "name": "Za-rei (sentado)",
+                "kind": "item"
+              }
+            ]
+          },
+          {
+            "name": "Shisei (postura)",
+            "kind": "group",
+            "children": [
+              {
+                "name": "Shizen-hontai",
+                "kind": "item"
+              },
+              {
+                "name": "Jigo-hontai",
+                "kind": "item"
+              }
+            ]
+          },
+          {
+            "name": "Kumi-kata (pegada)",
+            "kind": "group",
+            "children": [
+              {
+                "name": "Pegada básica (gola e manga)",
+                "kind": "item"
+              }
+            ]
+          },
+          {
+            "name": "Shintai (deslocamento)",
+            "kind": "group",
+            "children": [
+              {
+                "name": "Ayumi-ashi",
+                "kind": "item"
+              },
+              {
+                "name": "Tsugi-ashi",
+                "kind": "item"
+              }
+            ]
+          },
+          {
+            "name": "Tai-sabaki (giro do corpo)",
+            "kind": "group",
+            "children": [
+              {
+                "name": "Mae-sabaki",
+                "kind": "item"
+              },
+              {
+                "name": "Ushiro-sabaki",
+                "kind": "item"
+              }
+            ]
+          },
+          {
+            "name": "Kuzushi (desequilíbrio)",
+            "kind": "group",
+            "children": [
+              {
+                "name": "Happo-no-kuzushi",
+                "kind": "item"
+              }
+            ]
+          },
+          {
+            "name": "Ukemi (amortecimento de queda)",
+            "kind": "group",
+            "children": [
+              {
+                "name": "Ushiro-ukemi",
+                "kind": "item"
+              },
+              {
+                "name": "Yoko-ukemi",
+                "kind": "item"
+              },
+              {
+                "name": "Mae-ukemi",
+                "kind": "item"
+              },
+              {
+                "name": "Zenpo-kaiten-ukemi",
+                "kind": "item"
+              }
+            ]
+          }
+        ],
+        "knowledge": "practical"
+      },
+      {
+        "name": "Nage-waza",
+        "kind": "group",
+        "children": [
+          {
+            "name": "Tachi-waza",
+            "kind": "group",
+            "children": [
+              {
+                "name": "Te-waza",
+                "kind": "group",
+                "children": [
+                  {
+                    "name": "Ippon-seoi-nage",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Seoi-otoshi",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Tai-otoshi",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Kata-guruma",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Sukui-nage",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Uki-otoshi",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Sumi-otoshi",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Obi-otoshi",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Yama-arashi",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Morote-gari",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Kuchiki-taoshi",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Kibisu-gaeshi",
+                    "kind": "item"
+                  }
+                ],
+                "description": "Técnicas de braço"
+              },
+              {
+                "name": "Koshi-waza",
+                "kind": "group",
+                "children": [
+                  {
+                    "name": "Uki-goshi",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "O-goshi",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Koshi-guruma",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Tsurikomi-goshi",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Sode-tsurikomi-goshi",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Harai-goshi",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Tsuri-goshi",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Hane-goshi",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Utsuri-goshi",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Ushiro-goshi",
+                    "kind": "item"
+                  }
+                ],
+                "description": "Técnicas de quadril"
+              },
+              {
+                "name": "Ashi-waza",
+                "kind": "group",
+                "children": [
+                  {
+                    "name": "De-ashi-harai",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Hiza-guruma",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Sasae-tsurikomi-ashi",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "O-soto-gari",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "O-uchi-gari",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Ko-soto-gari",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Ko-uchi-gari",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Okuri-ashi-harai",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Uchi-mata",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Ko-soto-gake",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Ashi-guruma",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Harai-tsurikomi-ashi",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "O-guruma",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "O-soto-guruma",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "O-soto-otoshi",
+                    "kind": "item"
+                  }
+                ],
+                "description": "Técnicas de perna e pé"
+              }
+            ],
+            "description": "Técnicas de pé"
+          },
+          {
+            "name": "Sutemi-waza",
+            "kind": "group",
+            "children": [
+              {
+                "name": "Ma-sutemi-waza",
+                "kind": "group",
+                "children": [
+                  {
+                    "name": "Tomoe-nage",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Sumi-gaeshi",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Hikikomi-gaeshi",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Tawara-gaeshi",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Ura-nage",
+                    "kind": "item"
+                  }
+                ],
+                "description": "Sacrifício para trás"
+              },
+              {
+                "name": "Yoko-sutemi-waza",
+                "kind": "group",
+                "children": [
+                  {
+                    "name": "Yoko-otoshi",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Tani-otoshi",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Hane-makikomi",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Soto-makikomi",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Uki-waza",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Yoko-wakare",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Yoko-guruma",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Yoko-gake",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Uchi-makikomi",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Harai-makikomi",
+                    "kind": "item"
+                  }
+                ],
+                "description": "Sacrifício para o lado"
+              }
+            ],
+            "description": "Técnicas de sacrifício"
+          }
+        ],
+        "description": "Técnicas de arremesso e projeção",
+        "knowledge": "practical"
+      },
+      {
+        "name": "Ouyou-waza",
+        "kind": "group",
+        "children": [
+          {
+            "name": "Renraku-waza",
+            "kind": "group",
+            "children": [
+              {
+                "name": "O-uchi-gari → Ippon-seoi-nage",
+                "kind": "item"
+              },
+              {
+                "name": "Ko-uchi-gari → Tai-otoshi",
+                "kind": "item"
+              },
+              {
+                "name": "O-uchi-gari → Uchi-mata",
+                "kind": "item"
+              },
+              {
+                "name": "Ko-uchi-gari → Ippon-seoi-nage",
+                "kind": "item"
+              }
+            ],
+            "description": "Combinação: encadear golpes diferentes aproveitando a reação do oponente."
+          },
+          {
+            "name": "Renzoku-waza",
+            "kind": "group",
+            "children": [
+              {
+                "name": "Seoi-nage → Seoi-nage de joelhos",
+                "kind": "item"
+              },
+              {
+                "name": "O-uchi-gari → O-uchi-gari",
+                "kind": "item"
+              }
+            ],
+            "description": "Continuação: insistir no mesmo golpe ou na mesma direção."
+          },
+          {
+            "name": "Kaeshi-waza",
+            "kind": "group",
+            "children": [
+              {
+                "name": "Bloqueio e força",
+                "kind": "group",
+                "children": [
+                  {
+                    "name": "O-soto-gari → O-soto-gaeshi",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "O-uchi-gari → O-uchi-gaeshi",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Harai-goshi → Harai-goshi-gaeshi",
+                    "kind": "item"
+                  }
+                ]
+              },
+              {
+                "name": "Esquiva e inversão",
+                "kind": "group",
+                "children": [
+                  {
+                    "name": "Uchi-mata → Uchi-mata-sukashi",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Ko-uchi-gari → Ko-uchi-gaeshi",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "De-ashi-harai → Tsubame-gaeshi",
+                    "kind": "item"
+                  }
+                ]
+              },
+              {
+                "name": "Sacrifício",
+                "kind": "group",
+                "children": [
+                  {
+                    "name": "Ataque do oponente → Tani-otoshi",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Ataque do oponente → Sumi-gaeshi",
+                    "kind": "item"
+                  }
+                ]
+              }
+            ],
+            "description": "Contra-ataque usando a força, o desequilíbrio ou a falha do ataque do oponente."
+          }
+        ],
+        "description": "Aplicação prática e combinação",
+        "knowledge": "practical"
+      },
+      {
+        "name": "Katame-waza",
+        "kind": "group",
+        "children": [
+          {
+            "name": "Osaekomi-waza",
+            "kind": "group",
+            "children": [
+              {
+                "name": "Kesa-gatame",
+                "kind": "item"
+              },
+              {
+                "name": "Kuzure-kesa-gatame",
+                "kind": "item"
+              },
+              {
+                "name": "Ushiro-kesa-gatame",
+                "kind": "item"
+              },
+              {
+                "name": "Kata-gatame",
+                "kind": "item"
+              },
+              {
+                "name": "Kami-shiho-gatame",
+                "kind": "item"
+              },
+              {
+                "name": "Kuzure-kami-shiho-gatame",
+                "kind": "item"
+              },
+              {
+                "name": "Yoko-shiho-gatame",
+                "kind": "item"
+              },
+              {
+                "name": "Tate-shiho-gatame",
+                "kind": "item"
+              },
+              {
+                "name": "Uki-gatame",
+                "kind": "item"
+              },
+              {
+                "name": "Ura-gatame",
+                "kind": "item"
+              }
+            ],
+            "description": "Imobilizações"
+          },
+          {
+            "name": "Shime-waza",
+            "kind": "group",
+            "children": [
+              {
+                "name": "Nami-juji-jime",
+                "kind": "item"
+              },
+              {
+                "name": "Gyaku-juji-jime",
+                "kind": "item"
+              },
+              {
+                "name": "Kata-juji-jime",
+                "kind": "item"
+              },
+              {
+                "name": "Hadaka-jime",
+                "kind": "item"
+              },
+              {
+                "name": "Okuri-eri-jime",
+                "kind": "item"
+              },
+              {
+                "name": "Kata-ha-jime",
+                "kind": "item"
+              },
+              {
+                "name": "Sode-guruma-jime",
+                "kind": "item"
+              },
+              {
+                "name": "Kata-te-jime",
+                "kind": "item"
+              },
+              {
+                "name": "Ryo-te-jime",
+                "kind": "item"
+              },
+              {
+                "name": "Tsukkomi-jime",
+                "kind": "item"
+              },
+              {
+                "name": "Sankaku-jime",
+                "kind": "item"
+              }
+            ],
+            "description": "Estrangulamentos"
+          },
+          {
+            "name": "Kansetsu-waza",
+            "kind": "group",
+            "children": [
+              {
+                "name": "Ude-garami",
+                "kind": "item"
+              },
+              {
+                "name": "Ude-hishigi-juji-gatame",
+                "kind": "item"
+              },
+              {
+                "name": "Ude-hishigi-ude-gatame",
+                "kind": "item"
+              },
+              {
+                "name": "Ude-hishigi-hiza-gatame",
+                "kind": "item"
+              },
+              {
+                "name": "Ude-hishigi-waki-gatame",
+                "kind": "item"
+              },
+              {
+                "name": "Ude-hishigi-hara-gatame",
+                "kind": "item"
+              },
+              {
+                "name": "Ude-hishigi-ashi-gatame",
+                "kind": "item"
+              },
+              {
+                "name": "Ude-hishigi-te-gatame",
+                "kind": "item"
+              },
+              {
+                "name": "Ude-hishigi-sankaku-gatame",
+                "kind": "item"
+              }
+            ],
+            "description": "Chaves de articulação"
+          }
+        ],
+        "description": "Técnicas de domínio e solo (Ne-waza)",
+        "knowledge": "practical"
+      },
+      {
+        "name": "Ate-waza",
+        "kind": "group",
+        "children": [
+          {
+            "name": "Ude-ate",
+            "kind": "group",
+            "children": [],
+            "description": "Golpes com os braços e as mãos"
+          },
+          {
+            "name": "Ashi-ate",
+            "kind": "group",
+            "children": [],
+            "description": "Golpes com as pernas e os pés"
+          }
+        ],
+        "description": "Golpes a pontos vitais, praticados apenas em kata.",
+        "knowledge": "practical"
+      },
+      {
+        "name": "Kata",
+        "kind": "group",
+        "children": [
+          {
+            "name": "Nage-no-kata",
+            "kind": "group",
+            "children": [
+              {
+                "name": "Te-waza",
+                "kind": "group",
+                "children": [
+                  {
+                    "name": "Uki-otoshi",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Seoi-nage",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Kata-guruma",
+                    "kind": "item"
+                  }
+                ]
+              },
+              {
+                "name": "Koshi-waza",
+                "kind": "group",
+                "children": [
+                  {
+                    "name": "Uki-goshi",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Harai-goshi",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Tsurikomi-goshi",
+                    "kind": "item"
+                  }
+                ]
+              },
+              {
+                "name": "Ashi-waza",
+                "kind": "group",
+                "children": [
+                  {
+                    "name": "Okuri-ashi-harai",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Sasae-tsurikomi-ashi",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Uchi-mata",
+                    "kind": "item"
+                  }
+                ]
+              },
+              {
+                "name": "Ma-sutemi-waza",
+                "kind": "group",
+                "children": [
+                  {
+                    "name": "Tomoe-nage",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Ura-nage",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Sumi-gaeshi",
+                    "kind": "item"
+                  }
+                ]
+              },
+              {
+                "name": "Yoko-sutemi-waza",
+                "kind": "group",
+                "children": [
+                  {
+                    "name": "Yoko-gake",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Yoko-guruma",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Uki-waza",
+                    "kind": "item"
+                  }
+                ]
+              }
+            ],
+            "description": "Formas de projeção: 15 técnicas em 5 grupos."
+          },
+          {
+            "name": "Katame-no-kata",
+            "kind": "group",
+            "children": [
+              {
+                "name": "Osaekomi-waza",
+                "kind": "group",
+                "children": [
+                  {
+                    "name": "Kesa-gatame",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Kata-gatame",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Kami-shiho-gatame",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Yoko-shiho-gatame",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Kuzure-kami-shiho-gatame",
+                    "kind": "item"
+                  }
+                ]
+              },
+              {
+                "name": "Shime-waza",
+                "kind": "group",
+                "children": [
+                  {
+                    "name": "Kata-juji-jime",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Hadaka-jime",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Okuri-eri-jime",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Kata-ha-jime",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Gyaku-juji-jime",
+                    "kind": "item"
+                  }
+                ]
+              },
+              {
+                "name": "Kansetsu-waza",
+                "kind": "group",
+                "children": [
+                  {
+                    "name": "Ude-garami",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Ude-hishigi-juji-gatame",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Ude-hishigi-ude-gatame",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Ude-hishigi-hiza-gatame",
+                    "kind": "item"
+                  },
+                  {
+                    "name": "Ashi-garami",
+                    "kind": "item"
+                  }
+                ]
+              }
+            ],
+            "description": "Formas de domínio: 15 técnicas em 3 grupos."
+          }
+        ],
+        "knowledge": "practical"
+      }
+    ],
+    "curriculum": {
+      "11-kyu": [
+        [
+          "Conhecimento teórico > Etiqueta e dojo > Regras de conduta no dojo",
+          2
+        ],
+        [
+          "Conhecimento teórico > Etiqueta e dojo > Significado das saudações",
+          2
+        ],
+        [
+          "Kihon (fundamentos) > Rei-ho (saudação) > Ritsu-rei (em pé)",
+          3
+        ],
+        [
+          "Kihon (fundamentos) > Rei-ho (saudação) > Za-rei (sentado)",
+          3
+        ],
+        [
+          "Kihon (fundamentos) > Ukemi (amortecimento de queda) > Ushiro-ukemi",
+          3
+        ],
+        [
+          "Kihon (fundamentos) > Ukemi (amortecimento de queda) > Yoko-ukemi",
+          2
+        ],
+        [
+          "Kihon (fundamentos) > Shisei (postura) > Shizen-hontai",
+          2
+        ],
+        [
+          "Katame-waza > Osaekomi-waza > Kesa-gatame",
+          2
+        ],
+        [
+          "Nage-waza > Tachi-waza > Koshi-waza > O-goshi",
+          2
+        ]
+      ],
+      "10-kyu": [
+        [
+          "Conhecimento teórico > Terminologia > Contagem em japonês",
+          2
+        ],
+        [
+          "Conhecimento teórico > Etiqueta e dojo > Cuidados com o judogi e higiene",
+          2
+        ],
+        [
+          "Kihon (fundamentos) > Ukemi (amortecimento de queda) > Yoko-ukemi",
+          3
+        ],
+        [
+          "Kihon (fundamentos) > Ukemi (amortecimento de queda) > Mae-ukemi",
+          2
+        ],
+        [
+          "Kihon (fundamentos) > Kumi-kata (pegada) > Pegada básica (gola e manga)",
+          2
+        ],
+        [
+          "Kihon (fundamentos) > Shintai (deslocamento) > Ayumi-ashi",
+          2
+        ],
+        [
+          "Kihon (fundamentos) > Shintai (deslocamento) > Tsugi-ashi",
+          2
+        ],
+        [
+          "Nage-waza > Tachi-waza > Ashi-waza > O-soto-gari",
+          2
+        ],
+        [
+          "Nage-waza > Tachi-waza > Te-waza > Ippon-seoi-nage",
+          2
+        ],
+        [
+          "Katame-waza > Osaekomi-waza > Kesa-gatame",
+          3
+        ],
+        [
+          "Katame-waza > Osaekomi-waza > Kuzure-kesa-gatame",
+          2
+        ],
+        [
+          "Nage-waza > Tachi-waza > Koshi-waza > O-goshi",
+          3
+        ]
+      ],
+      "9-kyu": [
+        [
+          "Conhecimento teórico > História do judô > Jigoro Kano e a fundação do Kodokan (1882)",
+          2
+        ],
+        [
+          "Kihon (fundamentos) > Ukemi (amortecimento de queda) > Zenpo-kaiten-ukemi",
+          3
+        ],
+        [
+          "Kihon (fundamentos) > Ukemi (amortecimento de queda) > Mae-ukemi",
+          3
+        ],
+        [
+          "Kihon (fundamentos) > Tai-sabaki (giro do corpo) > Mae-sabaki",
+          2
+        ],
+        [
+          "Kihon (fundamentos) > Tai-sabaki (giro do corpo) > Ushiro-sabaki",
+          2
+        ],
+        [
+          "Nage-waza > Tachi-waza > Ashi-waza > O-uchi-gari",
+          2
+        ],
+        [
+          "Nage-waza > Tachi-waza > Ashi-waza > De-ashi-harai",
+          2
+        ],
+        [
+          "Nage-waza > Tachi-waza > Ashi-waza > Hiza-guruma",
+          2
+        ],
+        [
+          "Katame-waza > Osaekomi-waza > Yoko-shiho-gatame",
+          2
+        ],
+        [
+          "Katame-waza > Osaekomi-waza > Kami-shiho-gatame",
+          2
+        ],
+        [
+          "Nage-waza > Tachi-waza > Ashi-waza > O-soto-gari",
+          3
+        ]
+      ],
+      "8-kyu": [
+        [
+          "Conhecimento teórico > Terminologia > Comandos de arbitragem (Hajime, Matte, Sono-mama, Yoshi, Osaekomi, Toketa, Sore-made)",
+          2
+        ],
+        [
+          "Conhecimento teórico > Sistema de graduação > Kyu e Dan, cores das faixas",
+          2
+        ],
+        [
+          "Kihon (fundamentos) > Kuzushi (desequilíbrio) > Happo-no-kuzushi",
+          2
+        ],
+        [
+          "Nage-waza > Tachi-waza > Ashi-waza > Ko-uchi-gari",
+          2
+        ],
+        [
+          "Nage-waza > Tachi-waza > Ashi-waza > Ko-soto-gari",
+          2
+        ],
+        [
+          "Nage-waza > Tachi-waza > Ashi-waza > Sasae-tsurikomi-ashi",
+          2
+        ],
+        [
+          "Nage-waza > Tachi-waza > Te-waza > Tai-otoshi",
+          2
+        ],
+        [
+          "Katame-waza > Osaekomi-waza > Tate-shiho-gatame",
+          2
+        ],
+        [
+          "Katame-waza > Osaekomi-waza > Kata-gatame",
+          2
+        ],
+        [
+          "Nage-waza > Tachi-waza > Te-waza > Ippon-seoi-nage",
+          3
+        ],
+        [
+          "Kihon (fundamentos) > Kumi-kata (pegada) > Pegada básica (gola e manga)",
+          3
+        ]
+      ],
+      "7-kyu": [
+        [
+          "Conhecimento teórico > Princípios > Seiryoku-zenyo (máxima eficiência)",
+          2
+        ],
+        [
+          "Conhecimento teórico > Princípios > Jita-kyoei (bem-estar e benefício mútuos)",
+          2
+        ],
+        [
+          "Nage-waza > Tachi-waza > Koshi-waza > Uki-goshi",
+          2
+        ],
+        [
+          "Nage-waza > Tachi-waza > Koshi-waza > Koshi-guruma",
+          2
+        ],
+        [
+          "Nage-waza > Tachi-waza > Koshi-waza > Tsurikomi-goshi",
+          2
+        ],
+        [
+          "Nage-waza > Tachi-waza > Ashi-waza > Okuri-ashi-harai",
+          2
+        ],
+        [
+          "Nage-waza > Tachi-waza > Ashi-waza > O-uchi-gari",
+          3
+        ],
+        [
+          "Nage-waza > Tachi-waza > Ashi-waza > De-ashi-harai",
+          3
+        ],
+        [
+          "Nage-waza > Tachi-waza > Ashi-waza > Hiza-guruma",
+          3
+        ],
+        [
+          "Katame-waza > Osaekomi-waza > Yoko-shiho-gatame",
+          3
+        ],
+        [
+          "Katame-waza > Osaekomi-waza > Kami-shiho-gatame",
+          3
+        ]
+      ],
+      "6-kyu": [
+        [
+          "Conhecimento teórico > Regras de competição > Pontuação (Ippon, Waza-ari)",
+          2
+        ],
+        [
+          "Conhecimento teórico > Regras de competição > Penalidades (Shido, Hansoku-make)",
+          2
+        ],
+        [
+          "Conhecimento teórico > História do judô > Chegada e desenvolvimento do judô no Brasil",
+          2
+        ],
+        [
+          "Nage-waza > Tachi-waza > Koshi-waza > Harai-goshi",
+          2
+        ],
+        [
+          "Nage-waza > Tachi-waza > Ashi-waza > Uchi-mata",
+          2
+        ],
+        [
+          "Nage-waza > Tachi-waza > Ashi-waza > Ko-soto-gake",
+          2
+        ],
+        [
+          "Katame-waza > Osaekomi-waza > Ushiro-kesa-gatame",
+          2
+        ],
+        [
+          "Katame-waza > Osaekomi-waza > Kuzure-kami-shiho-gatame",
+          2
+        ],
+        [
+          "Ouyou-waza > Renraku-waza > O-uchi-gari → Ippon-seoi-nage",
+          2
+        ],
+        [
+          "Nage-waza > Tachi-waza > Ashi-waza > Ko-uchi-gari",
+          3
+        ],
+        [
+          "Nage-waza > Tachi-waza > Ashi-waza > Ko-soto-gari",
+          3
+        ],
+        [
+          "Nage-waza > Tachi-waza > Ashi-waza > Sasae-tsurikomi-ashi",
+          3
+        ],
+        [
+          "Nage-waza > Tachi-waza > Te-waza > Tai-otoshi",
+          3
+        ]
+      ],
+      "5-kyu": [
+        [
+          "Conhecimento teórico > Terminologia > Nomes das técnicas exigidas na faixa",
+          2
+        ],
+        [
+          "Nage-waza > Tachi-waza > Ashi-waza > Ashi-guruma",
+          2
+        ],
+        [
+          "Nage-waza > Tachi-waza > Ashi-waza > Harai-tsurikomi-ashi",
+          2
+        ],
+        [
+          "Nage-waza > Tachi-waza > Ashi-waza > O-guruma",
+          2
+        ],
+        [
+          "Nage-waza > Sutemi-waza > Ma-sutemi-waza > Tomoe-nage",
+          2
+        ],
+        [
+          "Nage-waza > Sutemi-waza > Ma-sutemi-waza > Sumi-gaeshi",
+          2
+        ],
+        [
+          "Nage-waza > Sutemi-waza > Yoko-sutemi-waza > Tani-otoshi",
+          2
+        ],
+        [
+          "Ouyou-waza > Renraku-waza > Ko-uchi-gari → Tai-otoshi",
+          2
+        ],
+        [
+          "Ouyou-waza > Renzoku-waza > Seoi-nage → Seoi-nage de joelhos",
+          2
+        ],
+        [
+          "Nage-waza > Tachi-waza > Koshi-waza > Uki-goshi",
+          3
+        ],
+        [
+          "Nage-waza > Tachi-waza > Koshi-waza > Koshi-guruma",
+          3
+        ],
+        [
+          "Nage-waza > Tachi-waza > Koshi-waza > Tsurikomi-goshi",
+          3
+        ],
+        [
+          "Katame-waza > Osaekomi-waza > Tate-shiho-gatame",
+          3
+        ],
+        [
+          "Katame-waza > Osaekomi-waza > Kata-gatame",
+          3
+        ]
+      ],
+      "4-kyu": [
+        [
+          "Conhecimento teórico > Regras de competição > Técnicas proibidas por idade",
+          2
+        ],
+        [
+          "Conhecimento teórico > Princípios > Ju (suavidade, ceder para vencer)",
+          2
+        ],
+        [
+          "Nage-waza > Tachi-waza > Koshi-waza > Hane-goshi",
+          2
+        ],
+        [
+          "Nage-waza > Tachi-waza > Koshi-waza > Tsuri-goshi",
+          2
+        ],
+        [
+          "Nage-waza > Sutemi-waza > Yoko-sutemi-waza > Yoko-otoshi",
+          2
+        ],
+        [
+          "Nage-waza > Sutemi-waza > Ma-sutemi-waza > Ura-nage",
+          2
+        ],
+        [
+          "Katame-waza > Shime-waza > Nami-juji-jime",
+          2
+        ],
+        [
+          "Katame-waza > Shime-waza > Hadaka-jime",
+          2
+        ],
+        [
+          "Katame-waza > Shime-waza > Okuri-eri-jime",
+          2
+        ],
+        [
+          "Katame-waza > Kansetsu-waza > Ude-garami",
+          2
+        ],
+        [
+          "Katame-waza > Kansetsu-waza > Ude-hishigi-juji-gatame",
+          2
+        ],
+        [
+          "Ouyou-waza > Kaeshi-waza > Bloqueio e força > O-soto-gari → O-soto-gaeshi",
+          2
+        ],
+        [
+          "Nage-waza > Tachi-waza > Koshi-waza > Harai-goshi",
+          3
+        ],
+        [
+          "Nage-waza > Tachi-waza > Ashi-waza > Uchi-mata",
+          3
+        ],
+        [
+          "Ouyou-waza > Renraku-waza > O-uchi-gari → Ippon-seoi-nage",
+          3
+        ]
+      ],
+      "3-kyu": [
+        [
+          "Conhecimento teórico > Classificação das técnicas > Gokyo-no-waza",
+          2
+        ],
+        [
+          "Conhecimento teórico > Classificação das técnicas > Divisão de Nage-waza e Katame-waza",
+          2
+        ],
+        [
+          "Nage-waza > Tachi-waza > Koshi-waza > Utsuri-goshi",
+          2
+        ],
+        [
+          "Nage-waza > Tachi-waza > Koshi-waza > Ushiro-goshi",
+          2
+        ],
+        [
+          "Nage-waza > Sutemi-waza > Yoko-sutemi-waza > Yoko-guruma",
+          2
+        ],
+        [
+          "Nage-waza > Sutemi-waza > Yoko-sutemi-waza > Uki-waza",
+          2
+        ],
+        [
+          "Nage-waza > Sutemi-waza > Yoko-sutemi-waza > Soto-makikomi",
+          2
+        ],
+        [
+          "Katame-waza > Shime-waza > Kata-juji-jime",
+          2
+        ],
+        [
+          "Katame-waza > Shime-waza > Gyaku-juji-jime",
+          2
+        ],
+        [
+          "Katame-waza > Shime-waza > Kata-ha-jime",
+          2
+        ],
+        [
+          "Katame-waza > Kansetsu-waza > Ude-hishigi-ude-gatame",
+          2
+        ],
+        [
+          "Katame-waza > Kansetsu-waza > Ude-hishigi-hiza-gatame",
+          2
+        ],
+        [
+          "Ouyou-waza > Kaeshi-waza > Esquiva e inversão > Uchi-mata → Uchi-mata-sukashi",
+          2
+        ],
+        [
+          "Kata > Nage-no-kata > Te-waza",
+          2
+        ],
+        [
+          "Kata > Nage-no-kata > Koshi-waza",
+          2
+        ],
+        [
+          "Katame-waza > Shime-waza > Nami-juji-jime",
+          3
+        ],
+        [
+          "Katame-waza > Shime-waza > Hadaka-jime",
+          3
+        ],
+        [
+          "Katame-waza > Shime-waza > Okuri-eri-jime",
+          3
+        ],
+        [
+          "Katame-waza > Kansetsu-waza > Ude-garami",
+          3
+        ],
+        [
+          "Katame-waza > Kansetsu-waza > Ude-hishigi-juji-gatame",
+          3
+        ]
+      ],
+      "2-kyu": [
+        [
+          "Conhecimento teórico > Classificação das técnicas > Kata do Kodokan",
+          2
+        ],
+        [
+          "Conhecimento teórico > Sistema de graduação > Requisitos de idade e tempo de faixa",
+          2
+        ],
+        [
+          "Nage-waza > Sutemi-waza > Yoko-sutemi-waza > Yoko-gake",
+          2
+        ],
+        [
+          "Nage-waza > Sutemi-waza > Yoko-sutemi-waza > Yoko-wakare",
+          2
+        ],
+        [
+          "Nage-waza > Sutemi-waza > Yoko-sutemi-waza > Hane-makikomi",
+          2
+        ],
+        [
+          "Nage-waza > Tachi-waza > Te-waza > Sukui-nage",
+          2
+        ],
+        [
+          "Nage-waza > Tachi-waza > Te-waza > Kata-guruma",
+          2
+        ],
+        [
+          "Nage-waza > Tachi-waza > Te-waza > Sumi-otoshi",
+          2
+        ],
+        [
+          "Katame-waza > Kansetsu-waza > Ude-hishigi-waki-gatame",
+          2
+        ],
+        [
+          "Katame-waza > Kansetsu-waza > Ude-hishigi-hara-gatame",
+          2
+        ],
+        [
+          "Katame-waza > Kansetsu-waza > Ude-hishigi-ashi-gatame",
+          2
+        ],
+        [
+          "Katame-waza > Shime-waza > Kata-te-jime",
+          2
+        ],
+        [
+          "Katame-waza > Shime-waza > Sankaku-jime",
+          2
+        ],
+        [
+          "Ouyou-waza > Kaeshi-waza > Sacrifício > Ataque do oponente → Tani-otoshi",
+          2
+        ],
+        [
+          "Ouyou-waza > Kaeshi-waza > Sacrifício > Ataque do oponente → Sumi-gaeshi",
+          2
+        ],
+        [
+          "Kata > Nage-no-kata > Ashi-waza",
+          2
+        ],
+        [
+          "Kata > Nage-no-kata > Te-waza",
+          3
+        ],
+        [
+          "Kata > Nage-no-kata > Koshi-waza",
+          3
+        ]
+      ],
+      "1-kyu": [
+        [
+          "Conhecimento teórico > História do judô > Judô olímpico",
+          2
+        ],
+        [
+          "Katame-waza > Osaekomi-waza > Ura-gatame",
+          2
+        ],
+        [
+          "Katame-waza > Osaekomi-waza > Uki-gatame",
+          2
+        ],
+        [
+          "Katame-waza > Kansetsu-waza > Ude-hishigi-te-gatame",
+          2
+        ],
+        [
+          "Katame-waza > Kansetsu-waza > Ude-hishigi-sankaku-gatame",
+          2
+        ],
+        [
+          "Ouyou-waza > Kaeshi-waza > Esquiva e inversão > Ko-uchi-gari → Ko-uchi-gaeshi",
+          2
+        ],
+        [
+          "Kata > Nage-no-kata > Ma-sutemi-waza",
+          2
+        ],
+        [
+          "Kata > Nage-no-kata > Yoko-sutemi-waza",
+          2
+        ],
+        [
+          "Kata > Nage-no-kata > Ashi-waza",
+          3
+        ],
+        [
+          "Conhecimento teórico > Classificação das técnicas > Gokyo-no-waza",
+          3
+        ],
+        [
+          "Ouyou-waza > Renraku-waza > Ko-uchi-gari → Tai-otoshi",
+          3
+        ],
+        [
+          "Ouyou-waza > Renraku-waza > O-uchi-gari → Uchi-mata",
+          3
+        ]
+      ],
+      "1-dan": [
+        [
+          "Kata > Nage-no-kata > Te-waza",
+          4
+        ],
+        [
+          "Kata > Nage-no-kata > Koshi-waza",
+          4
+        ],
+        [
+          "Kata > Nage-no-kata > Ashi-waza",
+          4
+        ],
+        [
+          "Kata > Nage-no-kata > Ma-sutemi-waza",
+          4
+        ],
+        [
+          "Kata > Nage-no-kata > Yoko-sutemi-waza",
+          4
+        ],
+        [
+          "Kata > Katame-no-kata > Osaekomi-waza",
+          3
+        ],
+        [
+          "Kata > Katame-no-kata > Shime-waza",
+          3
+        ],
+        [
+          "Kata > Katame-no-kata > Kansetsu-waza",
+          3
+        ],
+        [
+          "Conhecimento teórico > Classificação das técnicas > Gokyo-no-waza",
+          4
+        ],
+        [
+          "Conhecimento teórico > Classificação das técnicas > Kata do Kodokan",
+          4
+        ],
+        [
+          "Conhecimento teórico > Regras de competição > Pontuação (Ippon, Waza-ari)",
+          3
+        ],
+        [
+          "Conhecimento teórico > Regras de competição > Penalidades (Shido, Hansoku-make)",
+          3
+        ]
+      ]
+    },
+    "quiz": [
+      {
+        "rank": "11-kyu",
+        "item": "Conhecimento teórico > Etiqueta e dojo > Significado das saudações",
+        "statement": "Como se chama a saudação feita em pé?",
+        "options": [
+          "Ritsurei",
+          "Zarei",
+          "Hajime",
+          "Matte"
+        ],
+        "correct": 0,
+        "explanation": "Ritsurei é a saudação em pé; zarei é a saudação ajoelhado."
+      },
+      {
+        "rank": "11-kyu",
+        "item": "Conhecimento teórico > Etiqueta e dojo > Significado das saudações",
+        "statement": "O que a saudação (rei) demonstra no judô?",
+        "options": [
+          "Respeito e gratidão ao parceiro e ao professor",
+          "Que a luta acabou",
+          "Que o aluno quer desistir",
+          "Que o professor deve começar a aula"
+        ],
+        "correct": 0,
+        "explanation": "A saudação expressa respeito e gratidão, antes e depois de treinar com o parceiro."
+      },
+      {
+        "rank": "11-kyu",
+        "item": "Conhecimento teórico > Etiqueta e dojo > Regras de conduta no dojo",
+        "statement": "Ao entrar ou sair do tatame, o aluno deve:",
+        "options": [
+          "Fazer a saudação",
+          "Correr para o centro",
+          "Tirar a faixa",
+          "Pedir licença ao colega mais novo"
+        ],
+        "correct": 0,
+        "explanation": "Saudar ao entrar e sair do tatame faz parte da etiqueta do dojo."
+      },
+      {
+        "rank": "10-kyu",
+        "item": "Conhecimento teórico > Terminologia > Contagem em japonês",
+        "statement": "Como se diz \"três\" em japonês?",
+        "options": [
+          "San",
+          "Ichi",
+          "Go",
+          "Ju"
+        ],
+        "correct": 0,
+        "explanation": "Ichi (1), ni (2), san (3), shi ou yon (4), go (5)."
+      },
+      {
+        "rank": "10-kyu",
+        "item": "Conhecimento teórico > Terminologia > Contagem em japonês",
+        "statement": "Qual número corresponde a \"ju\"?",
+        "options": [
+          "10",
+          "5",
+          "8",
+          "2"
+        ],
+        "correct": 0,
+        "explanation": "Ju é dez; hachi é oito; go é cinco."
+      },
+      {
+        "rank": "10-kyu",
+        "item": "Conhecimento teórico > Etiqueta e dojo > Cuidados com o judogi e higiene",
+        "statement": "Qual destes cuidados é esperado de quem vai treinar?",
+        "options": [
+          "Unhas curtas e judogi limpo",
+          "Treinar de relógio e anel",
+          "Entrar no tatame calçado",
+          "Usar o judogi sem a faixa"
+        ],
+        "correct": 0,
+        "explanation": "Unhas curtas, judogi limpo e sem objetos protegem o próprio aluno e o parceiro."
+      },
+      {
+        "rank": "9-kyu",
+        "item": "Conhecimento teórico > História do judô > Jigoro Kano e a fundação do Kodokan (1882)",
+        "statement": "Quem criou o judô?",
+        "options": [
+          "Jigoro Kano",
+          "Mitsuyo Maeda",
+          "Kyuzo Mifune",
+          "Yasuhiro Yamashita"
+        ],
+        "correct": 0,
+        "explanation": "Jigoro Kano criou o judô e fundou o Kodokan em Tóquio."
+      },
+      {
+        "rank": "9-kyu",
+        "item": "Conhecimento teórico > História do judô > Jigoro Kano e a fundação do Kodokan (1882)",
+        "statement": "Em que ano foi fundado o Kodokan?",
+        "options": [
+          "1882",
+          "1964",
+          "1908",
+          "1920"
+        ],
+        "correct": 0,
+        "explanation": "O Kodokan foi fundado em 1882, em Tóquio."
+      },
+      {
+        "rank": "9-kyu",
+        "item": "Conhecimento teórico > História do judô > Jigoro Kano e a fundação do Kodokan (1882)",
+        "statement": "O que significa a palavra \"judô\"?",
+        "options": [
+          "Caminho suave",
+          "Luta de força",
+          "Arte do soco",
+          "Escola de guerreiros"
+        ],
+        "correct": 0,
+        "explanation": "Ju é suave e do é caminho: judô é o caminho suave."
+      },
+      {
+        "rank": "8-kyu",
+        "item": "Conhecimento teórico > Terminologia > Comandos de arbitragem (Hajime, Matte, Sono-mama, Yoshi, Osaekomi, Toketa, Sore-made)",
+        "statement": "O que o árbitro indica ao dizer \"Matte\"?",
+        "options": [
+          "Parem",
+          "Comecem",
+          "Imobilização iniciada",
+          "Fim da luta"
+        ],
+        "correct": 0,
+        "explanation": "Matte interrompe a luta; Hajime começa; Sore-made encerra."
+      },
+      {
+        "rank": "8-kyu",
+        "item": "Conhecimento teórico > Terminologia > Comandos de arbitragem (Hajime, Matte, Sono-mama, Yoshi, Osaekomi, Toketa, Sore-made)",
+        "statement": "Qual comando anuncia que uma imobilização foi desfeita?",
+        "options": [
+          "Toketa",
+          "Osaekomi",
+          "Yoshi",
+          "Hajime"
+        ],
+        "correct": 0,
+        "explanation": "Osaekomi anuncia a imobilização; Toketa indica que ela foi desfeita."
+      },
+      {
+        "rank": "8-kyu",
+        "item": "Conhecimento teórico > Sistema de graduação > Kyu e Dan, cores das faixas",
+        "statement": "Os graus \"Dan\" correspondem a:",
+        "options": [
+          "Faixa preta e acima",
+          "Faixas coloridas iniciais",
+          "Somente árbitros",
+          "Somente atletas olímpicos"
+        ],
+        "correct": 0,
+        "explanation": "Kyu são os graus das faixas coloridas; Dan começa na faixa preta."
+      },
+      {
+        "rank": "7-kyu",
+        "item": "Conhecimento teórico > Princípios > Seiryoku-zenyo (máxima eficiência)",
+        "statement": "O princípio Seiryoku-zenyo significa:",
+        "options": [
+          "Máxima eficiência com o mínimo esforço",
+          "Bem-estar e benefício mútuos",
+          "Vencer usando força máxima",
+          "Nunca cair no treino"
+        ],
+        "correct": 0,
+        "explanation": "Seiryoku-zenyo é o melhor uso da energia: máxima eficiência."
+      },
+      {
+        "rank": "7-kyu",
+        "item": "Conhecimento teórico > Princípios > Jita-kyoei (bem-estar e benefício mútuos)",
+        "statement": "O princípio Jita-kyoei significa:",
+        "options": [
+          "Bem-estar e benefício mútuos",
+          "Máxima eficiência",
+          "Ceder para vencer",
+          "Atacar primeiro"
+        ],
+        "correct": 0,
+        "explanation": "Jita-kyoei é a prosperidade mútua: crescer junto com o outro."
+      },
+      {
+        "rank": "7-kyu",
+        "item": "Conhecimento teórico > Princípios > Jita-kyoei (bem-estar e benefício mútuos)",
+        "statement": "No treino, quem aplica a técnica é chamado de:",
+        "options": [
+          "Tori",
+          "Uke",
+          "Sensei",
+          "Senpai"
+        ],
+        "correct": 0,
+        "explanation": "Tori aplica a técnica; uke recebe a técnica."
+      },
+      {
+        "rank": "6-kyu",
+        "item": "Conhecimento teórico > Regras de competição > Pontuação (Ippon, Waza-ari)",
+        "statement": "Qual é a pontuação máxima, que encerra a luta?",
+        "options": [
+          "Ippon",
+          "Waza-ari",
+          "Shido",
+          "Matte"
+        ],
+        "correct": 0,
+        "explanation": "Ippon encerra a luta; dois waza-ari também valem ippon."
+      },
+      {
+        "rank": "6-kyu",
+        "item": "Conhecimento teórico > Regras de competição > Penalidades (Shido, Hansoku-make)",
+        "statement": "Quantos shidos levam à desclassificação (hansoku-make)?",
+        "options": [
+          "Três",
+          "Um",
+          "Dois",
+          "Cinco"
+        ],
+        "correct": 0,
+        "explanation": "O terceiro shido resulta em hansoku-make."
+      },
+      {
+        "rank": "6-kyu",
+        "item": "Conhecimento teórico > História do judô > Chegada e desenvolvimento do judô no Brasil",
+        "statement": "Como o judô chegou ao Brasil?",
+        "options": [
+          "Com os imigrantes japoneses, no início do século 20",
+          "Com os Jogos Olímpicos de 1964",
+          "Pelos portugueses no século 18",
+          "Pela televisão nos anos 1990"
+        ],
+        "correct": 0,
+        "explanation": "O judô chegou com a imigração japonesa, a partir de 1908."
+      },
+      {
+        "rank": "5-kyu",
+        "item": "Conhecimento teórico > Terminologia > Nomes das técnicas exigidas na faixa",
+        "statement": "O-soto-gari é uma técnica de:",
+        "options": [
+          "Perna (ashi-waza)",
+          "Braço (te-waza)",
+          "Imobilização (osaekomi-waza)",
+          "Estrangulamento (shime-waza)"
+        ],
+        "correct": 0,
+        "explanation": "O-soto-gari é uma ceifada por fora: ashi-waza."
+      },
+      {
+        "rank": "5-kyu",
+        "item": "Conhecimento teórico > Terminologia > Nomes das técnicas exigidas na faixa",
+        "statement": "Kesa-gatame é uma técnica de:",
+        "options": [
+          "Imobilização",
+          "Projeção de quadril",
+          "Chave de braço",
+          "Sacrifício"
+        ],
+        "correct": 0,
+        "explanation": "Kesa-gatame é uma imobilização (osaekomi-waza)."
+      },
+      {
+        "rank": "5-kyu",
+        "item": "Conhecimento teórico > Terminologia > Nomes das técnicas exigidas na faixa",
+        "statement": "As três fases de uma projeção são:",
+        "options": [
+          "Kuzushi, tsukuri e kake",
+          "Hajime, matte e sore-made",
+          "Ichi, ni e san",
+          "Rei, zarei e ritsurei"
+        ],
+        "correct": 0,
+        "explanation": "Kuzushi é o desequilíbrio, tsukuri a entrada e kake a execução."
+      },
+      {
+        "rank": "4-kyu",
+        "item": "Conhecimento teórico > Regras de competição > Técnicas proibidas por idade",
+        "statement": "Em competição, as chaves (kansetsu-waza) são permitidas em qual articulação?",
+        "options": [
+          "Somente no cotovelo",
+          "Joelho e tornozelo",
+          "Ombro e punho",
+          "Pescoço"
+        ],
+        "correct": 0,
+        "explanation": "As regras de competição permitem chave apenas no cotovelo, e as categorias de base restringem chaves e estrangulamentos por idade."
+      },
+      {
+        "rank": "4-kyu",
+        "item": "Conhecimento teórico > Princípios > Ju (suavidade, ceder para vencer)",
+        "statement": "O princípio Ju ensina a:",
+        "options": [
+          "Ceder para vencer, usando a força do oponente",
+          "Resistir sempre com toda a força",
+          "Evitar o contato com o parceiro",
+          "Treinar apenas sozinho"
+        ],
+        "correct": 0,
+        "explanation": "Ju é suavidade: ceder à força do oponente e aproveitá-la."
+      },
+      {
+        "rank": "3-kyu",
+        "item": "Conhecimento teórico > Classificação das técnicas > Gokyo-no-waza",
+        "statement": "Quantos grupos (kyo) tem o Gokyo-no-waza?",
+        "options": [
+          "Cinco",
+          "Três",
+          "Oito",
+          "Dez"
+        ],
+        "correct": 0,
+        "explanation": "Gokyo significa cinco grupos; cada grupo tem oito técnicas."
+      },
+      {
+        "rank": "3-kyu",
+        "item": "Conhecimento teórico > Classificação das técnicas > Gokyo-no-waza",
+        "statement": "Qual é a primeira técnica do primeiro grupo do Gokyo?",
+        "options": [
+          "De-ashi-harai",
+          "Seoi-nage",
+          "O-goshi",
+          "Uchi-mata"
+        ],
+        "correct": 0,
+        "explanation": "O primeiro kyo começa com De-ashi-harai."
+      },
+      {
+        "rank": "3-kyu",
+        "item": "Conhecimento teórico > Classificação das técnicas > Divisão de Nage-waza e Katame-waza",
+        "statement": "As técnicas de Katame-waza se dividem em:",
+        "options": [
+          "Osaekomi-waza, shime-waza e kansetsu-waza",
+          "Te-waza, koshi-waza e ashi-waza",
+          "Ma-sutemi e yoko-sutemi",
+          "Ukemi e randori"
+        ],
+        "correct": 0,
+        "explanation": "Katame-waza reúne imobilizações, estrangulamentos e chaves."
+      },
+      {
+        "rank": "3-kyu",
+        "item": "Conhecimento teórico > Classificação das técnicas > Divisão de Nage-waza e Katame-waza",
+        "statement": "Te-waza, koshi-waza e ashi-waza fazem parte de:",
+        "options": [
+          "Tachi-waza",
+          "Sutemi-waza",
+          "Osaekomi-waza",
+          "Ate-waza"
+        ],
+        "correct": 0,
+        "explanation": "Tachi-waza (técnicas em pé) se divide em mão, quadril e perna."
+      },
+      {
+        "rank": "2-kyu",
+        "item": "Conhecimento teórico > Classificação das técnicas > Kata do Kodokan",
+        "statement": "Quantas técnicas tem o Nage-no-kata?",
+        "options": [
+          "Quinze, em cinco grupos de três",
+          "Dez, em dois grupos de cinco",
+          "Vinte, em quatro grupos de cinco",
+          "Oito, em um grupo"
+        ],
+        "correct": 0,
+        "explanation": "Nage-no-kata tem cinco grupos com três técnicas, executadas dos dois lados."
+      },
+      {
+        "rank": "2-kyu",
+        "item": "Conhecimento teórico > Sistema de graduação > Requisitos de idade e tempo de faixa",
+        "statement": "Além da técnica, o que normalmente é verificado para o exame de faixa?",
+        "options": [
+          "Idade mínima e tempo mínimo na faixa atual",
+          "Peso e altura",
+          "Número de medalhas",
+          "Tempo de inscrição no clube"
+        ],
+        "correct": 0,
+        "explanation": "Cada graduação tem idade mínima e tempo mínimo na faixa anterior."
+      },
+      {
+        "rank": "2-kyu",
+        "item": "Conhecimento teórico > Classificação das técnicas > Kata do Kodokan",
+        "statement": "O Katame-no-kata é formado por:",
+        "options": [
+          "Três grupos de cinco técnicas de controle",
+          "Cinco grupos de projeções",
+          "Golpes de mão e pé",
+          "Somente quedas"
+        ],
+        "correct": 0,
+        "explanation": "Katame-no-kata tem osaekomi-waza, shime-waza e kansetsu-waza, cinco técnicas em cada grupo."
+      },
+      {
+        "rank": "1-kyu",
+        "item": "Conhecimento teórico > História do judô > Judô olímpico",
+        "statement": "Em que edição o judô estreou nos Jogos Olímpicos?",
+        "options": [
+          "Tóquio 1964",
+          "Paris 1924",
+          "Londres 1948",
+          "Atlanta 1996"
+        ],
+        "correct": 0,
+        "explanation": "O judô masculino estreou em Tóquio 1964; o feminino passou a valer medalha em Barcelona 1992."
+      },
+      {
+        "rank": "1-kyu",
+        "item": "Conhecimento teórico > História do judô > Judô olímpico",
+        "statement": "Quem conquistou o primeiro ouro olímpico do Brasil no judô?",
+        "options": [
+          "Aurélio Miguel, em Seul 1988",
+          "Rogério Sampaio, em Barcelona 1992",
+          "Sarah Menezes, em Londres 2012",
+          "Chiaki Ishii, em Munique 1972"
+        ],
+        "correct": 0,
+        "explanation": "Aurélio Miguel foi ouro em 1988; Chiaki Ishii trouxe a primeira medalha (bronze, 1972)."
+      },
+      {
+        "rank": "1-kyu",
+        "item": "Conhecimento teórico > Classificação das técnicas > Gokyo-no-waza",
+        "statement": "Quantas técnicas tem cada grupo do Gokyo-no-waza?",
+        "options": [
+          "Oito",
+          "Cinco",
+          "Dez",
+          "Três"
+        ],
+        "correct": 0,
+        "explanation": "São cinco grupos de oito técnicas, 40 no total."
+      },
+      {
+        "rank": "1-dan",
+        "item": "Conhecimento teórico > Classificação das técnicas > Kata do Kodokan",
+        "statement": "No Nage-no-kata, cada técnica é executada:",
+        "options": [
+          "Dos dois lados, direito e esquerdo",
+          "Somente do lado direito",
+          "Três vezes do mesmo lado",
+          "Sem parceiro"
+        ],
+        "correct": 0,
+        "explanation": "No Nage-no-kata cada técnica é feita para a direita e para a esquerda."
+      },
+      {
+        "rank": "1-dan",
+        "item": "Conhecimento teórico > Regras de competição > Pontuação (Ippon, Waza-ari)",
+        "statement": "Por quanto tempo uma imobilização precisa ser mantida para valer ippon?",
+        "options": [
+          "20 segundos",
+          "10 segundos",
+          "30 segundos",
+          "5 segundos"
+        ],
+        "correct": 0,
+        "explanation": "Imobilização mantida por 20 segundos vale ippon."
+      },
+      {
+        "rank": "1-dan",
+        "item": "Conhecimento teórico > Regras de competição > Penalidades (Shido, Hansoku-make)",
+        "statement": "Uma ação contrária ao espírito do judô pode resultar diretamente em:",
+        "options": [
+          "Hansoku-make",
+          "Waza-ari para quem cometeu",
+          "Matte sem penalidade",
+          "Ippon para quem cometeu"
+        ],
+        "correct": 0,
+        "explanation": "Faltas graves ou contra o espírito do judô levam a hansoku-make direto."
+      },
+      {
+        "rank": "1-dan",
+        "item": "Conhecimento teórico > Classificação das técnicas > Gokyo-no-waza",
+        "statement": "O Gokyo-no-waza reúne técnicas de:",
+        "options": [
+          "Projeção (nage-waza)",
+          "Imobilização",
+          "Estrangulamento",
+          "Golpes traumáticos"
+        ],
+        "correct": 0,
+        "explanation": "O Gokyo organiza as projeções do judô em cinco grupos."
+      }
+    ]
+  }
+}
