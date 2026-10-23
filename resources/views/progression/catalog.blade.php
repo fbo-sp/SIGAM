@@ -13,8 +13,8 @@
 @endif
 
 @if($canManage)
-<details class="card disclosure" @if($errors->hasAny(['name','parent_id','kind','knowledge_type','video_url'])) open @endif><summary>Incluir grupo ou item</summary><form class="form-grid" method="post" action="{{ route('associations.techniques.store', [$association, $martialArt]) }}">@csrf
-<div class="field field-wide"><label for="parent_id">Dentro de</label><select id="parent_id" name="parent_id"><option value="">Nenhum (novo grupo principal)</option>@foreach($groups as $id => $path)<option value="{{ $id }}" @selected((int) old('parent_id') === $id)>{{ $path }}</option>@endforeach</select>@error('parent_id')<p class="field-error">{{ $message }}</p>@enderror</div>
+<details class="card disclosure" id="incluir" @if($within || $errors->hasAny(['name','parent_id','kind','knowledge_type','video_url'])) open @endif><summary>Incluir grupo ou item</summary><form class="form-grid" method="post" action="{{ route('associations.techniques.store', [$association, $martialArt]) }}">@csrf
+<div class="field field-wide"><label for="parent_id">Dentro de</label><select id="parent_id" name="parent_id"><option value="">Nenhum (novo grupo principal)</option>@foreach($groups as $id => $path)<option value="{{ $id }}" @selected((int) old('parent_id', $within) === $id)>{{ $path }}</option>@endforeach</select>@error('parent_id')<p class="field-error">{{ $message }}</p>@enderror</div>
 <div class="field"><label for="kind">Tipo de nó</label><select id="kind" name="kind"><option value="item" @selected(old('kind') === 'item')>Técnica ou item avaliado</option><option value="group" @selected(old('kind') === 'group')>Grupo</option></select>@error('kind')<p class="field-error">{{ $message }}</p>@enderror</div>
 <div class="field"><label for="knowledge_type">Conhecimento</label><select id="knowledge_type" name="knowledge_type">@foreach($knowledgeLabels as $value => $label)<option value="{{ $value }}" @selected(old('knowledge_type') === $value)>{{ $label }}</option>@endforeach</select><small>Só vale para grupo principal. Dentro de um grupo, o item segue o tipo do grupo.</small>@error('knowledge_type')<p class="field-error">{{ $message }}</p>@enderror</div>
 <div class="field"><label for="name">Nome</label><input id="name" name="name" value="{{ old('name') }}" maxlength="160" required>@error('name')<p class="field-error">{{ $message }}</p>@enderror</div>
@@ -29,16 +29,17 @@
 <div class="card empty-state"><h2>Catálogo vazio</h2><p>{{ $canManage ? 'Aplique o modelo pronto ou inclua o primeiro grupo.' : 'A associação ainda não cadastrou técnicas para esta modalidade.' }}</p></div>
 @endif
 
+@if(! $isEmpty)
+@include('progression._tree-toolbar', ['target' => 'catalogo'])
+<div data-tree="catalogo">
 @foreach($knowledgeLabels as $type => $label)
-@if($rows->has($type))
-<section class="section-block"><div class="section-heading"><h2>{{ $label }}</h2></div>
-<div class="card list-card technique-tree">@foreach($rows[$type] as $row)@php($item = $row['item'])
-<div class="list-row technique-row depth-{{ min($row['depth'], 4) }} {{ $item->kind === 'group' ? 'technique-group' : '' }}"><span><strong>{{ $item->name }}</strong>@if($item->original_name || $item->video_url || $item->description)<small>{{ $item->original_name }}@if($item->original_name && $item->video_url) · @endif @if($item->video_url)<a href="{{ $item->video_url }}" target="_blank" rel="noopener noreferrer">vídeo</a>@endif</small>@endif</span>
-<div class="row-actions">@if($item->kind === 'group')<span class="status-pill">Grupo</span>@endif @if(isset($inactive[$item->id]))<span class="status-pill status-inactive">Inativo</span>@endif
-@if($canManage)<details class="row-action"><summary>Opções</summary><div class="form-stack"><a class="button button-secondary" href="{{ route('associations.techniques.edit', [$association, $martialArt, $item]) }}" aria-label="Editar {{ $item->name }}">Editar</a>
-<form method="post" action="{{ route('associations.techniques.status', [$association, $martialArt, $item]) }}">@csrf<input type="hidden" name="status" value="{{ $item->status === 'active' ? 'inactive' : 'active' }}"><button class="button button-secondary" aria-label="{{ $item->status === 'active' ? 'Inativar' : 'Reativar' }} {{ $item->name }}">{{ $item->status === 'active' ? 'Inativar' : 'Reativar' }}</button></form></div></details>
-@endif</div></div>
-@endforeach</div></section>
+@if($trees->has($type))
+<section class="section-block" data-tree-block><div class="section-heading"><h2>{{ $label }}</h2><p>{{ $trees[$type]->count() }} grupo(s) principal(is) · {{ $trees[$type]->sum('count') }} técnica(s) ou item(ns). Toque na seta para abrir um grupo.</p></div>
+<div class="card tree-card">@include('progression._tree', ['nodes' => $trees[$type]->all(), 'mode' => 'catalog', 'root' => true])</div></section>
 @endif
 @endforeach
+<p class="tree-no-results" data-tree-empty hidden>Nenhum item com esse nome.</p>
+</div>
+@push('scripts')<script src="{{ asset('js/technique-tree.js') }}" defer></script>@endpush
+@endif
 @endsection

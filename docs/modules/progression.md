@@ -10,7 +10,7 @@ Entregue: catálogo de técnicas e currículo por graduação com modelo do jud�
 
 Em **Modalidades**, cada modalidade tem os botões **Técnicas** e **Currículo por graduação**.
 
-- `modalidades/{martialArt}/tecnicas`: árvore do catálogo em duas seções (Teórico e Prático). Com `curriculum.manage`: aplicar ou completar com o modelo, incluir grupo ou item, editar (mover de grupo, renomear, trocar tipo, descrição, link de vídeo, ordem), inativar e reativar.
+- `modalidades/{martialArt}/tecnicas`: árvore do catálogo em duas seções (Teórico e Prático). Cada grupo abre e fecha pela seta e mostra quantas técnicas tem abaixo, em todos os níveis; item inativo aparece riscado. No topo, filtro por nome (abre os ramos que combinam) e "Expandir tudo"/"Recolher tudo" (`public/js/technique-tree.js`; sem JavaScript a árvore funciona com `<details>`). O menu "⋯" de cada linha tem Editar, Inativar/Reativar e, nos grupos ativos, "Incluir aqui dentro" (`?dentro={grupo}`, abre o cadastro com o grupo escolhido). Com `curriculum.manage`: aplicar ou completar com o modelo, incluir grupo ou item, editar (mover de grupo, renomear, trocar tipo, descrição, link de vídeo, ordem), inativar e reativar.
 - `modalidades/{martialArt}/curriculo?graduacao={rank}`: currículo efetivo da graduação escolhida. Cada linha mostra o nível exigido e a origem: "Novo nesta graduação", "Nível alterado nesta graduação" ou "Herdado de {faixa}". Com `curriculum.manage`: incluir ou alterar exigência, deixar de cobrar a partir da faixa e desfazer o ajuste da faixa.
 
 ### Acompanhamento do aluno (fase 2)
@@ -21,7 +21,7 @@ Em **Modalidades**, cada modalidade tem os botões **Técnicas** e **Currículo 
 
 ### Técnicas da aula (fase 3)
 
-Na tela da aula (`operacao/dojos/{dojo}/aulas/{session}`), o bloco "Técnicas trabalhadas" mostra os grupos principais e os grupos logo abaixo como botões, e os itens mais internos dentro de "Técnicas de {grupo}". Grava em `POST aulas/{session}/tecnicas`. Na ficha de acompanhamento, "Trabalhado nas aulas" mostra, nos últimos 90 dias, em quantas aulas com presença do aluno cada grupo foi trabalhado.
+Na tela da aula (`operacao/dojos/{dojo}/aulas/{session}`), o bloco "Técnicas trabalhadas" usa a mesma árvore do catálogo (só itens ativos), com uma caixa de marcação em cada grupo e técnica: tocar no nome do grupo marca o grupo inteiro e a seta abre as técnicas dele. Os grupos principais e os que têm algo marcado já abrem, e o grupo mostra quantas técnicas estão marcadas dentro. Grava em `POST aulas/{session}/tecnicas`. Na ficha de acompanhamento, "Trabalhado nas aulas" mostra, nos últimos 90 dias, em quantas aulas com presença do aluno cada grupo foi trabalhado.
 
 ### Quiz (fases 4 e 5)
 
@@ -57,7 +57,7 @@ Na tela da aula (`operacao/dojos/{dojo}/aulas/{session}`), o bloco "Técnicas tr
 
 ## Serviços
 
-- `TechniqueCatalogService`: `items`, `paths`, `flatten`, `inactiveIds`, `save`, `setStatus`, `applyTemplate`.
+- `TechniqueCatalogService`: `items`, `paths`, `tree`, `inactiveIds`, `save`, `setStatus`, `applyTemplate`.
 - `CurriculumService`: `effective`, `set`, `restore`, `ownEntries`.
 - `AssessmentService`: `assessorTeacherId`, `teachesClass`, `canViewInDojo`, `current`, `history`, `record`.
 - `StudentProgressService`: `martialArts`, `snapshot` (próxima graduação, linhas do currículo com nível atual, o que falta, requisitos e radar), `axes`, `worked`.

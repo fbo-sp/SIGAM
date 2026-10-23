@@ -25,7 +25,8 @@ class TechniqueCatalogController extends Controller
         return view('progression.catalog', [
             'association' => $association,
             'martialArt' => $martialArt,
-            'rows' => collect($service->flatten($items))->groupBy(fn (array $row) => $row['item']->knowledge_type),
+            'trees' => collect($service->tree($items))->groupBy(fn (array $node) => $node['item']->knowledge_type),
+            'within' => $items->where('kind', 'group')->firstWhere('id', request()->integer('dentro'))?->id,
             'inactive' => $service->inactiveIds($items),
             'groups' => $items->where('kind', 'group')->where('status', 'active')->sortBy(fn (TechniqueItem $item) => $paths[$item->id])->mapWithKeys(fn (TechniqueItem $item) => [$item->id => $paths[$item->id]]),
             'templates' => $templates->all(),

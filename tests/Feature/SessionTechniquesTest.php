@@ -31,7 +31,7 @@ class SessionTechniquesTest extends TestCase
         $nage = TechniqueItem::query()->where('name', 'Nage-waza')->sole();
         $url = route('operation.session.techniques', [$this->dojo, $session]);
 
-        $this->actingAs($user)->get(route('operation.session', [$this->dojo, $session]))->assertOk()->assertSee('Técnicas trabalhadas')->assertSee('Nage-waza (geral)');
+        $this->actingAs($user)->get(route('operation.session', [$this->dojo, $session]))->assertOk()->assertSee('Técnicas trabalhadas')->assertSee('Marcar o grupo inteiro')->assertSee('id="tecnica-'.$this->items['O-goshi']->id.'"', false);
         $this->post($url, ['techniques' => [$nage->id, $this->items['O-goshi']->id]])->assertSessionHasNoErrors()->assertSessionHas('status', 'Técnicas trabalhadas salvas.');
         $this->post($url, ['techniques' => [$nage->id, $this->items['O-goshi']->id]])->assertSessionHas('status', 'Técnicas sem alteração.');
         $this->assertSame(2, ClassSessionTechnique::query()->whereNull('removed_at')->count());
