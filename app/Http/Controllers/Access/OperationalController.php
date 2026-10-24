@@ -60,7 +60,7 @@ class OperationalController extends Controller
     {
         $this->enter($request, $dojo);
         $students = $this->scope->students($request->user(), $dojo)->with([
-            'person:id,full_name,social_name',
+            'person:id,full_name,social_name,photo_path',
             'enrollments' => fn ($query) => $query->where('status', 'active')->whereHas('classGroup', fn ($group) => $group->where('dojo_id', $dojo->id))->with('classGroup:id,name'),
         ])->withExists(['person as is_teacher' => fn ($query) => $query->whereHas('teacherProfile')])
             ->orderBy('registration_number')->paginate(25);
@@ -162,7 +162,7 @@ class OperationalController extends Controller
         $teachers = TeacherProfile::query()->where('status', 'active')->whereIn('id', TeacherAssociationMembership::query()->select('teacher_profile_id')
             ->where('association_id', $dojo->association_id)->where('status', 'active'))->with('person:id,full_name')->get();
         $links = DojoTeacherAssignment::query()->where('association_id', $dojo->association_id)->where('dojo_id', $dojo->id)
-            ->with('teacher.person:id,full_name')->orderByDesc('start_date')->paginate(25);
+            ->with('teacher.person:id,full_name,photo_path')->orderByDesc('start_date')->paginate(25);
         $canAssign = $this->scope->canDojo($request->user(), $dojo, 'teacher.assign');
 
         $canEditPeople = $request->user()->hasPermission('person.manage', $dojo->association_id);

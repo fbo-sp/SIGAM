@@ -4,6 +4,7 @@ namespace App\Http\Requests\Sports;
 
 use App\Rules\Cpf;
 use App\Rules\PrivateDocumentFile;
+use App\Services\People\PersonPhotoService;
 use App\Support\Normalization\InputNormalizer;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -80,6 +81,7 @@ class DirectStudentRegistrationRequest extends FormRequest
             'document_type_id' => ['nullable', 'required_with:document_file', 'integer', 'exists:document_types,id'],
             'document_owner' => ['nullable', 'required_with:document_file', Rule::in(['student', 'guardian'])],
             'document_file' => ['nullable', 'file', 'max:10240', 'mimetypes:application/pdf,image/jpeg,image/png', 'extensions:pdf,jpg,jpeg,png', new PrivateDocumentFile],
+            'photo' => PersonPhotoService::RULES,
             'document_expiration_date' => ['nullable', 'date'],
         ];
     }

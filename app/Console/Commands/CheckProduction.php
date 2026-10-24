@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Services\Operations\ProductionReadiness;
+use App\Services\People\PersonPhotoService;
 use Illuminate\Console\Command;
 
 class CheckProduction extends Command
@@ -19,6 +20,8 @@ class CheckProduction extends Command
         } else {
             $this->table(['Verificação', 'Resultado'], collect($checks)->map(fn ($ok, $name) => [$name, $ok ? 'OK' : 'PENDENTE'])->values());
             $this->warn('Não substitui aceite de usuários, teste SMTP/cron, restauração e aprovação de privacidade.');
+            // Informativo: sem GD o sistema funciona, só não aceita fotos. Não muda o resultado do comando.
+            $this->line(PersonPhotoService::supported() ? 'Fotos de pessoas: extensão GD disponível.' : 'Fotos de pessoas: extensão GD ausente; o envio de fotos ficará indisponível.');
         }
 
         return in_array(false, $checks, true) ? self::FAILURE : self::SUCCESS;

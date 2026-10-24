@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-10-24 — Foto de alunos, professores e pessoas
+
+- campo "Foto para identificação" nos cadastros de pessoa, aluno e professor e na edição de dados do aluno pelo gestor do dojo, com opção de remover; no celular abre câmera ou galeria;
+- a foto é recortada em quadrado e regravada em JPEG de 96 px e 320 px, sem metadados, no disco privado (`PersonPhotoService`); troca e remoção auditadas como `person.photo_updated|removed`;
+- miniatura redonda (ou iniciais) nas listas de pessoas, alunos e professores da associação e do dojo, na chamada da aula e nas fichas da pessoa e do aluno;
+- a imagem é servida por link assinado (`/fotos/{person}/{size}`, `PersonPhotoController`), que exige login na mesma associação e perde a validade quando a foto muda;
+- `sigam:production:check` informa se a extensão GD está disponível; sem ela o envio de foto é recusado com mensagem. Sem migration: usa a coluna `people.photo_path` já existente;
+- novos `PersonPhotoTest` e `AttendancePhotoTest`.
+
 ## 2026-10-23 — Catálogo de técnicas em árvore
 
 - a tela `modalidades/{martialArt}/tecnicas` passa a mostrar o catálogo como árvore: grupos que abrem e fecham, linhas ligando cada item ao grupo, quantidade de técnicas por grupo, item inativo riscado, filtro por nome e "Expandir tudo"/"Recolher tudo";

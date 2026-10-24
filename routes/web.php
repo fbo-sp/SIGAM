@@ -27,6 +27,7 @@ use App\Http\Controllers\Notifications\NotificationController;
 use App\Http\Controllers\Organization\AssociationController;
 use App\Http\Controllers\Organization\DojoController;
 use App\Http\Controllers\People\PersonController;
+use App\Http\Controllers\People\PersonPhotoController;
 use App\Http\Controllers\Portal\PortalController;
 use App\Http\Controllers\Portal\PortalProgressionController;
 use App\Http\Controllers\Progression\CurriculumController;
@@ -65,6 +66,7 @@ Route::post('/convites/professor/{token}/aceitar', [TeacherInvitationController:
 Route::post('/convites/professor/{token}/recusar', [TeacherInvitationController::class, 'decline'])->middleware('throttle:5,1')->name('teacher-invitations.decline');
 
 Route::middleware(['auth', 'active', 'association.context'])->group(function (): void {
+    Route::get('/fotos/{person}/{size}', [PersonPhotoController::class, 'show'])->middleware('signed:relative')->name('people.photo');
     Route::get('/meus-dojos', [OperationalController::class, 'index'])->name('operation.index');
     Route::prefix('/operacao/dojos/{dojo}')->name('operation.')->controller(OperationalController::class)->group(function (): void {
         Route::get('/', 'show')->name('home');

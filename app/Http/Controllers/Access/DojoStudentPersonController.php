@@ -27,7 +27,7 @@ class DojoStudentPersonController extends Controller
     public function update(DojoStudentPersonRequest $request, Dojo $dojo, Student $student, PersonService $service): RedirectResponse
     {
         $this->authorizeStudent($request, $dojo, $student);
-        $service->update($dojo->association, $student->person, $request->validated());
+        $service->update($dojo->association, $student->person, $request->validated(), $request->file('photo'), $request->boolean('remove_photo'));
 
         return redirect()->route('operation.students', $dojo)->with('status', 'Dados do aluno atualizados.');
     }

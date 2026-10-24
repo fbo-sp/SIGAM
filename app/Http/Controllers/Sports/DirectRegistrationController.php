@@ -15,6 +15,7 @@ use App\Models\Person;
 use App\Models\Student;
 use App\Services\Access\OperationalScope;
 use App\Services\Documents\DocumentService;
+use App\Services\People\PersonPhotoService;
 use App\Services\Sports\DirectRegistrationService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -44,14 +45,17 @@ class DirectRegistrationController extends Controller
         Association $association,
         DirectRegistrationService $registration,
         DocumentService $documents,
+        PersonPhotoService $photos,
     ): RedirectResponse {
         $dojo = Dojo::query()->where('association_id', $association->id)->where('status', 'active')->findOrFail($request->integer('dojo_id'));
         $canUpload = $request->user()->hasPermission('document.manage', $association->id);
         abort_if($request->hasFile('document_file') && ! $canUpload, 403);
         abort_if($request->filled('class_group_ids') && ! $request->user()->hasPermission('enrollment.manage', $association->id), 403);
         $this->validateDocumentType($request, $association);
+        $photo = $photos->prepare($request->file('photo'));
         $result = $registration->registerStudent($association, $dojo, $request->user(), $request->validated());
         $this->storeStudentDocument($request, $association, $result['model'], $result['request'], $documents, $canUpload);
+        $this->storePhoto($photos, $association, $result, $photo, true);
 
         return redirect()->route('associations.students.show', [$association, $result['model']])
             ->with('status', $this->studentMessage($request, $result, 'Cadastro do aluno salvo.'));
@@ -78,6 +82,7 @@ class DirectRegistrationController extends Controller
         Dojo $dojo,
         DirectRegistrationService $registration,
         DocumentService $documents,
+        PersonPhotoService $photos,
     ): RedirectResponse {
         $this->authorizeDojoStudent($request, $dojo);
         abort_unless($request->integer('dojo_id') === $dojo->id, 404);
@@ -85,8 +90,10 @@ class DirectRegistrationController extends Controller
         abort_if($request->hasFile('document_file') && ! $canUpload, 403);
         abort_if($request->filled('class_group_ids') && ! $this->scope->canDojo($request->user(), $dojo, 'enrollment.manage'), 403);
         $this->validateDocumentType($request, $dojo->association);
+        $photo = $photos->prepare($request->file('photo'));
         $result = $registration->registerStudent($dojo->association, $dojo, $request->user(), $request->validated());
         $this->storeStudentDocument($request, $dojo->association, $result['model'], $result['request'], $documents, $canUpload);
+        $this->storePhoto($photos, $dojo->association, $result, $photo, false);
 
         return redirect()->route('operation.students', $dojo)
             ->with('status', $this->studentMessage($request, $result, 'Aluno salvo neste dojo.'));
@@ -109,10 +116,13 @@ class DirectRegistrationController extends Controller
         Association $association,
         DirectRegistrationService $registration,
         DocumentService $documents,
+        PersonPhotoService $photos,
     ): RedirectResponse {
         abort_if($request->hasFile('document_file') && ! $request->user()->hasPermission('document.manage', $association->id), 403);
         $this->validateDocumentType($request, $association);
+        $photo = $photos->prepare($request->file('photo'));
         $result = $registration->registerTeacher($association, $request->user(), $request->validated());
+        $this->storePhoto($photos, $association, $result, $photo, true);
         if ($request->hasFile('document_file')) {
             abort_unless($request->user()->hasPermission('document.manage', $association->id), 403);
             $this->storeDocumentOnce($result['request'], fn () => $documents->upload($association, $request->user(), [
@@ -208,6 +218,19 @@ class DirectRegistrationController extends Controller
             'document_type_id' => $request->integer('document_type_id'),
             'expiration_date' => $request->input('document_expiration_date'),
         ], $request->file('document_file')));
+    }
+
+    /**
+     * Grava a foto do cadastro. Na repetição do mesmo envio só completa se a pessoa ainda estiver sem foto.
+     * No dojo, a pessoa reaproveitada pelo CPF que também é professora continua mantida pela associação.
+     */
+    private function storePhoto(PersonPhotoService $photos, Association $association, array $result, ?array $photo, bool $associationContext): void
+    {
+        $person = $result['model']->person;
+        if ($photo === null || ($result['replayed'] && $person->photo_path) || (! $associationContext && $person->teacherProfile()->exists())) {
+            return;
+        }
+        $photos->apply($association, $person, $photo);
     }
 
     private function storeDocumentOnce(DirectRegistrationRequest $submission, callable $upload): void

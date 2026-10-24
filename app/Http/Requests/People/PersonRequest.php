@@ -3,6 +3,7 @@
 namespace App\Http\Requests\People;
 
 use App\Rules\Cpf;
+use App\Services\People\PersonPhotoService;
 use App\Support\Normalization\InputNormalizer;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -56,6 +57,8 @@ class PersonRequest extends FormRequest
             'emergency_contact_phone' => ['nullable', 'string', 'between:10,11'],
             'status' => ['required', Rule::in(['active', 'inactive'])],
             'notes' => ['nullable', 'string', 'max:5000'],
+            'photo' => PersonPhotoService::RULES,
+            'remove_photo' => ['nullable', 'boolean'],
         ];
     }
 

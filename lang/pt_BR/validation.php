@@ -159,6 +159,11 @@ return [
 
     // Mensagens de regras condicionais, que ficariam confusas no texto genérico.
     'custom' => [
+        'photo' => [
+            'max' => 'A foto deve ter até 5 MB.',
+            'mimetypes' => 'Envie uma foto em JPG, PNG ou WEBP.',
+            'extensions' => 'Envie uma foto em JPG, PNG ou WEBP.',
+        ],
         'guardian_relationship' => [
             'required_unless' => 'Informe a relação do responsável com o aluno.',
         ],

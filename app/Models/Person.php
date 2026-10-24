@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\URL;
 
 class Person extends Model
 {
@@ -40,6 +41,31 @@ class Person extends Model
     protected function casts(): array
     {
         return ['birth_date' => 'date'];
+    }
+
+    /**
+     * Link assinado da foto. Só é gerado em telas que já autorizaram ver a pessoa; vale por 6 a 12 horas
+     * e fica igual dentro da mesma janela, para o navegador reaproveitar a imagem entre as páginas.
+     */
+    public function photoUrl(string $size = 'thumb'): ?string
+    {
+        if (! $this->photo_path) {
+            return null;
+        }
+        $window = 6 * 3600;
+
+        return URL::temporarySignedRoute('people.photo', now()->setTimestamp((intdiv(time(), $window) + 2) * $window), [
+            'person' => $this->id, 'size' => $size, 'v' => substr(sha1($this->photo_path), 0, 12),
+        ], absolute: false);
+    }
+
+    public function initials(): string
+    {
+        $words = preg_split('/\s+/u', trim((string) ($this->social_name ?: $this->full_name))) ?: [];
+        $first = $words[0] ?? '';
+        $last = count($words) > 1 ? end($words) : '';
+
+        return mb_strtoupper(mb_substr($first, 0, 1).mb_substr($last, 0, 1));
     }
 
     public function associations(): BelongsToMany
