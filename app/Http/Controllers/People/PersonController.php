@@ -54,7 +54,7 @@ class PersonController extends Controller
 
     public function store(PersonRequest $request, Association $association, PersonService $service): RedirectResponse
     {
-        $person = $service->create($association, $request->validated());
+        $person = $service->create($association, $request->validated(), $request->file('photo'));
 
         return redirect()->route('associations.people.show', [$association, $person])->with('status', 'Pessoa cadastrada com sucesso.');
     }
@@ -77,7 +77,7 @@ class PersonController extends Controller
     public function update(PersonRequest $request, Association $association, Person $person, PersonService $service): RedirectResponse
     {
         $this->ensureBelongsToAssociation($association, $person);
-        $service->update($association, $person, $request->validated());
+        $service->update($association, $person, $request->validated(), $request->file('photo'), $request->boolean('remove_photo'));
         $returnTo = $this->returnPath($request->input('voltar'));
 
         return ($returnTo ? redirect($returnTo) : redirect()->route('associations.people.show', [$association, $person]))

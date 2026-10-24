@@ -50,6 +50,16 @@ O serviço `DojoService` valida associação ativa, abre transação, persiste e
 
 A busca cobre nome, nome social, CPF, e-mail e telefone. CPF repetido falha antes da persistência. A lista e o CSV só consultam pessoas vinculadas à associação. CSV protege células que começam com caracteres de fórmula.
 
+### Foto da pessoa
+
+A foto serve para identificação e é uma só por pessoa (vale para aluno, professor e responsável). Ela é enviada nos cadastros de pessoa, de aluno e de professor e na edição de dados do aluno pelo gestor do dojo. Quem altera é quem já edita dados pessoais: `person.manage` na associação; no dojo, o gestor com `student.manage` para alunos do próprio dojo que não são professores; no cadastro direto, quem cadastra.
+
+`PersonPhotoService::prepare` converte o arquivo antes de gravar qualquer dado: aceita JPG, PNG ou WEBP com até 5 MB e 30 megapixels, aplica a rotação EXIF, recorta em quadrado (levemente acima do centro, onde costuma estar o rosto) e regrava em JPEG nos tamanhos 96 px (listas) e 320 px (ficha), descartando metadados como localização. `apply` grava os arquivos em `storage/app/private/photos/{person}/{uuid}-{thumb|medium}.jpg`, troca `people.photo_path` com lock e auditoria (`person.photo_updated|removed`, só "tinha foto/tem foto") e apaga os arquivos antigos depois do commit. Remover a foto também apaga os arquivos: a foto não é registro histórico.
+
+A imagem nunca tem link público. As telas que já autorizaram ver a pessoa geram um link assinado e relativo (`/fotos/{person}/{size}?v=&expires=&signature=`) válido por 6 a 12 horas e estável dentro da mesma janela de 6 horas, para o navegador reaproveitar o cache. A rota exige login, conta ativa e, para usuário vinculado a uma associação, que a pessoa pertença a ela; trocar a foto muda `v` e invalida os links antigos. Aparece como miniatura redonda (`<x-person-photo>`, com iniciais quando não há foto) nas listas de pessoas, alunos e professores da associação e do dojo, na chamada da aula e nas fichas da pessoa e do aluno.
+
+O ajuste exige a extensão GD do PHP. Sem ela o sistema continua funcionando, mas o envio de foto é recusado com mensagem; `sigam:production:check` informa a disponibilidade da GD sem mudar o resultado.
+
 Limitação conhecida: um CPF já existente apenas em outra associação não pode ser vinculado automaticamente por um gestor, pois isso revelaria ou apropriaria identidade sem verificação. O fluxo de vinculação/mesclagem controlada será definido antes de operação multiassociação ampla.
 
 ## Mapa do código
@@ -66,7 +76,7 @@ Controllers coordenam HTTP; regras de escrita ficam nos serviços. Novos relacio
 
 ## Auditoria e dados pessoais
 
-Eventos: `association.created|updated`, `dojo.created|updated` e `person.created|updated`. Auditoria de pessoa guarda nome/status na criação; na edição registra status e nomes dos campos alterados, sem copiar CPF, contatos, endereço ou observações. CPF aparece mascarado na página de leitura e não é exportado no CSV inicial.
+Eventos: `association.created|updated`, `dojo.created|updated`, `person.created|updated` e `person.photo_updated|removed`. Auditoria de pessoa guarda nome/status na criação; na edição registra status e nomes dos campos alterados, sem copiar CPF, contatos, endereço ou observações. CPF aparece mascarado na página de leitura e não é exportado no CSV inicial.
 
 A matriz definitiva de visibilidade por campo permanece vinculada à decisão D-02. Até sua aprovação, evitar incluir CPF, documento, nascimento, endereço e emergência em novas listagens, logs ou exports.
 

@@ -42,7 +42,7 @@ erDiagram
 
 CPF e CNPJ são armazenados somente com dígitos e são únicos quando informados. E-mail de login é normalizado em minúsculas. Auditoria não possui fluxo normal de update/delete.
 
-`dojos.code` é único por associação. Pessoas permanecem globais e são vinculadas por `association_person_roles`, inicialmente com o tipo técnico `registered_person`; esse vínculo não concede acesso nem perfil esportivo. Consulte `modules/organization-people.md` para invariantes e mapa do código.
+`dojos.code` é único por associação. Pessoas permanecem globais e são vinculadas por `association_person_roles`, inicialmente com o tipo técnico `registered_person`; esse vínculo não concede acesso nem perfil esportivo. Consulte `modules/organization-people.md` para invariantes e mapa do código. `people.photo_path` guarda a base dos arquivos da foto no disco privado (`photos/{person}/{uuid}`, sufixos `-thumb.jpg` e `-medium.jpg`); nulo quando não há foto.
 
 ## Cadastro esportivo
 

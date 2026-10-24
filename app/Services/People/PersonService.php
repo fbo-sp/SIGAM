@@ -5,20 +5,24 @@ namespace App\Services\People;
 use App\Models\Association;
 use App\Models\Person;
 use App\Services\AuditService;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class PersonService
 {
-    public function __construct(private readonly AuditService $audit) {}
+    public function __construct(private readonly AuditService $audit, private readonly PersonPhotoService $photos) {}
 
-    public function create(Association $association, array $data): Person
+    public function create(Association $association, array $data, ?UploadedFile $photo = null): Person
     {
+        $rendered = $this->photos->prepare($photo);
+        $data = Arr::except($data, ['photo', 'remove_photo']);
         if ($association->status !== 'active') {
             throw ValidationException::withMessages(['association' => 'Ative a associação antes de vincular uma nova pessoa.']);
         }
 
-        return DB::transaction(function () use ($association, $data): Person {
+        $person = DB::transaction(function () use ($association, $data): Person {
             $person = Person::query()->create($data);
             $association->people()->attach($person->id, [
                 'role_type' => 'registered_person',
@@ -32,11 +36,17 @@ class PersonService
 
             return $person;
         });
+        $this->photos->apply($association, $person, $rendered);
+
+        return $person;
     }
 
-    public function update(Association $association, Person $person, array $data): Person
+    /** A foto é convertida antes de gravar os dados, para que um arquivo inválido não salve o restante pela metade. */
+    public function update(Association $association, Person $person, array $data, ?UploadedFile $photo = null, bool $removePhoto = false): Person
     {
-        return DB::transaction(function () use ($association, $person, $data): Person {
+        $rendered = $this->photos->prepare($photo);
+        $data = Arr::except($data, ['photo', 'remove_photo']);
+        DB::transaction(function () use ($association, $person, $data): Person {
             $changedFields = array_keys(array_filter(
                 $data,
                 fn (mixed $value, string $key): bool => $person->getAttribute($key) != $value,
@@ -51,5 +61,8 @@ class PersonService
 
             return $person;
         });
+        $this->photos->apply($association, $person, $rendered, $removePhoto);
+
+        return $person;
     }
 }

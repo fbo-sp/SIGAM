@@ -18,6 +18,7 @@ Este documento é um índice de manutenção. `routes/web.php`, `routes/console.
 |---|---|---|
 | `/dashboard` | `DashboardController` | visão derivada das permissões e vínculos da conta |
 | `/notificacoes` | `NotificationController` | sempre `notifications.user_id` da conta |
+| `/fotos/{person}/{thumb\|medium}` | `PersonPhotoController` | link assinado relativo gerado só por telas que já mostram a pessoa; pessoa da associação da conta; foto trocada invalida o link |
 | `/sair` | `AuthenticatedSessionController` | sessão autenticada, CSRF e invalidação |
 | `/modelos/importacao/{type}/{format}` | `AssistedImportController` | conta ativa; tipo/formato em lista fechada e conteúdo fictício |
 | `/portal` | `PortalController` | titularidade ou responsabilidade vigente |
@@ -81,7 +82,7 @@ O papel `dojo_teacher` recebe apenas funções de aula designada e a avaliação
 | `sigam:access:backfill-teachers` | inferir vínculo institucional comprovado | dry-run; `--apply` não cria conta/acesso local |
 | `sigam:access:sync-teacher-dojos` | criar a concessão `dojo_teacher` para vínculos de professor vigentes ou futuros sem acesso | dry-run; `--apply` idempotente, não altera concessões existentes |
 | `sigam:operation:audit-origins` | diagnosticar origem financeira legada | dry-run; `--apply` apenas evidência inequívoca |
-| `sigam:production:check` | preflight sem imprimir segredos | código não zero bloqueia liberação técnica |
+| `sigam:production:check` | preflight sem imprimir segredos; informa também se a extensão GD (fotos) está disponível, sem mudar o resultado | código não zero bloqueia liberação técnica |
 
 Use `php artisan help nome-do-comando` para opções atuais.
 
