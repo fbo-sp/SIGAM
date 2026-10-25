@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-10-25 — Menu das modalidades e filtros de aulas
+
+- a tela de modalidades mostra, em cada modalidade, um menu com Graduações, Catálogo de técnicas, Currículo por graduação, Quiz e Configurações; as graduações ganham página própria (`modalidades/{martialArt}/graduacoes`) com a mesma barra de abas;
+- a lista de aulas da associação filtra por data, dojo, turma e professor (principal previsto, quem deu a aula ou auxiliar vigente na data), abre no dia de hoje e mostra o professor com foto;
+- a chamada da associação mostra a foto dos alunos e visitantes;
+- sem migration; novos testes em `SportsRegistryTest` e `AttendancePhotoTest`.
+
 ## 2026-10-25 — Professores e matrícula na turma
 
 - listas de turmas da associação e do dojo mostram o professor principal e os auxiliares vigentes, com foto;

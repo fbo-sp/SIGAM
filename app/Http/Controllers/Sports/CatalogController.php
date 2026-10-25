@@ -19,9 +19,16 @@ class CatalogController extends Controller
     {
         return view('sports.catalog.index', [
             'association' => $association,
-            'martialArts' => MartialArt::query()->where(fn ($query) => $query->whereNull('association_id')->orWhere('association_id', $association->id))->with('ranks')->orderBy('name')->get(),
+            'martialArts' => MartialArt::query()->where(fn ($query) => $query->whereNull('association_id')->orWhere('association_id', $association->id))->withCount('ranks')->orderBy('name')->get(),
             'rankTemplates' => $templates->all(),
         ]);
+    }
+
+    public function ranks(Association $association, MartialArt $martialArt): View
+    {
+        $this->ensureMartialArt($association, $martialArt);
+
+        return view('sports.catalog.ranks', ['association' => $association, 'martialArt' => $martialArt->load('ranks')]);
     }
 
     public function storeMartialArt(MartialArtRequest $request, Association $association, CatalogService $service): RedirectResponse

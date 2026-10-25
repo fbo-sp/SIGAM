@@ -35,7 +35,8 @@ Este documento é um índice de manutenção. `routes/web.php`, `routes/console.
 |---|---|---|
 | `dojos` | unidades | `dojo.view`, `dojo.manage` |
 | `pessoas` | identidade central; `pessoas/{person}/editar?voltar=/caminho` volta à lista de origem (só caminho interno) | `person.view`, `person.manage` |
-| `modalidades` | modalidades/graduações/templates | `martial_art.view`, `martial_art.manage` |
+| `modalidades` | modalidades com menu de seções (graduações, técnicas, currículo, quiz, configurações) e templates | `martial_art.view`, `martial_art.manage` |
+| `modalidades/{martialArt}/graduacoes` | GET lista as graduações; POST inclui | leitura `martial_art.view`; escrita `martial_art.manage` |
 | `modalidades/{martialArt}/tecnicas` | catálogo de técnicas: incluir, `{item}/editar`, `{item}/situacao`, `modelo` | leitura `martial_art.view`; escrita `curriculum.manage` |
 | `alunos/{student}/acompanhamento` | acompanhamento técnico do aluno (`?modalidade=`), só consulta | `assessment.view` |
 | `modalidades/{martialArt}/quiz` | banco de perguntas (`?graduacao=`): incluir, `{question}/editar`, PUT `{question}`, `{question}/situacao` | `quiz.manage` |
@@ -45,7 +46,7 @@ Este documento é um índice de manutenção. `routes/web.php`, `routes/console.
 | `alunos` | alunos/responsáveis/histórico; `alunos/{student}/turmas` matricula e `.../turmas/{enrollment}/encerrar` encerra | `student.view`, `student.manage`; turmas com `enrollment.manage` |
 | `professores` | perfil, habilitação e convites | `teacher.view`, `teacher.manage` |
 | `turmas` | agenda e matrículas | `class.view`, `class.manage`, `enrollment.manage` |
-| `aulas` | ocorrências, visitantes e chamada | `session.view`, `session.manage`, `attendance.manage`, `attendance.reopen`, `visitor.manage` |
+| `aulas` | ocorrências (`?date=&dojo=&turma=&professor=`; sem filtros abre no dia de hoje, data em branco mostra todas), visitantes e chamada | `session.view`, `session.manage`, `attendance.manage`, `attendance.reopen`, `visitor.manage` |
 | `documentos` | tipos, metadados, upload/download | `document.view`, `document.manage`, `document.download` |
 | `importacoes` | alunos e presenças | `import.manage` + permissão da operação |
 | `federacoes` | federações e filiações | `federation.view`, `federation.manage` |

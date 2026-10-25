@@ -11,6 +11,7 @@ use App\Http\Requests\Attendance\SessionVisitorRequest;
 use App\Models\Association;
 use App\Models\ClassSession;
 use App\Models\ClassSessionVisitor;
+use App\Models\TeacherProfile;
 use App\Services\Attendance\AttendanceService;
 use App\Services\Attendance\SessionVisitorService;
 use Illuminate\Http\RedirectResponse;
@@ -21,11 +22,30 @@ class AttendanceController extends Controller
 {
     public function index(Request $request, Association $association): View
     {
-        $sessions = ClassSession::query()->whereHas('classGroup', fn ($query) => $query->where('association_id', $association->id))->with(['classGroup.dojo', 'classGroup.martialArt'])
+        // Sem filtro nenhum a tela abre no dia de hoje; com a data em branco mostra todas as datas.
+        $filters = ['date' => $request->has('date') ? (string) $request->input('date') : today()->toDateString(), 'dojo' => $request->integer('dojo'), 'turma' => $request->integer('turma'), 'professor' => $request->integer('professor')];
+        $sessions = ClassSession::query()
+            ->whereHas('classGroup', fn ($query) => $query->where('association_id', $association->id)
+                ->when($filters['dojo'], fn ($group) => $group->where('dojo_id', $filters['dojo']))
+                ->when($filters['turma'], fn ($group) => $group->whereKey($filters['turma'])))
+            ->when($filters['professor'], fn ($query) => $query->where(fn ($teacher) => $teacher
+                ->where('planned_teacher_id', $filters['professor'])->orWhere('actual_teacher_id', $filters['professor'])
+                ->orWhereExists(fn ($assistant) => $assistant->selectRaw('1')->from('class_group_teachers')
+                    ->whereColumn('class_group_teachers.class_group_id', 'class_sessions.class_group_id')
+                    ->where('class_group_teachers.teacher_profile_id', $filters['professor'])->where('class_group_teachers.role_type', 'assistant')
+                    ->whereColumn('class_group_teachers.start_date', '<=', 'class_sessions.session_date')
+                    ->where(fn ($end) => $end->whereNull('class_group_teachers.end_date')->orWhereColumn('class_group_teachers.end_date', '>=', 'class_sessions.session_date')))))
+            ->when($filters['date'] !== '', fn ($query) => $query->whereDate('session_date', $filters['date']))
+            ->with(['classGroup.dojo', 'classGroup.martialArt', 'plannedTeacher.person:id,full_name,social_name,photo_path'])
             ->withCount(['visitors' => fn ($query) => $query->whereNotIn('status', ['revoked'])])
-            ->when($request->filled('date'), fn ($query) => $query->whereDate('session_date', $request->date))->orderBy('session_date')->orderBy('start_time')->paginate(30)->withQueryString();
+            ->orderBy('session_date')->orderBy('start_time')->paginate(30)->withQueryString();
+        $dojos = $association->dojos()->orderBy('name')->get(['id', 'name']);
+        $groups = $association->classGroups()->when($filters['dojo'], fn ($query) => $query->where('dojo_id', $filters['dojo']))
+            ->with('dojo:id,name')->orderBy('name')->get(['id', 'name', 'dojo_id']);
+        $teachers = TeacherProfile::query()->whereHas('person.associations', fn ($query) => $query->whereKey($association->id))
+            ->with('person:id,full_name,social_name')->get()->sortBy('person.full_name');
 
-        return view('attendance.index', compact('association', 'sessions'));
+        return view('attendance.index', compact('association', 'sessions', 'filters', 'dojos', 'groups', 'teachers'));
     }
 
     public function show(Association $association, ClassSession $session, AttendanceService $service): View

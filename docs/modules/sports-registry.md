@@ -54,7 +54,7 @@ Quando `associations.requires_minor_guardian = true`, ativação de menor de 18 
 
 ## Template de graduações
 
-Na tela de modalidades, o gestor pode começar em branco ou selecionar um template. A seleção apresenta quantidade, escopo e alerta de revisão; preenche nome e descrição como sugestão. O servidor aceita somente chaves do catálogo versionado, deriva os padrões novamente e cria modalidade, graduações e auditoria na mesma transação. Template inválido ou falha em qualquer graduação não deixa catálogo parcial.
+A tela de modalidades lista cada modalidade com um menu de seções: Graduações (`modalidades/{martialArt}/graduacoes`, com a inclusão de graduação), Catálogo de técnicas, Currículo por graduação, Quiz e Configurações, as mesmas abas das telas de acompanhamento técnico. Na tela de modalidades, o gestor pode começar em branco ou selecionar um template. A seleção apresenta quantidade, escopo e alerta de revisão; preenche nome e descrição como sugestão. O servidor aceita somente chaves do catálogo versionado, deriva os padrões novamente e cria modalidade, graduações e auditoria na mesma transação. Template inválido ou falha em qualquer graduação não deixa catálogo parcial.
 
 `resources/data/rank-templates.json` é a fonte operacional. Os templates são dados opcionais e versionados, não valores fixos do domínio: a modalidade criada continua pertencendo à associação e todas as graduações podem ser alteradas depois. O arquivo `docs/templates/template_carga_graduacoes.xlsx` permanece como material revisável. A aba `Carga` usa os campos atuais (`name`, `display_name`, `sort_order`, `color_name`, `minimum_age`, `minimum_months` e `status`).
 
