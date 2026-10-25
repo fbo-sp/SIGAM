@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-10-25 — Modelo do judô versão 2
+
+- `judo_kodokan_2026` ganha 55 itens dentro dos grupos existentes e o grupo `Katame-waza > Ne-waza (viradas, escapadas e guarda)` com 15 itens; o currículo por faixa foi refeito pelo checklist de troca de faixa e revisado pelo responsável técnico; o quiz passa de 37 para 413 perguntas;
+- reaplicar o modelo tem a nova opção "Atualizar também o currículo que veio do modelo": exigências do modelo nunca ajustadas na tela de currículo mudam de nível ou saem, com auditoria `rank_curriculum.template_updated|template_removed`; ajustes da associação são mantidos;
+- associações que já usavam o modelo precisam reaplicá-lo em Modalidades > Judô > Técnicas, com a opção marcada. Sem migration.
+
 ## 2026-10-24 — Foto de alunos, professores e pessoas
 
 - campo "Foto para identificação" nos cadastros de pessoa, aluno e professor e na edição de dados do aluno pelo gestor do dojo, com opção de remover; no celular abre câmera ou galeria;

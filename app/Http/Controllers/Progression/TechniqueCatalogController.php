@@ -79,8 +79,11 @@ class TechniqueCatalogController extends Controller
     public function applyTemplate(TechniqueTemplateRequest $request, Association $association, MartialArt $martialArt, TechniqueCatalogService $service): RedirectResponse
     {
         $this->ensureMartialArt($association, $martialArt);
-        $result = $service->applyTemplate($association, $martialArt, $request->validated('template_key'), $request->user());
+        $result = $service->applyTemplate($association, $martialArt, $request->validated('template_key'), $request->user(), $request->boolean('update_curriculum'));
         $message = "Modelo aplicado: {$result['items_created']} item(ns), {$result['entries_created']} exigência(s) de currículo e {$result['questions_created']} pergunta(s) de quiz incluídos.";
+        if ($request->boolean('update_curriculum')) {
+            $message .= " Currículo do modelo atualizado: {$result['entries_updated']} exigência(s) alterada(s) e {$result['entries_removed']} retirada(s); {$result['entries_kept']} ajuste(s) da associação mantido(s).";
+        }
         if ($result['missing_ranks'] !== []) {
             $message .= ' Graduações não encontradas nesta modalidade: '.implode(', ', $result['missing_ranks']).'.';
         }

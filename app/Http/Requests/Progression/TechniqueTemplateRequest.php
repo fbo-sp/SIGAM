@@ -13,6 +13,6 @@ class TechniqueTemplateRequest extends FormRequest
 
     public function rules(): array
     {
-        return ['template_key' => ['required', 'string', 'max:80']];
+        return ['template_key' => ['required', 'string', 'max:80'], 'update_curriculum' => ['nullable', 'boolean']];
     }
 }

@@ -19,7 +19,7 @@ Notificações testam geração repetida, uma entrega por canal, preferências, 
 
 `AssistedImportTest` cobre o XLSX oficial, criação e replay de aluno, confirmação para CPF existente, presença em aula aberta sem duplicação e associação externa. Inclua ainda arquivos malformados/fórmulas e chamada fechada ao ampliar o leitor ou estados. O teste usa `Storage::fake('local')`; a suíte MySQL valida as tabelas JSON, índices e transações.
 
-`TechniqueCatalogTest` cobre a validade do modelo do judô frente ao template de graduações, aplicação idempotente que preserva ajustes do currículo, faixas ausentes, herança do currículo (novo, alterado, herdado, retirado e restaurado), item inativo, regras da árvore, isolamento entre associações e permissões.
+`TechniqueCatalogTest` cobre a validade do modelo do judô frente ao template de graduações, aplicação idempotente que preserva ajustes do currículo, reaplicação com atualização do currículo (altera e retira só exigências do modelo nunca ajustadas, com auditoria), faixas ausentes, herança do currículo (novo, alterado, herdado, retirado e restaurado), item inativo, regras da árvore, isolamento entre associações e permissões.
 
 `TechniqueAssessmentTest` cobre gravação só do que mudou com histórico preservado, o que falta e radar, idade e tempo mínimo, quem avalia (principal, auxiliar, professor de fora, auxiliar encerrado, outra modalidade), data futura, item inativo, consulta do gestor do dojo e da associação, isolamento e aluno com duas modalidades.
 
