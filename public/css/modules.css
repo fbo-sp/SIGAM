@@ -51,3 +51,12 @@
 .emergency-list{display:grid;gap:.8rem;margin:0}.emergency-list dt{color:var(--muted);font-size:.85rem;font-weight:700}.emergency-list dd{margin:.15rem 0 0}
 @media (max-width:640px){.coverage-group{grid-template-columns:1fr auto}.coverage-group .coverage-bar{grid-column:1/-1;grid-row:2}.coverage-rank>summary{grid-template-columns:1fr}}
 .coverage-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(8rem,16rem) auto}@media (max-width:640px){.coverage-row{grid-template-columns:1fr auto}.coverage-row .coverage-bar{grid-column:1/-1;grid-row:2}}
+.coverage-charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,22rem),1fr));gap:1rem;margin-top:1rem}.coverage-chart{padding:1rem 1.2rem;box-shadow:none}.coverage-chart h3{margin:0;font-size:1rem}.coverage-chart>p{margin:.2rem 0 .8rem;color:var(--muted);font-size:.9rem}.coverage-chart .coverage-groups{padding:0}
+.stacked-columns{margin:0}.stacked-columns>svg{width:100%;height:auto;font-size:11px}.chart-axis{fill:var(--muted)}.chart-grid{stroke:#e6eaf0;stroke-dasharray:3 3}.chart-baseline{stroke:#b9c3d1}
+.chart-legend{display:flex;flex-wrap:wrap;gap:.35rem .9rem;margin-top:.4rem;color:var(--muted);font-size:.85rem}.chart-legend span{display:inline-flex;align-items:center;gap:.35rem}.chart-legend svg{width:.7rem;height:.7rem}
+.series-1{fill:#2a78d6}.series-2{fill:#eb6834}.series-3{fill:#1baf7a}.series-4{fill:#eda100}.series-5{fill:#e87ba4}.series-6{fill:#008300}.series-7{fill:#6250d6}.series-8{fill:#e34948}
+.session-map{width:100%;border-collapse:collapse;font-size:.85rem}.session-map th,.session-map td{padding:.2rem .15rem;text-align:center}.session-map th:first-child,.session-map td:first-child{text-align:left;padding-right:.5rem}.session-map thead th{color:var(--muted);font-weight:700;font-size:.72rem}.session-map td:first-child small{display:block;color:var(--muted);font-size:.72rem}
+.map-cell{display:inline-block;width:.95rem;height:.95rem;border-radius:3px;border:1px solid #c9d1dc}.map-cell.is-worked{background:#1baf7a;border-color:#138a60}
+.coverage-chart .coverage-group{grid-template-columns:minmax(5rem,9rem) minmax(0,1fr) auto}.coverage-chart .coverage-bar svg{min-width:2.5rem}.coverage-chart.is-wide{grid-column:1/-1}.session-map-wrap{overflow-x:auto}.session-map td:first-child{min-width:9rem}.coverage-missing-card{margin-top:1rem}
+.coverage-chart{min-width:0}
+.session-map-wrap{position:relative}

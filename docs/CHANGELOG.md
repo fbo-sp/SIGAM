@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-10-25 — Gráficos na cobertura do currículo
+
+- a visão geral da turma na cobertura do currículo ganha três gráficos: cobertura por grupo, distribuição por grupo (aulas por mês em que cada grupo foi trabalhado, em colunas empilhadas) e mapa aula a aula (itens marcados nas últimas oito aulas); o detalhamento por faixa continua igual;
+- gráficos em SVG e tabela, sem script e sem estilo inline (CSP); sem migration; `TeacherViewTest` ampliado.
+
 ## 2026-10-25 — Visão do professor
 
 - "Minhas turmas" no painel do professor inclui as turmas em que ele é auxiliar, mostra o papel e tem link para abrir a turma no dojo;

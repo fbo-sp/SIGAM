@@ -52,6 +52,10 @@ class TeacherViewTest extends TestCase
         $this->assertSame([1, 1], $coverage['ranks']->map(fn ($row) => $row['students']->count())->all());
         $this->assertSame(100, $coverage['overall']['groups']->firstWhere('label', 'Nage-waza')['percent']);
         $this->assertSame(1, $coverage['sessions_with_techniques']);
+        $this->assertSame(['jul', 'ago', 'set', 'out'], array_column($coverage['monthly']['months'], 'label'));
+        $this->assertSame([['label' => 'Nage-waza', 'values' => ['2026-07' => 0, '2026-08' => 0, '2026-09' => 0, '2026-10' => 1]]], $coverage['monthly']['series']);
+        $this->assertSame(['2026-10-14'], $coverage['map']['sessions']->map(fn ($session) => $session->session_date->toDateString())->all());
+        $this->assertSame([['O-goshi', [true]]], $coverage['map']['rows']->map(fn ($row) => [$row['item']->name, $row['cells']])->all());
         $this->assertSame('medium', CurriculumCoverageService::tone(40));
         $this->assertSame('high', CurriculumCoverageService::tone(70));
 
@@ -70,7 +74,7 @@ class TeacherViewTest extends TestCase
 
         $this->get(route('operation.classes.coverage', [$this->dojo, $group]))->assertOk()
             ->assertSeeInOrder(['Visão geral da turma', '1 de 5 itens já trabalhados', 'Por faixa', 'Rumo a Faixa amarela', 'Rumo a Faixa laranja'])
-            ->assertSee('Ainda não trabalhado (4)')->assertSee('Kesa-gatame')->assertSee('← Voltar ao painel');
+            ->assertSee('Distribuição por grupo')->assertSee('Nage-waza · out: 1 aula(s)')->assertSee('Mapa aula a aula')->assertSee('14/10: trabalhado')->assertSee('Ainda não trabalhado (4)')->assertSee('Kesa-gatame')->assertSee('← Voltar ao painel');
         $this->get(route('operation.classes.coverage', [$this->dojo, $group, 'de' => '2026-10-15', 'ate' => '2026-10-01']))->assertSessionHasErrors('ate');
         $this->get(route('operation.classes.coverage', [$this->dojo, $group, 'de' => '2026-10-15']))->assertOk()->assertSee('0 de 5 itens já trabalhados');
 
@@ -95,6 +99,6 @@ class TeacherViewTest extends TestCase
         $this->assertSame(0, $coverage['overall']['total']);
         $this->assertCount(1, $coverage['without_next']);
         $this->actingAs($anaUser)->get(route('operation.classes.coverage', [$this->dojo, $group]))->assertOk()
-            ->assertSee('Sem currículo para comparar')->assertSee('1 aluno(s) já estão na última faixa');
+            ->assertSee('Sem currículo para comparar')->assertDontSee('Mapa aula a aula')->assertSee('1 aluno(s) já estão na última faixa');
     }
 }
