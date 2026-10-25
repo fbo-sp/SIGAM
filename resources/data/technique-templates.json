@@ -7811,6 +7811,1396 @@
         ],
         "correct": 0,
         "explanation": "Faltando um dos quatro elementos (costas, força, velocidade, controle), a pontuação é waza-ari."
+      },
+      {
+        "rank": "10-kyu",
+        "item": "Conhecimento teórico > Etiqueta e dojo > Significado das saudações",
+        "statement": "Como se chama a saudação feita ajoelhado?",
+        "options": [
+          "Zarei",
+          "Ritsurei",
+          "Mokuso",
+          "Kiotsuke"
+        ],
+        "correct": 0,
+        "explanation": "Zarei é a saudação ajoelhado, feita a partir do seiza; ritsurei é a saudação em pé."
+      },
+      {
+        "rank": "10-kyu",
+        "item": "Conhecimento teórico > Terminologia > Contagem em japonês",
+        "statement": "Como se diz \"cinco\" em japonês?",
+        "options": [
+          "Go",
+          "Roku",
+          "Shi",
+          "Hachi"
+        ],
+        "correct": 0,
+        "explanation": "Ichi, ni, san, shi, go: go é o cinco."
+      },
+      {
+        "rank": "10-kyu",
+        "statement": "Para que serve o ukemi?",
+        "options": [
+          "Para amortecer a queda sem se machucar",
+          "Para derrubar o parceiro",
+          "Para imobilizar o parceiro no solo",
+          "Para cumprimentar o professor"
+        ],
+        "correct": 0,
+        "explanation": "Ukemi é o amortecimento de queda: protege quem cai e permite treinar as projeções com segurança."
+      },
+      {
+        "rank": "10-kyu",
+        "statement": "Na queda para trás (ushiro-ukemi), onde fica o queixo?",
+        "options": [
+          "Encostado no peito",
+          "Levantado, olhando para o teto",
+          "Virado para trás",
+          "Apoiado no tatame"
+        ],
+        "correct": 0,
+        "explanation": "O queixo no peito impede que a cabeça bata no tatame."
+      },
+      {
+        "rank": "10-kyu",
+        "item": "Conhecimento teórico > Etiqueta e dojo > Regras de conduta no dojo",
+        "statement": "Onde ficam os chinelos (zori) durante o treino?",
+        "options": [
+          "Fora do tatame, na borda e alinhados",
+          "Em cima do tatame, ao lado do judoca",
+          "Nos pés, durante todo o treino",
+          "Em qualquer lugar do dojo"
+        ],
+        "correct": 0,
+        "explanation": "O zori nunca é usado sobre o tatame: fica na borda, alinhado."
+      },
+      {
+        "rank": "10-kyu",
+        "statement": "Na pegada básica (kumi-kata), as mãos seguram:",
+        "options": [
+          "Uma a gola e a outra a manga",
+          "As duas a faixa",
+          "As duas a calça",
+          "Os dois ombros, sem segurar o judogi"
+        ],
+        "correct": 0,
+        "explanation": "A pegada fundamental é uma mão na gola e outra na manga."
+      },
+      {
+        "rank": "10-kyu",
+        "statement": "Na postura natural (shizen-hontai), os pés ficam:",
+        "options": [
+          "Afastados na largura dos ombros, corpo solto",
+          "Juntos, encostados um no outro",
+          "Bem afastados, com os joelhos muito dobrados",
+          "Um atrás do outro, na mesma linha"
+        ],
+        "correct": 0,
+        "explanation": "Shizen-hontai é a postura natural: pés na largura dos ombros e corpo relaxado."
+      },
+      {
+        "rank": "9-kyu",
+        "item": "Conhecimento teórico > Terminologia > Comandos de arbitragem (Hajime, Matte, Sono-mama, Yoshi, Osaekomi, Toketa, Sore-made)",
+        "statement": "Qual comando o árbitro usa para iniciar a luta?",
+        "options": [
+          "Hajime",
+          "Matte",
+          "Sore-made",
+          "Osaekomi"
+        ],
+        "correct": 0,
+        "explanation": "Hajime quer dizer \"comecem\": inicia ou reinicia a luta."
+      },
+      {
+        "rank": "9-kyu",
+        "item": "Conhecimento teórico > Terminologia > Comandos de arbitragem (Hajime, Matte, Sono-mama, Yoshi, Osaekomi, Toketa, Sore-made)",
+        "statement": "\"Osaekomi\" é anunciado quando:",
+        "options": [
+          "Uma imobilização válida começa e o tempo passa a contar",
+          "A luta termina",
+          "Um atleta recebe uma penalidade",
+          "Os atletas devem voltar às marcas"
+        ],
+        "correct": 0,
+        "explanation": "Osaekomi anuncia que a imobilização é válida; o tempo começa a contar."
+      },
+      {
+        "rank": "9-kyu",
+        "item": "Conhecimento teórico > Terminologia > Comandos de arbitragem (Hajime, Matte, Sono-mama, Yoshi, Osaekomi, Toketa, Sore-made)",
+        "statement": "Depois de \"sono-mama\", qual comando faz a luta continuar exatamente da mesma posição?",
+        "options": [
+          "Yoshi",
+          "Hajime",
+          "Matte",
+          "Toketa"
+        ],
+        "correct": 0,
+        "explanation": "Sono-mama congela a ação; yoshi a retoma da posição congelada."
+      },
+      {
+        "rank": "9-kyu",
+        "item": "Conhecimento teórico > Terminologia > Comandos de arbitragem (Hajime, Matte, Sono-mama, Yoshi, Osaekomi, Toketa, Sore-made)",
+        "statement": "Qual comando significa \"não se mexam\"?",
+        "options": [
+          "Sono-mama",
+          "Yoshi",
+          "Hajime",
+          "Toketa"
+        ],
+        "correct": 0,
+        "explanation": "Sono-mama congela os atletas na posição em que estão."
+      },
+      {
+        "rank": "9-kyu",
+        "statement": "Quantas são as direções de desequilíbrio no happo-no-kuzushi?",
+        "options": [
+          "Oito",
+          "Quatro",
+          "Seis",
+          "Duas"
+        ],
+        "correct": 0,
+        "explanation": "Happo quer dizer oito direções: frente, trás, lados e as quatro diagonais."
+      },
+      {
+        "rank": "9-kyu",
+        "statement": "Em que momento se faz o kuzushi?",
+        "options": [
+          "Antes de entrar no golpe, para tirar o equilíbrio do uke",
+          "Depois que o uke já caiu",
+          "Somente no trabalho de solo",
+          "Apenas durante a saudação"
+        ],
+        "correct": 0,
+        "explanation": "O kuzushi é a primeira fase da técnica: sem desequilíbrio, a projeção exige força demais."
+      },
+      {
+        "rank": "9-kyu",
+        "item": "Conhecimento teórico > Terminologia > Nomes das técnicas exigidas na faixa",
+        "statement": "O ippon-seoi-nage é uma projeção feita:",
+        "options": [
+          "Pelas costas, com o braço do tori por baixo da axila do uke",
+          "Ceifando a perna do uke por fora",
+          "Pelo quadril, envolvendo a cintura do uke",
+          "No solo, a partir dos quatro apoios"
+        ],
+        "correct": 0,
+        "explanation": "No ippon-seoi-nage o tori carrega o uke nas costas, com o braço preso sob a axila."
+      },
+      {
+        "rank": "9-kyu",
+        "item": "Conhecimento teórico > Terminologia > Nomes das técnicas exigidas na faixa",
+        "statement": "No o-uchi-gari, a perna do uke é ceifada:",
+        "options": [
+          "Por dentro, levando o uke para trás",
+          "Por fora, levando o uke para a frente",
+          "Com o quadril, por baixo da faixa",
+          "Com as mãos, sem usar as pernas"
+        ],
+        "correct": 0,
+        "explanation": "O-uchi-gari é a grande ceifada interna: a perna do tori entra por dentro e o uke cai para trás."
+      },
+      {
+        "rank": "9-kyu",
+        "item": "Conhecimento teórico > Terminologia > Nomes das técnicas exigidas na faixa",
+        "statement": "O que significa \"uchi\" no nome dos golpes?",
+        "options": [
+          "Interno, por dentro",
+          "Externo, por fora",
+          "Grande",
+          "Pequeno"
+        ],
+        "correct": 0,
+        "explanation": "Uchi é interno; soto é externo. Ex.: o-uchi-gari, grande ceifada interna."
+      },
+      {
+        "rank": "9-kyu",
+        "item": "Conhecimento teórico > Terminologia > Nomes das técnicas exigidas na faixa",
+        "statement": "O que significa \"soto\" no nome dos golpes?",
+        "options": [
+          "Externo, por fora",
+          "Interno, por dentro",
+          "Quadril",
+          "Roda"
+        ],
+        "correct": 0,
+        "explanation": "Soto é externo. Ex.: o-soto-gari, grande ceifada externa."
+      },
+      {
+        "rank": "9-kyu",
+        "item": "Conhecimento teórico > Terminologia > Nomes das técnicas exigidas na faixa",
+        "statement": "\"Gari\" no nome de um golpe indica:",
+        "options": [
+          "Ceifar",
+          "Varrer",
+          "Rodar",
+          "Imobilizar"
+        ],
+        "correct": 0,
+        "explanation": "Gari é ceifar; harai é varrer. Ex.: o-soto-gari, o-uchi-gari."
+      },
+      {
+        "rank": "9-kyu",
+        "item": "Conhecimento teórico > Terminologia > Nomes das técnicas exigidas na faixa",
+        "statement": "Na combinação o-uchi-gari → o-soto-gari, o segundo golpe aproveita:",
+        "options": [
+          "A reação do uke, que recua a perna atacada",
+          "O cansaço do uke no fim da luta",
+          "Uma pausa entre os dois golpes",
+          "O momento da saudação final"
+        ],
+        "correct": 0,
+        "explanation": "Ao defender o o-uchi, o uke recua o peso; o tori troca o apoio e ceifa por fora, sem pausa."
+      },
+      {
+        "rank": "9-kyu",
+        "item": "Conhecimento teórico > Etiqueta e dojo > Cuidados com o judogi e higiene",
+        "statement": "Quantas voltas a faixa dá na cintura?",
+        "options": [
+          "Duas",
+          "Uma",
+          "Três",
+          "Quatro"
+        ],
+        "correct": 0,
+        "explanation": "A faixa dá duas voltas na cintura e termina com nó reto e pontas iguais."
+      },
+      {
+        "rank": "9-kyu",
+        "item": "Conhecimento teórico > Etiqueta e dojo > Cuidados com o judogi e higiene",
+        "statement": "Qual lapela do casaco (uwagi) fica por cima?",
+        "options": [
+          "A esquerda, sobre a direita",
+          "A direita, sobre a esquerda",
+          "Tanto faz",
+          "Nenhuma: o casaco fecha com botões"
+        ],
+        "correct": 0,
+        "explanation": "O uwagi é fechado com a lapela esquerda por cima da direita."
+      },
+      {
+        "rank": "9-kyu",
+        "statement": "No mae-ukemi (queda para a frente), o impacto é amortecido com:",
+        "options": [
+          "Os antebraços e as palmas das mãos",
+          "Os joelhos",
+          "O rosto virado para baixo",
+          "As mãos estendidas e os cotovelos travados"
+        ],
+        "correct": 0,
+        "explanation": "Antebraços e palmas amortecem a queda; mãos estendidas com cotovelos travados causam lesão."
+      },
+      {
+        "rank": "9-kyu",
+        "item": "Conhecimento teórico > Etiqueta e dojo > Regras de conduta no dojo",
+        "statement": "Quando o sensei chama o aluno, ele responde:",
+        "options": [
+          "Hai",
+          "Matte",
+          "Rei",
+          "Ju"
+        ],
+        "correct": 0,
+        "explanation": "Hai quer dizer \"sim\" e é a resposta ao ser chamado pelo sensei ou pelo examinador."
+      },
+      {
+        "rank": "9-kyu",
+        "item": "Conhecimento teórico > História do judô > Jigoro Kano e a fundação do Kodokan (1882)",
+        "statement": "O Kodokan é:",
+        "options": [
+          "A primeira escola de judô, fundada por Jigoro Kano",
+          "Um golpe de quadril",
+          "O nome da faixa-preta",
+          "A roupa do judoca"
+        ],
+        "correct": 0,
+        "explanation": "Jigoro Kano fundou o Kodokan em 1882, em Tóquio: a primeira escola de judô."
+      },
+      {
+        "rank": "7-kyu",
+        "item": "Conhecimento teórico > Terminologia > Nomes das partes do corpo e posições",
+        "statement": "No treino, quem recebe a técnica é chamado de:",
+        "options": [
+          "Uke",
+          "Tori",
+          "Sensei",
+          "Judogi"
+        ],
+        "correct": 0,
+        "explanation": "Uke recebe a técnica; tori aplica."
+      },
+      {
+        "rank": "7-kyu",
+        "item": "Conhecimento teórico > Terminologia > Nomes das partes do corpo e posições",
+        "statement": "Como se chama a posição sentado de pernas cruzadas, usada quando o sensei autoriza?",
+        "options": [
+          "Agura",
+          "Seiza",
+          "Shizen-hontai",
+          "Zarei"
+        ],
+        "correct": 0,
+        "explanation": "Agura é a posição informal de pernas cruzadas; seiza é a formal, sobre os calcanhares."
+      },
+      {
+        "rank": "7-kyu",
+        "item": "Conhecimento teórico > Terminologia > Nomes das partes do corpo e posições",
+        "statement": "A postura defensiva, com a base mais larga e mais baixa, chama-se:",
+        "options": [
+          "Jigo-hontai",
+          "Shizen-hontai",
+          "Seiza",
+          "Tsugi-ashi"
+        ],
+        "correct": 0,
+        "explanation": "Jigo-hontai é a postura defensiva; shizen-hontai é a natural."
+      },
+      {
+        "rank": "7-kyu",
+        "item": "Conhecimento teórico > Sistema de graduação > Kyu e Dan, cores das faixas",
+        "statement": "No sistema de graduação, \"kyu\" indica:",
+        "options": [
+          "Os graus das faixas coloridas",
+          "Os graus de faixa-preta",
+          "O local de treino",
+          "Um tipo de queda"
+        ],
+        "correct": 0,
+        "explanation": "Kyu são os graus das faixas coloridas; dan são os graus de faixa-preta."
+      },
+      {
+        "rank": "7-kyu",
+        "item": "Conhecimento teórico > Sistema de graduação > Kyu e Dan, cores das faixas",
+        "statement": "Na contagem dos kyus, qual é o 1º kyu?",
+        "options": [
+          "A faixa marrom, a última antes da preta",
+          "A faixa branca",
+          "A faixa azul",
+          "A faixa preta"
+        ],
+        "correct": 0,
+        "explanation": "A contagem dos kyus desce: quanto menor o número, mais perto da faixa-preta. O 1º kyu é a marrom."
+      },
+      {
+        "rank": "7-kyu",
+        "item": "Conhecimento teórico > Sistema de graduação > Kyu e Dan, cores das faixas",
+        "statement": "Como se chama a primeira faixa-preta?",
+        "options": [
+          "1º dan (shodan)",
+          "1º kyu",
+          "10º dan",
+          "5º kyu"
+        ],
+        "correct": 0,
+        "explanation": "Shodan é o 1º dan, a primeira faixa-preta."
+      },
+      {
+        "rank": "7-kyu",
+        "item": "Conhecimento teórico > Sistema de graduação > Kyu e Dan, cores das faixas",
+        "statement": "No programa com faixas intermediárias da CBJ, qual faixa vem logo depois da azul?",
+        "options": [
+          "Azul/amarela",
+          "Verde",
+          "Laranja",
+          "Roxa"
+        ],
+        "correct": 0,
+        "explanation": "Na sequência infantil da CBJ, depois da azul vem a azul/amarela e depois a amarela."
+      },
+      {
+        "rank": "7-kyu",
+        "item": "Conhecimento teórico > Classificação das técnicas > Gokyo-no-waza",
+        "statement": "O Gokyo-no-waza é:",
+        "options": [
+          "O conjunto das técnicas de projeção do Kodokan, organizado em cinco grupos",
+          "Uma imobilização de solo",
+          "A saudação de abertura da aula",
+          "A roupa usada em competição"
+        ],
+        "correct": 0,
+        "explanation": "Gokyo-no-waza reúne as técnicas de projeção do Kodokan em cinco grupos (kyo)."
+      },
+      {
+        "rank": "7-kyu",
+        "item": "Conhecimento teórico > Classificação das técnicas > Gokyo-no-waza",
+        "statement": "Em quantos grupos (kyo) se divide o Gokyo-no-waza?",
+        "options": [
+          "Cinco",
+          "Oito",
+          "Três",
+          "Dez"
+        ],
+        "correct": 0,
+        "explanation": "São cinco grupos, do Dai-ikkyo ao Dai-gokyo, com oito técnicas cada."
+      },
+      {
+        "rank": "7-kyu",
+        "item": "Conhecimento teórico > Classificação das técnicas > Gokyo-no-waza",
+        "statement": "Em qual grupo do Gokyo estão de-ashi-harai, hiza-guruma e o-soto-gari?",
+        "options": [
+          "No primeiro grupo (Dai-ikkyo)",
+          "No terceiro grupo",
+          "No quinto grupo",
+          "Não fazem parte do Gokyo"
+        ],
+        "correct": 0,
+        "explanation": "O Dai-ikkyo tem de-ashi-harai, hiza-guruma, sasae-tsurikomi-ashi, uki-goshi, o-soto-gari, o-goshi, o-uchi-gari e seoi-nage."
+      },
+      {
+        "rank": "7-kyu",
+        "item": "Conhecimento teórico > Classificação das técnicas > Gokyo-no-waza",
+        "statement": "O koshi-guruma pertence a qual grupo do Gokyo?",
+        "options": [
+          "Segundo grupo (Dai-nikyo)",
+          "Primeiro grupo (Dai-ikkyo)",
+          "Quarto grupo",
+          "Quinto grupo"
+        ],
+        "correct": 0,
+        "explanation": "O Dai-nikyo tem ko-soto-gari, ko-uchi-gari, koshi-guruma, tsurikomi-goshi, okuri-ashi-harai, tai-otoshi, harai-goshi e uchi-mata."
+      },
+      {
+        "rank": "7-kyu",
+        "item": "Conhecimento teórico > Classificação das técnicas > Divisão de Nage-waza e Katame-waza",
+        "statement": "As técnicas de projeção são nage-waza. Como se chamam as técnicas de controle no solo?",
+        "options": [
+          "Katame-waza",
+          "Tachi-waza",
+          "Ukemi",
+          "Kata"
+        ],
+        "correct": 0,
+        "explanation": "Katame-waza reúne imobilizações, estrangulamentos e chaves."
+      },
+      {
+        "rank": "7-kyu",
+        "item": "Conhecimento teórico > Classificação das técnicas > Divisão de Nage-waza e Katame-waza",
+        "statement": "Qual destas técnicas é de katame-waza?",
+        "options": [
+          "Kesa-gatame",
+          "O-goshi",
+          "Seoi-nage",
+          "De-ashi-harai"
+        ],
+        "correct": 0,
+        "explanation": "Kesa-gatame é uma imobilização (osaekomi-waza), parte do katame-waza."
+      },
+      {
+        "rank": "7-kyu",
+        "item": "Conhecimento teórico > Classificação das técnicas > Divisão de Nage-waza e Katame-waza",
+        "statement": "Qual destas técnicas é de nage-waza?",
+        "options": [
+          "Hiza-guruma",
+          "Kami-shiho-gatame",
+          "Kata-gatame",
+          "Yoko-shiho-gatame"
+        ],
+        "correct": 0,
+        "explanation": "Hiza-guruma é uma projeção de perna; as outras são imobilizações."
+      },
+      {
+        "rank": "7-kyu",
+        "item": "Conhecimento teórico > Classificação das técnicas > Divisão de Nage-waza e Katame-waza",
+        "statement": "Osaekomi-waza são as técnicas de:",
+        "options": [
+          "Imobilização",
+          "Estrangulamento",
+          "Chave de braço",
+          "Projeção de sacrifício"
+        ],
+        "correct": 0,
+        "explanation": "Osaekomi-waza são as imobilizações; shime-waza, os estrangulamentos; kansetsu-waza, as chaves."
+      },
+      {
+        "rank": "7-kyu",
+        "item": "Conhecimento teórico > Regras de competição > Pontuação (Ippon, Waza-ari)",
+        "statement": "Quantos waza-ari somam um ippon?",
+        "options": [
+          "Dois",
+          "Três",
+          "Quatro",
+          "Um"
+        ],
+        "correct": 0,
+        "explanation": "Dois waza-ari equivalem a um ippon e encerram a luta."
+      },
+      {
+        "rank": "7-kyu",
+        "item": "Conhecimento teórico > Regras de competição > Pontuação (Ippon, Waza-ari)",
+        "statement": "Uma imobilização mantida por 20 segundos vale:",
+        "options": [
+          "Ippon",
+          "Waza-ari",
+          "Shido",
+          "Nenhum ponto"
+        ],
+        "correct": 0,
+        "explanation": "Pelas regras atuais, 20 segundos de imobilização valem ippon."
+      },
+      {
+        "rank": "7-kyu",
+        "item": "Conhecimento teórico > Regras de competição > Pontuação (Ippon, Waza-ari)",
+        "statement": "Uma imobilização mantida por 10 segundos vale:",
+        "options": [
+          "Waza-ari",
+          "Ippon",
+          "Shido",
+          "Hansoku-make"
+        ],
+        "correct": 0,
+        "explanation": "Pelas regras atuais, 10 segundos de imobilização valem waza-ari."
+      },
+      {
+        "rank": "7-kyu",
+        "item": "Conhecimento teórico > Terminologia > Nomes das técnicas exigidas na faixa",
+        "statement": "Ayumi-ashi é o deslocamento em que:",
+        "options": [
+          "Um pé passa à frente do outro, como ao andar",
+          "Um pé segue o outro, sem cruzar",
+          "Os dois pés saltam juntos",
+          "O judoca gira sobre um pé só"
+        ],
+        "correct": 0,
+        "explanation": "Ayumi-ashi é o passo natural; tsugi-ashi é o passo em que um pé segue o outro."
+      },
+      {
+        "rank": "7-kyu",
+        "item": "Conhecimento teórico > Terminologia > Nomes das técnicas exigidas na faixa",
+        "statement": "Por que os pés deslizam no tatame durante o deslocamento?",
+        "options": [
+          "Para manter o equilíbrio e não ser desequilibrado com facilidade",
+          "Para fazer barulho e assustar o uke",
+          "Para cansar o uke",
+          "Porque é proibido levantar o pé"
+        ],
+        "correct": 0,
+        "explanation": "Deslizar os pés mantém a base estável; pés no ar facilitam o desequilíbrio e as varridas."
+      },
+      {
+        "rank": "7-kyu",
+        "item": "Conhecimento teórico > Terminologia > Nomes das técnicas exigidas na faixa",
+        "statement": "O de-ashi-harai é uma técnica de:",
+        "options": [
+          "Varrer o pé avançado do uke",
+          "Ceifar a perna do uke por dentro",
+          "Projetar pelo quadril",
+          "Imobilizar no solo"
+        ],
+        "correct": 0,
+        "explanation": "De-ashi-harai varre o pé que o uke está avançando, no momento em que ele vai apoiar."
+      },
+      {
+        "rank": "7-kyu",
+        "item": "Conhecimento teórico > Terminologia > Nomes das técnicas exigidas na faixa",
+        "statement": "\"Harai\" no nome de um golpe significa:",
+        "options": [
+          "Varrer",
+          "Ceifar",
+          "Roda",
+          "Queda"
+        ],
+        "correct": 0,
+        "explanation": "Harai é varrer. Ex.: de-ashi-harai, harai-goshi."
+      },
+      {
+        "rank": "7-kyu",
+        "item": "Conhecimento teórico > Terminologia > Nomes das técnicas exigidas na faixa",
+        "statement": "\"Guruma\" no nome de um golpe significa:",
+        "options": [
+          "Roda",
+          "Quadril",
+          "Pequeno",
+          "Varrer"
+        ],
+        "correct": 0,
+        "explanation": "Guruma é roda: o uke gira em torno de um ponto, como no hiza-guruma e no koshi-guruma."
+      },
+      {
+        "rank": "7-kyu",
+        "item": "Conhecimento teórico > Terminologia > Nomes das técnicas exigidas na faixa",
+        "statement": "No hiza-guruma, a sola do pé do tori bloqueia:",
+        "options": [
+          "O joelho do uke",
+          "O tornozelo do uke",
+          "O quadril do uke",
+          "A faixa do uke"
+        ],
+        "correct": 0,
+        "explanation": "Hiza é joelho: o pé bloqueia o joelho e o uke gira sobre ele."
+      },
+      {
+        "rank": "7-kyu",
+        "item": "Conhecimento teórico > Terminologia > Nomes das técnicas exigidas na faixa",
+        "statement": "O que significa \"kuzure\" no nome de uma imobilização?",
+        "options": [
+          "Modificada, uma variação da forma básica",
+          "Grande",
+          "Lateral",
+          "Por cima da cabeça"
+        ],
+        "correct": 0,
+        "explanation": "Kuzure indica a variação de uma técnica: kuzure-kesa-gatame é a kesa-gatame modificada."
+      },
+      {
+        "rank": "7-kyu",
+        "item": "Conhecimento teórico > Terminologia > Nomes das técnicas exigidas na faixa",
+        "statement": "Na kata-gatame, o tori prende junto ao pescoço do uke:",
+        "options": [
+          "Um dos braços do uke",
+          "As duas pernas do uke",
+          "A faixa do uke",
+          "As duas mãos do uke"
+        ],
+        "correct": 0,
+        "explanation": "Na kata-gatame, o braço do uke fica cruzado junto ao pescoço, preso pela cabeça do tori."
+      },
+      {
+        "rank": "7-kyu",
+        "item": "Conhecimento teórico > Terminologia > Nomes das técnicas exigidas na faixa",
+        "statement": "\"Kami\" em kami-shiho-gatame indica que o tori controla o uke:",
+        "options": [
+          "Pelo lado da cabeça, por cima",
+          "Pelo lado do corpo",
+          "Por baixo",
+          "Pelas costas"
+        ],
+        "correct": 0,
+        "explanation": "Na kami-shiho-gatame o tori fica além da cabeça do uke, peito contra peito."
+      },
+      {
+        "rank": "7-kyu",
+        "item": "Conhecimento teórico > Terminologia > Nomes das técnicas exigidas na faixa",
+        "statement": "\"Yoko\" em yoko-shiho-gatame significa:",
+        "options": [
+          "Lateral",
+          "Superior",
+          "Grande",
+          "Quatro"
+        ],
+        "correct": 0,
+        "explanation": "Yoko é lateral: o tori controla o uke de lado."
+      },
+      {
+        "rank": "7-kyu",
+        "statement": "Preso na kesa-gatame, qual é a primeira prioridade para escapar?",
+        "options": [
+          "Liberar o braço que está preso",
+          "Empurrar o rosto do tori",
+          "Ficar parado esperando o matte",
+          "Esticar as pernas"
+        ],
+        "correct": 0,
+        "explanation": "Com o braço preso, a ponte não funciona; liberar o braço vem primeiro."
+      },
+      {
+        "rank": "7-kyu",
+        "statement": "Quando o tori tenta passar e imobilizar, quem está de costas no tatame deve:",
+        "options": [
+          "Manter as pernas entre ele e o tori, girando para acompanhá-lo",
+          "Esticar as pernas e abrir os braços",
+          "Virar de bruços imediatamente",
+          "Segurar a própria faixa"
+        ],
+        "correct": 0,
+        "explanation": "No fusegi do solo, as pernas mantêm o tori na guarda e impedem a imobilização."
+      },
+      {
+        "rank": "7-kyu",
+        "statement": "Para virar o uke que está em quatro apoios, o tori deve:",
+        "options": [
+          "Desequilibrá-lo para o lado, controlando braço ou gola, e seguir até a imobilização",
+          "Puxar as pernas do uke para trás com força",
+          "Esperar o uke virar sozinho",
+          "Sentar nas costas do uke e parar"
+        ],
+        "correct": 0,
+        "explanation": "A virada usa o controle do braço ou da gola para tirar o apoio e já terminar imobilizando."
+      },
+      {
+        "rank": "7-kyu",
+        "item": "Conhecimento teórico > Etiqueta e dojo > Regras de conduta no dojo",
+        "statement": "Como se chama o lugar de honra do dojo, onde ficam as autoridades e os examinadores?",
+        "options": [
+          "Joseki",
+          "Tatami",
+          "Shiaijo",
+          "Zori"
+        ],
+        "correct": 0,
+        "explanation": "Joseki é o lugar de honra; a saudação de abertura começa por ele."
+      },
+      {
+        "rank": "7-kyu",
+        "item": "Conhecimento teórico > Etiqueta e dojo > Regras de conduta no dojo",
+        "statement": "Como o judoca deve esperar a vez no exame?",
+        "options": [
+          "Em seiza ou em pé, em silêncio, costas retas e mãos sobre as coxas",
+          "Encostado na parede",
+          "Deitado no tatame",
+          "Conversando baixo com os colegas"
+        ],
+        "correct": 0,
+        "explanation": "A banca observa a postura e a atenção também enquanto os outros são avaliados."
+      },
+      {
+        "rank": "7-kyu",
+        "item": "Conhecimento teórico > Etiqueta e dojo > Significado das saudações",
+        "statement": "Antes e depois de praticar com um parceiro, o judoca deve:",
+        "options": [
+          "Fazer o rei (saudação)",
+          "Apertar a mão do parceiro",
+          "Bater palmas",
+          "Ajustar a faixa"
+        ],
+        "correct": 0,
+        "explanation": "O rei antes e depois de cada prática mostra respeito e gratidão ao parceiro."
+      },
+      {
+        "rank": "7-kyu",
+        "item": "Conhecimento teórico > Etiqueta e dojo > Regras de conduta no dojo",
+        "statement": "Durante uma demonstração no exame, o tori deve:",
+        "options": [
+          "Aplicar a técnica com controle, segurando a manga para o uke cair bem",
+          "Projetar com força máxima",
+          "Soltar o uke durante a queda",
+          "Fazer o mais rápido possível, sem controle"
+        ],
+        "correct": 0,
+        "explanation": "Controle técnico e cuidado com o uke valem tanto quanto a técnica."
+      },
+      {
+        "rank": "7-kyu",
+        "item": "Conhecimento teórico > História do judô > Jigoro Kano e a fundação do Kodokan (1882)",
+        "statement": "De qual arte marcial Jigoro Kano partiu para criar o judô?",
+        "options": [
+          "Jujutsu",
+          "Karatê",
+          "Kendô",
+          "Aikidô"
+        ],
+        "correct": 0,
+        "explanation": "Kano estudou jujutsu e reorganizou suas técnicas, com princípios educativos, criando o judô."
+      },
+      {
+        "rank": "7-kyu",
+        "item": "Conhecimento teórico > Terminologia > Contagem em japonês",
+        "statement": "Como se diz \"sete\" em japonês?",
+        "options": [
+          "Shichi (nana)",
+          "Hachi",
+          "Roku",
+          "Ku"
+        ],
+        "correct": 0,
+        "explanation": "Shichi (ou nana) é sete; hachi é oito."
+      },
+      {
+        "rank": "5-kyu",
+        "item": "Conhecimento teórico > Princípios > Seiryoku-zenyo (máxima eficiência)",
+        "statement": "Como o princípio Seiryoku-zenyo se aplica fora do tatame?",
+        "options": [
+          "Usar bem a própria energia para alcançar o melhor resultado",
+          "Vencer sempre pela força",
+          "Evitar qualquer esforço",
+          "Treinar só quando houver competição"
+        ],
+        "correct": 0,
+        "explanation": "Seiryoku-zenyo é a máxima eficiência com o mínimo de esforço, nos estudos, no trabalho e na vida."
+      },
+      {
+        "rank": "5-kyu",
+        "item": "Conhecimento teórico > Princípios > Jita-kyoei (bem-estar e benefício mútuos)",
+        "statement": "Jita-kyoei ensina que:",
+        "options": [
+          "Cada um cresce ajudando os outros a crescer também",
+          "Só o vencedor importa",
+          "O treino deve ser individual",
+          "O uke serve apenas para cair"
+        ],
+        "correct": 0,
+        "explanation": "Jita-kyoei é prosperidade e benefício mútuos: eu e os outros crescemos juntos."
+      },
+      {
+        "rank": "5-kyu",
+        "item": "Conhecimento teórico > Princípios > Jita-kyoei (bem-estar e benefício mútuos)",
+        "statement": "Qual atitude no treino mostra Jita-kyoei?",
+        "options": [
+          "Cuidar da queda do parceiro e ajudá-lo a melhorar",
+          "Projetar o parceiro com força máxima",
+          "Recusar treinar com faixas mais baixas",
+          "Esconder as técnicas dos colegas"
+        ],
+        "correct": 0,
+        "explanation": "Ajudar o parceiro é ajudar a si mesmo: sem um bom uke, ninguém evolui."
+      },
+      {
+        "rank": "5-kyu",
+        "item": "Conhecimento teórico > Princípios > Jita-kyoei (bem-estar e benefício mútuos)",
+        "statement": "Ao treinar com um colega mais leve ou iniciante, o judoca deve:",
+        "options": [
+          "Controlar a força e garantir a queda segura do parceiro",
+          "Usar a força total",
+          "Soltar a manga na queda",
+          "Dispensar a saudação"
+        ],
+        "correct": 0,
+        "explanation": "O cuidado com o parceiro é parte do benefício mútuo e da segurança no treino."
+      },
+      {
+        "rank": "5-kyu",
+        "statement": "Ceder à força do adversário para usá-la a seu favor está ligado a qual ideia do judô?",
+        "options": [
+          "Ju, a suavidade",
+          "Hansoku-make",
+          "Mokuso",
+          "Kiotsuke"
+        ],
+        "correct": 0,
+        "explanation": "Ju é ceder para vencer: em vez de resistir, aproveita-se a força do outro."
+      },
+      {
+        "rank": "5-kyu",
+        "item": "Conhecimento teórico > Regras de competição > Penalidades (Shido, Hansoku-make)",
+        "statement": "\"Shido\" é:",
+        "options": [
+          "Uma penalidade leve",
+          "A pontuação máxima",
+          "O comando de início da luta",
+          "Uma imobilização"
+        ],
+        "correct": 0,
+        "explanation": "Shido é penalidade leve; o terceiro shido leva ao hansoku-make."
+      },
+      {
+        "rank": "5-kyu",
+        "item": "Conhecimento teórico > Regras de competição > Penalidades (Shido, Hansoku-make)",
+        "statement": "\"Hansoku-make\" significa:",
+        "options": [
+          "Desclassificação",
+          "Meia vantagem",
+          "Continuem",
+          "Imobilização desfeita"
+        ],
+        "correct": 0,
+        "explanation": "Hansoku-make é a desclassificação, por falta grave ou pelo terceiro shido."
+      },
+      {
+        "rank": "5-kyu",
+        "item": "Conhecimento teórico > Regras de competição > Penalidades (Shido, Hansoku-make)",
+        "statement": "Qual destas atitudes é punida com shido?",
+        "options": [
+          "Ficar muito tempo sem atacar (falta de combatividade)",
+          "Fazer a saudação",
+          "Aplicar um ippon",
+          "Ajustar o judogi quando o árbitro autoriza"
+        ],
+        "correct": 0,
+        "explanation": "A falta de combatividade é punida com shido."
+      },
+      {
+        "rank": "5-kyu",
+        "item": "Conhecimento teórico > Regras de competição > Penalidades (Shido, Hansoku-make)",
+        "statement": "Qual destas ações é proibida e leva ao hansoku-make?",
+        "options": [
+          "Mergulhar de cabeça no tatame ao aplicar uma projeção",
+          "Fazer uma imobilização",
+          "Segurar gola e manga",
+          "Fazer o kuzushi"
+        ],
+        "correct": 0,
+        "explanation": "Mergulhar de cabeça põe o pescoço em risco e é punido com hansoku-make."
+      },
+      {
+        "rank": "5-kyu",
+        "item": "Conhecimento teórico > Regras de competição > Penalidades (Shido, Hansoku-make)",
+        "statement": "O atleta que recebe hansoku-make:",
+        "options": [
+          "Perde a luta",
+          "Ganha um waza-ari",
+          "Volta à posição inicial sem efeito",
+          "Recebe só uma advertência verbal"
+        ],
+        "correct": 0,
+        "explanation": "Hansoku-make encerra a luta com a derrota de quem foi penalizado."
+      },
+      {
+        "rank": "5-kyu",
+        "item": "Conhecimento teórico > Terminologia > Nomes das técnicas exigidas na faixa",
+        "statement": "O que é o tsukuri?",
+        "options": [
+          "A preparação: entrar e encaixar o corpo para o golpe",
+          "A execução final da projeção",
+          "A saudação antes da luta",
+          "A queda do uke"
+        ],
+        "correct": 0,
+        "explanation": "Kuzushi desequilibra, tsukuri prepara a entrada e kake executa."
+      },
+      {
+        "rank": "5-kyu",
+        "item": "Conhecimento teórico > Terminologia > Nomes das técnicas exigidas na faixa",
+        "statement": "O que é o kake?",
+        "options": [
+          "A execução, o momento em que a projeção acontece",
+          "O desequilíbrio inicial",
+          "A pegada",
+          "O deslocamento"
+        ],
+        "correct": 0,
+        "explanation": "Kake é a terceira fase: a execução da técnica."
+      },
+      {
+        "rank": "5-kyu",
+        "item": "Conhecimento teórico > Terminologia > Nomes das técnicas exigidas na faixa",
+        "statement": "Por que o kuzushi vem antes do tsukuri?",
+        "options": [
+          "Porque o uke sem equilíbrio é projetado com menos força",
+          "Porque é a ordem da saudação",
+          "Porque o uke precisa estar firme para entrar o golpe",
+          "Não há ordem entre as fases"
+        ],
+        "correct": 0,
+        "explanation": "Sem desequilíbrio, a entrada encontra o uke firme e o golpe exige força demais."
+      },
+      {
+        "rank": "5-kyu",
+        "item": "Conhecimento teórico > Terminologia > Nomes das técnicas exigidas na faixa",
+        "statement": "O que é tai-sabaki?",
+        "options": [
+          "O giro do corpo, usado para entrar no golpe ou esquivar",
+          "A saudação ajoelhado",
+          "Um tipo de pegada",
+          "Uma penalidade"
+        ],
+        "correct": 0,
+        "explanation": "Tai-sabaki é o movimento rotatório do corpo."
+      },
+      {
+        "rank": "5-kyu",
+        "item": "Conhecimento teórico > Terminologia > Nomes das técnicas exigidas na faixa",
+        "statement": "No mae-sabaki, o judoca:",
+        "options": [
+          "Avança um pé e gira o corpo",
+          "Recua os dois pés",
+          "Salta para trás",
+          "Fica parado, sem mover os pés"
+        ],
+        "correct": 0,
+        "explanation": "Mae-sabaki é o giro à frente: um pé avança e o corpo gira."
+      },
+      {
+        "rank": "5-kyu",
+        "item": "Conhecimento teórico > Terminologia > Nomes das técnicas exigidas na faixa",
+        "statement": "No ushiro-sabaki, o judoca:",
+        "options": [
+          "Recua um pé e gira o corpo para trás",
+          "Avança um pé e gira para a frente",
+          "Fica parado",
+          "Salta para o lado"
+        ],
+        "correct": 0,
+        "explanation": "Ushiro-sabaki é o giro para trás, recuando um pé."
+      },
+      {
+        "rank": "5-kyu",
+        "item": "Conhecimento teórico > Classificação das técnicas > Gokyo-no-waza",
+        "statement": "O uki-goshi pertence a qual grupo do Gokyo?",
+        "options": [
+          "Primeiro grupo (Dai-ikkyo)",
+          "Segundo grupo",
+          "Terceiro grupo",
+          "Quinto grupo"
+        ],
+        "correct": 0,
+        "explanation": "Uki-goshi está no Dai-ikkyo, ao lado de o-goshi e seoi-nage."
+      },
+      {
+        "rank": "5-kyu",
+        "item": "Conhecimento teórico > Classificação das técnicas > Gokyo-no-waza",
+        "statement": "O tsurikomi-goshi pertence a qual grupo do Gokyo?",
+        "options": [
+          "Segundo grupo (Dai-nikyo)",
+          "Primeiro grupo",
+          "Quarto grupo",
+          "Quinto grupo"
+        ],
+        "correct": 0,
+        "explanation": "Tsurikomi-goshi está no Dai-nikyo."
+      },
+      {
+        "rank": "5-kyu",
+        "item": "Conhecimento teórico > Classificação das técnicas > Gokyo-no-waza",
+        "statement": "Ko-soto-gari e ko-uchi-gari estão em qual grupo do Gokyo?",
+        "options": [
+          "No segundo grupo (Dai-nikyo)",
+          "No primeiro grupo",
+          "No terceiro grupo",
+          "No quinto grupo"
+        ],
+        "correct": 0,
+        "explanation": "Os dois abrem o Dai-nikyo."
+      },
+      {
+        "rank": "5-kyu",
+        "item": "Conhecimento teórico > Terminologia > Nomes das técnicas exigidas na faixa",
+        "statement": "\"Ko\" no nome de um golpe significa:",
+        "options": [
+          "Pequeno",
+          "Grande",
+          "Externo",
+          "Interno"
+        ],
+        "correct": 0,
+        "explanation": "Ko é pequeno; o é grande. Ex.: ko-uchi-gari, pequena ceifada interna."
+      },
+      {
+        "rank": "5-kyu",
+        "item": "Conhecimento teórico > Terminologia > Nomes das técnicas exigidas na faixa",
+        "statement": "\"O\" no nome de um golpe significa:",
+        "options": [
+          "Grande",
+          "Pequeno",
+          "Roda",
+          "Quadril"
+        ],
+        "correct": 0,
+        "explanation": "O é grande. Ex.: o-soto-gari, grande ceifada externa."
+      },
+      {
+        "rank": "5-kyu",
+        "item": "Conhecimento teórico > Terminologia > Nomes das técnicas exigidas na faixa",
+        "statement": "Qual é a diferença entre o-uchi-gari e ko-uchi-gari?",
+        "options": [
+          "O o-uchi ceifa a perna do uke por dentro; o ko-uchi ceifa o pé por dentro, num movimento menor",
+          "O o-uchi é de quadril e o ko-uchi é de mão",
+          "São o mesmo golpe com nomes diferentes",
+          "O ko-uchi é feito só no solo"
+        ],
+        "correct": 0,
+        "explanation": "Os dois ceifam por dentro; no ko-uchi o alvo é o pé, num movimento curto."
+      },
+      {
+        "rank": "5-kyu",
+        "item": "Conhecimento teórico > Terminologia > Nomes das técnicas exigidas na faixa",
+        "statement": "No ko-soto-gari, o tori ceifa:",
+        "options": [
+          "O pé do uke por fora, pelo calcanhar",
+          "A perna do uke por dentro",
+          "O joelho, com a sola do pé",
+          "A cintura, com o braço"
+        ],
+        "correct": 0,
+        "explanation": "Ko-soto-gari é a pequena ceifada externa: a sola do pé ceifa o calcanhar do uke por fora."
+      },
+      {
+        "rank": "5-kyu",
+        "item": "Conhecimento teórico > Terminologia > Nomes das técnicas exigidas na faixa",
+        "statement": "\"Tsurikomi\" no nome de um golpe indica:",
+        "options": [
+          "Puxar e levantar o uke",
+          "Varrer",
+          "Rodar",
+          "Imobilizar"
+        ],
+        "correct": 0,
+        "explanation": "Tsurikomi é a ação de pescar: puxar e elevar o uke, como no tsurikomi-goshi."
+      },
+      {
+        "rank": "5-kyu",
+        "item": "Conhecimento teórico > Terminologia > Nomes das técnicas exigidas na faixa",
+        "statement": "No tsurikomi-goshi, a mão que segura a gola:",
+        "options": [
+          "Puxa e levanta o uke enquanto o quadril entra",
+          "Envolve a cintura do uke",
+          "Segura a faixa do uke",
+          "Fica solta, sem segurar"
+        ],
+        "correct": 0,
+        "explanation": "No tsurikomi-goshi a mão da gola eleva o uke; o braço não envolve a cintura, como no o-goshi."
+      },
+      {
+        "rank": "5-kyu",
+        "item": "Conhecimento teórico > Terminologia > Nomes das técnicas exigidas na faixa",
+        "statement": "Qual é a diferença entre uki-goshi e o-goshi?",
+        "options": [
+          "No uki-goshi o quadril encosta de lado e o uke gira sobre ele; no o-goshi o quadril entra todo e levanta o uke",
+          "No uki-goshi o tori segura só a faixa",
+          "O o-goshi é feito de joelhos",
+          "Não há diferença"
+        ],
+        "correct": 0,
+        "explanation": "Uki-goshi é o quadril flutuante, com rotação do tronco; o-goshi é o grande quadril, com elevação."
+      },
+      {
+        "rank": "5-kyu",
+        "item": "Conhecimento teórico > Terminologia > Nomes das técnicas exigidas na faixa",
+        "statement": "No o-soto-gaeshi, quem aplica o contragolpe:",
+        "options": [
+          "Absorve o ataque e ceifa a perna de apoio de quem atacou",
+          "Foge para trás",
+          "Desiste da luta",
+          "Puxa o adversário para o solo"
+        ],
+        "correct": 0,
+        "explanation": "O-soto-gaeshi responde ao o-soto-gari com a mesma mecânica, invertida."
+      },
+      {
+        "rank": "5-kyu",
+        "item": "Conhecimento teórico > Terminologia > Nomes das técnicas exigidas na faixa",
+        "statement": "Qual é a diferença entre renraku-waza e kaeshi-waza?",
+        "options": [
+          "Renraku encadeia golpes do próprio tori; kaeshi responde ao ataque do uke",
+          "São a mesma coisa",
+          "Renraku é feito no solo e kaeshi em pé",
+          "Kaeshi é uma penalidade"
+        ],
+        "correct": 0,
+        "explanation": "Renraku-waza são combinações; kaeshi-waza são contragolpes."
+      },
+      {
+        "rank": "5-kyu",
+        "item": "Conhecimento teórico > Terminologia > Nomes das técnicas exigidas na faixa",
+        "statement": "Na combinação de-ashi-harai → o-soto-gari, o segundo golpe é aplicado:",
+        "options": [
+          "Sem pausa, aproveitando a reação do uke ao primeiro",
+          "Depois de voltar à posição inicial",
+          "Só depois do comando do árbitro",
+          "No solo, com a outra perna"
+        ],
+        "correct": 0,
+        "explanation": "A combinação aproveita a reação do uke à varrida; uma pausa dá tempo para ele se recompor."
+      },
+      {
+        "rank": "5-kyu",
+        "item": "Conhecimento teórico > Terminologia > Nomes das técnicas exigidas na faixa",
+        "statement": "Na combinação seoi-nage → o-uchi-gari, o que leva o tori a trocar para o o-uchi-gari?",
+        "options": [
+          "O uke empurra o quadril para a frente para bloquear o seoi",
+          "O uke cai sozinho",
+          "O árbitro diz matte",
+          "O tori fica cansado"
+        ],
+        "correct": 0,
+        "explanation": "Para bloquear o seoi, o uke projeta o quadril à frente e deixa o peso atrás; o tori gira de volta e ceifa por dentro."
+      },
+      {
+        "rank": "5-kyu",
+        "item": "Conhecimento teórico > Terminologia > Nomes das técnicas exigidas na faixa",
+        "statement": "Por que encadear golpes (renraku-waza) funciona?",
+        "options": [
+          "Porque a defesa do primeiro golpe deixa o uke desequilibrado para o segundo",
+          "Porque o segundo golpe vale mais pontos",
+          "Porque cansa o árbitro",
+          "Porque evita o shido"
+        ],
+        "correct": 0,
+        "explanation": "A reação do uke ao primeiro ataque cria o desequilíbrio do segundo."
+      },
+      {
+        "rank": "5-kyu",
+        "item": "Conhecimento teórico > Terminologia > Nomes das técnicas exigidas na faixa",
+        "statement": "Na tate-shiho-gatame, o tori fica:",
+        "options": [
+          "Montado sobre o tronco do uke",
+          "De lado, peito sobre peito",
+          "Além da cabeça do uke",
+          "Sentado de lado, com o braço no pescoço"
+        ],
+        "correct": 0,
+        "explanation": "Tate é vertical: o tori monta sobre o uke."
+      },
+      {
+        "rank": "5-kyu",
+        "item": "Conhecimento teórico > Terminologia > Nomes das técnicas exigidas na faixa",
+        "statement": "Na makura-kesa-gatame, a coxa do tori serve de:",
+        "options": [
+          "Travesseiro para a cabeça do uke",
+          "Apoio para a mão do tori",
+          "Bloqueio do pé do uke",
+          "Ponte para o uke escapar"
+        ],
+        "correct": 0,
+        "explanation": "Makura é travesseiro: a coxa do tori fica sob a cabeça do uke."
+      },
+      {
+        "rank": "5-kyu",
+        "item": "Conhecimento teórico > Terminologia > Nomes das técnicas exigidas na faixa",
+        "statement": "\"Kesa\" em kesa-gatame lembra:",
+        "options": [
+          "A faixa diagonal usada pelos monges budistas",
+          "Um travesseiro",
+          "Quatro direções",
+          "Uma roda"
+        ],
+        "correct": 0,
+        "explanation": "Kesa é a faixa usada em diagonal pelos monges: o braço do tori passa como ela em volta do pescoço do uke."
+      },
+      {
+        "rank": "5-kyu",
+        "statement": "Para escapar da yoko-shiho-gatame, o uke deve:",
+        "options": [
+          "Fazer a ponte com o quadril e colocar o joelho entre ele e o tori, recuperando a guarda",
+          "Esticar as pernas e esperar",
+          "Empurrar o rosto do tori",
+          "Virar de costas para o tori e parar"
+        ],
+        "correct": 0,
+        "explanation": "A ponte abre espaço e o joelho entra entre os dois para recuperar a guarda."
+      },
+      {
+        "rank": "5-kyu",
+        "statement": "Em uma imobilização, por que o tori mantém o quadril baixo?",
+        "options": [
+          "Para pesar sobre o uke e impedir a ponte",
+          "Para descansar",
+          "Para facilitar a saída do uke",
+          "Para ficar pronto para levantar"
+        ],
+        "correct": 0,
+        "explanation": "Quadril alto deixa espaço para o uke fazer a ponte e escapar."
+      },
+      {
+        "rank": "5-kyu",
+        "statement": "Na virada pelo braço, com o uke de bruços, o tori controla:",
+        "options": [
+          "O braço e a gola do uke, girando-o de costas até imobilizar",
+          "Somente as pernas do uke",
+          "Somente a faixa",
+          "A cabeça, com as duas mãos"
+        ],
+        "correct": 0,
+        "explanation": "Soltar a gola na virada deixa o uke voltar aos quatro apoios."
+      },
+      {
+        "rank": "5-kyu",
+        "item": "Conhecimento teórico > Etiqueta e dojo > Regras de conduta no dojo",
+        "statement": "Por que a etiqueta é avaliada no exame junto com a técnica?",
+        "options": [
+          "Porque respeito e controle fazem parte do judô tanto quanto os golpes",
+          "Porque é a parte mais fácil do exame",
+          "Só para preencher o tempo",
+          "Ela não é avaliada"
+        ],
+        "correct": 0,
+        "explanation": "A banca observa a etiqueta do começo ao fim do exame."
+      },
+      {
+        "rank": "5-kyu",
+        "item": "Conhecimento teórico > Etiqueta e dojo > Regras de conduta no dojo",
+        "statement": "Ao ser chamado no exame, o judoca deve:",
+        "options": [
+          "Responder \"hai\", levantar-se, fazer o rei e ir até o local indicado",
+          "Levantar em silêncio e correr até o centro",
+          "Esperar ser chamado de novo",
+          "Acenar com a mão"
+        ],
+        "correct": 0,
+        "explanation": "Responder com clareza e seguir o protocolo mostra segurança e respeito."
+      },
+      {
+        "rank": "5-kyu",
+        "item": "Conhecimento teórico > Etiqueta e dojo > Significado das saudações",
+        "statement": "O que é o mokuso?",
+        "options": [
+          "O momento de concentração em silêncio, de olhos fechados",
+          "A saudação em pé",
+          "Um comando de luta",
+          "Uma penalidade"
+        ],
+        "correct": 0,
+        "explanation": "Mokuso é feito no início e no fim da aula, em seiza."
+      },
+      {
+        "rank": "5-kyu",
+        "item": "Conhecimento teórico > Etiqueta e dojo > Significado das saudações",
+        "statement": "No cerimonial de abertura, em que ordem são feitas as saudações?",
+        "options": [
+          "Ao joseki, ao sensei e aos colegas",
+          "Aos colegas, ao sensei e ao joseki",
+          "Somente ao sensei",
+          "Somente aos colegas"
+        ],
+        "correct": 0,
+        "explanation": "A saudação começa pelo lugar de honra (joseki), depois o sensei e os colegas."
+      },
+      {
+        "rank": "5-kyu",
+        "item": "Conhecimento teórico > Etiqueta e dojo > Regras de conduta no dojo",
+        "statement": "Ao receber o resultado do exame, qualquer que seja, o judoca deve:",
+        "options": [
+          "Agradecer com o mesmo rei",
+          "Comemorar no tatame",
+          "Discutir a avaliação",
+          "Sair sem saudar"
+        ],
+        "correct": 0,
+        "explanation": "O espírito do judô continua depois que a prova acaba."
+      },
+      {
+        "rank": "5-kyu",
+        "item": "Conhecimento teórico > Etiqueta e dojo > Regras de conduta no dojo",
+        "statement": "O que significa \"dojo\"?",
+        "options": [
+          "Local de treino, o \"lugar do caminho\"",
+          "A roupa do judoca",
+          "O professor",
+          "A faixa"
+        ],
+        "correct": 0,
+        "explanation": "Dojo é o local onde se pratica o caminho (do)."
+      },
+      {
+        "rank": "5-kyu",
+        "item": "Conhecimento teórico > Terminologia > Nomes das partes do corpo e posições",
+        "statement": "\"Shiai\" é:",
+        "options": [
+          "Competição",
+          "Treino livre",
+          "Repetição da entrada do golpe",
+          "Forma preestabelecida"
+        ],
+        "correct": 0,
+        "explanation": "Shiai é a competição; shiaijo é o local onde ela acontece."
+      },
+      {
+        "rank": "5-kyu",
+        "item": "Conhecimento teórico > Terminologia > Nomes das partes do corpo e posições",
+        "statement": "\"Randori\" é:",
+        "options": [
+          "O treino livre",
+          "A competição oficial",
+          "A saudação",
+          "A repetição da entrada sem projetar"
+        ],
+        "correct": 0,
+        "explanation": "Randori é a luta de treino, livre."
+      },
+      {
+        "rank": "5-kyu",
+        "item": "Conhecimento teórico > Terminologia > Nomes das partes do corpo e posições",
+        "statement": "\"Uchikomi\" é:",
+        "options": [
+          "Repetir a entrada do golpe sem projetar",
+          "O treino livre",
+          "Repetir o golpe completo, com projeção",
+          "A saudação ajoelhado"
+        ],
+        "correct": 0,
+        "explanation": "Uchikomi repete a entrada; nage-komi repete o golpe completo, com projeção."
+      },
+      {
+        "rank": "5-kyu",
+        "item": "Conhecimento teórico > Sistema de graduação > Kyu e Dan, cores das faixas",
+        "statement": "Qual faixa vem depois da amarela/laranja?",
+        "options": [
+          "Laranja",
+          "Verde",
+          "Azul",
+          "Roxa"
+        ],
+        "correct": 0,
+        "explanation": "Depois da amarela/laranja vem a laranja e, em seguida, a verde."
       }
     ]
   }
