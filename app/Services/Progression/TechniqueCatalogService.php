@@ -3,6 +3,7 @@
 namespace App\Services\Progression;
 
 use App\Models\Association;
+use App\Models\AuditLog;
 use App\Models\MartialArt;
 use App\Models\QuizQuestion;
 use App\Models\Rank;
@@ -145,16 +146,20 @@ class TechniqueCatalogService
     /**
      * Copia o modelo para a associação. Repetir não duplica itens nem sobrescreve ajustes do currículo.
      *
-     * @return array{items_created: int, entries_created: int, questions_created: int, missing_ranks: list<string>}
+     * Com $updateCurriculum, as exigências que vieram do modelo e nunca foram ajustadas na tela (sem registro
+     * rank_curriculum.saved na auditoria) passam a seguir a versão atual do modelo: mudam de nível ou saem.
+     * Cada troca fica na auditoria com o valor anterior.
+     *
+     * @return array{items_created: int, entries_created: int, entries_updated: int, entries_removed: int, entries_kept: int, questions_created: int, missing_ranks: list<string>}
      */
-    public function applyTemplate(Association $association, MartialArt $martialArt, string $key, User $actor): array
+    public function applyTemplate(Association $association, MartialArt $martialArt, string $key, User $actor, bool $updateCurriculum = false): array
     {
         $template = $this->templates->find($key);
         if ($template === null) {
             throw ValidationException::withMessages(['template_key' => 'Selecione um modelo válido.']);
         }
 
-        return DB::transaction(function () use ($association, $martialArt, $key, $template, $actor): array {
+        return DB::transaction(function () use ($association, $martialArt, $key, $template, $actor, $updateCurriculum): array {
             $items = TechniqueItem::query()->where('association_id', $association->id)->where('martial_art_id', $martialArt->id)->lockForUpdate()->get();
             $byPath = collect($this->paths($items))->flip()->map(fn (int $id) => $items->firstWhere('id', $id));
             $created = 0;
@@ -181,6 +186,7 @@ class TechniqueCatalogService
             $ranks = Rank::query()->where('martial_art_id', $martialArt->id)->get()->keyBy('name');
             $entries = 0;
             $missing = [];
+            $expected = [];
             foreach ($template['curriculum'] as $rankName => $rows) {
                 $rank = $ranks->get($rankName);
                 if ($rank === null) {
@@ -189,13 +195,16 @@ class TechniqueCatalogService
                     continue;
                 }
                 foreach ($rows as [$path, $level]) {
+                    $itemId = $byPath->get($path)->id;
+                    $expected[$rank->id.':'.$itemId] = $level;
                     $entry = RankCurriculumEntry::query()->firstOrCreate(
-                        ['association_id' => $association->id, 'rank_id' => $rank->id, 'technique_item_id' => $byPath->get($path)->id],
+                        ['association_id' => $association->id, 'rank_id' => $rank->id, 'technique_item_id' => $itemId],
                         ['required_level' => $level, 'updated_by_user_id' => $actor->id],
                     );
                     $entries += $entry->wasRecentlyCreated ? 1 : 0;
                 }
             }
+            $sync = $updateCurriculum ? $this->syncTemplateCurriculum($association, $ranks->pluck('id')->all(), $expected, $actor) : ['updated' => 0, 'removed' => 0, 'kept' => 0];
             $questions = 0;
             foreach ($template['quiz'] ?? [] as $row) {
                 $rank = $ranks->get($row['rank']);
@@ -214,10 +223,47 @@ class TechniqueCatalogService
             }
             $this->audit->record('technique_template.applied', 'created', $martialArt, null, [
                 'template_key' => $key, 'items_created' => $created, 'entries_created' => $entries, 'questions_created' => $questions, 'missing_ranks' => $missing,
+                'curriculum_updated' => $updateCurriculum, 'entries_updated' => $sync['updated'], 'entries_removed' => $sync['removed'], 'entries_kept' => $sync['kept'],
             ], ['association_id' => $association->id]);
 
-            return ['items_created' => $created, 'entries_created' => $entries, 'questions_created' => $questions, 'missing_ranks' => $missing];
+            return [
+                'items_created' => $created, 'entries_created' => $entries, 'entries_updated' => $sync['updated'], 'entries_removed' => $sync['removed'],
+                'entries_kept' => $sync['kept'], 'questions_created' => $questions, 'missing_ranks' => $missing,
+            ];
         });
+    }
+
+    /**
+     * Alinha ao modelo as exigências nunca ajustadas na tela. Quem a associação gravou pelo currículo fica como está.
+     *
+     * @param  list<int>  $rankIds
+     * @param  array<string, ?int>  $expected  nível do modelo por "rank_id:technique_item_id"
+     * @return array{updated: int, removed: int, kept: int}
+     */
+    private function syncTemplateCurriculum(Association $association, array $rankIds, array $expected, User $actor): array
+    {
+        $current = RankCurriculumEntry::query()->where('association_id', $association->id)->whereIn('rank_id', $rankIds)->lockForUpdate()->get();
+        $adjusted = AuditLog::query()->where('association_id', $association->id)->where('event_type', 'rank_curriculum.saved')
+            ->where('entity_type', (new RankCurriculumEntry)->getMorphClass())->whereIn('entity_id', $current->pluck('id'))
+            ->distinct()->pluck('entity_id')->flip();
+        $result = ['updated' => 0, 'removed' => 0, 'kept' => $adjusted->count()];
+        foreach ($current as $entry) {
+            if ($adjusted->has($entry->id)) {
+                continue;
+            }
+            $key = $entry->rank_id.':'.$entry->technique_item_id;
+            if (! array_key_exists($key, $expected)) {
+                $this->audit->record('rank_curriculum.template_removed', 'deleted', $entry, ['required_level' => $entry->required_level], null, ['association_id' => $association->id]);
+                $entry->delete();
+                $result['removed']++;
+            } elseif (($before = $entry->required_level === null ? null : (int) $entry->required_level) !== $expected[$key]) {
+                $entry->forceFill(['required_level' => $expected[$key], 'updated_by_user_id' => $actor->id])->save();
+                $this->audit->record('rank_curriculum.template_updated', 'updated', $entry, ['required_level' => $before], ['required_level' => $expected[$key]], ['association_id' => $association->id]);
+                $result['updated']++;
+            }
+        }
+
+        return $result;
     }
 
     /** @return list<int> */

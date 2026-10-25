@@ -42,6 +42,7 @@ Na tela da aula (`operacao/dojos/{dojo}/aulas/{session}`), o bloco "Técnicas tr
 - Inativar um grupo inativa tudo dentro dele. Reativar um item exige o grupo ativo. Nada é apagado; item inativo some do currículo efetivo, mas a exigência gravada continua.
 - O currículo de uma faixa é o que é cobrado no exame para chegar a ela. Ele herda as faixas anteriores da mesma modalidade (ordem `sort_order`). `required_level` 2 a 4 inclui ou altera; `NULL` deixa de cobrar a partir daquela faixa. "Desfazer ajuste" remove a linha da própria faixa e o item volta a seguir as anteriores.
 - O modelo é idempotente pelo caminho do item ("Nage-waza > Te-waza > ...") e pela chave única de exigência; não sobrescreve ajustes. Faixas do modelo que não existem na modalidade são informadas na mensagem.
+- Quando o catálogo já tem itens, a tela oferece "Atualizar também o currículo que veio do modelo" (`update_curriculum`). Com ela, as exigências nunca gravadas pela tela de currículo (sem `rank_curriculum.saved` na auditoria) passam a seguir a versão atual do modelo: mudam de nível (`rank_curriculum.template_updated`) ou saem (`rank_curriculum.template_removed`), com o valor anterior na auditoria. Ajustes da associação ficam como estão. Sem a opção, reaplicar só inclui o que falta.
 - Links de vídeo aceitam só `http` e `https`.
 - Avalia quem é professor principal ou auxiliar vigente (`class_group_teachers.role_type = assistant`) de turma ativa da modalidade no dojo, com matrícula ativa do aluno, e tem `assessment.manage` na concessão de professor do dojo. Substituto eventual não avalia.
 - O nível atual é o último registro gravado por item; sem registro, conta como "Não iniciado". O item falta quando o nível atual é menor que o exigido.
@@ -69,15 +70,17 @@ Na tela da aula (`operacao/dojos/{dojo}/aulas/{session}`), o bloco "Técnicas tr
 
 ## Auditoria
 
-`technique_item.saved`, `technique_item.status_changed`, `technique_template.applied`, `rank_curriculum.saved`, `rank_curriculum.restored`, `technique_assessment.recorded`, `class_session.techniques_saved`, `quiz_question.saved`, `quiz_question.status_changed`, `progression_settings.saved`, `quiz_release.created`, `quiz_release.cancelled`, `quiz_attempt.started` e `quiz_attempt.finished` (só a prova oficial; treino não é auditado).
+`technique_item.saved`, `technique_item.status_changed`, `technique_template.applied`, `rank_curriculum.saved`, `rank_curriculum.restored`, `rank_curriculum.template_updated`, `rank_curriculum.template_removed`, `technique_assessment.recorded`, `class_session.techniques_saved`, `quiz_question.saved`, `quiz_question.status_changed`, `progression_settings.saved`, `quiz_release.created`, `quiz_release.cancelled`, `quiz_attempt.started` e `quiz_attempt.finished` (só a prova oficial; treino não é auditado).
 
 ## Modelo do judô
 
 Chave `judo_kodokan_2026`: fundamentos (Kihon), Nage-waza (Tachi-waza e Sutemi-waza pela classificação Kodokan), Ouyou-waza (renraku, renzoku, kaeshi), Katame-waza, Ate-waza, Nage-no-kata e Katame-no-kata, mais o bloco teórico. O programa por faixa vai de 11º Kyū a 1º Dan e é uma sugestão que a associação revisa. O modelo traz também perguntas de quiz por faixa (lista `quiz`), ligadas aos itens teóricos; reaplicar não duplica perguntas com o mesmo enunciado na mesma faixa.
 
+Versão 2 (2026-10-25), revisada pelo responsável técnico: 55 itens novos encaixados nos grupos existentes (amarrar a faixa, fases kuzushi/tsukuri/kake, fusegi em pé, três osaekomi kuzure/makura, 20 renraku-waza, 14 kaeshi-waza) e o grupo novo `Katame-waza > Ne-waza (viradas, escapadas e guarda)` com 15 itens; currículo refeito pelo checklist de troca de faixa da CBJ, com as faixas intermediárias propostas, e 376 perguntas novas de quiz (413 no total). Cada coluna do currículo é o que se exige para chegar àquela faixa. Associações que já aplicaram a versão 1 recebem a versão 2 reaplicando o modelo com a opção de atualizar o currículo.
+
 ## Testes
 
-`TechniqueCatalogTest`: validade do modelo frente ao template de graduações, aplicação idempotente que preserva ajustes, faixas ausentes, herança (novo, alterado, herdado, retirado, restaurado), item inativo, regras da árvore, isolamento entre associações e permissões.
+`TechniqueCatalogTest`: validade do modelo frente ao template de graduações, aplicação idempotente que preserva ajustes, atualização do currículo do modelo que mantém ajustes da associação, faixas ausentes, herança (novo, alterado, herdado, retirado, restaurado), item inativo, regras da árvore, isolamento entre associações e permissões.
 
 `SessionTechniquesTest`, `QuizTest`, `ProgressionPanelTest` e `AssessmentReminderTest`: ver `docs/TESTING.md`.
 

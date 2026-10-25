@@ -74,6 +74,37 @@ class TechniqueCatalogTest extends TestCase
         $this->get(route('associations.curriculum.show', [$this->association, $this->judo]))->assertOk();
     }
 
+    public function test_reapplying_with_curriculum_update_aligns_untouched_template_entries_and_keeps_manual_ones(): void
+    {
+        $this->actingAs($this->manager)->post(route('associations.techniques.template', [$this->association, $this->judo]), ['template_key' => 'judo_kodokan_2026'])
+            ->assertSessionHasNoErrors();
+        $this->get(route('associations.techniques.index', [$this->association, $this->judo]))->assertOk()->assertSee('name="update_curriculum"', false);
+        $entries = RankCurriculumEntry::query()->count();
+        [$changed, $manual] = RankCurriculumEntry::query()->whereNotNull('required_level')->orderBy('id')->take(2)->get()->all();
+        $templateLevel = $changed->required_level;
+
+        // Simula o que sobrou de uma versão anterior do modelo: nível diferente e uma exigência que o modelo atual não tem.
+        $changed->update(['required_level' => $templateLevel === 4 ? 2 : 4]);
+        $leftover = RankCurriculumEntry::query()->create([
+            'association_id' => $this->association->id, 'rank_id' => $this->judo->ranks()->where('name', '1-dan')->value('id'),
+            'technique_item_id' => TechniqueItem::query()->where('name', 'Ippon-seoi-nage')->value('id'), 'required_level' => 2,
+        ]);
+        $manualLevel = $manual->required_level === 4 ? 2 : 4;
+        app(CurriculumService::class)->set($this->association, $manual->rank, $manual->item, $manualLevel, $this->manager);
+
+        $this->post(route('associations.techniques.template', [$this->association, $this->judo]), ['template_key' => 'judo_kodokan_2026', 'update_curriculum' => '1'])
+            ->assertSessionHas('status', fn (string $message) => str_contains($message, '1 exigência(s) alterada(s) e 1 retirada(s); 1 ajuste(s) da associação mantido(s)'));
+        $this->assertSame($templateLevel, $changed->fresh()->required_level);
+        $this->assertSame($manualLevel, $manual->fresh()->required_level);
+        $this->assertNull($leftover->fresh());
+        $this->assertSame($entries, RankCurriculumEntry::query()->count());
+        $this->assertDatabaseHas('audit_logs', ['event_type' => 'rank_curriculum.template_updated', 'entity_id' => $changed->id]);
+        $this->assertDatabaseHas('audit_logs', ['event_type' => 'rank_curriculum.template_removed', 'entity_id' => $leftover->id]);
+
+        $this->post(route('associations.techniques.template', [$this->association, $this->judo]), ['template_key' => 'judo_kodokan_2026', 'update_curriculum' => '1'])
+            ->assertSessionHas('status', fn (string $message) => str_contains($message, '0 exigência(s) alterada(s) e 0 retirada(s)'));
+    }
+
     public function test_template_reports_ranks_missing_in_martial_art(): void
     {
         $other = MartialArt::query()->create(['association_id' => $this->association->id, 'name' => 'Judô adaptado', 'status' => 'active']);
