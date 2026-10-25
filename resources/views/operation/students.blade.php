@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Alunos — '.$dojo->name)
 @section('content')
+@include('partials.back-to-dashboard')
 <nav class="breadcrumbs"><a href="{{ route('operation.home', $dojo) }}">{{ $dojo->name }}</a><span>/</span><span>Alunos</span></nav>
 <div class="page-heading"><div><span class="eyebrow">Vínculos regulares</span><h1>Alunos do dojo</h1><p>Esta lista não inclui visitantes e não exibe documentos, contatos ou dados financeiros.</p></div>@if($canManage)<a class="button button-primary" href="{{ route('operation.students.direct.create', $dojo) }}">Novo aluno</a>@endif</div>
 <div class="card list-card">

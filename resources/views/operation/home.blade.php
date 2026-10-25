@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('title', $dojo->name.' — Operação')
 @section('content')
+@include('partials.back-to-dashboard')
 <nav class="breadcrumbs"><a href="{{ route('operation.index') }}">Meus dojos</a><span>/</span><span>{{ $dojo->name }}</span></nav>
 <div class="page-heading"><div><span class="eyebrow">Operação do dojo</span><h1>{{ $dojo->name }}</h1><p>Você verá somente as funções autorizadas para esta unidade.</p></div></div>
 <section class="quick-grid" aria-label="Funções do dojo">

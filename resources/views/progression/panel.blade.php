@@ -2,6 +2,7 @@
 @php($knowledgeLabels = ['theoretical' => 'Conhecimento Teórico', 'practical' => 'Conhecimento Prático'])
 @section('title', 'Acompanhamento técnico — '.$dojo->name)
 @section('content')
+@include('partials.back-to-dashboard')
 <nav class="breadcrumbs"><a href="{{ route('operation.home', $dojo) }}">{{ $dojo->name }}</a><span>/</span><span>Acompanhamento técnico</span></nav>
 <div class="page-heading"><div><span class="eyebrow">Painel do dojo</span><h1>Acompanhamento técnico</h1><p>O que as turmas precisam para a próxima graduação e o que foi trabalhado nas aulas.</p></div></div>
 

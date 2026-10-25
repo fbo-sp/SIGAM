@@ -4,6 +4,7 @@
 @section('title', 'Acompanhamento — '.$name)
 @section('content')
 @if($dojo)
+@include('partials.back-to-dashboard')
 <nav class="breadcrumbs"><a href="{{ route('operation.home', $dojo) }}">{{ $dojo->name }}</a><span>/</span><span>{{ $name }}</span><span>/</span><span>Acompanhamento</span></nav>
 @else
 <nav class="breadcrumbs"><a href="{{ route('associations.students.index', $association) }}">Alunos</a><span>/</span><a href="{{ route('associations.students.show', [$association, $student]) }}">{{ $name }}</a><span>/</span><span>Acompanhamento</span></nav>

@@ -18,12 +18,18 @@ use App\Models\Student;
 use App\Models\TeacherProfile;
 use App\Models\User;
 use App\Services\Access\OperationalScope;
+use App\Services\Progression\CurriculumCoverageService;
+use App\Services\Progression\ProgressionPanelService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 class DashboardService
 {
-    public function __construct(private readonly OperationalScope $scope) {}
+    public function __construct(
+        private readonly OperationalScope $scope,
+        private readonly ProgressionPanelService $panels,
+        private readonly CurriculumCoverageService $coverage,
+    ) {}
 
     public function for(User $user): array
     {
@@ -81,7 +87,9 @@ class DashboardService
         if (! $teacher) {
             return ['kind' => 'teacher', 'metrics' => ['today_classes' => 0, 'pending_attendance' => 0, 'students' => 0, 'recurring_absences' => 0], 'lists' => ['next_classes' => collect(), 'classes' => collect(), 'championships' => collect()]];
         }
-        $groups = ClassGroup::query()->where('association_id', $user->association_id)->where('main_teacher_id', $teacher->id)->where('status', 'active');
+        $groups = ClassGroup::query()->where('association_id', $user->association_id)->where('status', 'active')
+            ->where(fn (Builder $query) => $query->where('main_teacher_id', $teacher->id)
+                ->orWhereHas('teacherAssignments', fn (Builder $assignment) => $assignment->where('teacher_profile_id', $teacher->id)->where('role_type', 'assistant')->current()));
         $groupIds = (clone $groups)->pluck('id');
         $todaySessions = ClassSession::query()->whereIn('class_group_id', $groupIds)->whereDate('session_date', today());
         $studentIds = Student::query()->whereHas('enrollments', fn (Builder $query) => $query->whereIn('class_group_id', $groupIds)->where('status', 'active'))->pluck('id');
@@ -91,7 +99,33 @@ class DashboardService
             return $latest->count() === 3 && $latest->every(fn (string $status) => $status === 'absent');
         })->count();
 
-        return ['kind' => 'teacher', 'metrics' => ['today_classes' => (clone $todaySessions)->count(), 'pending_attendance' => (clone $todaySessions)->where('status', '!=', 'cancelled')->where('attendance_state', 'open')->count(), 'students' => $studentIds->unique()->count(), 'recurring_absences' => $recurring], 'lists' => ['next_classes' => $this->teacherNextSessions($user, $groupIds), 'classes' => (clone $groups)->withCount(['enrollments' => fn (Builder $query) => $query->where('status', 'active')])->get(), 'championships' => Championship::query()->where('association_id', $user->association_id)->where('status', 'open')->where('registration_close_at', '>=', now())->orderBy('start_date')->limit(5)->get()]];
+        return ['kind' => 'teacher', 'metrics' => ['today_classes' => (clone $todaySessions)->count(), 'pending_attendance' => (clone $todaySessions)->where('status', '!=', 'cancelled')->where('attendance_state', 'open')->count(), 'students' => $studentIds->unique()->count(), 'recurring_absences' => $recurring], 'lists' => ['next_classes' => $this->teacherNextSessions($user, $groupIds), 'classes' => $this->teacherClasses($user, $teacher, (clone $groups)->with('dojo')->withCount(['enrollments' => fn (Builder $query) => $query->where('status', 'active')])->orderBy('name')->get()), 'championships' => Championship::query()->where('association_id', $user->association_id)->where('status', 'open')->where('registration_close_at', '>=', now())->orderBy('start_date')->limit(5)->get()]];
+    }
+
+    /**
+     * Turmas do professor com o link da turma no dojo e a cobertura do currículo nos últimos 90 dias,
+     * só quando as concessões vigentes do dojo permitem abrir (ADR-006).
+     *
+     * @return Collection<int, array{class: ClassGroup, role: string, url: ?string, coverage: ?array, coverage_url: ?string}>
+     */
+    private function teacherClasses(User $user, TeacherProfile $teacher, Collection $groups): Collection
+    {
+        $visible = [];
+
+        return $groups->map(function (ClassGroup $group) use ($user, $teacher, &$visible): array {
+            $dojo = $group->dojo;
+            $canOpen = $dojo && $dojo->status === 'active' && $this->scope->canEnter($user, $dojo)
+                && ($visible[$dojo->id] ??= $this->scope->classes($user, $dojo)->pluck('id')->flip())->has($group->id);
+            $canCover = $dojo && $this->panels->dojoClasses($user, $dojo)->whereKey($group->id)->exists();
+
+            return [
+                'class' => $group,
+                'role' => $group->main_teacher_id === $teacher->id ? 'Principal' : 'Auxiliar',
+                'url' => $canOpen ? route('operation.classes.show', [$dojo, $group]) : null,
+                'coverage' => $canCover ? $this->coverage->forClass($dojo->association, $group, today()->subDays(90), today())['overall'] : null,
+                'coverage_url' => $canCover ? route('operation.classes.coverage', [$dojo, $group]) : null,
+            ];
+        });
     }
 
     /**
