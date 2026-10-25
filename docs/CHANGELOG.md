@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-10-25 — Banco de quiz das faixas iniciais
+
+- o modelo `judo_kodokan_2026` ganha 108 perguntas, revisadas pelo responsável técnico: cinza passa a 10, cinza/azul a 20, azul/amarela a 40 e amarela/laranja a 50 perguntas, cobrindo o currículo cumulativo de cada faixa; o banco do modelo vai a 521 perguntas;
+- associações que já usam o modelo recebem as perguntas ao reaplicá-lo em Modalidades > Judô > Técnicas; sem migration.
+
 ## 2026-10-25 — Menu das modalidades e filtros de aulas
 
 - a tela de modalidades mostra, em cada modalidade, um menu com Graduações, Catálogo de técnicas, Currículo por graduação, Quiz e Configurações; as graduações ganham página própria (`modalidades/{martialArt}/graduacoes`) com a mesma barra de abas;
