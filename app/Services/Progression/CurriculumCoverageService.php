@@ -31,8 +31,8 @@ class CurriculumCoverageService
         $group->loadMissing('martialArt');
         $sessions = ClassSession::query()->where('class_group_id', $group->id)->whereNotIn('status', ['cancelled', 'rescheduled'])
             ->where('session_date', '>=', $from->toDateString())->where('session_date', '<', $until->copy()->addDay()->toDateString())
-            ->where('session_date', '<', today()->addDay()->toDateString())->pluck('id');
-        $marks = ClassSessionTechnique::query()->whereIn('class_session_id', $sessions)->whereNull('removed_at')->get(['class_session_id', 'technique_item_id']);
+            ->where('session_date', '<', today()->addDay()->toDateString())->orderBy('session_date')->orderBy('start_time')->get(['id', 'session_date', 'start_time']);
+        $marks = ClassSessionTechnique::query()->whereIn('class_session_id', $sessions->pluck('id'))->whereNull('removed_at')->get(['class_session_id', 'technique_item_id']);
         $worked = $marks->pluck('technique_item_id')->flip();
         $axes = $this->progress->axes($association, $group->martialArt);
 
@@ -67,7 +67,66 @@ class CurriculumCoverageService
             'overall' => $this->summary($all, $worked, $axes),
             'ranks' => $ranks,
             'without_next' => $withoutNext,
+            'monthly' => $this->monthly($sessions, $marks, $axes, $from, $until),
+            'map' => $this->map($sessions, $marks, $axes),
         ];
+    }
+
+    /**
+     * Distribuição por grupo: em quantas aulas de cada mês cada grupo prático foi trabalhado; o bloco teórico
+     * conta como um grupo só. Até sete grupos na ordem do catálogo, o resto em "Outros".
+     *
+     * @return array{months: list<array{key: string, label: string}>, series: list<array{label: string, values: array<string, int>}>}
+     */
+    private function monthly(Collection $sessions, Collection $marks, array $axes, CarbonInterface $from, CarbonInterface $until): array
+    {
+        $labels = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+        $months = [];
+        for ($month = $from->copy()->startOfMonth(); $month->lte($until); $month->addMonth()) {
+            $months[] = ['key' => $month->format('Y-m'), 'label' => $labels[$month->month - 1].($month->year !== $until->year ? '/'.$month->format('y') : '')];
+        }
+        $group = fn (int $itemId) => ($axes['type'][$itemId] ?? null) === 'theoretical' ? 'Teórico' : ($axes['axis'][$itemId] ?? null);
+        $order = collect($axes['items'])->keys()->map($group)->filter()->unique()
+            ->sortBy(fn (string $label) => $label === 'Teórico' ? 1 : 0)->values();
+        $kept = $order->take($order->count() > 8 ? 7 : 8)->all();
+        $dates = $sessions->mapWithKeys(fn (ClassSession $session) => [$session->id => $session->session_date->format('Y-m')]);
+        $pairs = [];
+        foreach ($marks as $mark) {
+            $label = $group($mark->technique_item_id);
+            if ($label === null) {
+                continue;
+            }
+            $label = in_array($label, $kept, true) ? $label : 'Outros';
+            $pairs[$label][$dates[$mark->class_session_id]][$mark->class_session_id] = true;
+        }
+        $series = [];
+        foreach ([...$kept, 'Outros'] as $label) {
+            if (isset($pairs[$label])) {
+                $series[] = ['label' => $label, 'values' => collect($months)->mapWithKeys(fn (array $month) => [$month['key'] => count($pairs[$label][$month['key']] ?? [])])->all()];
+            }
+        }
+
+        return ['months' => $months, 'series' => $series];
+    }
+
+    /**
+     * Mapa aula a aula: itens marcados nas últimas oito aulas do período (até 15, os mais frequentes).
+     *
+     * @return array{sessions: Collection<int, ClassSession>, rows: Collection, hidden: int}
+     */
+    private function map(Collection $sessions, Collection $marks, array $axes): array
+    {
+        $recent = $sessions->slice(-8)->values();
+        $bySession = $marks->whereIn('class_session_id', $recent->pluck('id'))->groupBy('technique_item_id');
+        $rows = $bySession->filter(fn (Collection $set, int $itemId) => isset($axes['items'][$itemId]))
+            ->map(fn (Collection $set, int $itemId) => [
+                'item' => $axes['items'][$itemId],
+                'axis' => $axes['axis'][$itemId],
+                'count' => $set->count(),
+                'cells' => $recent->map(fn (ClassSession $session) => $set->contains('class_session_id', $session->id))->all(),
+            ])->sortBy([['count', 'desc'], fn (array $a, array $b) => strcmp($a['item']->name, $b['item']->name)])->values();
+
+        return ['sessions' => $recent, 'rows' => $rows->take(15), 'hidden' => max($rows->count() - 15, 0)];
     }
 
     /** Faixa de cor da barra: alta a partir de 70%, média de 40% a 69%, baixa abaixo. */
