@@ -14,7 +14,7 @@ Há dois contextos (ADR-006). Na associação, o escopo vem da rota e `ClassGrou
 
 ## Turma no dojo
 
-`/operacao/dojos/{dojo}/turmas/{turma}` reúne Alunos (matriculados, encerrados, matricular e encerrar), Professores (principal e auxiliares), Horários (agenda vigente e substituição) e Aulas (próximas e anteriores, com link para a chamada). A ficha do aluno na associação mostra as turmas dele, e o cadastro direto pode matricular em turmas do dojo escolhido quando o aluno é ativado.
+`/operacao/dojos/{dojo}/turmas/{turma}` reúne Professores (principal e auxiliares, com foto), Alunos (matriculados com foto, encerrados, encerrar; o botão "Matricular aluno" ao lado do título abre a matrícula numa janela, `<x-modal>`), Horários (agenda vigente e substituição) e Aulas (próximas e anteriores, com link para a chamada). As listas de turmas da associação e do dojo mostram, com foto, o professor principal e os auxiliares vigentes (`ClassGroup::currentAssistants`). A página da turma na associação abre com os professores e lista os alunos com foto; a matrícula também é feita pela janela. A ficha do aluno na associação mostra as turmas dele, e o cadastro direto pode matricular em turmas do dojo escolhido quando o aluno é ativado.
 
 ## Invariantes
 

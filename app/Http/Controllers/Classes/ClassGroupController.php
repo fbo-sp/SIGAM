@@ -23,7 +23,7 @@ class ClassGroupController extends Controller
 {
     public function index(Association $association): View
     {
-        $groups = $association->classGroups()->with(['dojo', 'martialArt', 'mainTeacher.person'])->withCount(['enrollments' => fn ($query) => $query->where('status', 'active')])->orderBy('name')->paginate(20);
+        $groups = $association->classGroups()->with(['dojo', 'martialArt', 'mainTeacher.person', 'currentAssistants.teacher.person'])->withCount(['enrollments' => fn ($query) => $query->where('status', 'active')])->orderBy('name')->paginate(20);
 
         return view('classes.index', compact('association', 'groups'));
     }
@@ -43,7 +43,7 @@ class ClassGroupController extends Controller
     public function show(Association $association, ClassGroup $classGroup): View
     {
         $this->ensureGroup($association, $classGroup);
-        $classGroup->load(['dojo', 'martialArt', 'mainTeacher.person', 'schedules.teacher.person', 'enrollments.student.person']);
+        $classGroup->load(['dojo', 'martialArt', 'mainTeacher.person', 'currentAssistants.teacher.person', 'schedules.teacher.person', 'enrollments.student.person']);
         $students = Student::query()->where('association_id', $association->id)->where('status', 'active')->with('person')->orderBy('registration_number')->get();
         $nextSessions = $classGroup->sessions()->whereDate('session_date', '>=', today())->whereNotIn('status', ['cancelled', 'rescheduled'])
             ->orderBy('session_date')->orderBy('start_time')->limit(8)->get();
