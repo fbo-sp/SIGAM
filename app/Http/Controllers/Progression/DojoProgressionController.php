@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Progression;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Progression\AssessmentRequest;
 use App\Http\Requests\Progression\PanelFilterRequest;
+use App\Models\ClassGroup;
 use App\Models\ClassSession;
 use App\Models\Dojo;
 use App\Models\MartialArt;
@@ -12,6 +13,7 @@ use App\Models\QuizRelease;
 use App\Models\Student;
 use App\Services\Access\OperationalScope;
 use App\Services\Progression\AssessmentService;
+use App\Services\Progression\CurriculumCoverageService;
 use App\Services\Progression\ProgressionPanelService;
 use App\Services\Progression\QuizService;
 use App\Services\Progression\SessionTechniqueService;
@@ -109,6 +111,24 @@ class DojoProgressionController extends Controller
             'from' => $from,
             'until' => $until,
             'panel' => $martialArt && $classes->isNotEmpty() ? $panels->panel($dojo->association, $martialArt, $selected ? collect([$selected]) : $classes, $from, $until) : null,
+        ]);
+    }
+
+    /** Cobertura do currículo da turma: visão geral e por faixa buscada pelos alunos. */
+    public function coverage(PanelFilterRequest $request, Dojo $dojo, ClassGroup $classGroup, ProgressionPanelService $panels, CurriculumCoverageService $coverage): View
+    {
+        $this->enter($request, $dojo);
+        abort_unless($classGroup->association_id === $dojo->association_id && $classGroup->dojo_id === $dojo->id, 404);
+        abort_unless($panels->dojoClasses($request->user(), $dojo)->whereKey($classGroup->id)->exists(), 403);
+        [$from, $until] = $request->period();
+        $classGroup->load('martialArt');
+
+        return view('progression.coverage', [
+            'dojo' => $dojo,
+            'classGroup' => $classGroup,
+            'from' => $from,
+            'until' => $until,
+            'coverage' => $coverage->forClass($dojo->association, $classGroup, $from, $until),
         ]);
     }
 

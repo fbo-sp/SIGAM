@@ -3,6 +3,7 @@
 @php($knowledgeLabels = ['theoretical' => 'Conhecimento Teórico', 'practical' => 'Conhecimento Prático'])
 @section('title', 'Avaliar '.$name)
 @section('content')
+@include('partials.back-to-dashboard')
 <nav class="breadcrumbs"><a href="{{ route('operation.home', $dojo) }}">{{ $dojo->name }}</a><span>/</span><a href="{{ route('operation.progression.show', [$dojo, $student, 'modalidade' => $martialArt->id]) }}">{{ $name }}</a><span>/</span><span>Avaliar</span></nav>
 <div class="page-heading"><div><span class="eyebrow">{{ $martialArt->name }} · rumo a {{ $snapshot['next_rank']?->display_name }}</span><h1>Avaliar {{ $name }}</h1><p>Mude só o que evoluiu. Itens sem mudança não são gravados.</p></div></div>
 @if(! $snapshot['next_rank'] || $snapshot['rows']->isEmpty())

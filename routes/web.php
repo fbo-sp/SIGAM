@@ -85,6 +85,7 @@ Route::middleware(['auth', 'active', 'association.context'])->group(function ():
         Route::get('/turmas/nova', [DojoClassController::class, 'create'])->name('classes.create');
         Route::post('/turmas', [DojoClassController::class, 'store'])->name('classes.store');
         Route::get('/turmas/{classGroup}', [DojoClassController::class, 'show'])->name('classes.show');
+        Route::get('/turmas/{classGroup}/cobertura', [DojoProgressionController::class, 'coverage'])->name('classes.coverage');
         Route::get('/turmas/{classGroup}/editar', [DojoClassController::class, 'edit'])->name('classes.edit');
         Route::put('/turmas/{classGroup}', [DojoClassController::class, 'update'])->name('classes.update');
         Route::post('/turmas/{classGroup}/matriculas', [DojoClassController::class, 'enroll'])->name('classes.enrollments.store');

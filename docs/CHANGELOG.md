@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-10-25 — Visão do professor
+
+- "Minhas turmas" no painel do professor inclui as turmas em que ele é auxiliar, mostra o papel e tem link para abrir a turma no dojo;
+- na turma, cada aluno tem o botão "Emergência", que abre uma janela com o contato de emergência, o responsável legal e os telefones com toque para ligar, sem dados financeiros;
+- as telas do dojo ganham o botão "Voltar ao painel";
+- nova tela de cobertura do currículo por turma (`operacao/dojos/{dojo}/turmas/{classGroup}/cobertura`): visão geral da turma e uma linha expansível por faixa buscada, com barras por grupo, itens ainda não trabalhados e alunos; o painel do professor mostra o resumo dos últimos 90 dias por turma;
+- sem migration; novo teste `TeacherViewTest`.
+
 ## 2026-10-25 — Banco de quiz das faixas iniciais
 
 - o modelo `judo_kodokan_2026` ganha 108 perguntas, revisadas pelo responsável técnico: cinza passa a 10, cinza/azul a 20, azul/amarela a 40 e amarela/laranja a 50 perguntas, cobrindo o currículo cumulativo de cada faixa; o banco do modelo vai a 521 perguntas;

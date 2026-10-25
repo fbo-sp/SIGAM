@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Turmas — '.$dojo->name)
 @section('content')
+@include('partials.back-to-dashboard')
 <nav class="breadcrumbs"><a href="{{ route('operation.home', $dojo) }}">{{ $dojo->name }}</a><span>/</span><span>Turmas</span></nav>
 <div class="page-heading"><div><span class="eyebrow">Organização das aulas</span><h1>Turmas</h1><p>{{ $canManage ? 'Abra a turma para matricular alunos, designar professores e acompanhar as aulas.' : 'O professor visualiza somente turmas com aulas sob sua responsabilidade.' }}</p></div>@if($canManage)<a class="button button-primary" href="{{ route('operation.classes.create', $dojo) }}">Nova turma</a>@endif</div>
 <div class="card list-card">

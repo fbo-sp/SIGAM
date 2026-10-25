@@ -22,6 +22,7 @@ use App\Services\Access\OperationalScope;
 use App\Services\Attendance\FutureSessionMaintainer;
 use App\Services\Classes\ClassGroupService;
 use App\Services\Progression\AssessmentService;
+use App\Services\Progression\ProgressionPanelService;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -78,7 +79,9 @@ class DojoClassController extends Controller
 
         $canEditStudents = $this->scope->canDojo($user, $dojo, 'student.manage');
         $canEditPeople = $user->hasPermission('person.manage', $dojo->association_id);
-        $enrollments = $classGroup->enrollments()->with(['student' => fn ($query) => $query->with('person:id,full_name,social_name,birth_date,photo_path')
+        $enrollments = $classGroup->enrollments()->with(['student' => fn ($query) => $query->with(['person:id,full_name,social_name,birth_date,photo_path,phone,mobile,emergency_contact_name,emergency_contact_phone',
+            'guardians' => fn ($guardians) => $guardians->where(fn ($g) => $g->where('is_legal_guardian', true)->orWhere('is_primary', true))
+                ->where(fn ($g) => $g->whereNull('end_date')->orWhereDate('end_date', '>=', today()))->with('person:id,full_name,social_name,phone,mobile')])
             ->withExists(['person as is_teacher' => fn ($person) => $person->whereHas('teacherProfile')])])
             ->orderByRaw("case when status = 'active' then 0 else 1 end")->orderByDesc('start_date')->limit(200)->get();
         $activeIds = $enrollments->where('status', 'active')->pluck('student_id');
@@ -98,10 +101,11 @@ class DojoClassController extends Controller
         $scheduleTeachers = $canManage ? $this->formOptions($dojo)['teachers'] : collect();
         $canAssess = app(AssessmentService::class)->teachesClass($user, $dojo, $classGroup);
         $canProgress = $canAssess || $this->scope->canDojo($user, $dojo, 'assessment.view');
+        $canCoverage = app(ProgressionPanelService::class)->dojoClasses($user, $dojo)->whereKey($classGroup->id)->exists();
 
         return view('operation.class', compact(
             'dojo', 'classGroup', 'enrollments', 'assignments', 'upcoming', 'past', 'candidates', 'dojoTeachers',
-            'scheduleTeachers', 'canManage', 'canEnroll', 'canEditStudents', 'canEditPeople', 'canAssess', 'canProgress',
+            'scheduleTeachers', 'canManage', 'canEnroll', 'canEditStudents', 'canEditPeople', 'canAssess', 'canProgress', 'canCoverage',
         ));
     }
 

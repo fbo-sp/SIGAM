@@ -3,6 +3,7 @@
 @section('content')
 @php($regularCount = $roster->where('type', 'regular')->count())
 @php($visitorCount = $roster->where('type', 'visitor')->count())
+@include('partials.back-to-dashboard')
 <nav class="breadcrumbs"><a href="{{ route('operation.sessions', $dojo) }}">Aulas</a><span>/</span><span>{{ $session->classGroup->name }}</span></nav>
 <div class="page-heading"><div><span class="eyebrow">{{ $session->session_date->format('d/m/Y') }} · {{ substr($session->start_time, 0, 5) }}</span><h1>{{ $session->classGroup->name }}</h1><p>{{ $dojo->name }} · {{ $regularCount }} matriculado(s) · {{ $visitorCount }} visitante(s)</p></div><span class="status-pill {{ $session->attendance_state === 'open' ? 'status-inactive' : '' }}">{{ $session->attendance_state === 'closed' ? 'Chamada fechada' : 'Chamada aberta' }}</span></div>
 @if($regularCount === 0)<div class="alert alert-info"><strong>Nenhum aluno matriculado nesta turma para esta data.</strong> A chamada lista os alunos matriculados. @if($enrollUrl)<a href="{{ $enrollUrl }}">Matricular alunos na turma</a>@else O gestor do dojo faz as matrículas.@endif</div>@endif
