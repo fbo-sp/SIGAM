@@ -29,6 +29,8 @@ stateDiagram-v2
     }
 ```
 
+A lista de aulas da associação filtra por data, dojo, turma e professor; o professor encontra as aulas previstas ou dadas por ele e as das turmas em que é auxiliar na data. Cada aula mostra o professor previsto com foto, e a chamada mostra a foto de cada aluno.
+
 `attendance` tem uma linha por aula/aluno e registra `participation_type` como `regular` ou `visitor`. O aluno precisa ter matrícula vigente ou visita autorizada na data; matrícula encerrada vale até a data de término. Sem nenhum aluno matriculado, a tela da aula explica o motivo e oferece o link para matricular a quem tem `enrollment.manage`. A chamada só é registrada ou finalizada a partir do dia da aula; antes disso a tela informa a data em que ela abre. Chamada fechada é imutável até reabertura auditada, que pode ser feita pela associação (`attendance.reopen`) ou pelo dojo: o gestor nas aulas do dojo e o professor nas aulas dele. Fechamento exige todos os alunos da lista e materializa a visita como `attended` ou `no_show`.
 
 ## Visitante

@@ -179,6 +179,7 @@ Route::middleware(['auth', 'active', 'association.context'])->group(function ():
         Route::get('/modalidades', [CatalogController::class, 'index'])->middleware('permission:martial_art.view')->name('catalog.index');
         Route::post('/modalidades', [CatalogController::class, 'storeMartialArt'])->middleware('permission:martial_art.manage')->name('martial-arts.store');
         Route::put('/modalidades/{martialArt}', [CatalogController::class, 'updateMartialArt'])->middleware('permission:martial_art.manage')->name('martial-arts.update');
+        Route::get('/modalidades/{martialArt}/graduacoes', [CatalogController::class, 'ranks'])->middleware('permission:martial_art.view')->name('ranks.index');
         Route::post('/modalidades/{martialArt}/graduacoes', [CatalogController::class, 'storeRank'])->middleware('permission:martial_art.manage')->name('ranks.store');
         Route::put('/modalidades/{martialArt}/graduacoes/{rank}', [CatalogController::class, 'updateRank'])->middleware('permission:martial_art.manage')->name('ranks.update');
         Route::get('/modalidades/{martialArt}/tecnicas', [TechniqueCatalogController::class, 'index'])->middleware('permission:martial_art.view')->name('techniques.index');

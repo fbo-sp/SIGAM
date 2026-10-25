@@ -60,6 +60,23 @@ class SportsRegistryTest extends TestCase
         $this->assertDatabaseHas('audit_logs', ['association_id' => $association->id, 'event_type' => 'rank.template_applied', 'entity_id' => $martialArt->id]);
     }
 
+    public function test_martial_art_list_opens_section_menu_and_ranks_have_own_page(): void
+    {
+        [$association, $user] = $this->context(['martial_art.view', 'martial_art.manage']);
+        $this->actingAs($user)->post(route('associations.martial-arts.store', $association), ['template_key' => 'judo_cbj_2023', 'name' => '', 'status' => 'active']);
+        $martialArt = MartialArt::query()->sole();
+
+        $this->get(route('associations.catalog.index', $association))->assertOk()
+            ->assertSeeInOrder(['Graduações', '22', 'Catálogo de técnicas', 'Currículo por graduação'])
+            ->assertSee(route('associations.ranks.index', [$association, $martialArt]), false)
+            ->assertDontSee('Adicionar graduação')->assertDontSee('>Quiz<', false);
+        $this->get(route('associations.ranks.index', [$association, $martialArt]))->assertOk()
+            ->assertSeeInOrder(['aria-current="page"', 'Graduações'], false)->assertSee('Adicionar graduação')->assertSeeInOrder(['11º Kyū', '10º Dan']);
+
+        $other = Association::query()->create(['legal_name' => 'Outra', 'trade_name' => 'Outra']);
+        $this->get(route('associations.ranks.index', [$other, $martialArt]))->assertForbidden();
+    }
+
     public function test_invalid_template_does_not_create_partial_catalog(): void
     {
         [$association, $user] = $this->context(['martial_art.manage']);

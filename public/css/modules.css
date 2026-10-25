@@ -39,3 +39,6 @@
 .teacher-chips{display:flex;flex-wrap:wrap;gap:.4rem 1rem;margin-top:.35rem}.teacher-chip{display:inline-flex;align-items:center;gap:.4rem;color:var(--text);font-size:.9rem}.teacher-chip>span:not(.person-photo){display:inline}.teacher-chip small{color:var(--muted)}.teacher-chip .person-photo{width:1.75rem;height:1.75rem;font-size:.65rem}
 .section-heading-row{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;flex-wrap:wrap}.section-heading-row>div{min-width:0}
 .modal{width:min(560px,calc(100% - 2rem));padding:1.25rem;border:1px solid var(--border);color:var(--text)}.modal::backdrop{background:rgba(21,32,51,.45)}.modal-heading{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:1rem}.modal-heading h2{margin:0;font-size:1.2rem}.modal .inline-form{flex-direction:column;align-items:stretch}.modal:target{display:block;position:static;margin:1rem auto}
+.module-menu{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.6rem;margin-top:1rem}.module-menu .button{justify-content:space-between;gap:.5rem}.module-menu small{color:var(--muted);font-weight:700}
+.session-filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));align-items:end}.session-filter-actions{display:flex;gap:.5rem;flex-wrap:wrap}
+.catalog-card>header{align-items:flex-start}
