@@ -31,3 +31,14 @@ if (conditionalFields.length) {
     });
     refresh();
 }
+// Janelas <dialog>: data-modal-open="id" abre; a que tem data-open-on-load abre ao carregar (erro de validação).
+document.querySelectorAll('[data-modal-open]').forEach(opener => {
+    const dialog = document.getElementById(opener.dataset.modalOpen);
+    if (dialog && dialog.showModal) {
+        opener.addEventListener('click', event => {
+            event.preventDefault();
+            dialog.showModal();
+        });
+    }
+});
+document.querySelectorAll('dialog[data-open-on-load]').forEach(dialog => dialog.showModal && dialog.showModal());

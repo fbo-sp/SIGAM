@@ -53,6 +53,12 @@ class ClassGroup extends Model
         return $this->hasMany(ClassGroupTeacher::class);
     }
 
+    /** Auxiliares com designação vigente hoje. */
+    public function currentAssistants(): HasMany
+    {
+        return $this->teacherAssignments()->where('role_type', 'assistant')->current()->orderBy('start_date');
+    }
+
     public function sessions(): HasMany
     {
         return $this->hasMany(ClassSession::class);

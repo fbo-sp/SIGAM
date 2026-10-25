@@ -342,6 +342,31 @@ class DojoClassHubTest extends TestCase
         $this->assertSame('ended', $enrollment->fresh()->status);
     }
 
+    public function test_class_lists_and_pages_show_teachers_with_photo_and_enroll_in_a_modal(): void
+    {
+        $manager = User::factory()->create(['association_id' => $this->association->id]);
+        $manager->roles()->attach($this->role('association', ['class.view', 'enrollment.manage']), ['association_id' => $this->association->id]);
+        [, $ana] = $this->teacher('Professora Ana');
+        [, $bia] = $this->teacher('Professora Bia');
+        [, $caio] = $this->teacher('Professor Caio');
+        $group = $this->group('Turma Kids', $ana);
+        ClassGroupTeacher::query()->create(['class_group_id' => $group->id, 'teacher_profile_id' => $bia->id, 'role_type' => 'assistant', 'start_date' => '2026-10-01']);
+        ClassGroupTeacher::query()->create(['class_group_id' => $group->id, 'teacher_profile_id' => $caio->id, 'role_type' => 'assistant', 'start_date' => '2026-09-01', 'end_date' => '2026-09-30']);
+        $this->enroll($group, $this->student('A-1'));
+
+        $this->actingAs($manager)->get(route('associations.classes.index', $this->association))->assertOk()
+            ->assertSeeInOrder(['Turma Kids', 'PA', 'Professora Ana', 'principal', 'PB', 'Professora Bia', 'auxiliar'])->assertDontSee('Professor Caio');
+        $this->get(route('associations.classes.show', [$this->association, $group]))->assertOk()
+            ->assertSeeInOrder(['Professores', 'Professora Ana', 'Professor principal', 'Professora Bia', 'Auxiliar desde', 'Alunos matriculados', 'data-modal-open="matricular"', 'Matrícula A-1', '<dialog'], false)
+            ->assertDontSee('Professor Caio')->assertDontSee('data-open-on-load', false);
+        $this->post(route('associations.classes.enrollments.store', [$this->association, $group]), ['start_date' => '2026-10-15'])->assertSessionHasErrors('student_id');
+        $this->get(route('associations.classes.show', [$this->association, $group]))->assertSee('data-open-on-load', false);
+
+        $this->actingAs($this->dojoManager())->get(route('operation.classes', $this->dojo))->assertOk()->assertSeeInOrder(['Professora Ana', 'principal', 'Professora Bia', 'auxiliar']);
+        $this->get(route('operation.classes.show', [$this->dojo, $group]))->assertOk()
+            ->assertSeeInOrder(['id="professores"', 'PA', 'Professora Ana', 'id="alunos"', 'data-modal-open="matricular"', '<dialog'], false);
+    }
+
     private function dojoManager(): User
     {
         $user = User::factory()->create(['association_id' => $this->association->id]);

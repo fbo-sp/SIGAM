@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-10-25 — Professores e matrícula na turma
+
+- listas de turmas da associação e do dojo mostram o professor principal e os auxiliares vigentes, com foto;
+- a página da turma abre com o bloco de professores (com foto) e lista os alunos matriculados com foto, na associação e no dojo;
+- "Matricular aluno" virou um botão ao lado do título da lista de alunos que abre uma janela (`<x-modal>`, `<dialog>` aberto por `public/js/common.js`); com erro de validação a janela reabre sozinha;
+- sem migration; novo teste em `DojoClassHubTest`.
+
 ## 2026-10-25 — Modelo do judô versão 2
 
 - `judo_kodokan_2026` ganha 55 itens dentro dos grupos existentes e o grupo `Katame-waza > Ne-waza (viradas, escapadas e guarda)` com 15 itens; o currículo por faixa foi refeito pelo checklist de troca de faixa e revisado pelo responsável técnico; o quiz passa de 37 para 413 perguntas;

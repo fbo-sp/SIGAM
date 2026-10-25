@@ -36,7 +36,7 @@ class DojoClassController extends Controller
     {
         $this->enter($request, $dojo);
         abort_unless($this->scope->canDojo($request->user(), $dojo, 'class.view') || $this->scope->canTeacher($request->user(), $dojo, 'class.view'), 403);
-        $classes = $this->scope->classes($request->user(), $dojo)->with(['martialArt:id,name', 'mainTeacher.person:id,full_name'])
+        $classes = $this->scope->classes($request->user(), $dojo)->with(['martialArt:id,name', 'mainTeacher.person:id,full_name,social_name,photo_path', 'currentAssistants.teacher.person:id,full_name,social_name,photo_path'])
             ->withCount(['enrollments' => fn ($query) => $query->where('status', 'active')])
             ->orderByRaw("case when status = 'active' then 0 else 1 end")->orderBy('name')->paginate(25);
         $canManage = $this->scope->canDojo($request->user(), $dojo, 'class.manage');
@@ -78,11 +78,11 @@ class DojoClassController extends Controller
 
         $canEditStudents = $this->scope->canDojo($user, $dojo, 'student.manage');
         $canEditPeople = $user->hasPermission('person.manage', $dojo->association_id);
-        $enrollments = $classGroup->enrollments()->with(['student' => fn ($query) => $query->with('person:id,full_name,social_name,birth_date')
+        $enrollments = $classGroup->enrollments()->with(['student' => fn ($query) => $query->with('person:id,full_name,social_name,birth_date,photo_path')
             ->withExists(['person as is_teacher' => fn ($person) => $person->whereHas('teacherProfile')])])
             ->orderByRaw("case when status = 'active' then 0 else 1 end")->orderByDesc('start_date')->limit(200)->get();
         $activeIds = $enrollments->where('status', 'active')->pluck('student_id');
-        $assignments = $classGroup->teacherAssignments()->with('teacher.person:id,full_name')->orderByDesc('start_date')->get();
+        $assignments = $classGroup->teacherAssignments()->with('teacher.person:id,full_name,social_name,photo_path')->orderByDesc('start_date')->get();
         $visibleSessions = $this->scope->sessions($user, $dojo)->where('class_group_id', $classGroup->id);
         $upcoming = (clone $visibleSessions)->whereDate('session_date', '>=', today())->whereNotIn('status', ['cancelled', 'rescheduled'])
             ->orderBy('session_date')->orderBy('start_time')->limit(8)->get();
