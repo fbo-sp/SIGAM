@@ -17,6 +17,7 @@ Este documento é um índice de manutenção. `routes/web.php`, `routes/console.
 | Grupo | Controllers | Escopo |
 |---|---|---|
 | `/dashboard` | `DashboardController` | visão derivada das permissões e vínculos da conta |
+| `/professor/turmas` e `/professor/alunos` (`busca`, `filtro=faltando\|prontos`) | `TeacherWorkspaceController`: turmas e alunos do professor | conta com a navegação do professor; só turmas em que é principal ou auxiliar vigente e dojos com concessão vigente |
 | `/notificacoes` | `NotificationController` | sempre `notifications.user_id` da conta |
 | `/fotos/{person}/{thumb\|medium}` | `PersonPhotoController` | link assinado relativo gerado só por telas que já mostram a pessoa; pessoa da associação da conta; foto trocada invalida o link |
 | `/sair` | `AuthenticatedSessionController` | sessão autenticada, CSRF e invalidação |

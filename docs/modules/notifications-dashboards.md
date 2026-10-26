@@ -36,7 +36,9 @@ O scheduler gera eventos a cada hora e tenta e-mails a cada cinco minutos. Em ho
 
 1. `dashboard.association`: associação completa;
 2. `dashboard.dojo`: somente `users.dojo_id`;
-3. `dashboard.teacher`: turmas ativas em que a pessoa da conta é professor principal ou auxiliar vigente. "Minhas turmas" mostra o papel (Principal ou Auxiliar), a quantidade de alunos e o link "Abrir" para a turma no dojo (`operation.classes.show`) quando `OperationalScope::classes` libera; o bloco "Cobertura do currículo" mostra, por turma que o professor acompanha (`ProgressionPanelService::dojoClasses`), o percentual do currículo da próxima faixa dos alunos trabalhado nos últimos 90 dias, com "Detalhar" para `operation.classes.coverage`. As telas do dojo abertas a partir do painel (início do dojo, turmas, turma, aulas, chamada, alunos, acompanhamento e cobertura) têm o botão "Voltar ao painel". "Próximas aulas" vem de `OperationalScope::sessions` nos dojos com concessão vigente e leva à chamada do dojo (`operation.session`); só quem tem `session.view` associativo recebe também o link da associação. Sem concessão, a lista explica que é preciso pedir acesso ao dojo;
+3. `dashboard.teacher`: tela "Hoje" do professor, montada por `TeacherWorkspaceService`. Indicadores (aulas de hoje, chamadas abertas, minhas turmas); alerta expansível com todas as chamadas ainda abertas de dias anteriores (sem limite de período); cartões das aulas de hoje com "Fazer chamada" ou "Ver chamada"; "Próximos dias" (7 dias, até 8 aulas). As aulas vêm de `OperationalScope::sessions` nos dojos com concessão vigente, só as próprias (principal ou auxiliar vigente), e levam à chamada do dojo (`operation.session`); só quem tem `session.view` associativo recebe o link da associação quando falta a concessão. Sem concessão, a tela explica que é preciso pedir acesso ao dojo. As telas do dojo abertas a partir do painel têm o botão "Voltar ao painel", escondido quando a navegação do professor aparece.
+
+   Navegação do professor (`TeacherWorkspaceService::usesNavigation`): abas Hoje, Turmas (`/professor/turmas`: turmas como principal ou auxiliar, horário, papel, "Abrir" e cobertura do currículo dos últimos 90 dias quando `ProgressionPanelService::dojoClasses` libera), Alunos (`/professor/alunos`: busca, filtros "Faltando" com três faltas seguidas nos últimos seis meses e "Prontos" com o currículo da próxima faixa todo trabalhado, faixa, turmas, celular com toque para ligar, "Emergência" e "Ficha") e Mais (acompanhamento técnico por dojo, meus dojos, avisos, meu portal e campeonatos abertos). No celular as abas ficam numa barra inferior fixa; no computador, logo abaixo do menu. Aparecem no painel, nas telas `/professor/*`, `/operacao/*` e em notificações. O gestor do dojo (`dashboard.dojo`) que também é professor com turma ativa recebe as mesmas abas e o bloco "Hoje" antes do painel do dojo; quem tem `dashboard.association` não recebe;
 4. visão pessoal com atalhos permitidos.
 
 Associação/dojo exibem alunos ativos, entradas, desligamentos, frequência do mês, inadimplência, receita prevista/recebida, benefícios, filiações e campeonatos. Professor vê aulas de hoje/próximas, chamadas pendentes, alunos, faltas consecutivas e campeonatos abertos. As consultas são agregadas sobre tabelas indexadas e não aceitam escopo do navegador.
@@ -50,11 +52,11 @@ E-mail usa o contato da pessoa quando disponível e, como fallback, o e-mail da 
 ## Mapa de código
 
 - migration: `2026_08_30_000015_create_notifications_and_dashboard_scope.php`;
-- domínio: `app/Services/Notifications/` e `app/Services/Reporting/DashboardService.php`;
+- domínio: `app/Services/Notifications/`, `app/Services/Reporting/DashboardService.php` e `app/Services/Classes/TeacherWorkspaceService.php`;
 - catálogo: `app/Support/Notifications/NotificationCatalog.php`;
 - comandos: `GenerateNotifications.php` e `SendNotificationEmails.php`;
-- HTTP/UI: `NotificationController.php`, `DashboardController.php`, `resources/views/notifications/` e `dashboard.blade.php`;
-- testes: `NotificationsAndDashboardTest.php`.
+- HTTP/UI: `NotificationController.php`, `DashboardController.php`, `Classes/TeacherWorkspaceController.php`, `resources/views/notifications/`, `resources/views/teacher/` e `dashboard.blade.php`;
+- testes: `NotificationsAndDashboardTest.php` e `TeacherViewTest.php`.
 
 ## Manutenção futura
 

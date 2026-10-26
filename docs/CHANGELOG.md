@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-10-26 — Navegação do professor
+
+- o painel do professor virou a tela "Hoje": indicadores, alerta com todas as chamadas ainda abertas de dias anteriores, aulas de hoje com "Fazer chamada" e próximos dias;
+- abas Hoje, Turmas, Alunos e Mais (barra inferior fixa no celular): `/professor/turmas` com horário, papel e cobertura do currículo; `/professor/alunos` com busca, filtros "Faltando" e "Prontos", celular com toque para ligar, emergência e ficha; Mais com acompanhamento técnico, dojos, avisos, portal e campeonatos;
+- o gestor do dojo que também dá aula recebe as mesmas abas e o bloco "Hoje" antes do painel do dojo;
+- sem migration; `TeacherViewTest` ampliado.
+
 ## 2026-10-26 — Portal do aluno em formato de aplicativo
 
 - quem só tem o acesso de aluno ou responsável entra direto no portal; um aluno vai direto ao início dele e o responsável com mais de um aluno escolhe quem consultar; professores e gestores continuam no painel;

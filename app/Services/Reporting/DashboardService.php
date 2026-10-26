@@ -6,30 +6,19 @@ use App\Models\AttendanceRecord;
 use App\Models\Championship;
 use App\Models\ChampionshipRegistration;
 use App\Models\Charge;
-use App\Models\ClassGroup;
-use App\Models\ClassSession;
 use App\Models\Discount;
-use App\Models\Dojo;
-use App\Models\DojoRoleAssignment;
 use App\Models\FederationMembership;
 use App\Models\GratuityRequest;
 use App\Models\Payment;
 use App\Models\Student;
-use App\Models\TeacherProfile;
 use App\Models\User;
-use App\Services\Access\OperationalScope;
-use App\Services\Progression\CurriculumCoverageService;
-use App\Services\Progression\ProgressionPanelService;
+use App\Services\Classes\TeacherWorkspaceService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 class DashboardService
 {
-    public function __construct(
-        private readonly OperationalScope $scope,
-        private readonly ProgressionPanelService $panels,
-        private readonly CurriculumCoverageService $coverage,
-    ) {}
+    public function __construct(private readonly TeacherWorkspaceService $workspace) {}
 
     public function for(User $user): array
     {
@@ -78,81 +67,24 @@ class DashboardService
         $byDojo = $kind === 'association' ? Student::query()->where('students.association_id', $associationId)->where('students.status', 'active')->join('dojos', 'dojos.id', '=', 'students.primary_dojo_id')->selectRaw('dojos.name, COUNT(students.id) AS total')->groupBy('dojos.id', 'dojos.name')->orderByDesc('total')->limit(8)->get() : collect();
         $byModality = Student::query()->where('students.association_id', $associationId)->where('students.status', 'active')->when($dojoId, fn (Builder $query) => $query->where('students.primary_dojo_id', $dojoId))->join('student_martial_arts', 'student_martial_arts.student_id', '=', 'students.id')->join('martial_arts', 'martial_arts.id', '=', 'student_martial_arts.martial_art_id')->where('student_martial_arts.status', 'active')->selectRaw('martial_arts.name, COUNT(DISTINCT students.id) AS total')->groupBy('martial_arts.id', 'martial_arts.name')->orderByDesc('total')->limit(8)->get();
 
-        return ['kind' => $kind, 'metrics' => $metrics, 'lists' => ['by_dojo' => $byDojo, 'by_modality' => $byModality], 'dojo' => $dojoId ? $user->dojo : null];
+        return ['kind' => $kind, 'metrics' => $metrics, 'lists' => ['by_dojo' => $byDojo, 'by_modality' => $byModality], 'dojo' => $dojoId ? $user->dojo : null,
+            'agenda' => $kind === 'dojo' && $this->workspace->usesNavigation($user) ? $this->workspace->agenda($user) : null,
+            'championships' => $kind === 'dojo' ? $this->championships($user) : collect()];
     }
 
     private function teacher(User $user): array
     {
-        $teacher = TeacherProfile::query()->where('person_id', $user->person_id)->first();
-        if (! $teacher) {
-            return ['kind' => 'teacher', 'metrics' => ['today_classes' => 0, 'pending_attendance' => 0, 'students' => 0, 'recurring_absences' => 0], 'lists' => ['next_classes' => collect(), 'classes' => collect(), 'championships' => collect()]];
-        }
-        $groups = ClassGroup::query()->where('association_id', $user->association_id)->where('status', 'active')
-            ->where(fn (Builder $query) => $query->where('main_teacher_id', $teacher->id)
-                ->orWhereHas('teacherAssignments', fn (Builder $assignment) => $assignment->where('teacher_profile_id', $teacher->id)->where('role_type', 'assistant')->current()));
-        $groupIds = (clone $groups)->pluck('id');
-        $todaySessions = ClassSession::query()->whereIn('class_group_id', $groupIds)->whereDate('session_date', today());
-        $studentIds = Student::query()->whereHas('enrollments', fn (Builder $query) => $query->whereIn('class_group_id', $groupIds)->where('status', 'active'))->pluck('id');
-        $recurring = $studentIds->filter(function (int $studentId): bool {
-            $latest = AttendanceRecord::query()->where('student_id', $studentId)->latest('recorded_at')->limit(3)->pluck('status');
+        $agenda = $this->workspace->agenda($user);
 
-            return $latest->count() === 3 && $latest->every(fn (string $status) => $status === 'absent');
-        })->count();
-
-        return ['kind' => 'teacher', 'metrics' => ['today_classes' => (clone $todaySessions)->count(), 'pending_attendance' => (clone $todaySessions)->where('status', '!=', 'cancelled')->where('attendance_state', 'open')->count(), 'students' => $studentIds->unique()->count(), 'recurring_absences' => $recurring], 'lists' => ['next_classes' => $this->teacherNextSessions($user, $groupIds), 'classes' => $this->teacherClasses($user, $teacher, (clone $groups)->with('dojo')->withCount(['enrollments' => fn (Builder $query) => $query->where('status', 'active')])->orderBy('name')->get()), 'championships' => Championship::query()->where('association_id', $user->association_id)->where('status', 'open')->where('registration_close_at', '>=', now())->orderBy('start_date')->limit(5)->get()]];
+        return ['kind' => 'teacher', 'agenda' => $agenda, 'metrics' => [
+            'today_classes' => $agenda['today']->count(),
+            'pending_attendance' => $agenda['pending']->count() + $agenda['today']->where('session.attendance_state', 'open')->count(),
+            'classes' => $this->workspace->groups($user)->count(),
+        ], 'championships' => $this->championships($user)];
     }
 
-    /**
-     * Turmas do professor com o link da turma no dojo e a cobertura do currículo nos últimos 90 dias,
-     * só quando as concessões vigentes do dojo permitem abrir (ADR-006).
-     *
-     * @return Collection<int, array{class: ClassGroup, role: string, url: ?string, coverage: ?array, coverage_url: ?string}>
-     */
-    private function teacherClasses(User $user, TeacherProfile $teacher, Collection $groups): Collection
+    private function championships(User $user): Collection
     {
-        $visible = [];
-
-        return $groups->map(function (ClassGroup $group) use ($user, $teacher, &$visible): array {
-            $dojo = $group->dojo;
-            $canOpen = $dojo && $dojo->status === 'active' && $this->scope->canEnter($user, $dojo)
-                && ($visible[$dojo->id] ??= $this->scope->classes($user, $dojo)->pluck('id')->flip())->has($group->id);
-            $canCover = $dojo && $this->panels->dojoClasses($user, $dojo)->whereKey($group->id)->exists();
-
-            return [
-                'class' => $group,
-                'role' => $group->main_teacher_id === $teacher->id ? 'Principal' : 'Auxiliar',
-                'url' => $canOpen ? route('operation.classes.show', [$dojo, $group]) : null,
-                'coverage' => $canCover ? $this->coverage->forClass($dojo->association, $group, today()->subDays(90), today())['overall'] : null,
-                'coverage_url' => $canCover ? route('operation.classes.coverage', [$dojo, $group]) : null,
-            ];
-        });
-    }
-
-    /**
-     * Próximas aulas com o link que o professor consegue abrir: no dojo, pelas concessões vigentes
-     * (ADR-006); na associação, só se ele tiver `session.view` associativo.
-     *
-     * @return Collection<int, array{session: ClassSession, url: string}>
-     */
-    private function teacherNextSessions(User $user, Collection $groupIds): Collection
-    {
-        $window = [today()->toDateString(), today()->addDays(7)->toDateString()];
-        $dojoIds = DojoRoleAssignment::query()->where('user_id', $user->id)->where('association_id', $user->association_id)
-            ->whereNull('revoked_at')->whereDate('start_date', '<=', today())
-            ->where(fn (Builder $query) => $query->whereNull('end_date')->orWhereDate('end_date', '>=', today()))
-            ->distinct()->pluck('dojo_id');
-        $items = Dojo::query()->whereIn('id', $dojoIds)->where('status', 'active')->get()
-            ->flatMap(fn (Dojo $dojo) => $this->scope->sessions($user, $dojo)->whereBetween('session_date', $window)
-                ->whereNotIn('status', ['cancelled', 'rescheduled'])->with('classGroup')->orderBy('session_date')->orderBy('start_time')->limit(8)->get()
-                ->map(fn (ClassSession $session) => ['session' => $session, 'url' => route('operation.session', [$dojo, $session])]));
-
-        if ($user->hasPermission('session.view', $user->association_id)) {
-            $known = $items->pluck('session.id');
-            $items = $items->concat(ClassSession::query()->whereIn('class_group_id', $groupIds)->whereNotIn('id', $known)->whereBetween('session_date', $window)
-                ->whereNotIn('status', ['cancelled', 'rescheduled'])->with('classGroup')->orderBy('session_date')->orderBy('start_time')->limit(8)->get()
-                ->map(fn (ClassSession $session) => ['session' => $session, 'url' => route('associations.attendance.show', [$user->association_id, $session])]));
-        }
-
-        return $items->sortBy(fn (array $item) => $item['session']->session_date->format('Y-m-d').' '.$item['session']->start_time)->take(8)->values();
+        return Championship::query()->where('association_id', $user->association_id)->where('status', 'open')->where('registration_close_at', '>=', now())->orderBy('start_date')->limit(5)->get();
     }
 }
