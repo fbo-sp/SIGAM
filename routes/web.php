@@ -140,6 +140,7 @@ Route::middleware(['auth', 'active', 'association.context'])->group(function ():
     Route::prefix('/portal')->name('portal.')->middleware('permission:portal.access')->group(function (): void {
         Route::get('/', [PortalController::class, 'index'])->name('index');
         Route::get('/alunos/{student}', [PortalController::class, 'show'])->name('students.show');
+        Route::get('/alunos/{student}/{section}', [PortalController::class, 'section'])->whereIn('section', ['turmas', 'frequencia', 'financeiro', 'campeonatos', 'historico', 'documentos', 'dados'])->name('students.section');
         Route::put('/alunos/{student}/contato', [PortalController::class, 'updateContact'])->name('students.contact.update');
         Route::get('/alunos/{student}/documentos/{document}', [PortalController::class, 'download'])->name('students.documents.download');
         Route::post('/alunos/{student}/campeonatos/{championship}', [PortalController::class, 'register'])->name('students.championships.register');

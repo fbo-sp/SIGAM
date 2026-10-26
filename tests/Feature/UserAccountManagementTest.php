@@ -200,7 +200,8 @@ class UserAccountManagementTest extends TestCase
         auth()->logout();
         $this->post($this->activationPostUrl($this->sentActivationUrl('aluno@example.com')), ['email' => 'aluno@example.com', 'password' => 'SenhaDoAluno123', 'password_confirmation' => 'SenhaDoAluno123']);
 
-        $this->actingAs($account->fresh())->get(route('portal.index'))->assertOk()->assertSee('Aluno Portal');
+        $this->actingAs($account->fresh())->get(route('portal.index'))->assertRedirect();
+        $this->followingRedirects()->get(route('portal.index'))->assertOk()->assertSee('Aluno Portal');
         $this->get(route('associations.users.index', $association))->assertForbidden();
     }
 

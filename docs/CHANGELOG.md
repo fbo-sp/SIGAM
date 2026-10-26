@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-10-26 — Portal do aluno em formato de aplicativo
+
+- quem só tem o acesso de aluno ou responsável entra direto no portal; um aluno vai direto ao início dele e o responsável com mais de um aluno escolhe quem consultar; professores e gestores continuam no painel;
+- o início do portal mostra só indicadores (próxima aula, frequência no mês, mensalidade e quiz) e atalhos; turmas, frequência, financeiro, campeonatos, histórico e federações, documentos e meus dados viraram subtelas (`portal/alunos/{student}/{secao}`) com "← Início";
+- no celular, barra inferior fixa com Início, Frequência, Financeiro e Mais; o menu superior esconde "Meus dojos" e "Meu portal" de quem só usa o portal;
+- sem migration; `PortalAccessTest` ampliado.
+
 ## 2026-10-25 — Gráficos na cobertura do currículo
 
 - a visão geral da turma na cobertura do currículo ganha três gráficos: cobertura por grupo, distribuição por grupo (aulas por mês em que cada grupo foi trabalhado, em colunas empilhadas) e mapa aula a aula (itens marcados nas últimas oito aulas); o detalhamento por faixa continua igual;
