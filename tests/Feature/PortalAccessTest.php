@@ -31,8 +31,9 @@ class PortalAccessTest extends TestCase
         [$association, $dojo, $student, $user] = $this->studentContext();
         $other = $this->student($association, $dojo, 'Outro aluno');
 
-        $this->actingAs($user)->get(route('portal.index'))->assertOk()->assertSee($student->person->full_name)->assertDontSee($other->person->full_name);
-        $this->get(route('portal.students.show', $student))->assertOk()->assertSee('Turmas e horários')->assertSee('Financeiro')->assertSee('Campeonatos');
+        $this->actingAs($user)->get(route('portal.index'))->assertRedirect(route('portal.students.show', $student));
+        $this->get(route('portal.students.show', $student))->assertOk()->assertSee('Turmas e horários')->assertSee('Financeiro')->assertSee('Campeonatos')->assertDontSee($other->person->full_name);
+        $this->get(route('portal.students.section', [$other, 'financeiro']))->assertNotFound();
         $this->get(route('portal.students.show', $other))->assertNotFound();
 
         $withoutPermission = User::factory()->create(['association_id' => $association->id, 'person_id' => $student->person_id]);
@@ -49,7 +50,7 @@ class PortalAccessTest extends TestCase
         StudentGuardian::query()->create(['student_id' => $expired->id, 'guardian_person_id' => $guardian->id, 'relationship_type' => 'mother', 'is_legal_guardian' => true, 'start_date' => today()->subYear(), 'end_date' => today()->subDay()]);
         $user = $this->portalUser($association, $guardian);
 
-        $this->actingAs($user)->get(route('portal.index'))->assertOk()->assertSee($student->person->full_name)->assertDontSee($expired->person->full_name);
+        $this->actingAs($user)->get(route('portal.index'))->assertRedirect(route('portal.students.show', $student));
         $this->get(route('portal.students.show', $expired))->assertNotFound();
     }
 
@@ -104,6 +105,43 @@ class PortalAccessTest extends TestCase
         $this->actingAs($user)->post(route('portal.students.championships.register', [$student, $championship]), ['category' => 'Adulto', 'weight' => '70,50', 'rank_id' => $rank->id, 'person_id' => 999999, 'student_id' => 999999])->assertSessionHasNoErrors();
 
         $this->assertDatabaseHas('championship_registrations', ['championship_id' => $championship->id, 'student_id' => $student->id, 'person_id' => $student->person_id, 'participation_type' => 'competitor', 'weight' => '70.50', 'registration_fee' => '25.00']);
+    }
+
+    public function test_portal_user_starts_at_portal_home_and_reaches_each_section(): void
+    {
+        [$association, $dojo, $student, $user] = $this->studentContext();
+        $this->actingAs($user)->get(route('dashboard'))->assertRedirect(route('portal.index'));
+        $this->get(route('portal.students.show', $student))->assertOk()
+            ->assertSee('Próxima aula')->assertSee('Frequência no mês')->assertSee('Mensalidade')->assertSee('Em dia')
+            ->assertSee(route('portal.students.section', [$student, 'documentos']), false)->assertSee('class="portal-tabbar"', false)
+            ->assertDontSee('Salvar contatos')->assertDontSee('Ver pagamentos');
+        foreach (['turmas' => 'Turmas e horários', 'frequencia' => 'Frequência', 'financeiro' => 'Nenhuma cobrança encontrada', 'campeonatos' => 'Campeonatos', 'historico' => 'Nenhum histórico registrado', 'documentos' => 'Nenhum documento disponível', 'dados' => 'Salvar contatos'] as $section => $text) {
+            $this->get(route('portal.students.section', [$student, $section]))->assertOk()->assertSee($text)->assertSee('← Início');
+        }
+        $this->get('/portal/alunos/'.$student->id.'/qualquer')->assertNotFound();
+
+        $staff = $this->portalUser($association, Person::query()->create(['full_name' => 'Gestora com portal']));
+        $permission = Permission::query()->firstOrCreate(['code' => 'dashboard.association'], ['description' => 'Painel']);
+        $role = Role::query()->create(['association_id' => $association->id, 'name' => 'Gestão', 'code' => 'gestao_'.uniqid(), 'scope_type' => 'association']);
+        $role->permissions()->sync([$permission->id]);
+        $staff->roles()->attach($role, ['association_id' => $association->id]);
+        $this->actingAs($staff)->get(route('dashboard'))->assertOk()->assertSee('Painel da associação');
+    }
+
+    public function test_guardian_with_several_students_chooses_first(): void
+    {
+        [$association, $dojo, $first] = $this->studentContext(false);
+        $second = $this->student($association, $dojo, 'Segundo filho');
+        $guardian = Person::query()->create(['full_name' => 'Mãe de dois']);
+        $association->people()->attach($guardian, ['role_type' => 'guardian', 'start_date' => today()->subYear(), 'status' => 'active']);
+        foreach ([$first, $second] as $child) {
+            StudentGuardian::query()->create(['student_id' => $child->id, 'guardian_person_id' => $guardian->id, 'relationship_type' => 'mother', 'is_legal_guardian' => true, 'start_date' => today()->subYear()]);
+        }
+        $user = $this->portalUser($association, $guardian);
+
+        $this->actingAs($user)->get(route('portal.index'))->assertOk()->assertSee($first->person->full_name)->assertSee($second->person->full_name);
+        $this->get(route('portal.students.section', [$second, 'financeiro']))->assertOk()->assertSee('Consultando:')
+            ->assertSee(route('portal.students.section', [$first, 'financeiro']), false);
     }
 
     private function studentContext(bool $withUser = true): array

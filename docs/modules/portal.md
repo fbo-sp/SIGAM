@@ -2,7 +2,14 @@
 
 ## Objetivo e experiência
 
-O portal reúne, em uma tela responsiva, dados próprios e de dependentes autorizados: turmas, frequência, cobranças e pagamentos, documentos, graduações, filiações e campeonatos. Cada modalidade tem o link "Progresso técnico" (`portal/alunos/{student}/progresso`), com o que falta para a próxima graduação, material de estudo, radar, o que foi trabalhado nas aulas, a evolução (sem as observações do professor) e o quiz teórico (ver `progression.md`). A troca de dependente permanece visível no topo e as seções têm atalhos adequados para celular.
+O portal funciona como um aplicativo: um início curto e um assunto por subtela.
+
+- Entrada: quem só tem o acesso de aluno ou responsável (`portal.access` sem `dashboard.association|dojo|teacher`) vai do login e do "Início" direto ao portal; professores e gestores continuam no painel de trabalho e chegam pelo link "Meu portal". Em `portal/`, um aluno só vai direto ao início dele; o responsável com mais de um aluno escolhe quem consultar.
+- Início (`portal/alunos/{student}`): nome, foto, modalidade, faixa e dojo; indicadores de próxima aula, frequência no mês (presença, reposição e experimental sobre as chamadas do mês), mensalidade (em dia, saldo em aberto ou vencidas) e quiz (prova oficial liberada); grade de atalhos.
+- Subtelas (`portal/alunos/{student}/{secao}`, com `turmas`, `frequencia`, `financeiro`, `campeonatos`, `historico`, `documentos` e `dados`) mais o progresso técnico: título, botão "← Início" e só o conteúdo do assunto. "Meus dados" mostra o cadastro e o formulário de contatos.
+- No celular, uma barra inferior fixa leva a Início, Frequência, Financeiro e Mais (janela com os demais atalhos). A troca de aluno do responsável fica no topo de todas as telas e mantém a subtela aberta.
+
+Cada modalidade tem o "Progresso técnico" (`portal/alunos/{student}/progresso`), com o que falta para a próxima graduação, material de estudo, radar, o que foi trabalhado nas aulas, a evolução (sem as observações do professor) e o quiz teórico (ver `progression.md`). A troca de dependente permanece visível no topo e as seções têm atalhos adequados para celular.
 
 Não existe cadastro público. Uma conta só acessa o portal quando possui `portal.access`, `association_id`, `person_id` e vínculo válido com o aluno.
 

@@ -21,7 +21,7 @@ Este documento é um índice de manutenção. `routes/web.php`, `routes/console.
 | `/fotos/{person}/{thumb\|medium}` | `PersonPhotoController` | link assinado relativo gerado só por telas que já mostram a pessoa; pessoa da associação da conta; foto trocada invalida o link |
 | `/sair` | `AuthenticatedSessionController` | sessão autenticada, CSRF e invalidação |
 | `/modelos/importacao/{type}/{format}` | `AssistedImportController` | conta ativa; tipo/formato em lista fechada e conteúdo fictício |
-| `/portal` | `PortalController` | titularidade ou responsabilidade vigente |
+| `/portal`, `/portal/alunos/{student}` e `/portal/alunos/{student}/{secao}` (`turmas`, `frequencia`, `financeiro`, `campeonatos`, `historico`, `documentos`, `dados`) | `PortalController`: escolha do aluno (direto ao início quando há só um), início com indicadores e atalhos, subtelas | titularidade ou responsabilidade vigente |
 | `/portal/alunos/{student}/progresso` e `/portal/alunos/{student}/quiz/...` | `PortalProgressionController`: progresso técnico, início (`POST quiz/{martialArt}`, `mode=training|official`), tentativa e envio (`quiz/tentativas/{attempt}`) | titularidade ou responsabilidade vigente; início e envio com limite de 20 por minuto |
 | `/meus-dojos` | `OperationalController` | dojos concedidos ou administração associativa |
 | `/operacao/dojos/{dojo}` | `OperationalController`, `DirectRegistrationController`, `DojoFinanceController`, `DojoChampionshipController` | `OperationalScope`; recursos sempre filtrados pelo dojo |

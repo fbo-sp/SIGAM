@@ -3,7 +3,8 @@
 @php($knowledgeLabels = ['theoretical' => 'Conhecimento Teórico', 'practical' => 'Conhecimento Prático'])
 @section('title', 'Progresso técnico — '.$name)
 @section('content')
-<nav class="breadcrumbs" aria-label="Caminho"><a href="{{ route('portal.index') }}">Meu portal</a><span>/</span><a href="{{ route('portal.students.show', $student) }}">{{ $name }}</a><span>/</span><span>Progresso técnico</span></nav>
+<div class="portal-page">
+<a class="button button-secondary back-link" href="{{ route('portal.students.show', $student) }}">← Início</a>
 <div class="page-heading"><div><span class="eyebrow">{{ $martialArt->name }} · progresso técnico</span><h1>{{ $name }}</h1>
 <p>{{ $snapshot['current_rank']?->display_name ?? 'Sem graduação registrada' }}@if($snapshot['next_rank']) · rumo a <strong>{{ $snapshot['next_rank']->display_name }}</strong>@endif</p></div></div>
 
@@ -57,4 +58,6 @@
 <section class="section-block"><div class="section-heading"><h2>Evolução</h2><p>Avaliações registradas pelos professores.</p></div>
 <div class="card list-card">@forelse($history as $record)<div class="list-row"><span><strong>{{ $record->item->name }}</strong><small>{{ $record->assessed_on->format('d/m/Y') }}</small></span><span class="status-pill">{{ $levels[$record->level] }}</span></div>@empty<div class="empty-state"><p>Nenhuma avaliação ainda.</p></div>@endforelse</div>
 </section>
+@include('portal.partials.tabbar', ['current' => 'mais'])
+</div>
 @endsection
