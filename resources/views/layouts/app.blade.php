@@ -9,7 +9,8 @@
     <link rel="stylesheet" href="{{ asset('css/direct-registration.css') }}">
     <link rel="stylesheet" href="{{ asset('css/modules.css') }}">
 </head>
-<body>
+@php($teacherNav = auth()->check() && request()->routeIs('dashboard', 'teacher.*', 'operation.*', 'notifications.*') && app(\App\Services\Classes\TeacherWorkspaceService::class)->usesNavigation(auth()->user()))
+<body @class(['has-teacher-nav' => $teacherNav])>
     <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
     @auth
         <header class="topbar">
@@ -44,6 +45,7 @@
     @endauth
 
     <main id="conteudo" class="page-shell">
+        @if($teacherNav)@include('teacher.partials.tabbar')@endif
         @if(session('status'))
             <div class="alert alert-success" role="status">{{ session('status') }}</div>
         @endif

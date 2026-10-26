@@ -15,6 +15,7 @@ use App\Http\Controllers\Auth\TeacherInvitationController;
 use App\Http\Controllers\Championship\ChampionshipController;
 use App\Http\Controllers\Classes\ClassGroupController;
 use App\Http\Controllers\Classes\DojoClassController;
+use App\Http\Controllers\Classes\TeacherWorkspaceController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Documents\DocumentController;
 use App\Http\Controllers\Federation\FederationController;
@@ -68,6 +69,8 @@ Route::post('/convites/professor/{token}/recusar', [TeacherInvitationController:
 Route::middleware(['auth', 'active', 'association.context'])->group(function (): void {
     Route::get('/fotos/{person}/{size}', [PersonPhotoController::class, 'show'])->middleware('signed:relative')->name('people.photo');
     Route::get('/meus-dojos', [OperationalController::class, 'index'])->name('operation.index');
+    Route::get('/professor/turmas', [TeacherWorkspaceController::class, 'classes'])->name('teacher.classes');
+    Route::get('/professor/alunos', [TeacherWorkspaceController::class, 'students'])->name('teacher.students');
     Route::prefix('/operacao/dojos/{dojo}')->name('operation.')->controller(OperationalController::class)->group(function (): void {
         Route::get('/', 'show')->name('home');
         Route::get('/alunos', 'students')->name('students');
