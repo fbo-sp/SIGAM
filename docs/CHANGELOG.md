@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-10-27 — Corrigir o início da matrícula na turma
+
+- administrador do sistema e gestor da associação corrigem a data inicial da matrícula em "Corrigir início", na ficha do aluno e na página da turma, com motivo obrigatório e auditoria;
+- ao antecipar, o vínculo com o dojo, a modalidade e a data de entrada recuam junto se começavam depois; ao atrasar, a correção é recusada quando há presença antes da nova data;
+- as chamadas abertas, mesmo passadas, já mostram o aluno pela nova data; as chamadas fechadas no novo período aparecem listadas com link para reabrir;
+- sem migration; `DojoClassHubTest` ampliado.
+
 ## 2026-10-27 — Treino, avaliação do professor e evolução no tempo
 
 - cada item da próxima faixa ganha uma situação: Precisa melhorar, Ainda não treinado (desde a faixa atual), Aguardando avaliação ou No nível; "O que falta" no portal agrupa por situação e o atalho mostra, por exemplo, "3 não treinado(s) · 1 a melhorar";

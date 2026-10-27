@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Sports;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Classes\EndEnrollmentRequest;
+use App\Http\Requests\Classes\EnrollmentStartRequest;
 use App\Http\Requests\Sports\GuardianRequest;
 use App\Models\Association;
 use App\Models\ClassEnrollment;
@@ -11,6 +12,7 @@ use App\Models\ClassGroup;
 use App\Models\Person;
 use App\Models\Student;
 use App\Services\Classes\ClassGroupService;
+use App\Services\Classes\EnrollmentStartCorrectionService;
 use App\Services\Sports\StudentService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -69,6 +71,14 @@ class StudentController extends Controller
         $service->endEnrollment($association, $enrollment, $request->validated());
 
         return back()->with('status', 'Matrícula encerrada. As chamadas anteriores foram preservadas.');
+    }
+
+    public function correctEnrollmentStart(EnrollmentStartRequest $request, Association $association, Student $student, ClassEnrollment $enrollment, EnrollmentStartCorrectionService $service): RedirectResponse
+    {
+        $this->ensureStudent($association, $student);
+        abort_unless($enrollment->student_id === $student->id, 404);
+
+        return back()->with(EnrollmentStartCorrectionService::flash($service->correct($association, $enrollment, $request->validated())));
     }
 
     public function activate(Association $association, Student $student, StudentService $service): RedirectResponse

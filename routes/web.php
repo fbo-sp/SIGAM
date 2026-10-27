@@ -106,6 +106,7 @@ Route::middleware(['auth', 'active', 'association.context'])->group(function ():
         Route::put('/turmas/{classGroup}', [DojoClassController::class, 'update'])->name('classes.update');
         Route::post('/turmas/{classGroup}/matriculas', [DojoClassController::class, 'enroll'])->name('classes.enrollments.store');
         Route::post('/turmas/{classGroup}/matriculas/{enrollment}/encerrar', [DojoClassController::class, 'endEnrollment'])->name('classes.enrollments.end');
+        Route::post('/turmas/{classGroup}/matriculas/{enrollment}/inicio', [DojoClassController::class, 'correctEnrollmentStart'])->name('classes.enrollments.start');
         Route::post('/turmas/{classGroup}/professores', [DojoClassController::class, 'assignTeacher'])->name('classes.teachers.store');
         Route::post('/turmas/{classGroup}/professores/{assignment}/encerrar', [DojoClassController::class, 'endTeacher'])->name('classes.teachers.end');
         Route::post('/turmas/{classGroup}/agenda/substituir', [DojoClassController::class, 'replaceScheduleSet'])->name('classes.schedules.replace-set');
@@ -230,6 +231,7 @@ Route::middleware(['auth', 'active', 'association.context'])->group(function ():
         Route::post('/alunos/{student}/ativar', [StudentController::class, 'activate'])->middleware('permission:student.manage')->name('students.activate');
         Route::post('/alunos/{student}/turmas', [StudentController::class, 'enroll'])->middleware('permission:enrollment.manage')->name('students.enrollments.store');
         Route::post('/alunos/{student}/turmas/{enrollment}/encerrar', [StudentController::class, 'endEnrollment'])->middleware('permission:enrollment.manage')->name('students.enrollments.end');
+        Route::post('/alunos/{student}/turmas/{enrollment}/inicio', [StudentController::class, 'correctEnrollmentStart'])->middleware('permission:enrollment.manage')->name('students.enrollments.start');
 
         Route::get('/professores', [TeacherController::class, 'index'])->middleware('permission:teacher.view')->name('teachers.index');
         Route::get('/professores/novo', [DirectRegistrationController::class, 'createTeacher'])->middleware('permission:teacher.manage')->name('teachers.create');

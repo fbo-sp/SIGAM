@@ -1,0 +1,2 @@
+@if(session('closed_sessions'))<div class="alert alert-warning"><p>Estas chamadas já estavam fechadas no novo período e não mostram o aluno. Reabra a chamada para incluí-lo:</p><ul class="closed-sessions-list">@foreach(session('closed_sessions') as $closedSession)<li><a href="{{ $closedSession['url'] }}">{{ $closedSession['label'] }}</a></li>@endforeach</ul></div>@endif
+@error('corrected_start')<div class="alert alert-danger">{{ $message }}</div>@enderror @error('correction_reason')<div class="alert alert-danger">{{ $message }}</div>@enderror
