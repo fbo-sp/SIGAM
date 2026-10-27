@@ -2,6 +2,7 @@
 
 namespace App\Services\Portal;
 
+use App\Models\Charge;
 use App\Models\Person;
 use App\Models\Student;
 use App\Models\User;
@@ -25,6 +26,30 @@ class PortalAccessService
             ->with(['person', 'primaryDojo'])
             ->orderBy('registration_number')
             ->get();
+    }
+
+    /** @var array<int, array{fee: bool, finance: bool}> */
+    private array $financeCache = [];
+
+    /**
+     * O que o portal mostra do financeiro: "fee" quando o aluno paga mensalidade hoje (plano vigente e sem gratuidade
+     * aprovada no dia) e "finance" quando há mensalidade, cobrança em aberto ou cobrança dos últimos 12 meses.
+     *
+     * @return array{fee: bool, finance: bool}
+     */
+    public function financeVisibility(Student $student): array
+    {
+        return $this->financeCache[$student->id] ??= (function () use ($student): array {
+            $current = fn (Builder $query) => $query->whereDate('start_date', '<=', today())
+                ->where(fn (Builder $end) => $end->whereNull('end_date')->orWhereDate('end_date', '>=', today()));
+            $fee = $student->studentPlans()->where('status', 'active')->where($current)->exists()
+                && $student->gratuityRequests()->where('status', 'approved')->where($current)->doesntExist();
+            $finance = $fee || $student->charges()->where(fn (Builder $query) => $query
+                ->where(fn (Builder $open) => $open->whereIn('status', Charge::OUTSTANDING_STATUSES)->where('balance_amount', '>', 0))
+                ->orWhere(fn (Builder $recent) => $recent->where('status', '!=', 'cancelled')->whereDate('due_date', '>=', today()->subYear())))->exists();
+
+            return ['fee' => $fee, 'finance' => $finance];
+        })();
     }
 
     /** Aluno cujos "Meus dados" o nome no topo abre: o próprio cadastro de aluno, senão o primeiro aluno sob responsabilidade. */

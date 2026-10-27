@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-10-27 — Portal sem mensalidade quando ela não se aplica
+
+- o indicador "Mensalidade" do início do portal só aparece para quem tem plano financeiro vigente e não é bolsista (gratuidade aprovada); associação, dojo ou turma sem mensalidade aparecem como aluno sem plano;
+- o atalho e a aba Financeiro ficam só enquanto houver mensalidade, cobrança em aberto ou cobrança dos últimos 12 meses (inscrição em campeonato, taxa de cadastro); sem financeiro, a aba da barra inferior vira Turmas;
+- sem migration; `PortalAccessTest` ampliado.
+
 ## 2026-10-27 — Troca de senha a partir de Meus dados
 
 - para quem usa o portal, o nome no topo leva a "Meus dados", que ganhou o bloco "Senha de acesso" com o botão "Trocar senha"; a tela Minha conta tem "← Meus dados";

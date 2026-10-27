@@ -68,7 +68,7 @@ class PortalController extends Controller
         $indicators = [
             'next_session' => $nextSession,
             'attendance' => ['present' => $present, 'total' => $month->count(), 'percent' => $month->count() ? (int) round($present * 100 / $month->count()) : null],
-            'finance' => [
+            'finance' => $access->financeVisibility($student) + [
                 'balance' => (string) ((clone $outstanding)->sum('balance_amount') ?: '0.00'),
                 'count' => (clone $outstanding)->count(),
                 'overdue' => (clone $outstanding)->whereDate('due_date', '<', today())->count(),
