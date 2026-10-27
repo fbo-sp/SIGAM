@@ -3,6 +3,7 @@
 @php($value = fn (string $key, $default = null) => old($key, request()->query($key, $prefill[$key] ?? $default)))
 @php($selected = fn (string $key) => array_map('intval', (array) $value($key, [])))
 @section('content')
+@include('partials.back-to-dashboard')
 @include('announcements.partials.crumbs', ['current' => 'Enviar aviso'])
 <section class="page-heading"><div><span class="eyebrow">{{ $dojo?->name ?? $association->trade_name }}</span><h1>Enviar aviso</h1><p>Escolha para quem, escreva a mensagem e revise antes de enviar.</p></div></section>
 <form class="card entity-form announcement-form" method="post" action="{{ route($prefix.'.preview', $context) }}">

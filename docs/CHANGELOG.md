@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-10-27 — Botão "← Início" como padrão
+
+- o botão "Voltar ao painel" passa a se chamar "← Início" e vira padrão: caixa Notificações, Minha conta, abas Turmas e Alunos do professor, avisos, Meus dojos e todas as telas do dojo (acessos, campeonatos, editar turma, financeiro, editar aluno, professores); no portal, também na tela do quiz;
+- o botão deixa de ser escondido quando a navegação do professor aparece;
+- sem migration; `TeacherViewTest` e `AnnouncementTest` ampliados.
+
 ## 2026-10-27 — Avisos na lista de alunos e não lidos no portal
 
 - aba Alunos do professor: botão "Aviso" em cada aluno e "Avisar estes N alunos" para a lista filtrada, abrindo "Enviar aviso" já com os alunos marcados (um botão por dojo quando há mais de um);

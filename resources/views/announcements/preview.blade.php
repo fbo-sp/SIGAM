@@ -3,6 +3,7 @@
 @php($roles = \App\Services\Notifications\AnnouncementService::ROLES)
 @php($emails = ($data['send_email'] ?? false) ? $audience->pluck('email')->filter()->map(fn ($email) => mb_strtolower(trim($email)))->unique()->count() : 0)
 @section('content')
+@include('partials.back-to-dashboard')
 @include('announcements.partials.crumbs', ['current' => 'Revisar'])
 <section class="page-heading"><div><span class="eyebrow">Revisar antes de enviar</span><h1>Vai para {{ $audience->count() }} pessoa(s)</h1><p>{{ collect($roles)->map(fn ($label, $key) => [$audience->where('role', $key)->count(), mb_strtolower($label)])->filter(fn ($row) => $row[0] > 0)->map(fn ($row) => $row[0].' '.$row[1].'(s)')->join(' · ') }}</p></div></section>
 @if($audience->isEmpty())<div class="alert alert-warning" role="status">Ninguém recebe este aviso. Volte e revise a escolha.</div>@endif

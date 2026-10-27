@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Acessos aos dojos — '.$association->trade_name)
 @section('content')
+@include('partials.back-to-dashboard')
 <nav class="breadcrumbs"><a href="{{ route('associations.show', $association) }}">{{ $association->trade_name }}</a><span>/</span><span>Acessos aos dojos</span></nav>
 <div class="page-heading"><div><span class="eyebrow">Segurança operacional</span><h1>Acessos aos dojos</h1><p>Escolha a conta, a função, a unidade e a vigência. O acesso não vale para outros dojos.</p></div></div>
 <div class="alert alert-warning"><strong>Atenção:</strong> o papel “Professor do dojo” somente pode ser concedido a uma conta vinculada a professor ativo da associação. Ele não permite reabrir chamadas nem acessar documentos ou financeiro.</div>
