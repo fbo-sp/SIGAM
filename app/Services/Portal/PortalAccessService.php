@@ -27,6 +27,17 @@ class PortalAccessService
             ->get();
     }
 
+    /** Aluno cujos "Meus dados" o nome no topo abre: o próprio cadastro de aluno, senão o primeiro aluno sob responsabilidade. */
+    public function accountStudent(User $user): ?Student
+    {
+        if (! $user->hasPermission('portal.access', $user->association_id)) {
+            return null;
+        }
+        $students = $this->studentsFor($user);
+
+        return $students->firstWhere('person_id', $user->person_id) ?? $students->first();
+    }
+
     public function resolveStudent(User $user, Student|int $student): Student
     {
         abort_unless($user->association_id && $user->person_id, 404);

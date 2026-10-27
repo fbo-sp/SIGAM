@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-10-27 — Troca de senha a partir de Meus dados
+
+- para quem usa o portal, o nome no topo leva a "Meus dados", que ganhou o bloco "Senha de acesso" com o botão "Trocar senha"; a tela Minha conta tem "← Meus dados";
+- contas sem portal continuam indo do nome direto para Minha conta; o atalho repetido no "Mais" do portal saiu;
+- sem migration; `PortalAccessTest` e `AccountPasswordTest` ampliados.
+
 ## 2026-10-27 — Minha conta e troca de senha
 
 - nova tela **Minha conta** (`/minha-conta`), aberta pelo nome no topo, pelo "Mais" do portal e pelo "Mais" do professor;
