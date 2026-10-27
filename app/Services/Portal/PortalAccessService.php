@@ -3,10 +3,12 @@
 namespace App\Services\Portal;
 
 use App\Models\Charge;
+use App\Models\Notification;
 use App\Models\Person;
 use App\Models\Student;
 use App\Models\User;
 use App\Services\AuditService;
+use App\Services\Notifications\NotificationContentService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -31,6 +33,9 @@ class PortalAccessService
     /** @var array<int, array{fee: bool, finance: bool}> */
     private array $financeCache = [];
 
+    /** @var array<int, array{count: int, latest: ?Notification}> */
+    private array $unreadCache = [];
+
     /**
      * O que o portal mostra do financeiro: "fee" quando o aluno paga mensalidade hoje (plano vigente e sem gratuidade
      * aprovada no dia) e "finance" quando há mensalidade, cobrança em aberto ou cobrança dos últimos 12 meses.
@@ -49,6 +54,25 @@ class PortalAccessService
                 ->orWhere(fn (Builder $recent) => $recent->where('status', '!=', 'cancelled')->whereDate('due_date', '>=', today()->subYear())))->exists();
 
             return ['fee' => $fee, 'finance' => $finance];
+        })();
+    }
+
+    /**
+     * Notificações internas não lidas da conta (avisos escritos e automáticos), para o indicador e o atalho Avisos.
+     * "latest" é a mais recente que a conta ainda pode ler em detalhe.
+     *
+     * @return array{count: int, latest: ?Notification}
+     */
+    public function unreadNotices(User $user): array
+    {
+        return $this->unreadCache[$user->id] ??= (function () use ($user): array {
+            $query = Notification::query()->where('user_id', $user->id)->where('association_id', $user->association_id)
+                ->where('channel', 'internal')->whereNull('read_at');
+            $content = app(NotificationContentService::class);
+            $latest = (clone $query)->with('event')->latest('id')->limit(10)->get()
+                ->first(fn (Notification $notification) => $content->canViewDetails($notification, $user));
+
+            return ['count' => (clone $query)->count(), 'latest' => $latest];
         })();
     }
 

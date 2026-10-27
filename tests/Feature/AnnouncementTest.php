@@ -6,6 +6,7 @@ use App\Mail\AnnouncementMail;
 use App\Models\Announcement;
 use App\Models\AnnouncementRecipient;
 use App\Models\ClassGroup;
+use App\Models\ClassSession;
 use App\Models\Dojo;
 use App\Models\Notification;
 use App\Models\NotificationPreference;
@@ -137,6 +138,45 @@ class AnnouncementTest extends TestCase
         $this->actingAs($outsider)->get(route('associations.announcements.index', $this->association))->assertForbidden();
         $this->actingAs($outsider)->post(route('operation.announcements.store', $this->dojo), ['target_type' => 'all', 'title' => 'X', 'body' => 'Y', 'token' => (string) Str::uuid()])->assertForbidden();
         $this->assertSame(0, Announcement::query()->count());
+    }
+
+    public function test_teacher_students_tab_links_to_announcement_and_portal_highlights_unread(): void
+    {
+        [$anaUser, $ana] = $this->sender('Professora Ana');
+        [$brunoUser, $bruno] = $this->teacher('Professor Bruno');
+        $group = $this->group($ana);
+        $other = ClassGroup::query()->create(['association_id' => $this->association->id, 'dojo_id' => $this->dojo->id, 'martial_art_id' => $this->art->id, 'name' => 'Turma B', 'main_teacher_id' => $bruno->id, 'start_date' => '2026-09-01', 'status' => 'active']);
+        $first = $this->student('A-1');
+        $second = $this->student('A-2');
+        $portal = $this->portalUser($first->person);
+        $this->enroll($group, $first);
+        $this->enroll($group, $second);
+        $this->enroll($other, $second);
+        foreach ([$group, $other] as $class) {
+            ClassSession::query()->create(['class_group_id' => $class->id, 'session_date' => '2026-10-28', 'start_time' => '18:00', 'end_time' => '19:00', 'status' => 'planned', 'attendance_state' => 'open']);
+        }
+        foreach ([$anaUser, $brunoUser] as $user) {
+            $user->roles()->attach($this->role('association', ['dashboard.teacher']), ['association_id' => $this->association->id]);
+        }
+
+        $row = route('operation.announcements.create', [$this->dojo, 'target_type' => 'people', 'student_ids' => [$first->id]]);
+        $list = route('operation.announcements.create', [$this->dojo, 'target_type' => 'people', 'student_ids' => [$first->id, $second->id]]);
+        $this->actingAs($anaUser)->get(route('teacher.students'))->assertOk()->assertSee('href="'.e($row).'"', false)
+            ->assertSee('Avisar estes 2 alunos')->assertSee('href="'.e($list).'"', false);
+        $this->get($list)->assertOk()->assertSee('value="'.$first->id.'" checked', false)->assertSee('value="'.$second->id.'" checked', false);
+        $this->actingAs($brunoUser)->get(route('teacher.students'))->assertOk()->assertSee('A-2')->assertDontSee('Avisar este');
+
+        $home = route('portal.students.show', $first);
+        $this->actingAs($portal)->get($home)->assertOk()->assertSee('Nada novo')->assertDontSee('has-unread');
+        $this->actingAs($anaUser)->post(route('operation.announcements.store', $this->dojo), ['target_type' => 'people', 'student_ids' => [$first->id], 'include' => ['student'], 'title' => 'Treino cancelado', 'body' => 'Chuva forte.', 'token' => (string) Str::uuid()])->assertRedirect();
+        $this->post(route('operation.announcements.store', $this->dojo), ['target_type' => 'people', 'student_ids' => [$first->id], 'include' => ['student'], 'title' => 'Lida antes', 'body' => 'Ok.', 'token' => (string) Str::uuid()])->assertRedirect();
+        Notification::query()->where('user_id', $portal->id)->where('subject', 'Lida antes')->update(['read_at' => now()]);
+        $this->actingAs($portal)->get($home)->assertOk()->assertSee('1 novo')->assertSee('Treino cancelado')
+            ->assertSee('portal-shortcut has-unread', false)->assertSee('avisos novos');
+        $this->get(route('notifications.index'))->assertOk()->assertSeeInOrder(['Treino cancelado', 'Lida antes']);
+
+        Notification::query()->where('user_id', $portal->id)->update(['read_at' => now()]);
+        $this->get($home)->assertOk()->assertSee('Nada novo')->assertDontSee('has-unread');
     }
 
     /** @return array{User, TeacherProfile} */

@@ -10,6 +10,7 @@
     'documentos' => 'M7 3h7l5 5v13H7zM14 3v5h5M10 13h6M10 17h6',
     'dados' => 'M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21a8 8 0 0 1 16 0',
     'avisos' => 'M6 16V11a6 6 0 0 1 12 0v5l2 2H4zM10 21h4',
+    'avisos-novo' => 'M15 5.6A6 6 0 0 0 6 11v5l-2 2h16l-2-2v-4M10 21h4M19 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z',
     'mais' => 'M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z',
 ])
 <svg class="portal-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="{{ $paths[$name] ?? $paths['mais'] }}"/></svg>

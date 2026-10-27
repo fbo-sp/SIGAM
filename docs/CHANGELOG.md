@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-10-27 — Avisos na lista de alunos e não lidos no portal
+
+- aba Alunos do professor: botão "Aviso" em cada aluno e "Avisar estes N alunos" para a lista filtrada, abrindo "Enviar aviso" já com os alunos marcados (um botão por dojo quando há mais de um);
+- portal: indicador "Avisos" sempre visível entre Frequência e Quiz ("N novo(s)" em vermelho leve com o título do mais recente, ou "Nada novo"); atalho Avisos com sino de novo aviso, número e fundo vermelho leve; ponto vermelho na aba "Mais" do celular; conta qualquer notificação não lida, escrita ou automática;
+- a caixa Notificações mostra as não lidas primeiro;
+- sem migration; `AnnouncementTest` ampliado.
+
 ## 2026-10-27 — Avisos por nível
 
 - associação, gestor do dojo e professor enviam avisos: a associação para todos, dojos, turmas ou pessoas; o gestor para o dojo inteiro, turmas ou pessoas do dojo; o professor para as próprias turmas e os alunos delas; em cada envio marca-se alunos, responsáveis e professores;
