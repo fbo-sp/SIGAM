@@ -342,6 +342,56 @@ class DojoClassHubTest extends TestCase
         $this->assertSame('ended', $enrollment->fresh()->status);
     }
 
+    public function test_association_manager_corrects_enrollment_start_and_open_rosters_follow(): void
+    {
+        $manager = User::factory()->create(['association_id' => $this->association->id]);
+        $manager->roles()->attach($this->role('association', ['student.view', 'enrollment.manage', 'dojo.view', 'class.view', 'session.view']), ['association_id' => $this->association->id]);
+        $dojoManager = $this->dojoManager();
+        $group = $this->group('Turma A');
+        $student = $this->student('A-1');
+        $student->update(['entry_date' => '2026-10-10']);
+        $student->dojoHistory()->update(['start_date' => '2026-10-10']);
+        $art = $student->martialArts()->firstOrFail();
+        $art->update(['start_date' => '2026-10-10']);
+        $rank = $this->art->ranks()->create(['name' => 'Branca', 'display_name' => 'Branca', 'sort_order' => 1]);
+        $art->rankHistory()->create(['rank_id' => $rank->id, 'achieved_at' => '2026-10-10', 'source_type' => 'initial_registration']);
+        $enrollment = ClassEnrollment::query()->create(['class_group_id' => $group->id, 'student_id' => $student->id, 'start_date' => '2026-10-10', 'status' => 'active']);
+        $openPast = $this->classSession($group, '2026-09-03');
+        $closedPast = $this->classSession($group, '2026-09-10');
+        $closedPast->update(['attendance_state' => 'closed', 'status' => 'held']);
+        $later = $this->classSession($group, '2026-10-13');
+        $roster = app(AttendanceService::class);
+        $this->assertFalse($roster->roster($openPast)->contains(fn ($row) => $row['student']->id === $student->id));
+
+        $this->actingAs($dojoManager)->get(route('operation.classes.show', [$this->dojo, $group]))->assertOk()->assertDontSee('Corrigir início');
+        $this->post(route('operation.classes.enrollments.start', [$this->dojo, $group, $enrollment]), ['corrected_start' => '2026-09-01', 'correction_reason' => 'Data errada'])->assertForbidden();
+
+        $this->actingAs($manager)->get(route('operation.classes.show', [$this->dojo, $group]))->assertOk()->assertSee('Corrigir início');
+        $this->post(route('associations.students.enrollments.start', [$this->association, $student, $enrollment]), ['corrected_start' => '2026-09-01'])
+            ->assertSessionHasErrors('correction_reason');
+        $this->post(route('associations.students.enrollments.start', [$this->association, $student, $enrollment]), ['corrected_start' => '2026-09-01', 'correction_reason' => 'Cadastrado com a data errada'])
+            ->assertSessionHasNoErrors()->assertSessionHas('closed_sessions', fn ($list) => count($list) === 1 && str_starts_with($list[0]['label'], '10/09/2026'));
+
+        $this->assertSame('2026-09-01', $enrollment->fresh()->start_date->toDateString());
+        $this->assertSame('2026-09-01', $student->dojoHistory()->first()->start_date->toDateString());
+        $this->assertSame('2026-09-01', $art->fresh()->start_date->toDateString());
+        $this->assertSame('2026-09-01', $student->fresh()->entry_date->toDateString());
+        $this->assertSame('2026-09-01', $art->rankHistory()->first()->achieved_at->toDateString());
+        $this->assertTrue($roster->roster($openPast->fresh())->contains(fn ($row) => $row['student']->id === $student->id));
+        $this->assertDatabaseHas('audit_logs', ['event_type' => 'class_enrollment.start_corrected']);
+        $this->get(route('associations.students.show', [$this->association, $student]))->assertOk()->assertSee('01/09/2026');
+
+        AttendanceRecord::query()->create(['class_session_id' => $later->id, 'student_id' => $student->id, 'status' => 'present', 'participation_type' => 'regular', 'recorded_at' => now(), 'recorded_by_user_id' => $manager->id]);
+        $this->post(route('associations.students.enrollments.start', [$this->association, $student, $enrollment]), ['corrected_start' => '2026-10-14', 'correction_reason' => 'Teste de atraso'])
+            ->assertSessionHasErrors('corrected_start');
+        $this->post(route('associations.students.enrollments.start', [$this->association, $student, $enrollment]), ['corrected_start' => '2026-08-01', 'correction_reason' => 'Antes da turma'])
+            ->assertSessionHasErrors('corrected_start');
+        $this->post(route('associations.students.enrollments.start', [$this->association, $student, $enrollment]), ['corrected_start' => '2026-09-05', 'correction_reason' => 'Ajuste fino'])
+            ->assertSessionHasNoErrors();
+        $this->assertSame('2026-09-05', $enrollment->fresh()->start_date->toDateString());
+        $this->assertFalse($roster->roster($openPast->fresh())->contains(fn ($row) => $row['student']->id === $student->id));
+    }
+
     public function test_class_lists_and_pages_show_teachers_with_photo_and_enroll_in_a_modal(): void
     {
         $manager = User::factory()->create(['association_id' => $this->association->id]);

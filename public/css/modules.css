@@ -90,3 +90,4 @@
 .chart-card{padding:1rem}.timeline-item{padding:.75rem 1rem 1rem}.timeline-item .list-card{border:0;box-shadow:none;margin-top:.5rem}.timeline-scale{margin:.4rem 0 0;color:var(--muted);font-size:.82rem}.assessment-tip{color:#8f4d00!important;font-weight:600}
 .progress-status{font-weight:600}.progress-status.is-improve{color:#a12a2a}.progress-status.is-untrained{color:#6b7686}.progress-status.is-awaiting{color:#8a5d00}.progress-total{margin:0 0 1rem;color:var(--muted)}
 .assess-row{flex-wrap:wrap}.assess-tip{flex:1 1 100%;min-width:0;padding:.45rem .6rem;border:1px solid var(--border);border-radius:.5rem;font:inherit;font-size:.9rem}.level-option.is-current span{border:2px dashed #2a78d6}
+.closed-sessions-list{display:flex;flex-wrap:wrap;gap:.25rem 1.25rem;margin:.5rem 0 0;padding-left:1.2rem}

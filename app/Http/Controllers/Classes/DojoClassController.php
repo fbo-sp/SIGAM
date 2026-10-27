@@ -8,6 +8,7 @@ use App\Http\Requests\Classes\ClassGroupUpdateRequest;
 use App\Http\Requests\Classes\ClassTeacherRequest;
 use App\Http\Requests\Classes\EndEnrollmentRequest;
 use App\Http\Requests\Classes\EnrollmentRequest;
+use App\Http\Requests\Classes\EnrollmentStartRequest;
 use App\Http\Requests\Classes\FutureSessionsRequest;
 use App\Http\Requests\Classes\PastSessionsRequest;
 use App\Http\Requests\Classes\ScheduleSetRequest;
@@ -21,6 +22,7 @@ use App\Models\TeacherProfile;
 use App\Services\Access\OperationalScope;
 use App\Services\Attendance\FutureSessionMaintainer;
 use App\Services\Classes\ClassGroupService;
+use App\Services\Classes\EnrollmentStartCorrectionService;
 use App\Services\Classes\TeacherWorkspaceService;
 use App\Services\Progression\AssessmentService;
 use App\Services\Progression\ProgressionPanelService;
@@ -77,6 +79,7 @@ class DojoClassController extends Controller
         $classGroup->load(['martialArt', 'mainTeacher.person', 'schedules.teacher.person']);
         $canManage = $this->scope->canDojo($user, $dojo, 'class.manage');
         $canEnroll = $this->scope->canDojo($user, $dojo, 'enrollment.manage');
+        $canCorrectStart = $user->hasPermission('enrollment.manage', $dojo->association_id);
 
         $canEditStudents = $this->scope->canDojo($user, $dojo, 'student.manage');
         $canEditPeople = $user->hasPermission('person.manage', $dojo->association_id);
@@ -108,7 +111,7 @@ class DojoClassController extends Controller
 
         return view('operation.class', compact(
             'dojo', 'classGroup', 'enrollments', 'assignments', 'upcoming', 'past', 'candidates', 'dojoTeachers',
-            'scheduleTeachers', 'canManage', 'canEnroll', 'canEditStudents', 'canEditPeople', 'canAssess', 'canProgress', 'canCoverage', 'canAnnounce',
+            'scheduleTeachers', 'canManage', 'canEnroll', 'canCorrectStart', 'canEditStudents', 'canEditPeople', 'canAssess', 'canProgress', 'canCoverage', 'canAnnounce',
         ));
     }
 
@@ -148,6 +151,16 @@ class DojoClassController extends Controller
         $service->endEnrollment($dojo->association, $enrollment, $request->validated());
 
         return back()->with('status', 'Matrícula encerrada. As chamadas anteriores foram preservadas.');
+    }
+
+    /** Só administrador do sistema e gestor da associação: o papel local do dojo não corrige o início. */
+    public function correctEnrollmentStart(EnrollmentStartRequest $request, Dojo $dojo, ClassGroup $classGroup, ClassEnrollment $enrollment, EnrollmentStartCorrectionService $service): RedirectResponse
+    {
+        $this->enter($request, $dojo);
+        abort_unless($classGroup->dojo_id === $dojo->id && $request->user()->hasPermission('enrollment.manage', $dojo->association_id), 403);
+        abort_unless($enrollment->class_group_id === $classGroup->id, 404);
+
+        return back()->with(EnrollmentStartCorrectionService::flash($service->correct($dojo->association, $enrollment, $request->validated())));
     }
 
     public function assignTeacher(ClassTeacherRequest $request, Dojo $dojo, ClassGroup $classGroup, ClassGroupService $service): RedirectResponse
