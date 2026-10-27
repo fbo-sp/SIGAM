@@ -25,6 +25,8 @@ class AssessmentRequest extends FormRequest
             'levels.*' => ['nullable', 'integer', Rule::in(array_keys(AssessmentLevel::labels()))],
             'assessed_on' => ['required', 'date_format:Y-m-d', 'before_or_equal:today'],
             'notes' => ['nullable', 'string', 'max:1000'],
+            'tips' => ['nullable', 'array', 'max:500'],
+            'tips.*' => ['nullable', 'string', 'max:300'],
         ];
     }
 

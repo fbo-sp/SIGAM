@@ -32,13 +32,15 @@ class PortalProgressionController extends Controller
         abort_if($link === null, 404);
         $martialArt = $link->martialArt;
         $student->load('person');
+        $snapshot = $this->progress->snapshot($student->association, $student, $martialArt);
 
         return view('portal.progress', [
             'part' => $part,
             'student' => $student,
             'martialArt' => $martialArt,
             'options' => $options,
-            'snapshot' => $this->progress->snapshot($student->association, $student, $martialArt),
+            'snapshot' => $snapshot,
+            'timeline' => $part === 'evolucao' && $snapshot['next_rank'] ? $this->progress->timeline($student, $martialArt, $snapshot) : null,
             'worked' => $this->progress->worked($student->association, $student, $martialArt, today()->subDays(90), today()),
             'history' => $this->assessments->history($student, $martialArt, 30),
             'levels' => AssessmentLevel::labels(),

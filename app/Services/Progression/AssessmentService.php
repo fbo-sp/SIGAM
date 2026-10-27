@@ -87,11 +87,13 @@ class AssessmentService
     }
 
     /**
-     * Grava só os itens cujo nível mudou. Reenviar o mesmo formulário não cria registros.
+     * Grava uma avaliação para cada item marcado, inclusive quando o nível se mantém: cada registro é um ponto
+     * na linha do tempo. Reenviar o mesmo formulário não duplica: item, data, nível e dica iguais são ignorados.
      *
-     * @param  array<int|string, int|string|null>  $levels  item_id => nível (vazio = sem alteração)
+     * @param  array<int|string, int|string|null>  $levels  item_id => nível (vazio = não avaliado agora)
+     * @param  array<int|string, string|null>  $tips  item_id => dica para o aluno (opcional, exige nível)
      */
-    public function record(User $user, Dojo $dojo, Student $student, MartialArt $martialArt, array $levels, CarbonInterface $assessedOn, ?string $notes): int
+    public function record(User $user, Dojo $dojo, Student $student, MartialArt $martialArt, array $levels, CarbonInterface $assessedOn, ?string $notes, array $tips = []): int
     {
         $teacherId = $this->assessorTeacherId($user, $dojo, $student, $martialArt);
         abort_if($teacherId === null, 403);
@@ -102,31 +104,55 @@ class AssessmentService
         if ($levels->contains(fn (int $level) => ! array_key_exists($level, AssessmentLevel::labels()))) {
             throw ValidationException::withMessages(['levels' => 'Escolha um nível válido para cada item.']);
         }
+        $tips = collect($tips)->map(fn ($tip) => trim((string) $tip) ?: null)->filter();
+        if ($tips->keys()->diff($levels->keys())->isNotEmpty()) {
+            throw ValidationException::withMessages(['tips' => 'Para deixar uma dica, marque também o nível do item.']);
+        }
 
-        return DB::transaction(function () use ($user, $dojo, $student, $martialArt, $levels, $assessedOn, $notes, $teacherId): int {
+        return DB::transaction(function () use ($user, $dojo, $student, $martialArt, $levels, $tips, $assessedOn, $notes, $teacherId): int {
             Student::query()->whereKey($student->id)->lockForUpdate()->first();
             $items = TechniqueItem::query()->where('association_id', $student->association_id)->where('martial_art_id', $martialArt->id)
                 ->whereKey($levels->keys()->all())->where('status', 'active')->pluck('id')->all();
             if (count($items) !== $levels->count()) {
                 throw ValidationException::withMessages(['levels' => 'Um dos itens não está ativo no catálogo desta modalidade.']);
             }
-            $current = $this->current($student, $martialArt);
-            $changed = $levels->filter(fn (int $level, $itemId) => $current->get((int) $itemId)?->level !== $level);
-            foreach ($changed as $itemId => $level) {
+            $sameDay = TechniqueAssessment::query()->where('student_id', $student->id)->where('martial_art_id', $martialArt->id)
+                ->whereDate('assessed_on', $assessedOn->toDateString())->whereIn('technique_item_id', $levels->keys()->all())
+                ->get(['technique_item_id', 'level', 'student_tip'])->groupBy('technique_item_id');
+            $saved = 0;
+            foreach ($levels as $itemId => $level) {
+                $tip = $tips->get($itemId);
+                if ($sameDay->get((int) $itemId, collect())->contains(fn (TechniqueAssessment $row) => $row->level === $level && $row->student_tip === $tip)) {
+                    continue;
+                }
                 TechniqueAssessment::query()->create([
                     'association_id' => $student->association_id, 'student_id' => $student->id, 'martial_art_id' => $martialArt->id,
                     'technique_item_id' => (int) $itemId, 'level' => $level, 'teacher_profile_id' => $teacherId, 'dojo_id' => $dojo->id,
-                    'assessed_by_user_id' => $user->id, 'assessed_on' => $assessedOn->toDateString(), 'notes' => $notes,
+                    'assessed_by_user_id' => $user->id, 'assessed_on' => $assessedOn->toDateString(), 'notes' => $notes, 'student_tip' => $tip,
                 ]);
+                $saved++;
             }
-            if ($changed->isNotEmpty()) {
+            if ($saved > 0) {
                 $this->audit->record('technique_assessment.recorded', 'created', $student, null, [
-                    'martial_art_id' => $martialArt->id, 'items' => $changed->count(), 'assessed_on' => $assessedOn->toDateString(), 'teacher_profile_id' => $teacherId,
+                    'martial_art_id' => $martialArt->id, 'items' => $saved, 'assessed_on' => $assessedOn->toDateString(), 'teacher_profile_id' => $teacherId,
                 ], ['association_id' => $student->association_id]);
             }
 
-            return $changed->count();
+            return $saved;
         });
+    }
+
+    /**
+     * Todas as avaliações dos itens, em ordem de data, para a linha do tempo.
+     *
+     * @param  list<int>  $itemIds
+     * @return Collection<int, TechniqueAssessment>
+     */
+    public function timeline(Student $student, MartialArt $martialArt, array $itemIds): Collection
+    {
+        return TechniqueAssessment::query()->where('student_id', $student->id)->where('martial_art_id', $martialArt->id)
+            ->whereIn('technique_item_id', $itemIds)->with('teacher.person:id,full_name,social_name')
+            ->orderBy('assessed_on')->orderBy('id')->get();
     }
 
     /** Turmas da modalidade no dojo em que o professor é principal ou auxiliar vigente. */

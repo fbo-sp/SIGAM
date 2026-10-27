@@ -16,6 +16,7 @@ use App\Services\Access\AccessAdministration;
 use App\Services\Access\OperationalScope;
 use App\Services\Attendance\AttendanceService;
 use App\Services\Attendance\SessionVisitorService;
+use App\Services\Progression\SessionAssessmentService;
 use App\Services\Progression\SessionTechniqueService;
 use App\Services\Progression\TechniqueCatalogService;
 use Illuminate\Http\Request;
@@ -110,7 +111,9 @@ class OperationalController extends Controller
         $markedTechniques = $techniqueService->marked($session);
         $canMarkTechniques = $techniqueTree->isNotEmpty() && $techniqueService->canMark($request->user(), $dojo, $session);
 
-        return view('operation.session', compact('dojo', 'session', 'roster', 'records', 'canRecord', 'canReopen', 'canManageVisitors', 'enrollUrl', 'techniqueTree', 'markedTechniques', 'canMarkTechniques'));
+        $assessUrl = app(SessionAssessmentService::class)->available($request->user(), $dojo, $session) ? route('operation.session.assess', [$dojo, $session]) : null;
+
+        return view('operation.session', compact('dojo', 'session', 'roster', 'records', 'canRecord', 'canReopen', 'canManageVisitors', 'enrollUrl', 'techniqueTree', 'markedTechniques', 'canMarkTechniques', 'assessUrl'));
     }
 
     public function addVisitor(SessionVisitorRequest $request, Dojo $dojo, ClassSession $session, SessionVisitorService $service)

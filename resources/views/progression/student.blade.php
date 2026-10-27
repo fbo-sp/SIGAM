@@ -20,7 +20,7 @@
 @if(! $snapshot['next_rank'])
 <div class="card empty-state"><h2>Sem próxima graduação</h2><p>O aluno já está na última graduação cadastrada desta modalidade.</p></div>
 @else
-<section class="section-block"><div class="section-heading"><h2>O que falta para {{ $snapshot['next_rank']->display_name }}</h2><p>Itens abaixo do nível exigido no exame. Não há percentual: a lista mostra o que trabalhar.</p></div>
+<section class="section-block"><div class="section-heading"><h2>O que falta para {{ $snapshot['next_rank']->display_name }}</h2><p>Itens abaixo do nível exigido no exame: {{ $snapshot['statuses']['improve'] }} a melhorar, {{ $snapshot['statuses']['untrained'] }} não treinado(s) desde a faixa atual e {{ $snapshot['statuses']['awaiting'] }} aguardando avaliação.</p></div>
 <div class="card list-card">
 @foreach($snapshot['requirements'] as $requirement)<div class="list-row"><span><strong>{{ $requirement['label'] }}</strong><small>{{ $requirement['detail'] }}</small></span><span class="status-pill {{ $requirement['met'] === false ? 'status-inactive' : '' }}">{{ $requirement['met'] === null ? 'Sem dado' : ($requirement['met'] ? 'Atende' : 'Ainda não') }}</span></div>@endforeach
 @if($snapshot['rows']->isEmpty())<div class="list-row"><span><strong>Currículo não definido</strong><small>A associação ainda não definiu o que esta graduação cobra.</small></span></div>@endif
@@ -29,7 +29,7 @@
 @if($snapshot['rows']->has($type))
 <h3>{{ $label }}: {{ $snapshot['missing'][$type]->count() }} de {{ $snapshot['rows'][$type]->count() }} item(ns) abaixo do exigido</h3>
 @if($snapshot['missing'][$type]->isNotEmpty())
-<div class="card list-card">@foreach($snapshot['missing'][$type] as $row)<div class="list-row progress-row"><span><strong>{{ $row['item']->name }}</strong><small>{{ \Illuminate\Support\Str::beforeLast($row['path'], ' > ') }}</small></span><span class="level-gap"><span class="status-pill status-inactive">{{ $levels[$row['current'] ?? 1] }}</span><span aria-hidden="true">→</span><span class="status-pill">{{ $levels[$row['level']] }}</span></span></div>@endforeach</div>
+<div class="card list-card">@foreach($snapshot['missing'][$type] as $row)<div class="list-row progress-row"><span><strong>{{ $row['item']->name }}</strong><small>{{ \Illuminate\Support\Str::beforeLast($row['path'], ' > ') }}</small><small @class(['progress-status', 'is-'.$row['status']])>{{ \App\Services\Progression\StudentProgressService::STATUS_LABELS[$row['status']] ?? '' }}@if($row['status'] === 'improve' && $row['assessed_on']) · avaliado em {{ $row['assessed_on']->format('d/m/Y') }}@endif @if($row['trained_on']) · treinado em {{ $row['trained_on']->format('d/m/Y') }}@endif</small>@if($row['tip'] && $row['status'] === 'improve')<small class="assessment-tip">Dica ao aluno: {{ $row['tip'] }}</small>@endif</span><span class="level-gap"><span class="status-pill status-inactive">{{ $levels[$row['current'] ?? 1] }}</span><span aria-hidden="true">→</span><span class="status-pill">{{ $levels[$row['level']] }}</span></span></div>@endforeach</div>
 @else
 <p>Todos os itens {{ $type === 'theoretical' ? 'teóricos' : 'práticos' }} estão no nível exigido.</p>
 @endif
@@ -63,7 +63,10 @@
 <div class="radar-grid">@foreach($knowledgeLabels as $type => $label)@if($worked['axes']->has($type))<div class="card list-card"><div class="list-row"><span><strong>{{ $label }}</strong></span></div>@foreach($worked['axes'][$type] as $axis)<div class="list-row"><span>{{ $axis['label'] }}</span><span class="status-pill">{{ $axis['sessions'] }} de {{ $worked['sessions'] }} aula(s)</span></div>@endforeach</div>@endif @endforeach</div>@endif
 </section>
 
-<section class="section-block"><div class="section-heading"><h2>Evolução</h2><p>Cada avaliação fica registrada; o nível atual é o último registro de cada item.</p></div>
-<div class="card list-card">@forelse($history as $record)<div class="list-row"><span><strong>{{ $record->item->name }}</strong><small>{{ $record->assessed_on->format('d/m/Y') }} · {{ $record->teacher?->person?->social_name ?: $record->teacher?->person?->full_name ?: 'Professor' }}@if($record->notes) · {{ $record->notes }}@endif</small></span><span class="status-pill">{{ $levels[$record->level] }}</span></div>@empty<div class="empty-state"><h2>Nenhuma avaliação ainda</h2><p>Os professores das turmas do aluno registram as avaliações pelo botão Avaliar.</p></div>@endforelse</div>
+@if($timeline)
+@include('progression._timeline', ['showNotes' => true])
+@endif
+<section class="section-block"><div class="section-heading"><h2>Todas as avaliações</h2><p>Cada avaliação fica registrada, inclusive quando o nível se mantém; o nível atual é o último registro de cada item.</p></div>
+<div class="card list-card">@forelse($history as $record)<div class="list-row"><span><strong>{{ $record->item->name }}</strong><small>{{ $record->assessed_on->format('d/m/Y') }} · {{ $record->teacher?->person?->social_name ?: $record->teacher?->person?->full_name ?: 'Professor' }}@if($record->notes) · {{ $record->notes }}@endif</small>@if($record->student_tip)<small class="assessment-tip">Dica ao aluno: {{ $record->student_tip }}</small>@endif</span><span class="status-pill">{{ $levels[$record->level] }}</span></div>@empty<div class="empty-state"><h2>Nenhuma avaliação ainda</h2><p>Os professores das turmas do aluno registram as avaliações pelo botão Avaliar.</p></div>@endforelse</div>
 </section>
 @endsection

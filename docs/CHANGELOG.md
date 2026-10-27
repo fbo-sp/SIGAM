@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-10-27 — Treino, avaliação do professor e evolução no tempo
+
+- cada item da próxima faixa ganha uma situação: Precisa melhorar, Ainda não treinado (desde a faixa atual), Aguardando avaliação ou No nível; "O que falta" no portal agrupa por situação e o atalho mostra, por exemplo, "3 não treinado(s) · 1 a melhorar";
+- toda avaliação marcada vira um registro, inclusive no mesmo nível; cada item tem "Dica para o aluno", mostrada no portal; o formulário não vem mais marcado com o nível atual e ganha filtros por situação;
+- nova tela "Avaliar técnicas desta aula" na chamada encerrada, com os presentes e as técnicas marcadas;
+- Evolução (portal e ficha do professor): gráfico geral com a porcentagem no nível pedido e gráfico por item com cada avaliação e os dias de treino;
+- migration `2026_10_27_000028_add_student_tip_to_technique_assessments`; `TechniqueAssessmentTest` e `QuizTest` ampliados.
+
 ## 2026-10-27 — Progresso técnico do portal em atalhos
 
 - o Progresso técnico do portal começa pelo Perfil técnico (gráficos); sem próxima graduação ou sem currículo, aparece uma mensagem no lugar dos gráficos;

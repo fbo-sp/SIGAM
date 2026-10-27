@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /** Registro de avaliação técnica; nunca é alterado nem apagado. */
 class TechniqueAssessment extends Model
 {
-    protected $fillable = ['association_id', 'student_id', 'martial_art_id', 'technique_item_id', 'level', 'teacher_profile_id', 'dojo_id', 'assessed_by_user_id', 'assessed_on', 'notes'];
+    protected $fillable = ['association_id', 'student_id', 'martial_art_id', 'technique_item_id', 'level', 'teacher_profile_id', 'dojo_id', 'assessed_by_user_id', 'assessed_on', 'notes', 'student_tip'];
 
     protected function casts(): array
     {

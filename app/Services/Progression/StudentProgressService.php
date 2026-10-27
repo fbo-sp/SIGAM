@@ -52,29 +52,137 @@ class StudentProgressService
         $levels ??= $this->assessments->current($student, $martialArt);
         $axes = $this->axes($association, $martialArt);
         $rows = [];
+        $since = $details ? $this->rankSince($link) : null;
+        $trained = $details && $nextRank ? $this->sessionTechniques->trainedDates($student, $martialArt, $since) : [];
         if ($nextRank) {
             $effective = $this->memo['curriculum'][$nextRank->id] ??= $this->curriculum->effective($association, $nextRank)['rows'];
             foreach ($effective as $row) {
                 $assessment = $levels->get($row['item']->id);
+                $missing = ($assessment?->level ?? AssessmentLevel::NOT_STARTED) < $row['level'];
+                $trainedOn = isset($trained[$row['item']->id]) ? Carbon::parse(end($trained[$row['item']->id])) : null;
                 $rows[] = $row + [
                     'axis' => $axes['axis'][$row['item']->id] ?? $row['item']->name,
                     'current' => $assessment?->level,
                     'assessed_on' => $assessment?->assessed_on,
-                    'missing' => ($assessment?->level ?? AssessmentLevel::NOT_STARTED) < $row['level'],
+                    'missing' => $missing,
+                    'trained_on' => $trainedOn,
+                    'tip' => $assessment?->student_tip,
+                    'status' => $details ? $this->status($missing, $assessment, $trainedOn) : null,
                 ];
             }
         }
         $byType = collect($rows)->groupBy(fn (array $row) => $row['item']->knowledge_type);
+        $statuses = collect($rows)->where('missing', true)->countBy('status');
 
         return [
             'link' => $link,
             'current_rank' => $currentRank,
             'next_rank' => $nextRank,
+            'since' => $since,
             'rows' => $byType,
             'missing' => $byType->map(fn (Collection $group) => $group->where('missing', true)->values()),
+            'statuses' => ['untrained' => $statuses->get('untrained', 0), 'improve' => $statuses->get('improve', 0), 'awaiting' => $statuses->get('awaiting', 0)],
             'requirements' => $nextRank && $details ? $this->requirements($student, $link, $nextRank) : [],
             'radar' => $byType->map(fn (Collection $group) => $this->radar($group)),
         ];
+    }
+
+    /** Situações de um item abaixo do pedido, para "O que falta". */
+    public const STATUS_LABELS = ['improve' => 'Precisa melhorar', 'untrained' => 'Ainda não treinado', 'awaiting' => 'Aguardando avaliação'];
+
+    /**
+     * Situação do item: no nível, precisa melhorar (avaliado abaixo do pedido), aguardando avaliação (treinado em aula
+     * sem avaliação depois) ou ainda não treinado. "Não iniciado" conta como sem avaliação.
+     */
+    private function status(bool $missing, ?TechniqueAssessment $assessment, ?CarbonInterface $trainedOn): string
+    {
+        if (! $missing) {
+            return 'ok';
+        }
+        $assessed = $assessment && $assessment->level > AssessmentLevel::NOT_STARTED;
+        if ($assessed) {
+            return 'improve';
+        }
+
+        return $trainedOn && (! $assessment || $trainedOn->gt($assessment->assessed_on)) ? 'awaiting' : 'untrained';
+    }
+
+    /** Desde quando o aluno está na graduação atual (última promoção registrada ou início na modalidade). */
+    public function rankSince(?StudentMartialArt $link): ?Carbon
+    {
+        if (! $link) {
+            return null;
+        }
+        $since = $link->current_rank_id ? StudentRankHistory::query()->where('student_martial_art_id', $link->id)->where('rank_id', $link->current_rank_id)->max('achieved_at') : null;
+        $since ??= $link->start_date;
+
+        return $since ? Carbon::parse($since)->startOfDay() : null;
+    }
+
+    /**
+     * Linha do tempo da próxima graduação: porcentagem dos itens cobrados que estavam no nível pedido a cada
+     * data de avaliação (desde a graduação atual) e, por item, cada avaliação e os dias de treino em aula.
+     *
+     * @param  array<string, mixed>  $snapshot  resultado de snapshot()
+     * @return array{from: ?Carbon, overall: list<array{date: Carbon, value: float}>, items: Collection<int, array<string, mixed>>}
+     */
+    public function timeline(Student $student, MartialArt $martialArt, array $snapshot): array
+    {
+        $rows = $snapshot['rows']->flatten(1);
+        if ($rows->isEmpty()) {
+            return ['from' => $snapshot['since'], 'overall' => [], 'items' => collect()];
+        }
+        $required = $rows->mapWithKeys(fn (array $row) => [$row['item']->id => $row['level']]);
+        $records = $this->assessments->timeline($student, $martialArt, $required->keys()->all());
+        $trained = $this->sessionTechniques->trainedDates($student, $martialArt, $snapshot['since']);
+        $from = $snapshot['since'] ?? $records->first()?->assessed_on?->copy();
+        $levels = [];
+        $points = [];
+        $atLevel = fn (array $levels) => round(collect($levels)->filter(fn (int $level, int $id) => $level >= $required[$id])->count() * 100 / $required->count(), 1);
+        foreach ($records->groupBy(fn (TechniqueAssessment $record) => $record->assessed_on->toDateString()) as $date => $day) {
+            foreach ($day as $record) {
+                $levels[$record->technique_item_id] = $record->level;
+            }
+            if ($from && $date < $from->toDateString()) {
+                continue;
+            }
+            $points[] = ['date' => Carbon::parse($date), 'value' => $atLevel($levels)];
+        }
+        if ($from) {
+            $before = $records->filter(fn (TechniqueAssessment $record) => $record->assessed_on->lt($from));
+            $initial = $before->groupBy('technique_item_id')->map(fn (Collection $set) => $set->last()->level)
+                ->filter(fn (int $level, int $id) => $level >= $required[$id])->count();
+            array_unshift($points, ['date' => $from->copy(), 'value' => round($initial * 100 / $required->count(), 1), 'edge' => true]);
+        }
+        if ($points !== []) {
+            $points[] = ['date' => today(), 'value' => end($points)['value'], 'edge' => true];
+        }
+        $byItem = $records->groupBy('technique_item_id');
+        $items = $rows->filter(fn (array $row) => $byItem->has($row['item']->id) || isset($trained[$row['item']->id]))
+            ->map(fn (array $row) => $row + [
+                'records' => $byItem->get($row['item']->id, collect())->values(),
+                'points' => $this->itemPoints($byItem->get($row['item']->id, collect()), $from),
+                'trained' => array_map(fn (string $date) => Carbon::parse($date), $trained[$row['item']->id] ?? []),
+            ])
+            ->sortByDesc(fn (array $row) => $row['records']->last()?->assessed_on?->timestamp ?? 0)->values();
+
+        return ['from' => $from, 'overall' => $points, 'items' => $items];
+    }
+
+    /**
+     * Pontos do gráfico de um item: o nível no início do período (sem marcador) e cada avaliação a partir dele.
+     *
+     * @return list<array{date: Carbon, value: int, edge?: bool}>
+     */
+    private function itemPoints(Collection $records, ?Carbon $from): array
+    {
+        $before = $from ? $records->filter(fn (TechniqueAssessment $record) => $record->assessed_on->lt($from)) : collect();
+        $points = $from ? [['date' => $from->copy(), 'value' => $before->last()?->level ?? AssessmentLevel::NOT_STARTED, 'edge' => true]] : [];
+        foreach ($records->diffKeys($before) as $record) {
+            $points[] = ['date' => $record->assessed_on, 'value' => $record->level, 'title' => AssessmentLevel::label($record->level)];
+        }
+
+        return $points;
     }
 
     /**
@@ -135,9 +243,7 @@ class StudentProgressService
             ];
         }
         if ($nextRank->minimum_months !== null) {
-            $since = $link ? (StudentRankHistory::query()->where('student_martial_art_id', $link->id)->where('rank_id', $link->current_rank_id)
-                ->max('achieved_at') ?? $link->start_date) : null;
-            $since = $since ? Carbon::parse($since) : null;
+            $since = $this->rankSince($link);
             $requirements[] = [
                 'label' => "Tempo mínimo na faixa atual: {$nextRank->minimum_months} meses",
                 'met' => $since ? $since->copy()->addMonths($nextRank->minimum_months)->lte(today()) : null,

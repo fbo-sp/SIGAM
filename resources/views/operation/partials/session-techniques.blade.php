@@ -39,5 +39,6 @@
 @else
 <div class="card list-card">@foreach($markedItems->groupBy('root') as $root => $rows)<div class="list-row"><span><strong>{{ $root }}</strong><small>{{ $rows->pluck('name')->join(', ') }}</small></span></div>@endforeach</div>
 @endif
+@if($assessUrl ?? null)<div class="form-actions"><a class="button button-primary" href="{{ $assessUrl }}">Avaliar técnicas desta aula</a></div>@endif
 </section>
 @endif
