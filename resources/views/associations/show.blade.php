@@ -33,6 +33,7 @@
     @if(auth()->user()->hasPermission('charge.view', $association->id))<a href="{{ route('associations.charges.index', $association) }}"><strong>Cobranças</strong><span>Em aberto, vencidas e extrato dos alunos</span></a>@endif
     @if(auth()->user()->hasPermission('finance.report', $association->id))<a href="{{ route('associations.finance.reports.index', $association) }}"><strong>Relatórios financeiros</strong><span>Previsto, recebido e valores pendentes</span></a>@endif
     @if(auth()->user()->hasPermission('federation.view', $association->id))<a href="{{ route('associations.federation.index', $association) }}"><strong>Federações e filiações</strong><span>Histórico, documentos e vencimentos federativos</span></a>@endif
+    @if(auth()->user()->hasPermission('announcement.send', $association->id))<a href="{{ route('associations.announcements.index', $association) }}"><strong>Avisos</strong><span>Envie para dojos, turmas, alunos, responsáveis e professores</span></a>@endif
     @if(auth()->user()->hasPermission('championship.view', $association->id))<a href="{{ route('associations.championships.index', $association) }}"><strong>Campeonatos</strong><span>Inscrições, cobranças, resultados e medalhas</span></a>@endif
 </div></section>
 @endsection

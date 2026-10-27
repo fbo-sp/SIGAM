@@ -25,6 +25,7 @@ use App\Http\Controllers\Finance\FinanceController;
 use App\Http\Controllers\Finance\FinancialReportController;
 use App\Http\Controllers\Finance\PaymentController;
 use App\Http\Controllers\Import\AssistedImportController;
+use App\Http\Controllers\Notifications\AnnouncementController;
 use App\Http\Controllers\Notifications\NotificationController;
 use App\Http\Controllers\Organization\AssociationController;
 use App\Http\Controllers\Organization\DojoController;
@@ -74,6 +75,15 @@ Route::middleware(['auth', 'active', 'association.context'])->group(function ():
     Route::get('/meus-dojos', [OperationalController::class, 'index'])->name('operation.index');
     Route::get('/professor/turmas', [TeacherWorkspaceController::class, 'classes'])->name('teacher.classes');
     Route::get('/professor/alunos', [TeacherWorkspaceController::class, 'students'])->name('teacher.students');
+    foreach (['/associacoes/{association}/avisos' => 'associations.announcements.', '/operacao/dojos/{dojo}/avisos' => 'operation.announcements.'] as $path => $name) {
+        Route::prefix($path)->name($name)->controller(AnnouncementController::class)->group(function (): void {
+            Route::get('/', 'index')->name('index');
+            Route::get('/novo', 'create')->name('create');
+            Route::post('/revisar', 'preview')->middleware('throttle:30,1')->name('preview');
+            Route::post('/', 'store')->middleware('throttle:10,1')->name('store');
+            Route::get('/{announcement}', 'show')->whereNumber('announcement')->name('show');
+        });
+    }
     Route::prefix('/operacao/dojos/{dojo}')->name('operation.')->controller(OperationalController::class)->group(function (): void {
         Route::get('/', 'show')->name('home');
         Route::get('/alunos', 'students')->name('students');

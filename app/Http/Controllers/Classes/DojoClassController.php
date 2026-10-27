@@ -21,6 +21,7 @@ use App\Models\TeacherProfile;
 use App\Services\Access\OperationalScope;
 use App\Services\Attendance\FutureSessionMaintainer;
 use App\Services\Classes\ClassGroupService;
+use App\Services\Classes\TeacherWorkspaceService;
 use App\Services\Progression\AssessmentService;
 use App\Services\Progression\ProgressionPanelService;
 use Carbon\Carbon;
@@ -102,10 +103,12 @@ class DojoClassController extends Controller
         $canAssess = app(AssessmentService::class)->teachesClass($user, $dojo, $classGroup);
         $canProgress = $canAssess || $this->scope->canDojo($user, $dojo, 'assessment.view');
         $canCoverage = app(ProgressionPanelService::class)->dojoClasses($user, $dojo)->whereKey($classGroup->id)->exists();
+        $canAnnounce = $classGroup->status === 'active' && ($this->scope->canDojo($user, $dojo, 'announcement.send')
+            || ($this->scope->canTeacher($user, $dojo, 'announcement.send') && app(TeacherWorkspaceService::class)->groups($user)->whereKey($classGroup->id)->exists()));
 
         return view('operation.class', compact(
             'dojo', 'classGroup', 'enrollments', 'assignments', 'upcoming', 'past', 'candidates', 'dojoTeachers',
-            'scheduleTeachers', 'canManage', 'canEnroll', 'canEditStudents', 'canEditPeople', 'canAssess', 'canProgress', 'canCoverage',
+            'scheduleTeachers', 'canManage', 'canEnroll', 'canEditStudents', 'canEditPeople', 'canAssess', 'canProgress', 'canCoverage', 'canAnnounce',
         ));
     }
 

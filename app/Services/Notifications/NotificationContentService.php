@@ -14,7 +14,7 @@ class NotificationContentService
         if ($notification->user_id !== $user->id || $notification->association_id !== $user->association_id || ! $user->isActive()) {
             return false;
         }
-        if (in_array($notification->event_type, ['championship.opened', 'championship.deadline', 'class.cancelled'], true)) {
+        if (in_array($notification->event_type, ['championship.opened', 'championship.deadline', 'class.cancelled', 'announcement.sent'], true)) {
             return true;
         }
         $context = $notification->event?->context ?? [];

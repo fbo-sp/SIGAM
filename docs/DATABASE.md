@@ -140,7 +140,7 @@ Antes da produção, revisar retenção, backup/restore e os requisitos legais d
 
 ## Notificações e escopo de dashboard
 
-`notification_events` guarda o evento canônico e sua chave idempotente por associação. `notifications` materializa uma entrega por evento/usuário/canal e conserva tentativas, falha, envio e leitura. `notification_templates` separa texto de canal; `notification_preferences` usa chave única por usuário/evento. Os índices `notification_delivery_queue_idx` e `notification_inbox_idx` atendem respectivamente cron e caixa interna.
+`announcements` guarda o aviso escrito por pessoa (remetente, nível, dojo, alvo em JSON, título, texto, se vai por e-mail, total e chave idempotente única por associação). `announcement_recipients` é a foto dos destinatários no envio (pessoa única por aviso, conta quando houver, papel, entrega interna em `notification_id` e fila própria de e-mail com estado, tentativas e agenda; índice `announcement_email_queue_idx`). Nenhum dos dois tem exclusão. `notification_events` guarda o evento canônico e sua chave idempotente por associação. `notifications` materializa uma entrega por evento/usuário/canal e conserva tentativas, falha, envio e leitura. `notification_templates` separa texto de canal; `notification_preferences` usa chave única por usuário/evento. Os índices `notification_delivery_queue_idx` e `notification_inbox_idx` atendem respectivamente cron e caixa interna.
 
 `users.dojo_id` é opcional e referencia o único dojo usado pelo dashboard restrito. Ele não concede acesso a recursos nem substitui as validações dos demais módulos.
 

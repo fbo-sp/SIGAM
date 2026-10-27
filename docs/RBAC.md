@@ -75,6 +75,10 @@ Dashboards usam permissões exclusivas: `dashboard.association`, `dashboard.dojo
 
 Convites exigem `teacher.manage` associativo na rota e novamente no serviço. O papel técnico global `teacher_account`, anexado com o `association_id` do convite, contém somente `dashboard.teacher`. Ele não satisfaz permissões de cadastro, turma, chamada ou documentos. A autoridade do emissor é revalidada no aceite; perder a permissão torna o convite inutilizável.
 
+## Avisos (`announcement.send`)
+
+`announcement.send` libera o envio de avisos escritos por pessoas (`AnnouncementService`, ver `modules/notifications-dashboards.md`). Na associação vem do perfil Gestor (todas as permissões não pessoais) e permite toda a associação, dojos, turmas ou pessoas. No dojo está nos papéis `dojo_operator` (todo o dojo, turmas do dojo, alunos com vínculo vigente e professores vinculados ao dojo) e `dojo_teacher` (só turmas em que é principal ou auxiliar vigente e os alunos delas, sem professores como destinatários). O alcance é recalculado no serviço; ids do formulário só restringem. Avisos do professor saem direto (decisão do Fabio, 2026-10-27); o gestor do dojo vê os avisos do dojo, o professor só os próprios e a associação todos.
+
 ## Contexto operacional por dojo
 
 Papéis `dojo` e `teacher` existem somente em `dojo_role_assignments`; não entram em `user_roles` e não satisfazem `User::hasPermission`. O serviço `OperationalScope` exige concessão vigente para a unidade. Professor também exige os vínculos institucional/local e designação na aula. `users.dojo_id` não concede acesso.
