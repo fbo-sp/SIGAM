@@ -73,6 +73,7 @@ class PortalController extends Controller
                 'count' => (clone $outstanding)->count(),
                 'overdue' => (clone $outstanding)->whereDate('due_date', '<', today())->count(),
             ],
+            'notices' => $access->unreadNotices($request->user()),
             'quiz' => QuizRelease::query()->where('student_id', $student->id)->where('status', 'open')->with('rank')->latest('id')->first(),
         ];
 

@@ -15,7 +15,9 @@ class NotificationController extends Controller
 {
     public function index(Request $request): View
     {
-        $notifications = Notification::query()->where('user_id', $request->user()->id)->where('association_id', $request->user()->association_id)->where('channel', 'internal')->with('event')->latest('id')->paginate(25);
+        $notifications = Notification::query()->where('user_id', $request->user()->id)->where('association_id', $request->user()->association_id)->where('channel', 'internal')->with('event')
+            // Não lidas primeiro, depois as mais recentes.
+            ->orderByRaw('CASE WHEN read_at IS NULL THEN 0 ELSE 1 END')->latest('id')->paginate(25);
         $content = app(NotificationContentService::class);
         foreach ($notifications as $notification) {
             if (! $content->canViewDetails($notification, $request->user())) {
