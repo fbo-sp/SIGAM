@@ -19,6 +19,7 @@ Este documento é um índice de manutenção. `routes/web.php`, `routes/console.
 |---|---|---|
 | `/dashboard` | `DashboardController` | visão derivada das permissões e vínculos da conta |
 | `/professor/turmas` e `/professor/alunos` (`busca`, `filtro=faltando\|prontos`) | `TeacherWorkspaceController`: turmas e alunos do professor | conta com a navegação do professor; só turmas em que é principal ou auxiliar vigente e dojos com concessão vigente |
+| `/associacoes/{association}/avisos` e `/operacao/dojos/{dojo}/avisos` (`/`, `/novo`, `POST /revisar`, `POST /`, `/{announcement}`) | `AnnouncementController`: lista, formulário, revisão com contagem, envio e detalhe com leituras | `announcement.send` revalidado em `AnnouncementService::level`; envio com chave única (`token`), limite de 10 por minuto |
 | `/notificacoes` | `NotificationController` | sempre `notifications.user_id` da conta |
 | `/fotos/{person}/{thumb\|medium}` | `PersonPhotoController` | link assinado relativo gerado só por telas que já mostram a pessoa; pessoa da associação da conta; foto trocada invalida o link |
 | `/sair` | `AuthenticatedSessionController` | sessão autenticada, CSRF e invalidação |
@@ -79,7 +80,7 @@ O papel `dojo_teacher` recebe apenas funções de aula designada e a avaliação
 | `sigam:charges:generate` | gerar cobranças por competência | unicidade origem/competência |
 | `sigam:charges:mark-overdue` | marcar abertas vencidas | só transita cobranças elegíveis |
 | `sigam:notifications:generate` | detectar eventos | chave idempotente por evento/marco |
-| `sigam:notifications:send` | enviar e-mails em lote | reserva `sending`, retentativas e limite 1–500 |
+| `sigam:notifications:send` | enviar e-mails em lote, inclusive dos avisos | reserva `sending`, retentativas e limite 1–500 |
 | `sigam:teacher-invitations:send` | entregar convites | reserva, revalidação e até cinco tentativas |
 | `sigam:imports:purge-files` | aplicar retenção da planilha privada | ignora arquivos já eliminados |
 | `sigam:access:backfill-teachers` | inferir vínculo institucional comprovado | dry-run; `--apply` não cria conta/acesso local |

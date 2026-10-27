@@ -42,3 +42,18 @@ document.querySelectorAll('[data-modal-open]').forEach(opener => {
     }
 });
 document.querySelectorAll('dialog[data-open-on-load]').forEach(dialog => dialog.showModal && dialog.showModal());
+// Filtra uma lista de opções pelo texto digitado: data-filter-list="id-da-lista".
+// Usa classe, não [hidden], para não desabilitar as opções já marcadas.
+document.querySelectorAll('[data-filter-list]').forEach(input => {
+    const list = document.getElementById(input.dataset.filterList);
+    if (!list) {
+        return;
+    }
+    const plain = text => text.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+    input.addEventListener('input', () => {
+        const term = plain(input.value.trim());
+        list.querySelectorAll('label').forEach(label => {
+            label.classList.toggle('is-filtered', term !== '' && !plain(label.textContent).includes(term));
+        });
+    });
+});

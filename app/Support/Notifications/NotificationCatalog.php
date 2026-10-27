@@ -13,6 +13,7 @@ class NotificationCatalog
         'championship.deadline' => 'Prazo de campeonato próximo',
         'gratuity.awaiting_approval' => 'Gratuidade aguardando aprovação',
         'class.cancelled' => 'Aula cancelada',
+        'announcement.sent' => 'Avisos da associação, do dojo e dos professores',
         'attendance.consecutive_absences' => 'Faltas consecutivas',
         'assessment.due' => 'Avaliação técnica pendente',
     ];
@@ -27,6 +28,7 @@ class NotificationCatalog
             'championship.opened' => ['Inscrições abertas para campeonato', 'As inscrições para “{{item}}” estão abertas até {{date}}. Consulte as regras no JUDOMA.'],
             'championship.deadline' => ['Prazo de inscrição próximo', 'O prazo de inscrição para “{{item}}” termina em {{date}}.'],
             'gratuity.awaiting_approval' => ['Gratuidade aguardando decisão', 'A solicitação de gratuidade de {{student_name}} aguarda sua análise no JUDOMA.'],
+            'announcement.sent' => ['{{title}}', '{{body}}'],
             'class.cancelled' => ['Aula cancelada', 'A aula “{{item}}” de {{date}} foi cancelada. Consulte o JUDOMA para detalhes.'],
             'attendance.consecutive_absences' => ['Atenção à frequência', '{{student_name}} possui três faltas consecutivas registradas. Procure a associação se precisar de ajuda.'],
             'assessment.due' => ['Avaliação técnica pendente', 'Olá, {{recipient_name}}. Na turma “{{item}}”, {{count}} aluno(s) estão sem avaliação técnica há mais de {{weeks}} semanas. Registre pelo acompanhamento técnico no JUDOMA.'],

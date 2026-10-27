@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-10-27 — Avisos por nível
+
+- associação, gestor do dojo e professor enviam avisos: a associação para todos, dojos, turmas ou pessoas; o gestor para o dojo inteiro, turmas ou pessoas do dojo; o professor para as próprias turmas e os alunos delas; em cada envio marca-se alunos, responsáveis e professores;
+- revisão antes de enviar com o número de pessoas, contas, e-mails e quem fica sem contato; lista de avisos enviados com quem leu e o estado de cada e-mail;
+- o aviso chega na caixa Notificações e por e-mail com o texto completo, inclusive para quem não tem conta, uma vez por endereço; o professor envia direto, sem aprovação; não há respostas;
+- nova permissão `announcement.send` (perfil Gestor da associação, Gestor do dojo e Professor do dojo, aplicada pelo seeder na instalação); migration `2026_10_27_000027_create_announcements_tables` (tabelas `announcements` e `announcement_recipients`); `AnnouncementTest` novo.
+
 ## 2026-10-27 — Portal sem mensalidade quando ela não se aplica
 
 - o indicador "Mensalidade" do início do portal só aparece para quem tem plano financeiro vigente e não é bolsista (gratuidade aprovada); associação, dojo ou turma sem mensalidade aparecem como aluno sem plano;

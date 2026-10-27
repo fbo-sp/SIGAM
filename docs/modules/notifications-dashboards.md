@@ -30,6 +30,16 @@ Caixa interna é materializada imediatamente. `sigam:notifications:send --limit=
 
 O scheduler gera eventos a cada hora e tenta e-mails a cada cinco minutos. Em hospedagem sem cron por minuto, os comandos podem ser chamados diretamente na periodicidade disponível.
 
+## Avisos escritos por pessoas
+
+Proposta aprovada em `/mnt/project-files/sigam/proposta-avisos-por-nivel.md` (Fabio, 2026-10-27: e-mail com texto completo, envio direto do professor, sem respostas).
+
+- Telas: `/associacoes/{association}/avisos` e `/operacao/dojos/{dojo}/avisos` (lista, "Enviar aviso", revisão e detalhe). Atalhos: card "Avisos" na associação e no início do dojo, "Enviar aviso" no "Mais" do professor e "Enviar aviso à turma" na página da turma (já com a turma marcada).
+- Alcance (`AnnouncementService::level` e `options`): associação = todos, dojos, turmas ou pessoas; gestor do dojo = todo o dojo, turmas do dojo ou pessoas do dojo; professor = as próprias turmas (principal ou auxiliar vigente) ou alunos delas. Em cada envio marca-se quem recebe: alunos, responsáveis (vigentes com `can_receive_notifications`) e, fora do nível professor, professores. Professor escolhido pelo nome sempre recebe.
+- Revisão: antes de enviar, a tela mostra quantas pessoas recebem, quantas têm conta, quantos e-mails diferentes e quem fica sem contato. O envio usa uma chave única gerada na revisão; repetir o envio devolve o mesmo aviso.
+- Entrega: quem tem conta recebe na caixa Notificações (evento `announcement.sent`, sempre exibido); o e-mail leva título e texto completos e vai também para quem não tem conta, pelo e-mail do cadastro, uma vez por endereço. As preferências "Avisos da associação, do dojo e dos professores" da caixa e do e-mail são respeitadas.
+- Histórico: `announcement_recipients` guarda os destinatários do momento do envio; o detalhe mostra quem leu no JUDOMA e o estado de cada e-mail. Associação vê todos os avisos, gestor do dojo os do dojo (inclusive dos professores) e professor só os próprios. Sem anexos, agendamento ou respostas nesta versão.
+
 ## Dashboards e escopo
 
 `DashboardService` escolhe uma única visão, na ordem:
@@ -52,11 +62,11 @@ E-mail usa o contato da pessoa quando disponível e, como fallback, o e-mail da 
 ## Mapa de código
 
 - migration: `2026_08_30_000015_create_notifications_and_dashboard_scope.php`;
-- domínio: `app/Services/Notifications/`, `app/Services/Reporting/DashboardService.php` e `app/Services/Classes/TeacherWorkspaceService.php`;
+- domínio: `app/Services/Notifications/` (inclui `AnnouncementService` e `AnnouncementEmailService`), `app/Services/Reporting/DashboardService.php` e `app/Services/Classes/TeacherWorkspaceService.php`;
 - catálogo: `app/Support/Notifications/NotificationCatalog.php`;
 - comandos: `GenerateNotifications.php` e `SendNotificationEmails.php`;
-- HTTP/UI: `NotificationController.php`, `DashboardController.php`, `Classes/TeacherWorkspaceController.php`, `resources/views/notifications/`, `resources/views/teacher/` e `dashboard.blade.php`;
-- testes: `NotificationsAndDashboardTest.php` e `TeacherViewTest.php`.
+- HTTP/UI: `NotificationController.php`, `AnnouncementController.php`, `resources/views/announcements/`, `DashboardController.php`, `Classes/TeacherWorkspaceController.php`, `resources/views/notifications/`, `resources/views/teacher/` e `dashboard.blade.php`;
+- testes: `NotificationsAndDashboardTest.php`, `TeacherViewTest.php` e `AnnouncementTest.php`.
 
 ## Manutenção futura
 

@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\ScheduledJobRun;
+use App\Services\Notifications\AnnouncementEmailService;
 use App\Services\Notifications\EmailDeliveryService;
 use Illuminate\Console\Command;
 
@@ -12,7 +13,7 @@ class SendNotificationEmails extends Command
 
     protected $description = 'Processa entregas com reserva exclusiva e falhas sem dados sensíveis';
 
-    public function handle(EmailDeliveryService $delivery): int
+    public function handle(EmailDeliveryService $delivery, AnnouncementEmailService $announcements): int
     {
         $limit = filter_var($this->option('limit'), FILTER_VALIDATE_INT);
         if ($limit === false || $limit < 1 || $limit > 500) {
@@ -29,6 +30,11 @@ class SendNotificationEmails extends Command
         $run = ScheduledJobRun::query()->create(['job_name' => 'SendNotificationEmails', 'started_at' => now(), 'status' => 'running']);
         try {
             $result = $delivery->sendBatch($limit);
+            // Avisos escritos por pessoas usam o que sobrou do lote.
+            if ($result['processed'] < $limit) {
+                $more = $announcements->sendBatch($limit - $result['processed']);
+                $result = ['processed' => $result['processed'] + $more['processed'], 'failed' => $result['failed'] + $more['failed']];
+            }
             $run->update(['finished_at' => now(), 'status' => $result['failed'] ? 'failed' : 'completed', 'processed_count' => $result['processed'], 'error_count' => $result['failed'], 'message' => 'Lote finalizado. Consulte os estados das entregas.']);
             $this->info($result['processed'].' entrega(s), '.$result['failed'].' falha(s).');
 
