@@ -156,7 +156,7 @@ Antes da produção, revisar retenção, backup/restore e os requisitos legais d
 
 `rank_curriculum_entries` guarda só os ajustes de cada graduação, únicos por `(association_id, rank_id, technique_item_id)`. `required_level` vai de 2 a 4; `NULL` significa que o item herdado deixa de ser cobrado a partir daquela graduação. O currículo efetivo é calculado pela soma das graduações anteriores da modalidade (ADR-014). As chaves estrangeiras usam `restrictOnDelete`.
 
-`technique_assessments` é só de inclusão: aluno, modalidade, item, nível (1 a 4), professor, dojo, usuário, data da avaliação e observação. O nível atual de um item é o último registro gravado (maior `id`). Índices `technique_assessments_student_item_index` (consulta do aluno) e `technique_assessments_period_index` (painéis por período).
+`technique_assessments` é só de inclusão: aluno, modalidade, item, nível (1 a 4), professor, dojo, usuário, data da avaliação, observação interna e `student_tip` (dica para o aluno, até 300 caracteres, migration `2026_10_27_000028`). Cada avaliação marcada gera um registro, inclusive no mesmo nível; registros iguais (item, data, nível e dica) não se repetem. O nível atual de um item é o último registro gravado (maior `id`). Índices `technique_assessments_student_item_index` (consulta do aluno) e `technique_assessments_period_index` (painéis por período).
 
 `class_session_techniques` liga aula e item do catálogo, única por `(class_session_id, technique_item_id)`. Desmarcar preenche `removed_at`/`removed_by_user_id`; marcar de novo limpa os campos.
 

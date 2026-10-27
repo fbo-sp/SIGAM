@@ -65,10 +65,10 @@ class QuizTest extends TestCase
 
         $this->actingAs($portal)->get($hub)->assertOk()->assertSee('radar-card')
             ->assertSeeInOrder(['Perfil técnico', 'Quiz teórico', 'O que falta', 'Nas aulas', 'Evolução'])
-            ->assertSee('item(ns)')->assertSee('0 aula(s) em 90 dias')->assertSee('Nenhuma avaliação')
+            ->assertSee('não treinado(s)')->assertSee('0 aula(s) em 90 dias')->assertSee('Nenhuma avaliação')
             ->assertSee('href="'.route('portal.progress.part', [$student, 'falta']).'"', false)->assertDontSee('Requisitos do exame');
         $this->get(route('portal.progress.part', [$student, 'falta']))->assertOk()->assertSee('← Progresso')->assertSee('href="'.$hub.'"', false)
-            ->assertSee('Requisitos do exame')->assertSee('<details class="card progress-group">', false)->assertSee('a trabalhar')->assertDontSee('Perfil técnico');
+            ->assertSee('Requisitos do exame')->assertSee('<details class="card progress-group">', false)->assertSee('Ainda não treinado (')->assertSee('já no nível pedido')->assertDontSee('Perfil técnico');
         $this->get(route('portal.progress.part', [$student, 'quiz']))->assertOk()->assertSee('Treinar');
         $this->get(route('portal.progress.part', [$student, 'aulas']))->assertOk()->assertSee('Nenhuma técnica registrada');
         $this->get(route('portal.progress.part', [$student, 'evolucao']))->assertOk()->assertSee('Nenhuma avaliação ainda.');

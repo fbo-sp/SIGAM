@@ -98,4 +98,48 @@ class SessionTechniqueService
 
         return ['sessions' => $sessions->count(), 'techniques' => $techniques];
     }
+
+    /**
+     * Datas das aulas da modalidade, desde $from, em que o aluno estava presente e cada técnica foi marcada.
+     * Marcar um grupo conta para os itens abaixo dele.
+     *
+     * @return array<int, list<string>> item_id => datas (Y-m-d) em ordem
+     */
+    public function trainedDates(Student $student, MartialArt $martialArt, ?CarbonInterface $from): array
+    {
+        $rows = DB::table('class_session_techniques')
+            ->join('class_sessions', 'class_sessions.id', '=', 'class_session_techniques.class_session_id')
+            ->join('class_groups', 'class_groups.id', '=', 'class_sessions.class_group_id')
+            ->join('attendance', fn ($join) => $join->on('attendance.class_session_id', '=', 'class_sessions.id')->where('attendance.student_id', '=', $student->id))
+            ->whereNull('class_session_techniques.removed_at')->whereIn('attendance.status', self::PRESENT_STATUSES)
+            ->where('class_groups.association_id', $student->association_id)->where('class_groups.martial_art_id', $martialArt->id)
+            ->when($from, fn ($query) => $query->where('class_sessions.session_date', '>=', $from->toDateString()))
+            ->distinct()->get(['class_session_techniques.technique_item_id', 'class_sessions.session_date']);
+        if ($rows->isEmpty()) {
+            return [];
+        }
+        $parents = TechniqueItem::query()->where('association_id', $student->association_id)->where('martial_art_id', $martialArt->id)->pluck('parent_id', 'id');
+        $children = [];
+        foreach ($parents as $id => $parent) {
+            if ($parent) {
+                $children[$parent][] = $id;
+            }
+        }
+        $dates = [];
+        foreach ($rows as $row) {
+            $stack = [(int) $row->technique_item_id];
+            while ($stack !== []) {
+                $id = array_pop($stack);
+                $dates[$id][] = substr((string) $row->session_date, 0, 10);
+                array_push($stack, ...($children[$id] ?? []));
+            }
+        }
+
+        return array_map(function (array $list): array {
+            $list = array_values(array_unique($list));
+            sort($list);
+
+            return $list;
+        }, $dates);
+    }
 }

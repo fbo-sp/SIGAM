@@ -3,8 +3,10 @@
 namespace Tests\Feature;
 
 use App\Models\Association;
+use App\Models\AttendanceRecord;
 use App\Models\ClassGroupTeacher;
 use App\Models\ClassSession;
+use App\Models\ClassSessionTechnique;
 use App\Models\MartialArt;
 use App\Models\Permission;
 use App\Models\Rank;
@@ -27,7 +29,7 @@ class TechniqueAssessmentTest extends TestCase
         $this->setUpProgression();
     }
 
-    public function test_main_teacher_records_only_changed_levels_and_history_is_kept(): void
+    public function test_each_marked_item_is_recorded_without_duplicates_and_history_is_kept(): void
     {
         [$user, $teacher] = $this->teacher('Professora Ana');
         $student = $this->student('A-1');
@@ -43,8 +45,12 @@ class TechniqueAssessmentTest extends TestCase
 
         $payload = ['levels' => [$this->items['O-goshi']->id => 3, $this->items['kano']->id => 2, $this->items['shido']->id => ''], 'assessed_on' => '2026-10-15'];
         $this->post($url, $payload)->assertSessionHasNoErrors()->assertSessionHas('status', 'Avaliação registrada em 2 item(ns).');
-        $this->post($url, $payload)->assertSessionHas('status', 'Nenhum nível mudou; nada foi gravado.');
+        $this->post($url, $payload)->assertSessionHas('status', 'Nada novo para gravar.');
         $this->assertSame(2, TechniqueAssessment::query()->count());
+        $this->post($url, ['levels' => [$this->items['kano']->id => 2], 'tips' => [$this->items['kano']->id => 'Releia a história do Kodokan.'], 'assessed_on' => '2026-10-14'])->assertSessionHasNoErrors();
+        $this->assertSame(2, TechniqueAssessment::query()->where('technique_item_id', $this->items['kano']->id)->count());
+        $this->assertDatabaseHas('technique_assessments', ['technique_item_id' => $this->items['kano']->id, 'level' => 2, 'student_tip' => 'Releia a história do Kodokan.']);
+        $this->post($url, ['levels' => [], 'tips' => [$this->items['shido']->id => 'Sem nível'], 'assessed_on' => '2026-10-15'])->assertSessionHasErrors('tips');
 
         $this->post($url, ['levels' => [$this->items['O-goshi']->id => 4], 'assessed_on' => '2026-10-15', 'notes' => 'Evoluiu bem'])->assertSessionHasNoErrors();
         $this->assertSame(2, TechniqueAssessment::query()->where('technique_item_id', $this->items['O-goshi']->id)->count());
@@ -55,11 +61,60 @@ class TechniqueAssessmentTest extends TestCase
         $this->assertSame('amarela', $snapshot['next_rank']->name);
         $this->assertSame(['Shido'], $snapshot['missing']['theoretical']->map(fn ($row) => $row['item']->name)->all());
         $this->assertSame(['Kesa-gatame', 'Nage-no-kata'], $snapshot['missing']['practical']->map(fn ($row) => $row['item']->name)->sort()->values()->all());
+        $this->assertSame(['untrained' => 3, 'improve' => 0, 'awaiting' => 0], $snapshot['statuses']);
         $this->assertSame(['História', 'Regras'], array_column($snapshot['radar']['theoretical'], 'label'));
         $this->assertSame(['Kata', 'Katame-waza', 'Nage-waza'], collect($snapshot['radar']['practical'])->pluck('label')->sort()->values()->all());
 
         $this->get(route('operation.progression.show', [$this->dojo, $student]))->assertOk()
             ->assertSee('rumo a', false)->assertSee('O que falta para Faixa amarela')->assertSee('Evoluiu bem')->assertSee('<svg', false);
+    }
+
+    public function test_session_assessment_separates_trained_from_assessed_and_draws_timeline(): void
+    {
+        [$user, $teacher] = $this->teacher('Professora Ana');
+        [$bruno] = $this->teacher('Professor Bruno');
+        $present = $this->student('A-1');
+        $absent = $this->student('A-2');
+        $group = $this->group($teacher);
+        $this->enroll($group, $present);
+        $this->enroll($group, $absent);
+        $portal = $this->portalUser($present->person);
+        $session = ClassSession::query()->create(['class_group_id' => $group->id, 'session_date' => '2026-10-14', 'start_time' => '18:00', 'end_time' => '19:00', 'status' => 'planned', 'attendance_state' => 'closed']);
+        foreach ([[$present, 'present'], [$absent, 'absent']] as [$student, $status]) {
+            AttendanceRecord::query()->create(['class_session_id' => $session->id, 'student_id' => $student->id, 'participation_type' => 'regular', 'status' => $status, 'recorded_at' => now(), 'recorded_by_user_id' => $user->id]);
+        }
+        foreach ([$this->items['O-goshi']->parent_id, $this->items['kano']->id] as $itemId) {
+            ClassSessionTechnique::query()->create(['association_id' => $this->association->id, 'class_session_id' => $session->id, 'technique_item_id' => $itemId, 'marked_by_user_id' => $user->id]);
+        }
+
+        $progress = app(StudentProgressService::class);
+        $this->assertSame(['untrained' => 3, 'improve' => 0, 'awaiting' => 2], $progress->snapshot($this->association, $present, $this->art)['statuses']);
+        $this->assertSame(['untrained' => 5, 'improve' => 0, 'awaiting' => 0], $progress->snapshot($this->association, $absent, $this->art)['statuses']);
+
+        $assess = route('operation.session.assess', [$this->dojo, $session]);
+        $this->actingAs($user)->get(route('operation.session', [$this->dojo, $session]))->assertOk()->assertSee('href="'.$assess.'"', false);
+        $this->get($assess)->assertOk()->assertSee('O-goshi')->assertSee('Jigoro Kano')->assertSee('A-1')->assertDontSee('A-2')->assertDontSee('Shido');
+        $store = route('operation.session.assess.store', [$this->dojo, $session]);
+        $payload = ['levels' => [$present->id => [$this->items['O-goshi']->id => 2, $this->items['kano']->id => 2]], 'tips' => [$present->id => [$this->items['O-goshi']->id => 'Gire mais o quadril.']]];
+        $this->post($store, $payload)->assertSessionHasNoErrors()->assertSessionHas('status', 'Avaliação registrada: 2 item(ns) de 1 aluno(s).');
+        $this->post($store, $payload)->assertSessionHas('status', 'Nada novo para gravar.');
+        $this->post($store, ['levels' => [$absent->id => [$this->items['kano']->id => 2]]])->assertSessionHasErrors('levels');
+        $this->assertSame(2, TechniqueAssessment::query()->whereDate('assessed_on', '2026-10-14')->count());
+        $this->actingAs($bruno)->get($assess)->assertNotFound();
+
+        $snapshot = $progress->snapshot($this->association, $present, $this->art);
+        $this->assertSame(['untrained' => 3, 'improve' => 1, 'awaiting' => 0], $snapshot['statuses']);
+        $timeline = $progress->timeline($present, $this->art, $snapshot);
+        $this->assertSame([['2026-01-01', 0.0], ['2026-10-14', 20.0], ['2026-10-15', 20.0]], array_map(fn ($point) => [$point['date']->toDateString(), $point['value']], $timeline['overall']));
+        $this->assertSame(['O-goshi', 'Jigoro Kano'], $timeline['items']->map(fn ($row) => $row['item']->name)->sort()->reverse()->values()->all());
+
+        $this->actingAs($portal)->get(route('portal.progress', $present))->assertOk()->assertSee('3 não treinado(s) · 1 a melhorar');
+        $this->get(route('portal.progress.part', [$present, 'falta']))->assertOk()->assertSee('Precisa melhorar (1)')->assertSee('Ainda não treinado (3)')
+            ->assertSee('Dica do professor: Gire mais o quadril.');
+        $this->get(route('portal.progress.part', [$present, 'evolucao']))->assertOk()->assertSee('Itens no nível pedido')->assertSee('Evolução de O-goshi')
+            ->assertSee('class="chart-mark"', false)->assertSee('Dica: Gire mais o quadril.');
+        $this->actingAs($user)->get(route('operation.progression.show', [$this->dojo, $present]))->assertOk()->assertSee('Precisa melhorar')->assertSee('Itens no nível pedido');
+        $this->get(route('operation.progression.assess', [$this->dojo, $present, $this->art, 'situacao' => 'untrained']))->assertOk()->assertSee('Shido')->assertDontSee('O-goshi</strong>', false);
     }
 
     public function test_requirements_show_age_and_time_in_current_rank(): void

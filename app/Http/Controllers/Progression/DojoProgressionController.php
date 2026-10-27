@@ -16,6 +16,7 @@ use App\Services\Progression\AssessmentService;
 use App\Services\Progression\CurriculumCoverageService;
 use App\Services\Progression\ProgressionPanelService;
 use App\Services\Progression\QuizService;
+use App\Services\Progression\SessionAssessmentService;
 use App\Services\Progression\SessionTechniqueService;
 use App\Services\Progression\StudentProgressService;
 use App\Support\Progression\AssessmentLevel;
@@ -23,6 +24,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 /** Acompanhamento técnico do aluno no contexto do dojo (ADR-006 e ADR-014). */
@@ -36,12 +38,14 @@ class DojoProgressionController extends Controller
         abort_if($martialArt === null, 404);
         abort_unless($this->assessments->canViewInDojo($request->user(), $dojo, $student, $martialArt), 403);
         $student->load('person');
+        $snapshot = $this->progress->snapshot($dojo->association, $student, $martialArt);
 
         return view('progression.student', [
             'student' => $student,
             'martialArt' => $martialArt,
             'options' => $options,
-            'snapshot' => $this->progress->snapshot($dojo->association, $student, $martialArt),
+            'snapshot' => $snapshot,
+            'timeline' => $snapshot['next_rank'] ? $this->progress->timeline($student, $martialArt, $snapshot) : null,
             'history' => $this->assessments->history($student, $martialArt),
             'worked' => $this->progress->worked($dojo->association, $student, $martialArt, today()->subDays(90), today()),
             'levels' => AssessmentLevel::labels(),
@@ -65,6 +69,7 @@ class DojoProgressionController extends Controller
             'martialArt' => $martialArt,
             'snapshot' => $this->progress->snapshot($dojo->association, $student, $martialArt),
             'levels' => AssessmentLevel::labels(),
+            'filter' => in_array($request->query('situacao'), ['awaiting', 'improve', 'untrained'], true) ? $request->query('situacao') : null,
         ]);
     }
 
@@ -72,10 +77,37 @@ class DojoProgressionController extends Controller
     {
         $this->enter($request, $dojo);
         $data = $request->validated();
-        $count = $this->assessments->record($request->user(), $dojo, $student, $martialArt, $data['levels'] ?? [], Carbon::parse($data['assessed_on']), $data['notes'] ?? null);
+        $count = $this->assessments->record($request->user(), $dojo, $student, $martialArt, $data['levels'] ?? [], Carbon::parse($data['assessed_on']), $data['notes'] ?? null, $data['tips'] ?? []);
 
         return redirect()->route('operation.progression.show', [$dojo, $student, 'modalidade' => $martialArt->id])
-            ->with('status', $count === 0 ? 'Nenhum nível mudou; nada foi gravado.' : "Avaliação registrada em {$count} item(ns).");
+            ->with('status', $count === 0 ? 'Nada novo para gravar.' : "Avaliação registrada em {$count} item(ns).");
+    }
+
+    public function sessionAssess(Request $request, Dojo $dojo, ClassSession $session, SessionAssessmentService $service): View
+    {
+        $this->enter($request, $dojo);
+        abort_unless($this->scope->sessions($request->user(), $dojo)->whereKey($session->id)->exists(), 404);
+
+        return view('progression.session-assess', [
+            'dojo' => $dojo,
+            'session' => $session,
+            'sheet' => $service->sheet($request->user(), $dojo, $session),
+            'levels' => AssessmentLevel::labels(),
+        ]);
+    }
+
+    public function sessionAssessStore(Request $request, Dojo $dojo, ClassSession $session, SessionAssessmentService $service): RedirectResponse
+    {
+        $this->enter($request, $dojo);
+        abort_unless($this->scope->sessions($request->user(), $dojo)->whereKey($session->id)->exists(), 404);
+        $data = $request->validate([
+            'levels' => ['nullable', 'array', 'max:200'], 'levels.*' => ['array', 'max:500'], 'levels.*.*' => ['nullable', 'integer', Rule::in(array_keys(AssessmentLevel::labels()))],
+            'tips' => ['nullable', 'array', 'max:200'], 'tips.*' => ['array', 'max:500'], 'tips.*.*' => ['nullable', 'string', 'max:300'],
+        ]);
+        $result = $service->record($request->user(), $dojo, $session, $data['levels'] ?? [], $data['tips'] ?? []);
+
+        return redirect()->route('operation.session', [$dojo, $session])->withFragment('tecnicas')
+            ->with('status', $result['items'] === 0 ? 'Nada novo para gravar.' : "Avaliação registrada: {$result['items']} item(ns) de {$result['students']} aluno(s).");
     }
 
     public function saveTechniques(Request $request, Dojo $dojo, ClassSession $session, SessionTechniqueService $service): RedirectResponse

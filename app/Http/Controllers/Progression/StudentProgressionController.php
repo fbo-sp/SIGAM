@@ -22,12 +22,14 @@ class StudentProgressionController extends Controller
         $link = $options->firstWhere('martial_art_id', $request->integer('modalidade')) ?? $options->first();
         abort_if($link === null, 404);
         $student->load('person');
+        $snapshot = $progress->snapshot($association, $student, $link->martialArt);
 
         return view('progression.student', [
             'student' => $student,
             'martialArt' => $link->martialArt,
             'options' => $options,
-            'snapshot' => $progress->snapshot($association, $student, $link->martialArt),
+            'snapshot' => $snapshot,
+            'timeline' => $snapshot['next_rank'] ? $progress->timeline($student, $link->martialArt, $snapshot) : null,
             'history' => $assessments->history($student, $link->martialArt),
             'worked' => $progress->worked($association, $student, $link->martialArt, today()->subDays(90), today()),
             'levels' => AssessmentLevel::labels(),

@@ -32,7 +32,9 @@
 @php($lastAssessment = $history->first())
 <nav class="portal-shortcuts progress-shortcuts" aria-label="Partes do progresso">
 <a class="card portal-shortcut {{ $quizRelease ? 'is-highlight' : '' }}" href="{{ route('portal.progress.part', [$student, 'quiz', ...$modality]) }}"><span>{{ $parts['quiz'] }}</span><small>{{ $quizRelease ? 'Prova oficial liberada' : ($snapshot['next_rank'] ? 'Treinar' : 'Ver tentativas') }}</small></a>
-<a class="card portal-shortcut" href="{{ route('portal.progress.part', [$student, 'falta', ...$modality]) }}"><span>{{ $parts['falta'] }}</span><small>{{ ! $snapshot['next_rank'] ? 'Última graduação' : ($snapshot['rows']->isEmpty() ? 'Currículo não definido' : ($missing ? 'Faltam '.$missing.' item(ns)' : 'Tudo no nível pedido')) }}</small></a>
+<a class="card portal-shortcut" href="{{ route('portal.progress.part', [$student, 'falta', ...$modality]) }}"><span>{{ $parts['falta'] }}</span>@php($counts = $snapshot['statuses'])
+@php($summary = collect([$counts['untrained'] ? $counts['untrained'].' não treinado(s)' : null, $counts['improve'] ? $counts['improve'].' a melhorar' : null, $counts['awaiting'] && ! $counts['untrained'] && ! $counts['improve'] ? $counts['awaiting'].' aguardando avaliação' : null])->filter()->join(' · '))
+<small>{{ ! $snapshot['next_rank'] ? 'Última graduação' : ($snapshot['rows']->isEmpty() ? 'Currículo não definido' : ($missing ? $summary : 'Tudo no nível pedido')) }}</small></a>
 <a class="card portal-shortcut" href="{{ route('portal.progress.part', [$student, 'aulas', ...$modality]) }}"><span>{{ $parts['aulas'] }}</span><small>{{ $worked['sessions'] }} aula(s) em 90 dias</small></a>
 <a class="card portal-shortcut" href="{{ route('portal.progress.part', [$student, 'evolucao', ...$modality]) }}"><span>{{ $parts['evolucao'] }}</span><small>{{ $lastAssessment ? 'Última avaliação '.$lastAssessment->assessed_on->format('d/m') : 'Nenhuma avaliação' }}</small></a>
 </nav>
