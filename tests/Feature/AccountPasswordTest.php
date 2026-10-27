@@ -19,7 +19,7 @@ class AccountPasswordTest extends TestCase
         $user = User::factory()->create(['name' => 'Ana Conta']);
 
         $this->actingAs($user)->get(route('account.show'))->assertOk()
-            ->assertSee('href="'.route('account.show').'"', false)
+            ->assertSee('class="account-name" href="'.route('account.show').'"', false)->assertDontSee('← Meus dados')
             ->assertSee('Trocar senha')->assertSee('Senha atual')->assertSee($user->email);
     }
 

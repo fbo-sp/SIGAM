@@ -30,10 +30,11 @@
                 <a href="{{ route('notifications.index') }}">Notificações{{ $unreadNotifications ? ' ('.$unreadNotifications.')' : '' }}</a>
             </nav>
             <div class="account">
-                <a class="account-name" href="{{ route('account.show') }}" title="Minha conta">
+                @php($accountStudent = app(\App\Services\Portal\PortalAccessService::class)->accountStudent(auth()->user()))
+                <a class="account-name" href="{{ $accountStudent ? route('portal.students.section', [$accountStudent, 'dados']) : route('account.show') }}" title="{{ $accountStudent ? 'Meus dados' : 'Minha conta' }}">
                     <span>
                         <strong>{{ auth()->user()->name }}</strong>
-                        <small>{{ ($currentAssociation ?? null)?->trade_name ? $currentAssociation->trade_name.' · ' : '' }}Minha conta</small>
+                        <small>{{ ($currentAssociation ?? null)?->trade_name ? $currentAssociation->trade_name.' · ' : '' }}{{ $accountStudent ? 'Meus dados' : 'Minha conta' }}</small>
                     </span>
                 </a>
                 <form method="post" action="{{ route('logout') }}">

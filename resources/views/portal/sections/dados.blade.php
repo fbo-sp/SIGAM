@@ -4,6 +4,7 @@
 <div class="portal-page">
 @include('portal.partials.header', ['subtitle' => 'Apenas os contatos abaixo podem ser alterados pelo portal.'])
 <dl class="card details-grid"><div><dt>Nome</dt><dd>{{ $student->person->full_name }}</dd></div><div><dt>Matrícula</dt><dd>{{ $student->registration_number }}</dd></div><div><dt>E-mail</dt><dd>{{ $student->person->email ?: 'Não informado' }}</dd></div><div><dt>Celular</dt><dd>{{ $student->person->mobile ?: ($student->person->phone ?: 'Não informado') }}</dd></div><div><dt>Contato de emergência</dt><dd>{{ $student->person->emergency_contact_name ?: 'Não informado' }}{{ $student->person->emergency_contact_phone ? ' · '.$student->person->emergency_contact_phone : '' }}</dd></div></dl>
+    <section class="card portal-access-card"><div><h2>Senha de acesso</h2><p>Você entra no JUDOMA com {{ auth()->user()->email }}.</p></div><a class="button button-primary" href="{{ route('account.show') }}">Trocar senha</a></section>
     @if($canEditContact)
     <form class="card entity-form portal-contact" method="post" action="{{ route('portal.students.contact.update', $student) }}">
         @csrf @method('PUT')

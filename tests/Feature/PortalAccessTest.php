@@ -118,6 +118,10 @@ class PortalAccessTest extends TestCase
         foreach (['turmas' => 'Turmas e horários', 'frequencia' => 'Frequência', 'financeiro' => 'Nenhuma cobrança encontrada', 'campeonatos' => 'Campeonatos', 'historico' => 'Nenhum histórico registrado', 'documentos' => 'Nenhum documento disponível', 'dados' => 'Salvar contatos'] as $section => $text) {
             $this->get(route('portal.students.section', [$student, $section]))->assertOk()->assertSee($text)->assertSee('← Início');
         }
+        $dados = route('portal.students.section', [$student, 'dados']);
+        $this->get(route('portal.students.show', $student))->assertSee('class="account-name" href="'.$dados.'"', false);
+        $this->get($dados)->assertSee('Senha de acesso')->assertSee('href="'.route('account.show').'"', false);
+        $this->get(route('account.show'))->assertOk()->assertSee('← Meus dados')->assertSee('href="'.$dados.'"', false);
         $this->get('/portal/alunos/'.$student->id.'/qualquer')->assertNotFound();
 
         $staff = $this->portalUser($association, Person::query()->create(['full_name' => 'Gestora com portal']));
