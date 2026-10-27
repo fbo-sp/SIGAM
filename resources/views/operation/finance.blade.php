@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Financeiro do dojo — JUDOMA')
 @section('content')
+@include('partials.back-to-dashboard')
 <nav class="breadcrumbs"><a href="{{ route('operation.home', $dojo) }}">{{ $dojo->name }}</a><span>/</span><span>Financeiro</span></nav>
 <div class="page-heading"><div><span class="eyebrow">Operação do dojo</span><h1>Financeiro de {{ $dojo->name }}</h1><p>Somente planos, benefícios e cobranças cuja origem é esta unidade.</p></div></div>
 

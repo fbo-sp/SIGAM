@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Meus dojos — JUDOMA')
 @section('content')
+@include('partials.back-to-dashboard')
 <div class="page-heading"><div><span class="eyebrow">Contexto de trabalho</span><h1>Meus dojos</h1><p>Escolha a unidade em que você vai trabalhar. Cada acesso respeita sua função e o período autorizado.</p></div></div>
 <div class="card list-card">
 @forelse($dojos as $dojo)

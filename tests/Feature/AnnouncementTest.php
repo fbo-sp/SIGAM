@@ -173,7 +173,8 @@ class AnnouncementTest extends TestCase
         Notification::query()->where('user_id', $portal->id)->where('subject', 'Lida antes')->update(['read_at' => now()]);
         $this->actingAs($portal)->get($home)->assertOk()->assertSee('1 novo')->assertSee('Treino cancelado')
             ->assertSee('portal-shortcut has-unread', false)->assertSee('avisos novos');
-        $this->get(route('notifications.index'))->assertOk()->assertSeeInOrder(['Treino cancelado', 'Lida antes']);
+        $this->get(route('notifications.index'))->assertOk()->assertSeeInOrder(['Treino cancelado', 'Lida antes'])
+            ->assertSee('href="'.route('dashboard').'">← Início', false);
 
         Notification::query()->where('user_id', $portal->id)->update(['read_at' => now()]);
         $this->get($home)->assertOk()->assertSee('Nada novo')->assertDontSee('has-unread');

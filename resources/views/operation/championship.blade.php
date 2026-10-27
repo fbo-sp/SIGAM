@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('title', $championship->name.' — JUDOMA')
 @section('content')
+@include('partials.back-to-dashboard')
 <nav class="breadcrumbs"><a href="{{ route('operation.home', $dojo) }}">{{ $dojo->name }}</a><span>/</span><a href="{{ route('operation.championships.index', $dojo) }}">Campeonatos</a><span>/</span><span>{{ $championship->name }}</span></nav>
 <div class="page-heading"><div><span class="eyebrow">Campeonato compartilhado</span><h1>{{ $championship->name }}</h1><p>{{ $championship->martialArt->name }} · {{ $championship->start_date->format('d/m/Y') }} a {{ $championship->end_date->format('d/m/Y') }} · {{ $championship->location_name }}</p></div></div>
 <section class="card"><h2>Regras e taxa</h2><p><strong>Taxa definida pela associação:</strong> R$ {{ \App\Support\Money\MoneyFormatter::brl($championship->default_fee) }}</p><p>{!! nl2br(e($championship->rules_text ?: 'Nenhuma regra adicional informada.')) !!}</p></section>

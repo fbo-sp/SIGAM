@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Dados do aluno — '.$dojo->name)
 @section('content')
+@include('partials.back-to-dashboard')
 <nav class="breadcrumbs"><a href="{{ route('operation.home', $dojo) }}">{{ $dojo->name }}</a><span>/</span><a href="{{ route('operation.students', $dojo) }}">Alunos</a><span>/</span><span>{{ $person->social_name ?: $person->full_name }}</span></nav>
 <div class="page-heading"><div><span class="eyebrow">Matrícula {{ $student->registration_number }}</span><h1>Dados do aluno</h1><p>CPF, documentos e situação do cadastro são alterados pela associação.</p></div></div>
 <form class="card entity-form" method="post" enctype="multipart/form-data" action="{{ route('operation.students.person.update', [$dojo, $student]) }}">@csrf @method('PUT')

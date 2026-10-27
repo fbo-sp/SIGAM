@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Avisos — JUDOMA')
 @section('content')
+@include('partials.back-to-dashboard')
 @include('announcements.partials.crumbs')
 <section class="page-heading"><div><span class="eyebrow">{{ $dojo?->name ?? $association->trade_name }}</span><h1>Avisos</h1><p>{{ match ($level) { 'association' => 'Avisos enviados pela associação, pelos dojos e pelos professores.', 'dojo' => 'Avisos enviados neste dojo, inclusive pelos professores.', default => 'Avisos que você enviou às suas turmas e alunos.' } }}</p></div><a class="button button-primary" href="{{ route($prefix.'.create', $context) }}">Enviar aviso</a></section>
 <section class="card list-card">

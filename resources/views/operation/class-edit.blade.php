@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Editar turma — '.$classGroup->name)
 @section('content')
+@include('partials.back-to-dashboard')
 <nav class="breadcrumbs"><a href="{{ route('operation.home', $dojo) }}">{{ $dojo->name }}</a><span>/</span><a href="{{ route('operation.classes', $dojo) }}">Turmas</a><span>/</span><a href="{{ route('operation.classes.show', [$dojo, $classGroup]) }}">{{ $classGroup->name }}</a><span>/</span><span>Editar</span></nav>
 <div class="page-heading"><div><span class="eyebrow">{{ $classGroup->martialArt->name }}</span><h1>Editar turma</h1><p>Dias e horários são alterados na página da turma, em "Alterar agenda completa".</p></div></div>
 <form class="card entity-form" method="post" action="{{ route('operation.classes.update', [$dojo, $classGroup]) }}">@csrf @method('PUT')

@@ -65,22 +65,22 @@ class TeacherViewTest extends TestCase
 
         $this->actingAs($anaUser)->get(route('dashboard'))->assertOk()->assertSee('Aulas de hoje')->assertSee('Próximos dias')
             ->assertSee(route('teacher.classes'), false)->assertSee(route('teacher.students'), false)->assertDontSee('chamada(s) aberta(s)');
-        $this->get(route('teacher.classes'))->assertOk()->assertSee(route('operation.classes.show', [$this->dojo, $group]), false)
+        $this->get(route('teacher.classes'))->assertOk()->assertSee('← Início')->assertSee(route('operation.classes.show', [$this->dojo, $group]), false)
             ->assertSee('2 aluno(s) · principal')->assertSee(route('operation.classes.coverage', [$this->dojo, $group]), false)->assertSee('20%');
-        $this->get(route('teacher.students'))->assertOk()->assertSee('A-1')->assertSee('A-2')->assertSee('href="tel:11955554444"', false)
+        $this->get(route('teacher.students'))->assertOk()->assertSee('← Início')->assertSee('A-1')->assertSee('A-2')->assertSee('href="tel:11955554444"', false)
             ->assertSee('data-modal-open="emergencia-'.$white->id.'"', false)->assertSee('Faltando (0)');
         $this->actingAs($brunoUser)->get(route('teacher.classes'))->assertOk()->assertSee('2 aluno(s) · auxiliar')
             ->assertSee(route('operation.classes.show', [$this->dojo, $group]), false);
 
         $this->actingAs($anaUser)->get(route('operation.classes.show', [$this->dojo, $group]))->assertOk()
-            ->assertSee('← Voltar ao painel')->assertSee('data-modal-open="emergencia-'.$white->id.'"', false)
+            ->assertSee('← Início')->assertSee('data-modal-open="emergencia-'.$white->id.'"', false)
             ->assertSee('Maria Avó')->assertSee('href="tel:11988887777"', false)
             ->assertSee('Responsável legal')->assertSee('Carlos Pai')->assertSee('href="tel:11977776666"', false)
             ->assertSee('menor de idade')->assertSee('Cobertura do currículo');
 
         $this->get(route('operation.classes.coverage', [$this->dojo, $group]))->assertOk()
             ->assertSeeInOrder(['Visão geral da turma', '1 de 5 itens já trabalhados', 'Por faixa', 'Rumo a Faixa amarela', 'Rumo a Faixa laranja'])
-            ->assertSee('Distribuição por grupo')->assertSee('Nage-waza · out: 1 aula(s)')->assertSee('Mapa aula a aula')->assertSee('14/10: trabalhado')->assertSee('Ainda não trabalhado (4)')->assertSee('Kesa-gatame')->assertSee('← Voltar ao painel');
+            ->assertSee('Distribuição por grupo')->assertSee('Nage-waza · out: 1 aula(s)')->assertSee('Mapa aula a aula')->assertSee('14/10: trabalhado')->assertSee('Ainda não trabalhado (4)')->assertSee('Kesa-gatame')->assertSee('← Início');
         $this->get(route('operation.classes.coverage', [$this->dojo, $group, 'de' => '2026-10-15', 'ate' => '2026-10-01']))->assertSessionHasErrors('ate');
         $this->get(route('operation.classes.coverage', [$this->dojo, $group, 'de' => '2026-10-15']))->assertOk()->assertSee('0 de 5 itens já trabalhados');
 

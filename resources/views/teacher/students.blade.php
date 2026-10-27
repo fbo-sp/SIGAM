@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Meus alunos — JUDOMA')
 @section('content')
+@include('partials.back-to-dashboard')
 <div class="page-heading"><div><span class="eyebrow">Professor</span><h1>Meus alunos</h1><p>Alunos matriculados nas suas turmas.</p></div></div>
 <form class="card filter-bar teacher-search" method="get" action="{{ route('teacher.students') }}"><div class="field filter-grow"><label for="busca">Buscar aluno</label><input id="busca" name="busca" type="search" value="{{ $search }}" placeholder="Nome ou matrícula"></div>@if($filter)<input type="hidden" name="filtro" value="{{ $filter }}">@endif<button class="button button-secondary">Buscar</button></form>
 <nav class="chip-filters" aria-label="Filtros">

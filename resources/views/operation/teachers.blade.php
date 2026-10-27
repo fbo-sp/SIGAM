@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Professores — '.$dojo->name)
 @section('content')
+@include('partials.back-to-dashboard')
 <nav class="breadcrumbs"><a href="{{ route('operation.home', $dojo) }}">{{ $dojo->name }}</a><span>/</span><span>Professores</span></nav>
 <div class="page-heading"><div><span class="eyebrow">Equipe local</span><h1>Professores do dojo</h1><p>Somente professores previamente cadastrados pela associação podem ser vinculados.</p></div></div>
 @if($canAssign)

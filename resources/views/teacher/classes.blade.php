@@ -2,6 +2,7 @@
 @php($weekdays = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'])
 @section('title', 'Minhas turmas — JUDOMA')
 @section('content')
+@include('partials.back-to-dashboard')
 <div class="page-heading"><div><span class="eyebrow">Professor</span><h1>Minhas turmas</h1><p>Turmas em que você é principal ou auxiliar, de todos os dojos.</p></div></div>
 <div class="teacher-classes">
 @forelse($classes as $item)

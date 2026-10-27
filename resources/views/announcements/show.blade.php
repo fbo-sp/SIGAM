@@ -3,6 +3,7 @@
 @php($roles = \App\Services\Notifications\AnnouncementService::ROLES)
 @php($emailLabels = ['none' => '', 'pending' => 'e-mail na fila', 'sending' => 'e-mail enviando', 'sent' => 'e-mail enviado', 'failed' => 'e-mail com falha, nova tentativa', 'suppressed' => 'e-mail cancelado'])
 @section('content')
+@include('partials.back-to-dashboard')
 @include('announcements.partials.crumbs', ['current' => $announcement->title])
 <section class="page-heading"><div><span class="eyebrow">{{ $announcement->sent_at->format('d/m/Y H:i') }} · {{ $announcement->sender->name }}</span><h1>{{ $announcement->title }}</h1><p>@include('announcements.partials.target') · {{ $announcement->recipient_count }} pessoa(s)</p></div><a class="button button-secondary" href="{{ route($prefix.'.index', $context) }}">Todos os avisos</a></section>
 <section class="portal-indicators announcement-stats"><article class="card portal-indicator"><span>Pessoas</span><strong>{{ $stats['total'] }}</strong><small>{{ $stats['accounts'] }} com conta</small></article><article class="card portal-indicator"><span>Leram no JUDOMA</span><strong>{{ $stats['read'] }}</strong><small>de {{ $stats['accounts'] }} com conta</small></article><article class="card portal-indicator"><span>E-mails enviados</span><strong>{{ $stats['emails_sent'] }}</strong><small>de {{ $stats['emails'] }}</small></article></section>

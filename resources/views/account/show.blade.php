@@ -2,7 +2,7 @@
 @section('title', 'Minha conta — JUDOMA')
 @section('content')
 @php($accountStudent = app(\App\Services\Portal\PortalAccessService::class)->accountStudent($user))
-@if($accountStudent)<a class="button button-secondary back-link" href="{{ route('portal.students.section', [$accountStudent, 'dados']) }}">← Meus dados</a>@endif
+@if($accountStudent)<a class="button button-secondary back-link" href="{{ route('portal.students.section', [$accountStudent, 'dados']) }}">← Meus dados</a>@else @include('partials.back-to-dashboard')@endif
 <header class="page-heading"><div><span class="eyebrow">Minha conta</span><h1>{{ $user->name }}</h1><p>{{ $user->email }}</p></div></header>
 <form class="card form-stack account-password" method="post" action="{{ route('account.password.update') }}">
     @csrf
