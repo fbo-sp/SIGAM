@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-10-27 — Minha conta e troca de senha
+
+- nova tela **Minha conta** (`/minha-conta`), aberta pelo nome no topo, pelo "Mais" do portal e pelo "Mais" do professor;
+- o usuário troca a própria senha informando a atual e a nova duas vezes (12 caracteres, letras e números); os outros aparelhos conectados saem, a troca é auditada e a conta recebe um aviso por e-mail;
+- sem migration; novo `AccountPasswordTest`.
+
 ## 2026-10-26 — Navegação do professor
 
 - o painel do professor virou a tela "Hoje": indicadores, alerta com todas as chamadas ainda abertas de dias anteriores, aulas de hoje com "Fazer chamada" e próximos dias;

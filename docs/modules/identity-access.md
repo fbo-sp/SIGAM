@@ -23,6 +23,10 @@ O botão **Liberar portal** na ficha do aluno (para o aluno e para cada respons�
 
 Inativar uma conta encerra as sessões abertas e descarta tokens de senha. Reativar devolve `active` a quem já entrou ou confirmou o e-mail; quem nunca ativou volta a `pending` e precisa de novo convite.
 
+## Minha conta e troca de senha
+
+Toda conta logada abre **Minha conta** (`/minha-conta`) pelo nome no topo da tela, pelo "Mais" do portal ou pelo "Mais" do professor. A troca de senha (`PUT /minha-conta/senha`, limite de 5 por minuto) pede a senha atual e a nova duas vezes (mínimo de 12 caracteres, letras e números, diferente da atual). `AccountPasswordService` confere a senha atual (erro auditado como `security.password_change_failed`), grava o novo hash, troca o `remember_token`, apaga as outras linhas de `sessions` da conta mantendo só a atual, audita `security.password_changed` e envia `PasswordChangedMail` com link para a recuperação. Falha no envio do aviso não desfaz a troca. Quem esqueceu a senha atual usa a recuperação por e-mail.
+
 ## Estados e escopo
 
 - `users.status = pending`: conta provisionada, mas sem autenticação até o aceite válido;
@@ -46,8 +50,9 @@ Recuperação de senha sempre responde de forma genérica. Tokens são temporár
 - autorização: `app/Http/Middleware/EnsureUserIsActive.php`, `ResolveAssociationContext.php`, `RequirePermission.php` e model `User`;
 - convites: `TeacherInvitationService`, `TeacherInvitationDeliveryService` e `teacher-invitations.md`;
 - contas e perfis da associação: `UserAccountService`, `AssociationRoleCatalog`, `Access\UserController`, `Auth\AccountActivationController`, views em `resources/views/users/`;
+- minha conta: `Auth\AccountController`, `ChangePasswordRequest`, `AccountPasswordService`, `PasswordChangedMail` e `resources/views/account/`;
 - bootstrap: `database/seeders/DatabaseSeeder.php`, `OperationalRolesSeeder.php` e `AssociationRolesSeeder.php`;
-- regressão: `AuthenticationTest`, `AssociationScopeTest`, `TeacherInvitationTest`, `OperationalContextAuthorizationTest` e `UserAccountManagementTest`.
+- regressão: `AuthenticationTest`, `AssociationScopeTest`, `TeacherInvitationTest`, `OperationalContextAuthorizationTest`, `UserAccountManagementTest` e `AccountPasswordTest`.
 
 ## Invariantes de manutenção
 

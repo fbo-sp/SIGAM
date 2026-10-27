@@ -30,12 +30,12 @@
                 <a href="{{ route('notifications.index') }}">Notificações{{ $unreadNotifications ? ' ('.$unreadNotifications.')' : '' }}</a>
             </nav>
             <div class="account">
-                <span>
-                    <strong>{{ auth()->user()->name }}</strong>
-                    @if($currentAssociation ?? null)
-                        <small>{{ $currentAssociation->trade_name }}</small>
-                    @endif
-                </span>
+                <a class="account-name" href="{{ route('account.show') }}" title="Minha conta">
+                    <span>
+                        <strong>{{ auth()->user()->name }}</strong>
+                        <small>{{ ($currentAssociation ?? null)?->trade_name ? $currentAssociation->trade_name.' · ' : '' }}Minha conta</small>
+                    </span>
+                </a>
                 <form method="post" action="{{ route('logout') }}">
                     @csrf
                     <button class="button button-secondary" type="submit">Sair</button>

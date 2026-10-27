@@ -8,6 +8,7 @@ use App\Http\Controllers\Access\OperationalController;
 use App\Http\Controllers\Access\UserController;
 use App\Http\Controllers\Attendance\AttendanceController;
 use App\Http\Controllers\Auth\AccountActivationController;
+use App\Http\Controllers\Auth\AccountController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
@@ -67,6 +68,8 @@ Route::post('/convites/professor/{token}/aceitar', [TeacherInvitationController:
 Route::post('/convites/professor/{token}/recusar', [TeacherInvitationController::class, 'decline'])->middleware('throttle:5,1')->name('teacher-invitations.decline');
 
 Route::middleware(['auth', 'active', 'association.context'])->group(function (): void {
+    Route::get('/minha-conta', [AccountController::class, 'show'])->name('account.show');
+    Route::put('/minha-conta/senha', [AccountController::class, 'updatePassword'])->middleware('throttle:5,1')->name('account.password.update');
     Route::get('/fotos/{person}/{size}', [PersonPhotoController::class, 'show'])->middleware('signed:relative')->name('people.photo');
     Route::get('/meus-dojos', [OperationalController::class, 'index'])->name('operation.index');
     Route::get('/professor/turmas', [TeacherWorkspaceController::class, 'classes'])->name('teacher.classes');
