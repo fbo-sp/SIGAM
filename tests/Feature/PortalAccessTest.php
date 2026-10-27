@@ -4,9 +4,12 @@ namespace Tests\Feature;
 
 use App\Models\Association;
 use App\Models\Championship;
+use App\Models\Charge;
 use App\Models\Document;
 use App\Models\DocumentType;
 use App\Models\Dojo;
+use App\Models\FinancialPlan;
+use App\Models\GratuityRequest;
 use App\Models\MartialArt;
 use App\Models\Permission;
 use App\Models\Person;
@@ -15,6 +18,7 @@ use App\Models\Role;
 use App\Models\Student;
 use App\Models\StudentGuardian;
 use App\Models\StudentMartialArt;
+use App\Models\StudentPlan;
 use App\Models\StudentRankHistory;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -29,6 +33,7 @@ class PortalAccessTest extends TestCase
     public function test_student_only_sees_own_record_and_portal_requires_permission(): void
     {
         [$association, $dojo, $student, $user] = $this->studentContext();
+        $this->plan($association, $dojo, $student);
         $other = $this->student($association, $dojo, 'Outro aluno');
 
         $this->actingAs($user)->get(route('portal.index'))->assertRedirect(route('portal.students.show', $student));
@@ -110,6 +115,7 @@ class PortalAccessTest extends TestCase
     public function test_portal_user_starts_at_portal_home_and_reaches_each_section(): void
     {
         [$association, $dojo, $student, $user] = $this->studentContext();
+        $this->plan($association, $dojo, $student);
         $this->actingAs($user)->get(route('dashboard'))->assertRedirect(route('portal.index'));
         $this->get(route('portal.students.show', $student))->assertOk()
             ->assertSee('Próxima aula')->assertSee('Frequência no mês')->assertSee('Mensalidade')->assertSee('Em dia')
@@ -146,6 +152,34 @@ class PortalAccessTest extends TestCase
         $this->actingAs($user)->get(route('portal.index'))->assertOk()->assertSee($first->person->full_name)->assertSee($second->person->full_name);
         $this->get(route('portal.students.section', [$second, 'financeiro']))->assertOk()->assertSee('Consultando:')
             ->assertSee(route('portal.students.section', [$first, 'financeiro']), false);
+    }
+
+    public function test_fee_indicator_and_finance_hide_when_fee_does_not_apply(): void
+    {
+        [$association, $dojo, $student, $user] = $this->studentContext();
+        $home = route('portal.students.show', $student);
+        $finance = 'href="'.route('portal.students.section', [$student, 'financeiro']).'"';
+
+        $this->actingAs($user)->get($home)->assertOk()->assertDontSee('Mensalidade')->assertDontSee($finance, false)
+            ->assertSee('href="'.route('portal.students.section', [$student, 'turmas']).'" ><svg', false);
+
+        $plan = $this->plan($association, $dojo, $student);
+        $this->get($home)->assertSee('Mensalidade')->assertSee($finance, false);
+
+        GratuityRequest::query()->create(['association_id' => $association->id, 'dojo_id' => $dojo->id, 'student_id' => $student->id, 'reason' => 'Bolsa', 'justification' => 'Atleta', 'start_date' => today()->subMonth(), 'end_date' => today()->addMonth(), 'requested_by' => $user->id, 'requested_at' => now(), 'status' => 'approved']);
+        $this->get($home)->assertDontSee('Mensalidade')->assertDontSee($finance, false);
+
+        $plan->update(['end_date' => today()->subDay()]);
+        Charge::query()->create(['association_id' => $association->id, 'dojo_id' => $dojo->id, 'student_id' => $student->id, 'person_id' => $student->person_id, 'source_type' => 'championship_registration', 'source_id' => 1, 'description' => 'Inscrição — Copa', 'competence' => today()->startOfMonth(), 'issued_at' => now(), 'due_date' => today()->addWeek(), 'original_amount' => '25.00', 'final_amount' => '25.00', 'balance_amount' => '25.00', 'calculation_snapshot' => [], 'due_policy_snapshot' => [], 'status' => 'open']);
+        $this->get($home)->assertDontSee('Mensalidade')->assertSee($finance, false);
+        $this->get(route('portal.students.section', [$student, 'financeiro']))->assertOk()->assertSee('Inscrição — Copa');
+    }
+
+    private function plan(Association $association, Dojo $dojo, Student $student): StudentPlan
+    {
+        $plan = FinancialPlan::query()->create(['association_id' => $association->id, 'dojo_id' => $dojo->id, 'name' => 'Mensal', 'billing_period' => 'monthly', 'amount' => '120.00', 'valid_from' => today()->subYear(), 'status' => 'active']);
+
+        return StudentPlan::query()->create(['student_id' => $student->id, 'dojo_id' => $dojo->id, 'financial_plan_id' => $plan->id, 'start_date' => today()->subMonths(6), 'base_amount' => '120.00', 'preferred_due_day' => 10, 'status' => 'active']);
     }
 
     private function studentContext(bool $withUser = true): array
