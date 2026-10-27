@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-10-27 — Progresso técnico do portal em atalhos
+
+- o Progresso técnico do portal começa pelo Perfil técnico (gráficos); sem próxima graduação ou sem currículo, aparece uma mensagem no lugar dos gráficos;
+- abaixo, quatro atalhos com resumo abrem subtelas com "← Progresso": Quiz teórico, O que falta, Nas aulas e Evolução, na mesma ordem de antes;
+- em O que falta, os itens a trabalhar ficam agrupados por grupo de técnicas e recolhidos, com a contagem de cada grupo; o indicador Quiz do início abre direto o Quiz teórico;
+- sem migration; `QuizTest` ampliado.
+
 ## 2026-10-27 — Botão "← Início" como padrão
 
 - o botão "Voltar ao painel" passa a se chamar "← Início" e vira padrão: caixa Notificações, Minha conta, abas Turmas e Alunos do professor, avisos, Meus dojos e todas as telas do dojo (acessos, campeonatos, editar turma, financeiro, editar aluno, professores); no portal, também na tela do quiz;

@@ -6,6 +6,7 @@ use App\Models\QuizAttempt;
 use App\Models\QuizAttemptAnswer;
 use App\Models\QuizQuestion;
 use App\Models\QuizRelease;
+use App\Models\Rank;
 use App\Models\Student;
 use App\Models\TechniqueAssessment;
 use App\Models\User;
@@ -56,6 +57,27 @@ class QuizTest extends TestCase
         $this->actingAs($this->associationUser(['martial_art.view']))->get($url)->assertForbidden();
     }
 
+    public function test_portal_progress_starts_with_profile_and_opens_each_part(): void
+    {
+        $student = $this->student('A-1');
+        $portal = $this->portalUser($student->person);
+        $hub = route('portal.progress', $student);
+
+        $this->actingAs($portal)->get($hub)->assertOk()->assertSee('radar-card')
+            ->assertSeeInOrder(['Perfil técnico', 'Quiz teórico', 'O que falta', 'Nas aulas', 'Evolução'])
+            ->assertSee('item(ns)')->assertSee('0 aula(s) em 90 dias')->assertSee('Nenhuma avaliação')
+            ->assertSee('href="'.route('portal.progress.part', [$student, 'falta']).'"', false)->assertDontSee('Requisitos do exame');
+        $this->get(route('portal.progress.part', [$student, 'falta']))->assertOk()->assertSee('← Progresso')->assertSee('href="'.$hub.'"', false)
+            ->assertSee('Requisitos do exame')->assertSee('<details class="card progress-group">', false)->assertSee('a trabalhar')->assertDontSee('Perfil técnico');
+        $this->get(route('portal.progress.part', [$student, 'quiz']))->assertOk()->assertSee('Treinar');
+        $this->get(route('portal.progress.part', [$student, 'aulas']))->assertOk()->assertSee('Nenhuma técnica registrada');
+        $this->get(route('portal.progress.part', [$student, 'evolucao']))->assertOk()->assertSee('Nenhuma avaliação ainda.');
+        $this->get('/portal/alunos/'.$student->id.'/progresso/outra')->assertNotFound();
+
+        $student->martialArts()->first()->update(['current_rank_id' => Rank::query()->where('name', 'laranja')->value('id')]);
+        $this->get($hub)->assertOk()->assertSee('Você está na última graduação cadastrada')->assertSee('Última graduação')->assertDontSee('radar-card');
+    }
+
     public function test_training_is_free_and_official_needs_release_with_single_attempt(): void
     {
         [$teacherUser, $teacher] = $this->teacher('Professora Ana');
@@ -66,7 +88,7 @@ class QuizTest extends TestCase
         $this->question('Pergunta da faixa branca', null, $this->white->id);
         $portal = $this->portalUser($student->person);
 
-        $this->actingAs($portal)->get(route('portal.progress', $student))->assertOk()->assertSee('Treinar')->assertDontSee('Fazer prova oficial');
+        $this->actingAs($portal)->get(route('portal.progress.part', [$student, 'quiz']))->assertOk()->assertSee('Treinar')->assertDontSee('Fazer prova oficial');
         $this->post(route('portal.quiz.start', [$student, $this->art]), ['mode' => 'training'])->assertRedirect();
         $training = QuizAttempt::query()->sole();
         $this->assertSame(3, $training->question_count);
@@ -88,7 +110,7 @@ class QuizTest extends TestCase
         $this->assertSame($this->yellow->id, $release->rank_id);
         $this->get(route('operation.progression.show', [$this->dojo, $student]))->assertSee('Prova oficial liberada para Faixa amarela');
 
-        $this->actingAs($portal)->get(route('portal.progress', $student))->assertSee('Fazer prova oficial');
+        $this->actingAs($portal)->get(route('portal.progress.part', [$student, 'quiz']))->assertSee('Fazer prova oficial');
         $this->post(route('portal.quiz.start', [$student, $this->art]), ['mode' => 'official', 'release' => $release->id]);
         $official = QuizAttempt::query()->where('mode', 'official')->sole();
         $this->post(route('portal.quiz.start', [$student, $this->art]), ['mode' => 'official', 'release' => $release->id]);

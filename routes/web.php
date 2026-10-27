@@ -161,6 +161,7 @@ Route::middleware(['auth', 'active', 'association.context'])->group(function ():
         Route::get('/alunos/{student}/documentos/{document}', [PortalController::class, 'download'])->name('students.documents.download');
         Route::post('/alunos/{student}/campeonatos/{championship}', [PortalController::class, 'register'])->name('students.championships.register');
         Route::get('/alunos/{student}/progresso', [PortalProgressionController::class, 'show'])->name('progress');
+        Route::get('/alunos/{student}/progresso/{part}', [PortalProgressionController::class, 'show'])->whereIn('part', ['quiz', 'falta', 'aulas', 'evolucao'])->name('progress.part');
         Route::post('/alunos/{student}/quiz/{martialArt}', [PortalProgressionController::class, 'start'])->middleware('throttle:20,1')->name('quiz.start');
         Route::get('/alunos/{student}/quiz/tentativas/{attempt}', [PortalProgressionController::class, 'attempt'])->name('quiz.attempt');
         Route::post('/alunos/{student}/quiz/tentativas/{attempt}', [PortalProgressionController::class, 'submit'])->middleware('throttle:20,1')->name('quiz.submit');

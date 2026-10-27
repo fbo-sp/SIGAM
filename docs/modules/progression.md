@@ -28,7 +28,7 @@ Na tela da aula (`operacao/dojos/{dojo}/aulas/{session}`), o bloco "Técnicas tr
 - `modalidades/{martialArt}/quiz` (`quiz.manage`): perguntas por graduação, com 2 a 5 alternativas, a correta, o item teórico avaliado (opcional) e uma explicação mostrada depois da resposta. Inativar tira a pergunta dos próximos sorteios.
 - `acompanhamento/configuracoes` (`curriculum.manage`): perguntas por quiz, nota mínima da prova oficial e semanas do lembrete.
 - No acompanhamento do aluno no dojo, o professor que avalia libera ("Liberar prova oficial") ou cancela a liberação ainda não iniciada; a ficha mostra as provas oficiais e quantos treinos o aluno fez.
-- No portal (`portal/alunos/{student}/progresso`), o aluno ou responsável treina quando quiser e faz a prova oficial liberada. A tela da tentativa mostra as perguntas com as alternativas na ordem sorteada; o resultado mostra acertos, a correta e a explicação.
+- No portal (`portal/alunos/{student}/progresso/quiz`, atalho "Quiz teórico" do progresso), o aluno ou responsável treina quando quiser e faz a prova oficial liberada. A tela da tentativa mostra as perguntas com as alternativas na ordem sorteada; o resultado mostra acertos, a correta e a explicação.
 
 ### Painéis (fase 6)
 

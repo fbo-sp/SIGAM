@@ -1,0 +1,1 @@
+<div class="radar-grid">@foreach($knowledgeLabels as $type => $label)@if($snapshot['radar']->has($type))<article class="card radar-card"><h3>{{ $label }}</h3><x-radar :axes="$snapshot['radar'][$type]" :label="'Perfil técnico: '.$label" /></article>@endif @endforeach</div>

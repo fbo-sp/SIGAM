@@ -19,9 +19,12 @@ use Illuminate\View\View;
 /** Progresso técnico e quiz no portal: o próprio aluno ou o responsável, só dos dependentes (ADR-014). */
 class PortalProgressionController extends Controller
 {
+    /** Subtelas abertas pelos atalhos abaixo do Perfil técnico. */
+    public const PARTS = ['quiz' => 'Quiz teórico', 'falta' => 'O que falta', 'aulas' => 'Nas aulas', 'evolucao' => 'Evolução'];
+
     public function __construct(private readonly PortalAccessService $access, private readonly StudentProgressService $progress, private readonly QuizService $quiz, private readonly AssessmentService $assessments) {}
 
-    public function show(Request $request, Student $student): View
+    public function show(Request $request, Student $student, ?string $part = null): View
     {
         $student = $this->access->resolveStudent($request->user(), $student);
         $options = $this->progress->martialArts($student);
@@ -31,6 +34,7 @@ class PortalProgressionController extends Controller
         $student->load('person');
 
         return view('portal.progress', [
+            'part' => $part,
             'student' => $student,
             'martialArt' => $martialArt,
             'options' => $options,
