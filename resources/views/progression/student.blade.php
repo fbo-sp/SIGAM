@@ -29,7 +29,7 @@
 @if($snapshot['rows']->has($type))
 <h3>{{ $label }}: {{ $snapshot['missing'][$type]->count() }} de {{ $snapshot['rows'][$type]->count() }} item(ns) abaixo do exigido</h3>
 @if($snapshot['missing'][$type]->isNotEmpty())
-<div class="card list-card">@foreach($snapshot['missing'][$type] as $row)<div class="list-row progress-row"><span><strong>{{ $row['item']->name }}</strong><small>{{ \Illuminate\Support\Str::beforeLast($row['path'], ' > ') }}</small><small @class(['progress-status', 'is-'.$row['status']])>{{ \App\Services\Progression\StudentProgressService::STATUS_LABELS[$row['status']] ?? '' }}@if($row['status'] === 'improve' && $row['assessed_on']) · avaliado em {{ $row['assessed_on']->format('d/m/Y') }}@endif @if($row['trained_on']) · treinado em {{ $row['trained_on']->format('d/m/Y') }}@endif</small>@if($row['tip'] && $row['status'] === 'improve')<small class="assessment-tip">Dica ao aluno: {{ $row['tip'] }}</small>@endif</span><span class="level-gap"><span class="status-pill status-inactive">{{ $levels[$row['current'] ?? 1] }}</span><span aria-hidden="true">→</span><span class="status-pill">{{ $levels[$row['level']] }}</span></span></div>@endforeach</div>
+<div class="card list-card">@foreach($snapshot['missing'][$type] as $row)<div class="list-row progress-row"><span><strong>{{ $row['item']->name }}</strong><small>{{ \Illuminate\Support\Str::beforeLast($row['path'], ' > ') }}</small><small @class(['progress-status', 'is-'.$row['status']])>{{ \App\Services\Progression\StudentProgressService::STATUS_LABELS[$row['status']] ?? '' }}@if($row['status'] === 'improve' && $row['assessed_on']) · avaliado em {{ $row['assessed_on']->format('d/m/Y') }}@endif @if($row['trained_on']) · treinado em {{ $row['trained_on']->format('d/m/Y') }}@endif @if(isset($studied[$row['item']->id])) · estudou em casa {{ $studied[$row['item']->id]['count'] }}x, última em {{ $studied[$row['item']->id]['last']->format('d/m') }}@endif</small>@if($row['tip'] && $row['status'] === 'improve')<small class="assessment-tip">Dica ao aluno: {{ $row['tip'] }}</small>@endif</span><span class="level-gap"><span class="status-pill status-inactive">{{ $levels[$row['current'] ?? 1] }}</span><span aria-hidden="true">→</span><span class="status-pill">{{ $levels[$row['level']] }}</span></span></div>@endforeach</div>
 @else
 <p>Todos os itens {{ $type === 'theoretical' ? 'teóricos' : 'práticos' }} estão no nível exigido.</p>
 @endif
@@ -61,6 +61,12 @@
 <section class="section-block"><div class="section-heading"><h2>Trabalhado nas aulas</h2><p>Últimos 90 dias: {{ $worked['sessions'] }} aula(s) com presença. Conta só a aula em que o aluno estava presente.</p></div>
 @if($worked['axes']->isEmpty())<div class="card empty-state"><p>Nenhuma técnica marcada nas aulas em que o aluno esteve presente.</p></div>@else
 <div class="radar-grid">@foreach($knowledgeLabels as $type => $label)@if($worked['axes']->has($type))<div class="card list-card"><div class="list-row"><span><strong>{{ $label }}</strong></span></div>@foreach($worked['axes'][$type] as $axis)<div class="list-row"><span>{{ $axis['label'] }}</span><span class="status-pill">{{ $axis['sessions'] }} de {{ $worked['sessions'] }} aula(s)</span></div>@endforeach</div>@endif @endforeach</div>@endif
+</section>
+
+@php($studiedItems = collect($studied ?? [])->sortByDesc(fn ($log) => $log['last'])->take(12))
+<section class="section-block"><div class="section-heading"><h2>Estudo em casa</h2><p>O que o aluno marcou como estudado na área Estudar do portal (um registro por dia).</p></div>
+@if($studiedItems->isEmpty())<div class="card empty-state"><p>O aluno ainda não registrou estudo no portal.</p></div>@else
+<div class="card list-card">@foreach($studiedItems as $log)<div class="list-row"><span>{{ $log['name'] }}</span><span class="status-pill">{{ $log['count'] }}x · última {{ $log['last']->format('d/m') }}</span></div>@endforeach</div>@endif
 </section>
 
 @if($timeline)

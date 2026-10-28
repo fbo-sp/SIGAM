@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-10-28 — Área de estudo do aluno no portal
+
+- nova aba e atalho "Estudar" no portal (`portal/alunos/{student}/estudar`) com todo o catálogo ativo da modalidade, busca e filtros Para melhorar, Próxima faixa, Já aprendidas e Todo o catálogo; começa em "Para melhorar" quando o professor pediu atenção em algum item;
+- página da técnica com vídeo (YouTube ou Vimeo embutido), faixa em que entra no currículo, tradução, dica do professor, o que o professor avalia, erro comum, passo a passo, situação do aluno, ficha (imagem ou PDF) e "Veja também";
+- "Estudei esta técnica" registra um estudo por dia; o professor vê na ficha de acompanhamento ("estudou em casa Nx" nos itens e o bloco "Estudo em casa"); não muda a avaliação;
+- no catálogo, a edição do item ganha "Em português" e a "Área de estudo do aluno": pontos avaliados e passo a passo (até 5 linhas cada), erro comum e ficha (JPG, PNG, WEBP ou PDF até 5 MB, disco privado, rota `/tecnicas/{item}/ficha`);
+- a CSP passa a permitir quadros de `www.youtube-nocookie.com` e `player.vimeo.com`;
+- migration `2026_10_28_000030_add_study_content_to_technique_items` (colunas novas em `technique_items` e tabela `technique_study_logs`); `StudyAreaTest` novo.
+
 ## 2026-10-28 — Marcar grupo inteiro na aula vira opção da associação
 
 - nova opção "Permitir marcar o grupo inteiro nas técnicas da aula" em Modalidades › Configurações (vale para a associação toda), começando desligada;

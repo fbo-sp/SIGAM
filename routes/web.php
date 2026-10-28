@@ -33,12 +33,14 @@ use App\Http\Controllers\People\PersonController;
 use App\Http\Controllers\People\PersonPhotoController;
 use App\Http\Controllers\Portal\PortalController;
 use App\Http\Controllers\Portal\PortalProgressionController;
+use App\Http\Controllers\Portal\PortalStudyController;
 use App\Http\Controllers\Progression\CurriculumController;
 use App\Http\Controllers\Progression\DojoProgressionController;
 use App\Http\Controllers\Progression\ProgressionReportController;
 use App\Http\Controllers\Progression\QuizBankController;
 use App\Http\Controllers\Progression\StudentProgressionController;
 use App\Http\Controllers\Progression\TechniqueCatalogController;
+use App\Http\Controllers\Progression\TechniqueSheetController;
 use App\Http\Controllers\Sports\CatalogController;
 use App\Http\Controllers\Sports\DirectRegistrationController;
 use App\Http\Controllers\Sports\StudentController;
@@ -156,6 +158,8 @@ Route::middleware(['auth', 'active', 'association.context'])->group(function ():
     Route::post('/notificacoes/{notification}/ler', [NotificationController::class, 'read'])->name('notifications.read');
     Route::put('/notificacoes/preferencias', [NotificationController::class, 'preferences'])->name('notifications.preferences');
 
+    Route::get('/tecnicas/{item}/ficha', TechniqueSheetController::class)->name('techniques.sheet');
+
     Route::prefix('/portal')->name('portal.')->middleware('permission:portal.access')->group(function (): void {
         Route::get('/', [PortalController::class, 'index'])->name('index');
         Route::get('/alunos/{student}', [PortalController::class, 'show'])->name('students.show');
@@ -165,6 +169,9 @@ Route::middleware(['auth', 'active', 'association.context'])->group(function ():
         Route::post('/alunos/{student}/campeonatos/{championship}', [PortalController::class, 'register'])->name('students.championships.register');
         Route::get('/alunos/{student}/progresso', [PortalProgressionController::class, 'show'])->name('progress');
         Route::get('/alunos/{student}/progresso/{part}', [PortalProgressionController::class, 'show'])->whereIn('part', ['quiz', 'falta', 'aulas', 'evolucao'])->name('progress.part');
+        Route::get('/alunos/{student}/estudar', [PortalStudyController::class, 'index'])->name('study');
+        Route::get('/alunos/{student}/estudar/{item}', [PortalStudyController::class, 'show'])->name('study.item');
+        Route::post('/alunos/{student}/estudar/{item}/estudei', [PortalStudyController::class, 'studied'])->middleware('throttle:30,1')->name('study.studied');
         Route::post('/alunos/{student}/quiz/{martialArt}', [PortalProgressionController::class, 'start'])->middleware('throttle:20,1')->name('quiz.start');
         Route::get('/alunos/{student}/quiz/tentativas/{attempt}', [PortalProgressionController::class, 'attempt'])->name('quiz.attempt');
         Route::post('/alunos/{student}/quiz/tentativas/{attempt}', [PortalProgressionController::class, 'submit'])->middleware('throttle:20,1')->name('quiz.submit');

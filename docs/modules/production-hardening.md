@@ -8,7 +8,7 @@ Incremento técnico disponível para homologação. **NO-GO para produção** at
 
 | Componente | Responsabilidade e invariantes |
 |---|---|
-| `AddSecurityHeaders` | CSP, proteção de frames, respostas autenticadas sem cache; HSTS somente em produção por HTTPS |
+| `AddSecurityHeaders` | CSP (quadros só de `www.youtube-nocookie.com` e `player.vimeo.com`, para os vídeos da área de estudo), proteção de frames, respostas autenticadas sem cache; HSTS somente em produção por HTTPS |
 | `CsvWriter` | Neutraliza células iniciadas por fórmulas, incluindo espaços/controles; usado em relatórios financeiros, federativos e campeonatos |
 | `ProductionReadiness` / `CheckProduction` | Preflight sem imprimir valores de configuração; retorna falha se qualquer requisito técnico não passa |
 | `EmailDeliveryService` | Reserva atômica por entrega, revalida conta/preferências/endereço, retentativas e supressão; não envia conteúdo pessoal |

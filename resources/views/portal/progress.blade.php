@@ -37,6 +37,7 @@
 <small>{{ ! $snapshot['next_rank'] ? 'Última graduação' : ($snapshot['rows']->isEmpty() ? 'Currículo não definido' : ($missing ? $summary : 'Tudo no nível pedido')) }}</small></a>
 <a class="card portal-shortcut" href="{{ route('portal.progress.part', [$student, 'aulas', ...$modality]) }}"><span>{{ $parts['aulas'] }}</span><small>{{ $worked['sessions'] }} aula(s) em 90 dias</small></a>
 <a class="card portal-shortcut" href="{{ route('portal.progress.part', [$student, 'evolucao', ...$modality]) }}"><span>{{ $parts['evolucao'] }}</span><small>{{ $lastAssessment ? 'Última avaliação '.$lastAssessment->assessed_on->format('d/m') : 'Nenhuma avaliação' }}</small></a>
+<a class="card portal-shortcut" href="{{ route('portal.study', [$student, ...$modality]) }}"><span>Estudar</span><small>Vídeos e fichas das técnicas</small></a>
 </nav>
 @endif
 @include('portal.partials.tabbar', ['current' => 'mais'])

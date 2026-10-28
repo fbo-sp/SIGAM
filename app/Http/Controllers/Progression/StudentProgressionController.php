@@ -8,6 +8,7 @@ use App\Models\Student;
 use App\Services\Progression\AssessmentService;
 use App\Services\Progression\QuizService;
 use App\Services\Progression\StudentProgressService;
+use App\Services\Progression\TechniqueStudyService;
 use App\Support\Progression\AssessmentLevel;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -33,6 +34,7 @@ class StudentProgressionController extends Controller
             'history' => $assessments->history($student, $link->martialArt),
             'worked' => $progress->worked($association, $student, $link->martialArt, today()->subDays(90), today()),
             'levels' => AssessmentLevel::labels(),
+            'studied' => app(TechniqueStudyService::class)->studyCounts($student, $link->martialArt),
             'dojo' => null,
             'association' => $association,
             'canAssess' => false,

@@ -11,6 +11,7 @@ Entregue: catálogo de técnicas e currículo por graduação com modelo do jud�
 Em **Modalidades**, cada modalidade tem os botões **Técnicas** e **Currículo por graduação**.
 
 - `modalidades/{martialArt}/tecnicas`: árvore do catálogo em duas seções (Teórico e Prático). Cada grupo abre e fecha pela seta e mostra quantas técnicas tem abaixo, em todos os níveis; item inativo aparece riscado. No topo, filtro por nome (abre os ramos que combinam) e "Expandir tudo"/"Recolher tudo" (`public/js/technique-tree.js`; sem JavaScript a árvore funciona com `<details>`). O menu "⋯" de cada linha tem Editar, Inativar/Reativar e, nos grupos ativos, "Incluir aqui dentro" (`?dentro={grupo}`, abre o cadastro com o grupo escolhido). Com `curriculum.manage`: aplicar ou completar com o modelo, incluir grupo ou item, editar (mover de grupo, renomear, trocar tipo, descrição, link de vídeo, ordem), inativar e reativar.
+- Na edição de um item (não grupo), "Em português" e o bloco "Área de estudo do aluno": o que o professor avalia e passo a passo (uma linha por ponto, até 5), erro comum e ficha (JPG, PNG, WEBP ou PDF até 5 MB, guardada no disco privado e servida por `/tecnicas/{item}/ficha`). Esses campos aparecem no portal em "Estudar" (ver `portal.md`).
 - `modalidades/{martialArt}/curriculo?graduacao={rank}`: currículo efetivo da graduação escolhida. Cada linha mostra o nível exigido e a origem: "Novo nesta graduação", "Nível alterado nesta graduação" ou "Herdado de {faixa}". Com `curriculum.manage`: incluir ou alterar exigência, deixar de cobrar a partir da faixa e desfazer o ajuste da faixa.
 
 ### Acompanhamento do aluno (fase 2)
@@ -20,6 +21,7 @@ Em **Modalidades**, cada modalidade tem os botões **Técnicas** e **Currículo 
 - `operacao/dojos/{dojo}/aulas/{session}/avaliar`: "Avaliar técnicas desta aula", na chamada encerrada com técnicas marcadas, para o professor principal ou auxiliar da turma (`SessionAssessmentService`). Mostra, por técnica marcada (o grupo marcado conta para os itens abaixo dele), os alunos presentes que o professor avalia e que têm o item no currículo da próxima faixa; a data é a da aula.
 - Situação de cada item da próxima faixa (`StudentProgressService::snapshot`, só no detalhe): No nível; Precisa melhorar (última avaliação acima de Não iniciado e abaixo do pedido); Aguardando avaliação (treinado em aula com presença, sem avaliação depois); Ainda não treinado (sem treino desde a graduação atual, contada da última promoção registrada ou do início na modalidade). "O que falta" no portal agrupa por situação e grupo; o atalho mostra "N não treinado(s) · N a melhorar"; a ficha do professor mostra a situação em cada item.
 - Linha do tempo (`StudentProgressService::timeline`, portal em Evolução e ficha do professor): gráfico geral com a porcentagem do currículo da próxima faixa no nível pedido desde a graduação atual e, por item, os degraus de cada avaliação, a linha tracejada do pedido e os dias de treino em aula (`x-timeline-chart`, SVG sem bibliotecas).
+- Estudo em casa: na ficha do professor (dojo e associação), cada item que falta mostra "estudou em casa Nx, última em dd/mm" e o bloco "Estudo em casa" lista os 12 itens estudados mais recentes (`TechniqueStudyService::studyCounts`). O estudo não muda o nível do item.
 - `associacoes/{association}/alunos/{student}/acompanhamento`: a mesma consulta para a associação (`assessment.view`), com link na ficha do aluno. A associação não avalia.
 
 ### Técnicas da aula (fase 3)
@@ -68,13 +70,14 @@ Na tela da aula (`operacao/dojos/{dojo}/aulas/{session}`), o bloco "Técnicas tr
 - `StudentProgressService`: `martialArts`, `snapshot` (próxima graduação, linhas do currículo com nível atual, o que falta, requisitos e radar), `axes`, `worked`.
 - `SessionTechniqueService`: `canMark`, `marked`, `sync`, `workedByStudent`.
 - `QuizService`: `saveQuestion`, `setQuestionStatus`, `saveSettings`, `release`, `cancelRelease`, `openReleases`, `start`, `submit`, `attempts`, `summary`.
+- `TechniqueStudyService`: `catalog` (itens ativos com a situação do aluno, a primeira faixa que pede o item e os estudos), `filter`, `markStudied` (um por dia, idempotente), `studyCounts`, `firstRanks`, `storeSheet`, `removeSheet`.
 - `ProgressionPanelService`: `dojoClasses`, `panel`, `comparison`.
 - `NotificationGenerator::assessmentsDue`: lembrete `assessment.due`.
 - `TechniqueTemplateCatalog`: lê e valida `resources/data/technique-templates.json` (chaves obrigatórias, tipo no grupo principal, nomes únicos entre irmãos, caminhos e níveis do currículo).
 
 ## Auditoria
 
-`technique_item.saved`, `technique_item.status_changed`, `technique_template.applied`, `rank_curriculum.saved`, `rank_curriculum.restored`, `rank_curriculum.template_updated`, `rank_curriculum.template_removed`, `technique_assessment.recorded`, `class_session.techniques_saved`, `quiz_question.saved`, `quiz_question.status_changed`, `progression_settings.saved`, `quiz_release.created`, `quiz_release.cancelled`, `quiz_attempt.started` e `quiz_attempt.finished` (só a prova oficial; treino não é auditado).
+`technique_item.saved`, `technique_item.status_changed`, `technique_template.applied`, `rank_curriculum.saved`, `rank_curriculum.restored`, `rank_curriculum.template_updated`, `rank_curriculum.template_removed`, `technique_assessment.recorded`, `class_session.techniques_saved`, `quiz_question.saved`, `quiz_question.status_changed`, `progression_settings.saved`, `quiz_release.created`, `quiz_release.cancelled`, `quiz_attempt.started` e `quiz_attempt.finished` (só a prova oficial; treino não é auditado), `technique_item.sheet_saved`, `technique_item.sheet_removed` e `technique_study.logged`.
 
 ## Modelo do judô
 
@@ -85,6 +88,8 @@ Versão 2 (2026-10-25), revisada pelo responsável técnico: 55 itens novos enca
 ## Testes
 
 `TechniqueCatalogTest`: validade do modelo frente ao template de graduações, aplicação idempotente que preserva ajustes, atualização do currículo do modelo que mantém ajustes da associação, faixas ausentes, herança (novo, alterado, herdado, retirado, restaurado), item inativo, regras da árvore, isolamento entre associações e permissões.
+
+`StudyAreaTest`: conteúdo de estudo e ficha no catálogo (limites, tipo de arquivo, remoção), área de estudo no portal (filtros, busca, página da técnica, item fora do currículo, grupo e item de outra associação negados), um estudo por dia e o estudo em casa na ficha do professor.
 
 `SessionTechniquesTest`, `QuizTest`, `ProgressionPanelTest` e `AssessmentReminderTest`: ver `docs/TESTING.md`.
 
