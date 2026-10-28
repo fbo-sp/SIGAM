@@ -23,7 +23,7 @@
 @if(! $item->hasStudyContent())<div class="card empty-state"><p>A associação ainda não incluiu vídeo nem conteúdo de estudo para este item. Pergunte ao professor na próxima aula.</p></div>@endif
 </div>
 <aside class="study-side">
-<div class="card"><h2 class="study-label">Sua situação</h2>
+<div class="card study-situation"><h2 class="study-label">Sua situação</h2>
 @if($row)<dl class="study-status"><div><dt>Nível atual</dt><dd>{{ $levels[$row['current'] ?? 1] }}</dd></div><div><dt>Pedido em {{ $snapshot['next_rank']->display_name }}</dt><dd>{{ $levels[$row['level']] }}</dd></div><div><dt>Último treino em aula</dt><dd>{{ $row['trained_on']?->format('d/m/Y') ?? 'Ainda não' }}</dd></div><div><dt>Avaliações</dt><dd>{{ $assessments }}</dd></div></dl>
 @else<p class="form-help">Este item não está no currículo da sua próxima faixa. Estude à vontade: ele aparece {{ $entry['first_rank'] ? 'a partir de '.$entry['first_rank']->display_name : 'no catálogo da associação' }}.</p>@endif
 @if($entry['studied'])<p class="form-help">Você estudou {{ $entry['studied']['count'] }}x no portal, a última em {{ $entry['studied']['last']->format('d/m/Y') }}.</p>@endif
