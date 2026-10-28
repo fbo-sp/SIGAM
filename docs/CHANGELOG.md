@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-10-28 — Chamada SIM/NÃO
+
+- a chamada do dojo e da associação troca a lista de status por dois botões grandes por aluno, SIM (presente) e NÃO (ausente), pensados para o celular;
+- a lista começa em branco, com o contador "N de M marcados", o botão "Todos SIM" e uma faixa amarela em quem falta marcar; aluno em branco não é gravado e a chamada só finaliza com todos marcados;
+- falta justificada, reposição e experimental saem da chamada (decisão de Fabio); chamadas antigas mantêm o status gravado, inclusive quando a resposta é confirmada depois de reabrir; a importação de planilha não muda;
+- sem migration; `AttendanceYesNoTest` novo.
+
 ## 2026-10-28 — Fichas e textos próprios do JUDOMA no modelo do judô
 
 - o material de estudo do modelo do judô passa a ser próprio do JUDOMA: tradução, o que o professor avalia, erro comum e passo a passo de 195 itens foram escritos do zero, e as 195 fichas em imagem seguem o modelo aprovado por Fabio (faixa, desequilíbrio ou quadro de tempo, fases, pontos observados, cuidado, segurança e QR do vídeo);
