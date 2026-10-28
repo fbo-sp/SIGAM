@@ -10,6 +10,7 @@ use App\Models\ClassSessionVisitor;
 use App\Models\Dojo;
 use App\Models\DojoRoleAssignment;
 use App\Models\DojoTeacherAssignment;
+use App\Models\ProgressionSetting;
 use App\Models\TeacherAssociationMembership;
 use App\Models\TeacherProfile;
 use App\Services\Access\AccessAdministration;
@@ -109,11 +110,12 @@ class OperationalController extends Controller
         $inactive = $catalog->inactiveIds($catalogItems);
         $techniqueTree = collect($catalog->tree($catalogItems->reject(fn ($item) => isset($inactive[$item->id]))));
         $markedTechniques = $techniqueService->marked($session);
+        $allowGroupPick = ProgressionSetting::for($dojo->association_id)->allow_group_pick;
         $canMarkTechniques = $techniqueTree->isNotEmpty() && $techniqueService->canMark($request->user(), $dojo, $session);
 
         $assessUrl = app(SessionAssessmentService::class)->available($request->user(), $dojo, $session) ? route('operation.session.assess', [$dojo, $session]) : null;
 
-        return view('operation.session', compact('dojo', 'session', 'roster', 'records', 'canRecord', 'canReopen', 'canManageVisitors', 'enrollUrl', 'techniqueTree', 'markedTechniques', 'canMarkTechniques', 'assessUrl'));
+        return view('operation.session', compact('dojo', 'session', 'roster', 'records', 'canRecord', 'canReopen', 'canManageVisitors', 'enrollUrl', 'techniqueTree', 'markedTechniques', 'canMarkTechniques', 'assessUrl', 'allowGroupPick'));
     }
 
     public function addVisitor(SessionVisitorRequest $request, Dojo $dojo, ClassSession $session, SessionVisitorService $service)

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\ProgressionSetting;
 use App\Models\QuizAttempt;
 use App\Models\QuizAttemptAnswer;
 use App\Models\QuizQuestion;
@@ -52,7 +53,10 @@ class QuizTest extends TestCase
         $this->assertSame('Quem fundou o judô?', $question->fresh()->statement);
 
         $this->put(route('associations.progression.settings.update', $this->association), ['quiz_question_count' => 5, 'quiz_minimum_score' => 80, 'assessment_reminder_weeks' => 6])->assertSessionHasNoErrors();
-        $this->assertDatabaseHas('progression_settings', ['association_id' => $this->association->id, 'quiz_question_count' => 5, 'quiz_minimum_score' => 80]);
+        $this->assertDatabaseHas('progression_settings', ['association_id' => $this->association->id, 'quiz_question_count' => 5, 'quiz_minimum_score' => 80, 'allow_group_pick' => false]);
+        $this->put(route('associations.progression.settings.update', $this->association), ['quiz_question_count' => 5, 'quiz_minimum_score' => 80, 'assessment_reminder_weeks' => 6, 'allow_group_pick' => '1'])->assertSessionHasNoErrors();
+        $this->assertTrue(ProgressionSetting::for($this->association->id)->allow_group_pick);
+        $this->get(route('associations.progression.settings', $this->association))->assertOk()->assertSee('Permitir marcar o grupo inteiro');
 
         $this->actingAs($this->associationUser(['martial_art.view']))->get($url)->assertForbidden();
     }

@@ -2,9 +2,10 @@
 <ul class="tree {{ $root ?? false ? 'tree-root' : '' }}">
 @foreach($nodes as $node)@php($item = $node['item'])
 @if($mode === 'pick')
-<li class="tree-pick" data-tree-node data-name="{{ mb_strtolower($item->name.' '.$item->original_name) }}"><input type="checkbox" class="tree-check" name="techniques[]" value="{{ $item->id }}" id="tecnica-{{ $item->id }}" @checked(isset($marked[$item->id]))>
+@php($groupCheck = $item->kind !== 'group' || ($allowGroupPick ?? true) || isset($marked[$item->id]))
+<li class="tree-pick" data-tree-node data-name="{{ mb_strtolower($item->name.' '.$item->original_name) }}">@if($groupCheck)<input type="checkbox" class="tree-check" name="techniques[]" value="{{ $item->id }}" id="tecnica-{{ $item->id }}" @checked(isset($marked[$item->id]))>@else<span class="tree-check-spacer" aria-hidden="true"></span>@endif
 @if($item->kind === 'group')
-<details class="tree-group" @if(($markedCounts[$item->id] ?? 0) > 0 || ($root ?? false)) open @endif><summary><span class="tree-caret" aria-hidden="true"></span><label class="tree-label" for="tecnica-{{ $item->id }}" title="Marcar o grupo inteiro">{{ $item->name }}</label>@if(($markedCounts[$item->id] ?? 0) > 0)<span class="tree-count is-marked">{{ $markedCounts[$item->id] }} marcada(s)</span>@elseif($node['count'] > 0)<span class="tree-count">{{ $node['count'] }}</span>@endif</summary>
+<details class="tree-group" @if(($markedCounts[$item->id] ?? 0) > 0 || isset($marked[$item->id]) || ($root ?? false)) open @endif><summary><span class="tree-caret" aria-hidden="true"></span>@if($groupCheck)<label class="tree-label" for="tecnica-{{ $item->id }}" title="Marcar o grupo inteiro">{{ $item->name }}</label>@else<span class="tree-label">{{ $item->name }}</span>@endif @if(isset($marked[$item->id]) && ! ($allowGroupPick ?? true))<span class="tree-count is-marked">grupo inteiro</span>@endif @if(($markedCounts[$item->id] ?? 0) > 0)<span class="tree-count is-marked">{{ $markedCounts[$item->id] }} marcada(s)</span>@elseif($node['count'] > 0)<span class="tree-count">{{ $node['count'] }}</span>@endif</summary>
 @include('progression._tree', ['nodes' => $node['children'], 'root' => false])</details>
 @else
 <label class="tree-leaf" for="tecnica-{{ $item->id }}"><span class="tree-label">{{ $item->name }}</span></label>

@@ -24,7 +24,7 @@ Em **Modalidades**, cada modalidade tem os botões **Técnicas** e **Currículo 
 
 ### Técnicas da aula (fase 3)
 
-Na tela da aula (`operacao/dojos/{dojo}/aulas/{session}`), o bloco "Técnicas trabalhadas" usa a mesma árvore do catálogo (só itens ativos), com uma caixa de marcação em cada grupo e técnica: tocar no nome do grupo marca o grupo inteiro e a seta abre as técnicas dele. Os grupos principais e os que têm algo marcado já abrem, e o grupo mostra quantas técnicas estão marcadas dentro. Grava em `POST aulas/{session}/tecnicas`. Na ficha de acompanhamento, "Trabalhado nas aulas" mostra, nos últimos 90 dias, em quantas aulas com presença do aluno cada grupo foi trabalhado.
+Na tela da aula (`operacao/dojos/{dojo}/aulas/{session}`), o bloco "Técnicas trabalhadas" usa a mesma árvore do catálogo (só itens ativos), com uma caixa de marcação em cada técnica. Os grupos só ganham caixa quando a associação liga "Permitir marcar o grupo inteiro nas técnicas da aula" em Configurações do acompanhamento (`progression_settings.allow_group_pick`, desligado por padrão, decisão de Fabio em 28/10/2026); aí tocar no nome do grupo marca o grupo inteiro e a seta abre as técnicas dele. Desligada a opção, o servidor recusa grupo novo, mas o grupo já marcado numa aula continua valendo, aparece com a etiqueta "grupo inteiro" e pode ser desmarcado. Os grupos principais e os que têm algo marcado já abrem, e o grupo mostra quantas técnicas estão marcadas dentro. Grava em `POST aulas/{session}/tecnicas`. Na ficha de acompanhamento, "Trabalhado nas aulas" mostra, nos últimos 90 dias, em quantas aulas com presença do aluno cada grupo foi trabalhado.
 
 ### Quiz (fases 4 e 5)
 

@@ -85,7 +85,7 @@ class QuizBankController extends Controller
 
     public function saveSettings(ProgressionSettingsRequest $request, Association $association, QuizService $quiz): RedirectResponse
     {
-        $quiz->saveSettings($association, $request->validated(), $request->user());
+        $quiz->saveSettings($association, [...$request->validated(), 'allow_group_pick' => $request->boolean('allow_group_pick')], $request->user());
 
         return back()->with('status', 'Configurações do acompanhamento salvas.');
     }
