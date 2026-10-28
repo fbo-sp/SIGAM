@@ -143,7 +143,7 @@ class OperationalController extends Controller
         abort_unless($this->scope->sessions($request->user(), $dojo, 'attendance.manage')->whereKey($session->id)->exists(), 404);
         $data = $request->validate([
             'records' => ['required', 'array', 'min:1'], 'records.*.student_id' => ['required', 'integer', 'distinct'],
-            'records.*.status' => ['required', Rule::in(['present', 'absent', 'excused_absence', 'makeup', 'trial'])],
+            'records.*.status' => ['nullable', Rule::in(AttendanceService::RECORDABLE_STATUSES)],
             'close_attendance' => ['nullable', 'boolean'],
         ]);
         $service->save($dojo->association, $session, $request->user(), $data['records'], $request->boolean('close_attendance'));

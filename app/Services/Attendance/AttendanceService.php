@@ -14,6 +14,12 @@ use Illuminate\Validation\ValidationException;
 
 class AttendanceService
 {
+    /** A chamada grava só SIM (presente) ou NÃO (ausente); os demais status vêm de registros antigos e da importação. */
+    public const RECORDABLE_STATUSES = ['present', 'absent'];
+
+    /** Status antigos que equivalem a SIM ou NÃO e são mantidos quando o professor confirma a mesma resposta. */
+    private const EQUIVALENT_STATUSES = ['present' => ['makeup', 'trial'], 'absent' => ['excused_absence']];
+
     public function __construct(private readonly AuditService $audit, private readonly FutureSessionMaintainer $futureSessions) {}
 
     public function save(Association $association, ClassSession $session, User $user, array $records, bool $close): void
@@ -29,19 +35,25 @@ class AttendanceService
                 throw ValidationException::withMessages(['attendance' => 'Esta aula ainda não aconteceu. A chamada abre no dia '.$locked->session_date->format('d/m/Y').'.']);
             }
             $roster = $this->roster($locked)->keyBy(fn (array $row) => $row['student']->id);
+            $existing = $locked->records()->pluck('status', 'student_id');
             foreach ($records as $record) {
                 $row = $roster->get((int) $record['student_id']);
                 if ($row === null) {
                     throw ValidationException::withMessages(['attendance' => 'A lista contém um aluno sem matrícula ou visita autorizada nesta aula.']);
                 }
-                $locked->records()->updateOrCreate(['student_id' => $record['student_id']], ['participation_type' => $row['type'], 'status' => $record['status'], 'notes' => $record['notes'] ?? null, 'recorded_at' => now(), 'recorded_by_user_id' => $user->id]);
+                // Aluno em branco (nem SIM nem NÃO) não é gravado; a chamada só fecha com todos marcados.
+                if (blank($record['status'] ?? null)) {
+                    continue;
+                }
+                $status = in_array($existing->get($row['student']->id), self::EQUIVALENT_STATUSES[$record['status']] ?? [], true) ? $existing->get($row['student']->id) : $record['status'];
+                $locked->records()->updateOrCreate(['student_id' => $record['student_id']], ['participation_type' => $row['type'], 'status' => $status, 'notes' => $record['notes'] ?? null, 'recorded_at' => now(), 'recorded_by_user_id' => $user->id]);
             }
             if ($close) {
                 $expectedIds = $roster->keys()->map(fn ($id) => (int) $id)->all();
                 $recorded = $locked->records()->whereIn('student_id', $expectedIds)->pluck('student_id')->map(fn ($id) => (int) $id)->sort()->values()->all();
                 $expected = collect($expectedIds)->sort()->values()->all();
                 if ($recorded !== $expected) {
-                    throw ValidationException::withMessages(['attendance' => 'Marque a presença de todos os alunos antes de fechar a chamada.']);
+                    throw ValidationException::withMessages(['attendance' => 'Marque SIM ou NÃO para todos os alunos antes de finalizar a chamada.']);
                 }
                 $locked->visitors()->whereIn('status', ['authorized', 'attended', 'no_show'])->get()->each(function ($visitor) use ($locked): void {
                     $status = $locked->records()->where('student_id', $visitor->student_id)->value('status');
