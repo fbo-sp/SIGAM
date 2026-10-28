@@ -1,10 +1,11 @@
 # Changelog
 
-## 2026-10-28 — Explicação, cuidado e segurança na tela de estudo
+## 2026-10-28 — Explicação, cuidado e segurança na tela de estudo; Estudar do professor
 
 - a página da técnica do portal mostra, logo abaixo do nome, a explicação da técnica (campo "Descrição para estudo" do catálogo); "Erro comum" passa a se chamar "Cuidado" e um bloco verde "Segurança" vem logo abaixo; cada bloco só aparece quando está preenchido;
 - no catálogo, o campo passa a se chamar "Cuidado (erro comum)" e surge o campo "Segurança" (até 300 caracteres);
 - o modelo do judô traz a explicação e a segurança das 195 fichas próprias; reaplicar o modelo preenche só os campos vazios;
+- professores ganham "Estudar" no Mais (`/professor/estudar`), para apoio e consulta: todo o catálogo da associação com busca e filtro por faixa, a mesma página da técnica e, ao lado, o nível pedido em cada faixa do currículo; sem "Estudei" e sem dados de aluno;
 - 1 migration (`technique_items.safety_note`); `StudyAreaTest` e `TechniqueCatalogTest` ampliados.
 
 ## 2026-10-28 — Chamada SIM/NÃO

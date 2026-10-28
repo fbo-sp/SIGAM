@@ -102,4 +102,28 @@ class StudyAreaTest extends TestCase
         $this->actingAs($teacherUser)->get(route('operation.progression.show', [$this->dojo, $student]))->assertOk()
             ->assertSee('Estudo em casa')->assertSee('estudou em casa 2x');
     }
+
+    public function test_teacher_consults_the_study_material_without_a_student(): void
+    {
+        [$teacherUser] = $this->teacher('Professora Ana');
+        $ogoshi = $this->items['O-goshi'];
+        $ogoshi->update(['translation' => 'grande quadril', 'description' => 'O tori abraça a cintura do uke.', 'common_error' => 'não girar', 'safety_note' => 'Segure a manga.', 'key_points' => 'quadril encaixado', 'video_url' => 'https://youtu.be/abcdefghijk']);
+        $extra = $this->item('Uki-goshi', 'practical', $ogoshi->parent);
+
+        $index = route('teacher.study');
+        $this->actingAs($teacherUser)->get($index)->assertOk()->assertSee('O-goshi')->assertSee('Uki-goshi')->assertSee('Jigoro Kano')->assertSee('Faixa amarela');
+        $this->get(route('teacher.study', ['faixa' => $this->yellow->id]))->assertOk()->assertSee('O-goshi')->assertDontSee('Uki-goshi');
+        $this->get(route('teacher.study', ['q' => 'quadril']))->assertOk()->assertSee('O-goshi')->assertDontSee('Kesa-gatame');
+
+        $this->get(route('teacher.study.item', $ogoshi))->assertOk()->assertSee('grande quadril')->assertSee('O tori abraça a cintura do uke.')->assertSee('Cuidado')->assertSee('Segure a manga.')
+            ->assertSee('youtube-nocookie.com/embed/abcdefghijk', false)->assertSee('No currículo')->assertSee('Adequado')->assertSee('Uki-goshi')
+            ->assertDontSee('Estudei esta técnica')->assertDontSee('Sua situação');
+        $this->get(route('teacher.study.item', $extra))->assertOk()->assertSee('não é cobrado no currículo de nenhuma faixa');
+        $this->get(route('teacher.study.item', $ogoshi->parent))->assertNotFound();
+        $other = Association::query()->create(['legal_name' => 'Outra', 'trade_name' => 'Outra', 'status' => 'active']);
+        $foreign = TechniqueItem::query()->create(['association_id' => $other->id, 'martial_art_id' => $this->art->id, 'kind' => 'item', 'knowledge_type' => 'practical', 'name' => 'Alheio', 'status' => 'active']);
+        $this->get(route('teacher.study.item', $foreign))->assertNotFound();
+
+        $this->actingAs($this->portalUser($this->person('Aluno Sem Perfil')))->get($index)->assertForbidden();
+    }
 }

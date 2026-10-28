@@ -18,6 +18,7 @@ Este documento é um índice de manutenção. `routes/web.php`, `routes/console.
 | Grupo | Controllers | Escopo |
 |---|---|---|
 | `/dashboard` | `DashboardController` | visão derivada das permissões e vínculos da conta |
+| `/professor/estudar` (`modalidade`, `faixa`, `q`) e `/professor/estudar/{item}` | `TeacherStudyController`: consulta do material de estudo do catálogo | perfil de professor ativo; só modalidades e itens ativos da própria associação; sem escrita |
 | `/professor/turmas` e `/professor/alunos` (`busca`, `filtro=faltando\|prontos`) | `TeacherWorkspaceController`: turmas e alunos do professor | conta com a navegação do professor; só turmas em que é principal ou auxiliar vigente e dojos com concessão vigente |
 | `/associacoes/{association}/avisos` e `/operacao/dojos/{dojo}/avisos` (`/`, `/novo`, `POST /revisar`, `POST /`, `/{announcement}`) | `AnnouncementController`: lista, formulário, revisão com contagem, envio e detalhe com leituras | `announcement.send` revalidado em `AnnouncementService::level`; envio com chave única (`token`), limite de 10 por minuto |
 | `/notificacoes` | `NotificationController` | sempre `notifications.user_id` da conta |
