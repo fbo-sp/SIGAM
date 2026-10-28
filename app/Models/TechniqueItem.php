@@ -12,7 +12,7 @@ class TechniqueItem extends Model
 
     public const KNOWLEDGE_TYPES = ['theoretical', 'practical'];
 
-    protected $fillable = ['association_id', 'martial_art_id', 'parent_id', 'kind', 'knowledge_type', 'name', 'original_name', 'translation', 'description', 'key_points', 'common_error', 'steps', 'video_url', 'sheet_path', 'sheet_mime', 'sheet_name', 'sort_order', 'status'];
+    protected $fillable = ['association_id', 'martial_art_id', 'parent_id', 'kind', 'knowledge_type', 'name', 'original_name', 'translation', 'description', 'key_points', 'common_error', 'safety_note', 'steps', 'video_url', 'sheet_path', 'sheet_mime', 'sheet_name', 'sort_order', 'status'];
 
     public function martialArt(): BelongsTo
     {
@@ -57,7 +57,7 @@ class TechniqueItem extends Model
 
     public function hasStudyContent(): bool
     {
-        return $this->translation || $this->description || $this->key_points || $this->common_error || $this->steps || $this->video_url || $this->sheet_path;
+        return $this->translation || $this->description || $this->key_points || $this->common_error || $this->safety_note || $this->steps || $this->video_url || $this->sheet_path;
     }
 
     /** @return list<string> */

@@ -35,13 +35,14 @@ class StudyAreaTest extends TestCase
         $this->put($url, $base + ['sheet' => UploadedFile::fake()->create('ficha.exe', 10, 'application/x-msdownload')])->assertSessionHasErrors('sheet');
         $this->put($url, $base + [
             'translation' => 'grande quadril', 'video_url' => 'https://youtu.be/abcdefghijk',
-            'key_points' => "quadril encaixado\n\nbraço envolve a cintura", 'common_error' => 'ficar de frente sem girar',
+            'key_points' => "quadril encaixado\n\nbraço envolve a cintura", 'common_error' => 'ficar de frente sem girar', 'safety_note' => '  segure a manga  ',
             'steps' => "Prepare: puxe\nAjuste: gire\nControle: projete", 'sheet' => UploadedFile::fake()->image('o-goshi.png', 400, 600),
         ])->assertSessionHasNoErrors();
 
         $item->refresh();
         $this->assertSame(['quadril encaixado', 'braço envolve a cintura'], $item->keyPointList());
         $this->assertSame('https://www.youtube-nocookie.com/embed/abcdefghijk', $item->videoEmbedUrl());
+        $this->assertSame('segure a manga', $item->safety_note);
         $this->assertSame('image/png', $item->sheet_mime);
         Storage::disk('local')->assertExists($item->sheet_path);
         $this->get(route('techniques.sheet', $item))->assertOk()->assertHeader('Content-Type', 'image/png');
@@ -62,7 +63,7 @@ class StudyAreaTest extends TestCase
         $this->enroll($group, $student);
         $portal = $this->portalUser($student->person);
         $ogoshi = $this->items['O-goshi'];
-        $ogoshi->update(['translation' => 'grande quadril', 'video_url' => 'https://vimeo.com/123456789', 'key_points' => "quadril encaixado\nbraço na cintura", 'common_error' => 'não girar', 'steps' => "Prepare\nAjuste\nControle"]);
+        $ogoshi->update(['translation' => 'grande quadril', 'video_url' => 'https://vimeo.com/123456789', 'key_points' => "quadril encaixado\nbraço na cintura", 'common_error' => 'não girar', 'safety_note' => 'Segure a manga até o fim.', 'description' => 'O tori abraça a cintura do uke e projeta à frente.', 'steps' => "Prepare\nAjuste\nControle"]);
         TechniqueAssessment::query()->create(['association_id' => $this->association->id, 'student_id' => $student->id, 'martial_art_id' => $this->art->id, 'technique_item_id' => $ogoshi->id,
             'level' => 2, 'teacher_profile_id' => $teacher->id, 'assessed_by_user_id' => $teacherUser->id, 'assessed_on' => '2026-10-10', 'student_tip' => 'Gire mais o quadril.']);
         $extra = $this->item('Uki-goshi', 'practical', $ogoshi->parent);
@@ -77,11 +78,13 @@ class StudyAreaTest extends TestCase
         $show = route('portal.study.item', [$student, $ogoshi]);
         $this->get($show)->assertOk()->assertSee('grande quadril')->assertSee('A partir de Faixa amarela')->assertSee('Gire mais o quadril.')
             ->assertSee('https://player.vimeo.com/video/123456789', false)->assertSee('quadril encaixado')->assertSee('não girar')->assertSee('Estudei esta técnica')
+            ->assertSee('Cuidado')->assertSee('Segurança')->assertSee('Segure a manga até o fim.')->assertSee('O tori abraça a cintura do uke e projeta à frente.')
             ->assertDontSee('Abrir ficha da técnica');
         $ogoshi->update(['sheet_path' => 'technique-sheets/'.$this->association->id.'/o-goshi.jpg', 'sheet_mime' => 'image/jpeg', 'sheet_name' => 'o-goshi.jpg']);
         $this->get($show)->assertOk()->assertSee('Abrir ficha da técnica')->assertSee('href="'.route('techniques.sheet', $ogoshi).'"', false)
             ->assertDontSee('<img src="'.route('techniques.sheet', $ogoshi), false);
-        $this->get(route('portal.study.item', [$student, $extra]))->assertOk()->assertSee('não está no currículo da sua próxima faixa')->assertSee('ainda não incluiu vídeo');
+        $this->get(route('portal.study.item', [$student, $extra]))->assertOk()->assertSee('não está no currículo da sua próxima faixa')->assertSee('ainda não incluiu vídeo')
+            ->assertDontSee('class="card study-safety"', false)->assertDontSee('class="study-what"', false);
         $this->get(route('portal.study.item', [$student, $ogoshi->parent]))->assertNotFound();
 
         $this->post(route('portal.study.studied', [$student, $ogoshi]))->assertSessionHas('status', 'Estudo registrado. O professor vê na sua ficha de acompanhamento.');
