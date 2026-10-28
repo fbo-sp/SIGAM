@@ -9,10 +9,15 @@ use RuntimeException;
 /** Modelos de catálogo de técnicas e currículo mantidos em resources/data/technique-templates.json (ADR-014). */
 class TechniqueTemplateCatalog
 {
-    /** Campos de estudo que o modelo pode trazer em cada item; ao reaplicar, só preenchem o que está vazio. */
+    /**
+     * Campos de estudo que o modelo pode trazer em cada item; ao reaplicar, só preenchem o que está vazio
+     * ou o que ainda é material aposentado do modelo (technique-templates-retired.json).
+     */
     public const STUDY_FIELDS = ['translation', 'key_points', 'common_error', 'steps', 'video_url'];
 
     private ?array $templates = null;
+
+    private ?array $retired = null;
 
     public function all(): array
     {
@@ -39,6 +44,34 @@ class TechniqueTemplateCatalog
     public function sheetPath(string $key, string $sheet): string
     {
         return resource_path('data/technique-sheets/'.$key.'/'.$sheet);
+    }
+
+    /** O valor é igual a um texto de estudo que o modelo já trouxe e foi retirado (comparação por SHA-256). */
+    public function isRetiredValue(string $key, string $field, ?string $value): bool
+    {
+        if (blank($value)) {
+            return false;
+        }
+        $hash = hash('sha256', $field."\n".trim(str_replace("\r\n", "\n", $value)));
+
+        return in_array($hash, $this->retired()[$key]['values'] ?? [], true);
+    }
+
+    /** A ficha do item veio de uma versão anterior do modelo e foi retirada. */
+    public function isRetiredSheet(string $key, ?string $name): bool
+    {
+        return $name !== null && in_array($name, $this->retired()[$key]['sheets'] ?? [], true);
+    }
+
+    private function retired(): array
+    {
+        if ($this->retired !== null) {
+            return $this->retired;
+        }
+        $path = resource_path('data/technique-templates-retired.json');
+        $retired = is_file($path) ? json_decode(file_get_contents($path) ?: '', true) : [];
+
+        return $this->retired = is_array($retired) ? $retired : [];
     }
 
     public function find(?string $key): ?array

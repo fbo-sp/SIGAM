@@ -165,24 +165,32 @@ class TechniqueCatalogService
         }
 
         $written = [];
+        $replaced = [];
         try {
-            return $this->applyTemplateLocked($association, $martialArt, $key, $template, $actor, $updateCurriculum, $written);
+            $result = $this->applyTemplateLocked($association, $martialArt, $key, $template, $actor, $updateCurriculum, $written, $replaced);
         } catch (Throwable $exception) {
             Storage::disk('local')->delete($written);
 
             throw $exception;
         }
+        Storage::disk('local')->delete($replaced);
+
+        return $result;
     }
 
-    /** @param  list<string>  $written  fichas gravadas no disco, apagadas se a transação falhar */
-    private function applyTemplateLocked(Association $association, MartialArt $martialArt, string $key, array $template, User $actor, bool $updateCurriculum, array &$written): array
+    /**
+     * @param  list<string>  $written  fichas gravadas no disco, apagadas se a transação falhar
+     * @param  list<string>  $replaced  fichas aposentadas que foram trocadas, apagadas depois da transação
+     */
+    private function applyTemplateLocked(Association $association, MartialArt $martialArt, string $key, array $template, User $actor, bool $updateCurriculum, array &$written, array &$replaced): array
     {
-        return DB::transaction(function () use ($association, $martialArt, $key, $template, $actor, $updateCurriculum, &$written): array {
+        return DB::transaction(function () use ($association, $martialArt, $key, $template, $actor, $updateCurriculum, &$written, &$replaced): array {
             $items = TechniqueItem::query()->where('association_id', $association->id)->where('martial_art_id', $martialArt->id)->lockForUpdate()->get();
             $byPath = collect($this->paths($items))->flip()->map(fn (int $id) => $items->firstWhere('id', $id));
             $created = 0;
             $studied = 0;
-            $create = function (array $nodes, ?TechniqueItem $parent, string $prefix, ?string $knowledge) use (&$create, &$created, &$studied, &$written, $association, $martialArt, $byPath, $key): void {
+            $retiredReplaced = 0;
+            $create = function (array $nodes, ?TechniqueItem $parent, string $prefix, ?string $knowledge) use (&$create, &$created, &$studied, &$retiredReplaced, &$written, &$replaced, $association, $martialArt, $byPath, $key): void {
                 foreach (array_values($nodes) as $index => $node) {
                     $path = $prefix === '' ? $node['name'] : $prefix.' > '.$node['name'];
                     $nodeKnowledge = $knowledge ?? $node['knowledge'];
@@ -197,7 +205,9 @@ class TechniqueCatalogService
                         $byPath->put($path, $item);
                         $created++;
                     }
-                    $studied += $this->fillStudyContent($association, $item, $node, $key, $written) ? 1 : 0;
+                    $filled = $this->fillStudyContent($association, $item, $node, $key, $written, $replaced);
+                    $studied += $filled === null ? 0 : 1;
+                    $retiredReplaced += $filled === 'replaced' ? 1 : 0;
                     $create($node['children'] ?? [], $item, $path, $nodeKnowledge);
                 }
             };
@@ -242,12 +252,12 @@ class TechniqueCatalogService
                 $questions++;
             }
             $this->audit->record('technique_template.applied', 'created', $martialArt, null, [
-                'template_key' => $key, 'items_created' => $created, 'study_filled' => $studied, 'entries_created' => $entries, 'questions_created' => $questions, 'missing_ranks' => $missing,
+                'template_key' => $key, 'items_created' => $created, 'study_filled' => $studied, 'study_replaced' => $retiredReplaced, 'entries_created' => $entries, 'questions_created' => $questions, 'missing_ranks' => $missing,
                 'curriculum_updated' => $updateCurriculum, 'entries_updated' => $sync['updated'], 'entries_removed' => $sync['removed'], 'entries_kept' => $sync['kept'],
             ], ['association_id' => $association->id]);
 
             return [
-                'items_created' => $created, 'study_filled' => $studied, 'entries_created' => $entries, 'entries_updated' => $sync['updated'], 'entries_removed' => $sync['removed'],
+                'items_created' => $created, 'study_filled' => $studied, 'study_replaced' => $retiredReplaced, 'entries_created' => $entries, 'entries_updated' => $sync['updated'], 'entries_removed' => $sync['removed'],
                 'entries_kept' => $sync['kept'], 'questions_created' => $questions, 'missing_ranks' => $missing,
             ];
         });
@@ -255,34 +265,53 @@ class TechniqueCatalogService
 
     /**
      * Material de estudo do modelo: preenche só os campos vazios do item, para não sobrescrever o que a associação
-     * escreveu, e copia a ficha para o disco privado quando o item ainda não tem uma.
+     * escreveu, e copia a ficha quando o item ainda não tem uma. Campos e fichas que ainda são material aposentado
+     * de uma versão anterior do modelo também são trocados; a ficha antiga é apagada depois da transação.
      *
      * @param  list<string>  $written
+     * @param  list<string>  $replaced
+     * @return 'filled'|'replaced'|null
      */
-    private function fillStudyContent(Association $association, TechniqueItem $item, array $node, string $key, array &$written): bool
+    private function fillStudyContent(Association $association, TechniqueItem $item, array $node, string $key, array &$written, array &$replaced): ?string
     {
         if ($item->kind !== 'item') {
-            return false;
+            return null;
         }
         $changes = [];
+        $retired = false;
         foreach (TechniqueTemplateCatalog::STUDY_FIELDS as $field) {
-            if (filled($node[$field] ?? null) && blank($item->{$field})) {
+            if (! filled($node[$field] ?? null) || $item->{$field} === $node[$field]) {
+                continue;
+            }
+            if (blank($item->{$field})) {
                 $changes[$field] = $node[$field];
+            } elseif ($this->templates->isRetiredValue($key, $field, $item->{$field})) {
+                $changes[$field] = $node[$field];
+                $retired = true;
             }
         }
-        if (isset($node['sheet']) && $item->sheet_path === null) {
+        $retiredSheet = $item->sheet_path !== null && $this->templates->isRetiredSheet($key, $item->sheet_name);
+        if (isset($node['sheet']) && ($item->sheet_path === null || $retiredSheet)) {
             $extension = pathinfo($node['sheet'], PATHINFO_EXTENSION);
             $path = 'technique-sheets/'.$association->id.'/'.$item->id.'-'.Str::random(20).'.'.$extension;
             Storage::disk('local')->put($path, file_get_contents($this->templates->sheetPath($key, $node['sheet'])));
             $written[] = $path;
+            if ($retiredSheet) {
+                $replaced[] = $item->sheet_path;
+                $retired = true;
+            }
             $changes += ['sheet_path' => $path, 'sheet_mime' => array_search($extension, TechniqueStudyService::SHEET_MIMES, true), 'sheet_name' => $node['sheet']];
+        } elseif ($retiredSheet) {
+            $replaced[] = $item->sheet_path;
+            $retired = true;
+            $changes += ['sheet_path' => null, 'sheet_mime' => null, 'sheet_name' => null];
         }
         if ($changes === []) {
-            return false;
+            return null;
         }
         $item->update($changes);
 
-        return true;
+        return $retired ? 'replaced' : 'filled';
     }
 
     /**

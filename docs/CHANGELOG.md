@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-10-28 — Fichas e textos próprios do JUDOMA no modelo do judô
+
+- o material de estudo do modelo do judô passa a ser próprio do JUDOMA: tradução, o que o professor avalia, erro comum e passo a passo de 195 itens foram escritos do zero, e as 195 fichas em imagem seguem o modelo aprovado por Fabio (faixa, desequilíbrio ou quadro de tempo, fases, pontos observados, cuidado, segurança e QR do vídeo);
+- saem as 141 fichas e os textos de terceiros que a v0.1.33 trouxe; `resources/data/technique-templates-retired.json` guarda só o SHA-256 dos textos antigos e os nomes das fichas antigas;
+- reaplicar o modelo troca os campos e as fichas que ainda são esse material antigo e apaga a ficha antiga do disco; o que a associação escreveu ou enviou fica como está, e a mensagem informa quantos itens foram atualizados;
+- na página da técnica do portal, a ficha não aparece mais na tela: o botão "Abrir ficha da técnica" fica abaixo do nome, "Estudei esta técnica" vem logo depois do passo a passo, a coluna ao lado mostra "Sua situação" e "Veja também" no topo e, no celular, "Sua situação" é o primeiro bloco;
+- sem migration; `TechniqueCatalogTest` e `StudyAreaTest` ampliados.
+
 ## 2026-10-28 — Material de estudo no modelo do judô
 
 - o modelo do judô passa a trazer o material de estudo de 189 itens: tradução, o que o professor avalia, erro comum e passo a passo de 153 itens (fichas por faixa do material do responsável técnico, revisadas em planilha) e 150 vídeos dos canais oficiais do Kodokan e do Judo365 no YouTube;

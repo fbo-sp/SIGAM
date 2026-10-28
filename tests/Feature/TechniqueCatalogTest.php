@@ -81,14 +81,15 @@ class TechniqueCatalogTest extends TestCase
         $this->actingAs($this->manager)->post(route('associations.techniques.template', [$this->association, $this->judo]), ['template_key' => 'judo_kodokan_2026'])
             ->assertSessionHasNoErrors();
         $item = TechniqueItem::query()->where('name', 'De-ashi-harai')->whereNotNull('sheet_path')->firstOrFail();
-        $this->assertSame('Varredura do pé avançado', $item->translation);
+        $this->assertSame('Varrer o pé que avança', $item->translation);
+        $this->assertSame('judoma-de-ashi-harai.jpg', $item->sheet_name);
         $this->assertNotEmpty($item->keyPointList());
         $this->assertNotEmpty($item->stepList());
         $this->assertNotNull($item->common_error);
         $this->assertStringStartsWith('https://www.youtube-nocookie.com/embed/', (string) $item->videoEmbedUrl());
         $this->assertSame('image/jpeg', $item->sheet_mime);
         Storage::disk('local')->assertExists($item->sheet_path);
-        $this->assertGreaterThan(140, TechniqueItem::query()->whereNotNull('sheet_path')->count());
+        $this->assertSame(195, TechniqueItem::query()->whereNotNull('sheet_path')->count());
         $this->assertGreaterThan(140, TechniqueItem::query()->whereNotNull('video_url')->count());
 
         // O que a associação escreveu fica; o campo que ela esvaziou volta do modelo.
@@ -102,6 +103,31 @@ class TechniqueCatalogTest extends TestCase
         $this->assertNotNull($item->common_error);
         $this->assertSame($sheet, $item->sheet_path);
         $this->assertSame($files, count(Storage::disk('local')->allFiles('technique-sheets')));
+    }
+
+    public function test_reapplying_replaces_retired_study_material_from_older_template_versions(): void
+    {
+        $this->actingAs($this->manager)->post(route('associations.techniques.template', [$this->association, $this->judo]), ['template_key' => 'judo_kodokan_2026'])
+            ->assertSessionHasNoErrors();
+        $item = TechniqueItem::query()->where('name', 'De-ashi-harai')->firstOrFail();
+        $other = TechniqueItem::query()->where('name', 'O-goshi')->firstOrFail();
+
+        // Simula o que a v0.1.33 deixou: tradução e ficha de terceiros, retiradas do modelo.
+        $old = 'technique-sheets/'.$this->association->id.'/antiga.jpg';
+        Storage::disk('local')->put($old, 'ficha antiga');
+        Storage::disk('local')->delete($item->sheet_path);
+        $item->update(['translation' => 'Varredura do pé avançado', 'sheet_path' => $old, 'sheet_name' => 'fichas-faixa-amarela-p01.jpg']);
+        $other->update(['translation' => 'Texto da associação']);
+
+        $this->post(route('associations.techniques.template', [$this->association, $this->judo]), ['template_key' => 'judo_kodokan_2026'])
+            ->assertSessionHas('status', fn (string $message) => str_contains($message, '1 item(ns) receberam material de estudo, dos quais 1 tinham o material antigo do modelo e foram atualizados.'));
+        $item->refresh();
+        $this->assertSame('Varrer o pé que avança', $item->translation);
+        $this->assertSame('judoma-de-ashi-harai.jpg', $item->sheet_name);
+        Storage::disk('local')->assertExists($item->sheet_path);
+        Storage::disk('local')->assertMissing($old);
+        $this->assertSame('Texto da associação', $other->fresh()->translation);
+        $this->assertDatabaseHas('audit_logs', ['event_type' => 'technique_template.applied']);
     }
 
     public function test_reapplying_with_curriculum_update_aligns_untouched_template_entries_and_keeps_manual_ones(): void
