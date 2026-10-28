@@ -70,13 +70,37 @@ class TechniqueStudyService
     public function catalog(Association $association, Student $student, MartialArt $martialArt): array
     {
         $snapshot = $this->progress->snapshot($association, $student, $martialArt);
+        $curriculum = $snapshot['rows']->flatten(1)->keyBy(fn (array $row) => $row['item']->id);
+
+        return ['snapshot' => $snapshot, 'rows' => $this->rows($association, $martialArt, $curriculum, $this->studyCounts($student, $martialArt))];
+    }
+
+    /**
+     * Consulta do professor (decisão de Fabio em 28/10/2026): o mesmo catálogo, sem a situação de um aluno.
+     *
+     * @return Collection<int, array{item: TechniqueItem, path: string, group: string, row: null, first_rank: ?Rank, studied: null}>
+     */
+    public function reference(Association $association, MartialArt $martialArt): Collection
+    {
+        return $this->rows($association, $martialArt, collect(), []);
+    }
+
+    /** @return Collection<int, array{rank: Rank, level: ?int}> faixas cujo currículo pede (ou deixa de pedir) o item, em ordem */
+    public function curriculumFor(TechniqueItem $item): Collection
+    {
+        return RankCurriculumEntry::query()->where('association_id', $item->association_id)->where('technique_item_id', $item->id)
+            ->with('rank')->get()->filter(fn ($entry) => $entry->rank && $entry->rank->martial_art_id === $item->martial_art_id)
+            ->sortBy(fn ($entry) => $entry->rank->sort_order)->map(fn ($entry) => ['rank' => $entry->rank, 'level' => $entry->required_level])->values();
+    }
+
+    private function rows(Association $association, MartialArt $martialArt, Collection $curriculum, array $studied): Collection
+    {
         $items = $this->catalog->items($association, $martialArt);
         $inactive = $this->catalog->inactiveIds($items);
         $paths = $this->catalog->paths($items);
-        $curriculum = $snapshot['rows']->flatten(1)->keyBy(fn (array $row) => $row['item']->id);
         $firstRanks = $this->firstRanks($association, $martialArt);
-        $studied = $this->studyCounts($student, $martialArt);
-        $rows = $items->filter(fn (TechniqueItem $item) => $item->kind === 'item' && ! isset($inactive[$item->id]))
+
+        return $items->filter(fn (TechniqueItem $item) => $item->kind === 'item' && ! isset($inactive[$item->id]))
             ->map(fn (TechniqueItem $item) => [
                 'item' => $item,
                 'path' => $paths[$item->id],
@@ -86,8 +110,6 @@ class TechniqueStudyService
                 'studied' => $studied[$item->id] ?? null,
             ])
             ->sortBy(fn (array $row) => [$row['item']->knowledge_type === 'practical', $row['path']])->values();
-
-        return ['snapshot' => $snapshot, 'rows' => $rows];
     }
 
     /** Filtro da lista; "Para melhorar" também traz o item com dica do professor. */

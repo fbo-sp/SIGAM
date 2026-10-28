@@ -86,6 +86,8 @@ class TechniqueCatalogTest extends TestCase
         $this->assertNotEmpty($item->keyPointList());
         $this->assertNotEmpty($item->stepList());
         $this->assertNotNull($item->common_error);
+        $this->assertNotNull($item->safety_note);
+        $this->assertStringStartsWith('Rasteira', (string) $item->description);
         $this->assertStringStartsWith('https://www.youtube-nocookie.com/embed/', (string) $item->videoEmbedUrl());
         $this->assertSame('image/jpeg', $item->sheet_mime);
         Storage::disk('local')->assertExists($item->sheet_path);

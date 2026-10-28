@@ -16,6 +16,7 @@ use App\Http\Controllers\Auth\TeacherInvitationController;
 use App\Http\Controllers\Championship\ChampionshipController;
 use App\Http\Controllers\Classes\ClassGroupController;
 use App\Http\Controllers\Classes\DojoClassController;
+use App\Http\Controllers\Classes\TeacherStudyController;
 use App\Http\Controllers\Classes\TeacherWorkspaceController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Documents\DocumentController;
@@ -77,6 +78,8 @@ Route::middleware(['auth', 'active', 'association.context'])->group(function ():
     Route::get('/meus-dojos', [OperationalController::class, 'index'])->name('operation.index');
     Route::get('/professor/turmas', [TeacherWorkspaceController::class, 'classes'])->name('teacher.classes');
     Route::get('/professor/alunos', [TeacherWorkspaceController::class, 'students'])->name('teacher.students');
+    Route::get('/professor/estudar', [TeacherStudyController::class, 'index'])->name('teacher.study');
+    Route::get('/professor/estudar/{item}', [TeacherStudyController::class, 'show'])->whereNumber('item')->name('teacher.study.item');
     foreach (['/associacoes/{association}/avisos' => 'associations.announcements.', '/operacao/dojos/{dojo}/avisos' => 'operation.announcements.'] as $path => $name) {
         Route::prefix($path)->name($name)->controller(AnnouncementController::class)->group(function (): void {
             Route::get('/', 'index')->name('index');

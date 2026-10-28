@@ -152,7 +152,7 @@ Antes da produção, revisar retenção, backup/restore e os requisitos legais d
 
 ## Acompanhamento técnico
 
-`technique_items` guarda a árvore de técnicas por associação e modalidade (`parent_id` aponta para o grupo; `kind` é `group` ou `item`; `knowledge_type` é `theoretical` ou `practical`, herdado do grupo principal; `status` ativo ou inativo, sem exclusão física). O índice `technique_items_tree_index` cobre a leitura por associação, modalidade e grupo. Para a área de estudo do portal (migration `2026_10_28_000030`), o item tem `translation` (nome em português), `key_points` e `steps` (texto, uma linha por ponto ou passo, até 5), `common_error` e a ficha (`sheet_path` no disco privado, `sheet_mime`, `sheet_name`).
+`technique_items` guarda a árvore de técnicas por associação e modalidade (`parent_id` aponta para o grupo; `kind` é `group` ou `item`; `knowledge_type` é `theoretical` ou `practical`, herdado do grupo principal; `status` ativo ou inativo, sem exclusão física). O índice `technique_items_tree_index` cobre a leitura por associação, modalidade e grupo. Para a área de estudo do portal (migration `2026_10_28_000030`), o item tem `translation` (nome em português), `key_points` e `steps` (texto, uma linha por ponto ou passo, até 5), `common_error`, `safety_note` (até 300 caracteres, migration `2026_10_28_000031`) e a ficha (`sheet_path` no disco privado, `sheet_mime`, `sheet_name`).
 
 `technique_study_logs` guarda o "Estudei esta técnica" do portal: associação, aluno, item, usuário e `studied_on`, único por `(student_id, technique_item_id, studied_on)` (um estudo por dia). Só de inclusão.
 

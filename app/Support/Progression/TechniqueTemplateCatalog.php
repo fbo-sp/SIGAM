@@ -11,9 +11,10 @@ class TechniqueTemplateCatalog
 {
     /**
      * Campos de estudo que o modelo pode trazer em cada item; ao reaplicar, só preenchem o que está vazio
-     * ou o que ainda é material aposentado do modelo (technique-templates-retired.json).
+     * ou o que ainda é material aposentado do modelo (technique-templates-retired.json). A descrição ("O que é")
+     * também é preenchida nos itens vazios, mas fica fora desta lista porque grupos do modelo também a usam.
      */
-    public const STUDY_FIELDS = ['translation', 'key_points', 'common_error', 'steps', 'video_url'];
+    public const STUDY_FIELDS = ['translation', 'key_points', 'common_error', 'safety_note', 'steps', 'video_url'];
 
     private ?array $templates = null;
 

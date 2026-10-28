@@ -120,7 +120,7 @@ class TechniqueCatalogService
                 'parent_id' => $parent?->id, 'kind' => $data['kind'], 'knowledge_type' => $knowledge, 'name' => $name,
                 'original_name' => $data['original_name'] ?? null, 'description' => $data['description'] ?? null,
                 'translation' => $data['translation'] ?? null, 'key_points' => $data['key_points'] ?? null,
-                'common_error' => $data['common_error'] ?? null, 'steps' => $data['steps'] ?? null,
+                'common_error' => $data['common_error'] ?? null, 'safety_note' => $data['safety_note'] ?? null, 'steps' => $data['steps'] ?? null,
                 'video_url' => $data['video_url'] ?? null, 'sort_order' => (int) ($data['sort_order'] ?? 0),
             ])->save();
             if ($before !== null && $before['knowledge_type'] !== $knowledge) {
@@ -279,7 +279,7 @@ class TechniqueCatalogService
         }
         $changes = [];
         $retired = false;
-        foreach (TechniqueTemplateCatalog::STUDY_FIELDS as $field) {
+        foreach ([...TechniqueTemplateCatalog::STUDY_FIELDS, 'description'] as $field) {
             if (! filled($node[$field] ?? null) || $item->{$field} === $node[$field]) {
                 continue;
             }

@@ -64,7 +64,7 @@ class TeacherViewTest extends TestCase
         $this->assertSame('high', CurriculumCoverageService::tone(70));
 
         $this->actingAs($anaUser)->get(route('dashboard'))->assertOk()->assertSee('Aulas de hoje')->assertSee('Próximos dias')
-            ->assertSee(route('teacher.classes'), false)->assertSee(route('teacher.students'), false)->assertDontSee('chamada(s) aberta(s)');
+            ->assertSee(route('teacher.classes'), false)->assertSee(route('teacher.students'), false)->assertSee(route('teacher.study'), false)->assertDontSee('chamada(s) aberta(s)');
         $this->get(route('teacher.classes'))->assertOk()->assertSee('← Início')->assertSee(route('operation.classes.show', [$this->dojo, $group]), false)
             ->assertSee('2 aluno(s) · principal')->assertSee(route('operation.classes.coverage', [$this->dojo, $group]), false)->assertSee('20%');
         $this->get(route('teacher.students'))->assertOk()->assertSee('← Início')->assertSee('A-1')->assertSee('A-2')->assertSee('href="tel:11955554444"', false)
