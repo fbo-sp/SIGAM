@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-10-28 — Material de estudo no modelo do judô
+
+- o modelo do judô passa a trazer o material de estudo de 189 itens: tradução, o que o professor avalia, erro comum e passo a passo de 153 itens (fichas por faixa do material do responsável técnico, revisadas em planilha) e 150 vídeos dos canais oficiais do Kodokan e do Judo365 no YouTube;
+- 141 fichas em imagem ficam em `resources/data/technique-sheets/judo_kodokan_2026/` e são copiadas para o disco privado ao aplicar o modelo;
+- aplicar ou reaplicar o modelo preenche só os campos de estudo vazios e só copia a ficha quando o item ainda não tem uma; o que a associação escreveu fica como está, e a mensagem informa quantos itens receberam material;
+- na página da técnica do portal, um link "Abrir o vídeo no YouTube" aparece abaixo do vídeo, para os vídeos que o canal não deixa exibir embutidos;
+- sem migration; `TechniqueCatalogTest` ampliado.
+
 ## 2026-10-28 — Área de estudo do aluno no portal
 
 - nova aba e atalho "Estudar" no portal (`portal/alunos/{student}/estudar`) com todo o catálogo ativo da modalidade, busca e filtros Para melhorar, Próxima faixa, Já aprendidas e Todo o catálogo; começa em "Para melhorar" quando o professor pediu atenção em algum item;

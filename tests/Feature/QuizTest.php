@@ -14,6 +14,7 @@ use App\Models\User;
 use App\Support\Progression\AssessmentLevel;
 use App\Support\Progression\TechniqueTemplateCatalog;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Storage;
 use Tests\Feature\Concerns\BuildsProgressionContext;
 use Tests\TestCase;
 
@@ -24,6 +25,7 @@ class QuizTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        Storage::fake('local');
         $this->setUpProgression();
     }
 

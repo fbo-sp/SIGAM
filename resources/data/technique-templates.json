@@ -151,15 +151,31 @@
             "children": [
               {
                 "name": "Ritsu-rei (em pé)",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Saudação em pé e ajoelhado",
+                "key_points": "Tronco: incline o tronco cerca de 30°, mantendo as costas retas.\nMãos: mantenha as mãos nas coxas, com os dedos juntos.\nPés: calcanhares juntos, pontas dos pés levemente abertas.\nPostura: a partir do seiza, incline o tronco à frente, mantendo as costas retas.\nMãos: apoie as mãos no tatame, formando um triângulo com os polegares e indicadores.",
+                "common_error": "Curvar só a cabeça, sem o tronco.",
+                "steps": "Prepare: Ritsurei: incline o tronco cerca de 30°, mantendo as mãos nas coxas.\nAjuste: Zarei: parta do seiza, ajoelhado, e leve as mãos ao tatame para saudar.\nControle: O olhar acompanha a inclinação, sem levantar a cabeça.",
+                "video_url": "https://www.youtube.com/watch?v=BBZG9N4cW0U",
+                "sheet": "fichas-faixa-azul-p05.jpg"
               },
               {
                 "name": "Za-rei (sentado)",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Saudação em pé e ajoelhado",
+                "key_points": "Tronco: incline o tronco cerca de 30°, mantendo as costas retas.\nMãos: mantenha as mãos nas coxas, com os dedos juntos.\nPés: calcanhares juntos, pontas dos pés levemente abertas.\nPostura: a partir do seiza, incline o tronco à frente, mantendo as costas retas.\nMãos: apoie as mãos no tatame, formando um triângulo com os polegares e indicadores.",
+                "common_error": "Curvar só a cabeça, sem o tronco.",
+                "steps": "Prepare: Ritsurei: incline o tronco cerca de 30°, mantendo as mãos nas coxas.\nAjuste: Zarei: parta do seiza, ajoelhado, e leve as mãos ao tatame para saudar.\nControle: O olhar acompanha a inclinação, sem levantar a cabeça.",
+                "video_url": "https://www.youtube.com/watch?v=BBZG9N4cW0U",
+                "sheet": "fichas-faixa-azul-p05.jpg"
               },
               {
                 "name": "Amarrar a faixa (obi)",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Nó reto, firme e bem alinhado",
+                "common_error": "Torcer a faixa ou deixar as pontas desiguais.",
+                "steps": "Envolva: Centralize a faixa e dê duas voltas na cintura, sem torcer.\nPasse por baixo: Cruze as pontas e passe uma delas sob as duas voltas, de baixo para cima.\nFeche o nó: Cruze no sentido oposto, passe pela abertura e puxe as pontas para os lados.",
+                "sheet": "fichas-faixa-azul-p08.jpg"
               }
             ]
           },
@@ -169,11 +185,23 @@
             "children": [
               {
                 "name": "Shizen-hontai",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Shizen-hontai, migi/hidari shizentai; jigo-hontai, migi/hidari jigotai",
+                "key_points": "Postura ereta: coluna alinhada, olhar à frente.\nMãos à frente: mantenha as mãos em posição de prontidão.\nBase estável: joelhos flexionados e peso bem distribuído.",
+                "common_error": "Confundir a postura defensiva com a natural.",
+                "steps": "Prepare: Natural: pés na largura dos ombros, joelhos soltos.\nAjuste: Natural à direita/esquerda: um pé à frente.\nControle: Defensiva (jigotai): base mais larga e baixa.",
+                "video_url": "https://www.youtube.com/watch?v=BBZG9N4cW0U",
+                "sheet": "fichas-faixa-amarela-p01.jpg"
               },
               {
                 "name": "Jigo-hontai",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Shizen-hontai, migi/hidari shizentai; jigo-hontai, migi/hidari jigotai",
+                "key_points": "Postura ereta: coluna alinhada, olhar à frente.\nMãos à frente: mantenha as mãos em posição de prontidão.\nBase estável: joelhos flexionados e peso bem distribuído.",
+                "common_error": "Confundir a postura defensiva com a natural.",
+                "steps": "Prepare: Natural: pés na largura dos ombros, joelhos soltos.\nAjuste: Natural à direita/esquerda: um pé à frente.\nControle: Defensiva (jigotai): base mais larga e baixa.",
+                "video_url": "https://www.youtube.com/watch?v=BBZG9N4cW0U",
+                "sheet": "fichas-faixa-amarela-p01.jpg"
               }
             ]
           },
@@ -183,7 +211,12 @@
             "children": [
               {
                 "name": "Pegada básica (gola e manga)",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Formas de pegar o judogi",
+                "key_points": "Pegada na gola: uma mão segura a gola na altura da clavícula.\nPegada na manga: a outra mão segura o tecido da manga do uke.\nCotovelo baixo: controle a manga sem enrijecer os braços.",
+                "common_error": "Manter os braços rígidos e perder a mobilidade da pegada.",
+                "steps": "Prepare: Estabeleça uma pegada na gola e outra na manga.\nAjuste: Adapte a pegada à postura e à técnica escolhida.\nControle: Mantenha os braços flexíveis e acompanhe o movimento.",
+                "sheet": "fichas-faixa-azul-p06.jpg"
               }
             ]
           },
@@ -193,11 +226,23 @@
             "children": [
               {
                 "name": "Ayumi-ashi",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Ayumi-ashi e tsugi-ashi",
+                "key_points": "Postura: mantenha a base estável e o tronco ereto.\nPegada firme: mantenha as pegadas durante o deslocamento.\nDeslocamento: mova-se de forma contínua, leve e no equilíbrio.",
+                "common_error": "Cruzar lateralmente os pés ou aproximá-los demais.",
+                "steps": "Ayumi-ashi: Alterne os passos: um pé avança e ultrapassa o outro.\nTsugi-ashi: Um pé avança e o outro acompanha, sem ultrapassá-lo.\nControle: Deslize os pés perto do tatame e preserve a base.",
+                "video_url": "https://www.youtube.com/watch?v=zbBtzBd9Eg4",
+                "sheet": "fichas-faixa-amarela-p02.jpg"
               },
               {
                 "name": "Tsugi-ashi",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Ayumi-ashi e tsugi-ashi",
+                "key_points": "Postura: mantenha a base estável e o tronco ereto.\nPegada firme: mantenha as pegadas durante o deslocamento.\nDeslocamento: mova-se de forma contínua, leve e no equilíbrio.",
+                "common_error": "Cruzar lateralmente os pés ou aproximá-los demais.",
+                "steps": "Ayumi-ashi: Alterne os passos: um pé avança e ultrapassa o outro.\nTsugi-ashi: Um pé avança e o outro acompanha, sem ultrapassá-lo.\nControle: Deslize os pés perto do tatame e preserve a base.",
+                "video_url": "https://www.youtube.com/watch?v=zbBtzBd9Eg4",
+                "sheet": "fichas-faixa-amarela-p02.jpg"
               }
             ]
           },
@@ -207,15 +252,32 @@
             "children": [
               {
                 "name": "Mae-sabaki",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Esquivas, movimentos rotatórios do corpo",
+                "key_points": "Olhar e intenção: direcione o olhar para onde vai se mover.\nTronco integrado: reposicione os pés e gire o corpo de forma coordenada.\nBase estável: ajuste os apoios durante o giro e mantenha o equilíbrio.",
+                "common_error": "Torcer o tronco sem reposicionar os pés.",
+                "steps": "Mae-sabaki: Deslocamento e giro para a frente.\nUshiro-sabaki: Deslocamento e giro para trás.\nMae-mawari-sabaki: Entrada com meia-volta, cerca de 180°, para ficar de costas ao uke.",
+                "video_url": "https://www.youtube.com/watch?v=zbBtzBd9Eg4",
+                "sheet": "fichas-faixa-laranja-p01.jpg"
               },
               {
                 "name": "Ushiro-sabaki",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Esquivas, movimentos rotatórios do corpo",
+                "key_points": "Olhar e intenção: direcione o olhar para onde vai se mover.\nTronco integrado: reposicione os pés e gire o corpo de forma coordenada.\nBase estável: ajuste os apoios durante o giro e mantenha o equilíbrio.",
+                "common_error": "Torcer o tronco sem reposicionar os pés.",
+                "steps": "Mae-sabaki: Deslocamento e giro para a frente.\nUshiro-sabaki: Deslocamento e giro para trás.\nMae-mawari-sabaki: Entrada com meia-volta, cerca de 180°, para ficar de costas ao uke.",
+                "video_url": "https://www.youtube.com/watch?v=zbBtzBd9Eg4",
+                "sheet": "fichas-faixa-laranja-p01.jpg"
               },
               {
                 "name": "Fusegi em pé (defesas em tachi-waza)",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Defesas de técnicas em tachi-waza",
+                "key_points": "Afasta o pé: abaixa o quadril e afasta o pé atacado, bloqueando a entrada da técnica.\nTronco ereto: mantém a pegada no judogi e o tronco ereto, sem se curvar à frente.\nSem a mão na perna: realiza a defesa sem usar a mão na perna do adversário.",
+                "common_error": "Defender curvando o tronco à frente.",
+                "steps": "Prepare: Abaixa o quadril e afasta o pé atacado.\nAjuste: Mantém a pegada e o tronco ereto.\nControle: Sem usar a mão na perna.",
+                "sheet": "fichas-faixa-laranja-p04.jpg"
               }
             ]
           },
@@ -225,11 +287,22 @@
             "children": [
               {
                 "name": "Happo-no-kuzushi",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Formas de desequilíbrio",
+                "key_points": "Quebra do equilíbrio: puxa ou empurra no momento certo para tirar o uke do eixo.\nDireção do movimento: leva o uke para a direção desejada com as mãos e o corpo.\nCorpo e pegadas coordenados: usa o corpo e as pegadas em harmonia para ampliar o desequilíbrio.",
+                "common_error": "Tentar projetar enquanto o uke mantém a base estável.",
+                "steps": "Prepare: Estabeleça as pegadas e perceba a base do uke.\nAjuste: Combine mãos e deslocamento para quebrar o equilíbrio.\nControle: Entre na técnica aproveitando a reação do uke.",
+                "sheet": "fichas-faixa-azul-p07.jpg"
               },
               {
                 "name": "Kuzushi, tsukuri e kake (fases da técnica)",
-                "kind": "item"
+                "kind": "item",
+                "translation": "As três fases da técnica",
+                "key_points": "Kuzushi: desequilibre o uke com as pegadas, direção e ação do corpo. Crie uma reação.\nTsukuri: aproxime-se, entre e posicione o corpo corretamente para a técnica.\nKake: execute a técnica, mantendo o controle até o final.",
+                "common_error": "Executar (kake) sem preparar (tsukuri).",
+                "steps": "Prepare: Kuzushi: desequilíbrio.\nAjuste: Tsukuri: preparação, a entrada.\nControle: Kake: a execução final.",
+                "video_url": "https://www.youtube.com/watch?v=FT3kgec9JEM",
+                "sheet": "fichas-faixa-laranja-p03.jpg"
               }
             ]
           },
@@ -239,19 +312,43 @@
             "children": [
               {
                 "name": "Ushiro-ukemi",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Queda para trás",
+                "key_points": "Queixo encolhido: mantenha o queixo no peito e olhe para o nó da faixa.\nPernas flexionadas: mantenha os joelhos flexionados e os pés ligeiramente afastados e elevados do tatame.\nBraços a 45°: bata os braços no tatame com as palmas das mãos para baixo, formando aproximadamente 45° com o tronco.",
+                "common_error": "Bater a cabeça por não encolher o queixo.",
+                "steps": "Prepare: Queixo no peito, olhar no nó da faixa.\nAjuste: Braços batem no tatame a 45°.\nControle: Não apoiar as mãos nem os cotovelos.",
+                "video_url": "https://www.youtube.com/watch?v=VoktcQAxEPg",
+                "sheet": "fichas-faixa-azul-p01.jpg"
               },
               {
                 "name": "Yoko-ukemi",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Queda lateral",
+                "key_points": "Protege a cabeça: mantenha a cabeça e o queixo afastados do tatame.\nAmortece a queda: braço estendido com a palma da mão no tatame, em ângulo de 30 a 45°.\nEstabiliza o corpo: perna de cima flexionada, pé apoiado no tatame.",
+                "common_error": "Cair de costas em vez de lado.",
+                "steps": "Prepare: Cai de lado com o braço estendido batendo no tatame.\nAjuste: Perna de cima flexionada, pé apoiado.\nControle: Executa deitado, agachado e em pé.",
+                "video_url": "https://www.youtube.com/watch?v=VoktcQAxEPg",
+                "sheet": "fichas-faixa-azul-p02.jpg"
               },
               {
                 "name": "Mae-ukemi",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Queda para a frente",
+                "key_points": "Contatos no tatame: antebraços e palmas das mãos no tatame, com os cotovelos flexionados.\nCabeça protegida: mantenha o queixo levemente recolhido e olhe para a frente. Não encoste o rosto no tatame.\nCorpo alinhado: mantenha o corpo em linha reta, com o abdômen firme e os joelhos próximos ao tatame.",
+                "common_error": "Cair com as mãos estendidas e travar os cotovelos.",
+                "steps": "Prepare: Antebraços e palmas amortecem juntos, com cotovelos flexionados.\nAjuste: Proteja o rosto e mantenha o corpo alinhado.\nControle: Não receba a queda com braços esticados e cotovelos travados.",
+                "video_url": "https://www.youtube.com/watch?v=VoktcQAxEPg",
+                "sheet": "fichas-faixa-azul-p04.jpg"
               },
               {
                 "name": "Zenpo-kaiten-ukemi",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Rolamento para frente",
+                "key_points": "Entrada: prepare o apoio e recolha o queixo.\nRolamento: role em diagonal pelo ombro e pelas costas, mantendo a cabeça protegida.\nFinalização: termine em yoko-ukemi, com o braço amortecendo e pernas sem cruzar.",
+                "common_error": "Apoiar a cabeça no tatame durante o rolamento.",
+                "steps": "Prepare: Mantenha o queixo recolhido.\nAjuste: Passe pelo ombro, nunca pelo topo da cabeça.\nControle: Termine com base e braços organizados.",
+                "video_url": "https://www.youtube.com/watch?v=VoktcQAxEPg",
+                "sheet": "fichas-faixa-azul-p03.jpg"
               }
             ]
           }
@@ -272,51 +369,93 @@
                 "children": [
                   {
                     "name": "Ippon-seoi-nage",
-                    "kind": "item"
+                    "kind": "item",
+                    "translation": "Projeção sobre o ombro",
+                    "key_points": "Controle da manga\nCotovelo sob a axila\nContato das costas",
+                    "common_error": "Entrar deixando espaço entre suas costas e o uke.",
+                    "steps": "Desequilibre: Tracione a manga e conduza o uke à frente.\nEntre: Gire, flexione os joelhos e encaixe o cotovelo sob a axila.\nProjete: Mantenha contato das costas e conduza sobre o ombro.",
+                    "video_url": "https://www.youtube.com/watch?v=FQnOlCxo4oI",
+                    "sheet": "fichas-faixa-azul-p12.jpg"
                   },
                   {
                     "name": "Seoi-otoshi",
-                    "kind": "item"
+                    "kind": "item",
+                    "video_url": "https://www.youtube.com/watch?v=vu1TMVNnq34"
                   },
                   {
                     "name": "Tai-otoshi",
-                    "kind": "item"
+                    "kind": "item",
+                    "translation": "Queda do corpo",
+                    "key_points": "Desequilíbrio à frente\nPerna à frente da base\nTração pelas mãos",
+                    "common_error": "Carregar o uke no quadril em vez de conduzir com as mãos.",
+                    "steps": "Desequilibre: Conduza o uke à diagonal anterior.\nGire: Saia da linha do uke e coloque a perna à frente de sua base.\nProjete: Continue a tração com as mãos, sem carregar no quadril.",
+                    "video_url": "https://www.youtube.com/watch?v=4x6S3Q-Ktv8",
+                    "sheet": "fichas-faixa-laranja-p11.jpg"
                   },
                   {
                     "name": "Kata-guruma",
-                    "kind": "item"
+                    "kind": "item",
+                    "translation": "Roda de ombros",
+                    "key_points": "Controle da manga.\nApoio da coxa.\nBase estável.",
+                    "common_error": "Segurar dois punhos e perder o apoio da coxa.",
+                    "steps": "Desequilibre: Conduza o uke para a frente e mantenha o controle da manga.\nCarregue: Passe o braço por dentro da coxa e apoie o uke nos ombros.\nConduza: Eleve com as pernas e projete em roda, controlando a descida.",
+                    "video_url": "https://www.youtube.com/watch?v=cnHRhSy8yi4",
+                    "sheet": "fichas-faixa-verde-p08.jpg"
                   },
                   {
                     "name": "Sukui-nage",
-                    "kind": "item"
+                    "kind": "item",
+                    "translation": "Projeção em concha",
+                    "key_points": "Entrada lateral\nControle das coxas\nElevação próxima",
+                    "common_error": "Tentar erguer o uke mantendo o corpo distante.",
+                    "steps": "Aproxime: Posicione-se ao lado do uke com uma base estável.\nRecolha: Na forma clássica, envolva as coxas com as mãos.\nProjete: Eleve em concha e conduza o uke para trás.",
+                    "video_url": "https://www.youtube.com/watch?v=vU6aJ2kFxoI",
+                    "sheet": "fichas-faixa-roxa-p04.jpg"
                   },
                   {
                     "name": "Uki-otoshi",
-                    "kind": "item"
+                    "kind": "item",
+                    "translation": "Queda flutuante",
+                    "key_points": "Desequilíbrio na diagonal: conduza o uke para a diagonal à frente, conforme o lado da execução.\nMãos conduzem em arco: puxe as duas mãos para baixo, em movimento circular.\nBase baixa e estável: reduza sua altura mantendo uma base estável.",
+                    "common_error": "Puxar só com os braços antes de quebrar o equilíbrio.",
+                    "steps": "Conduza: Conduza o uke para a diagonal à frente, conforme o lado da execução.\nAbaixe: Reduza sua altura mantendo uma base estável.\nFinalize: Puxe com as duas mãos para baixo, em movimento circular.",
+                    "video_url": "https://www.youtube.com/watch?v=6H5tmncOY4Q",
+                    "sheet": "fichas-faixa-roxa-p08.jpg"
                   },
                   {
                     "name": "Sumi-otoshi",
-                    "kind": "item"
+                    "kind": "item",
+                    "translation": "Queda pelo canto",
+                    "key_points": "Passo externo: avance por fora do pé direito.\nMãos coordenadas: conduza o tronco do uke.\nCanto posterior: projeção na diagonal para trás.",
+                    "common_error": "Tentar derrubar só com os braços, sem deslocar o corpo.",
+                    "steps": "Posicione: Dê um passo por fora do pé direito do uke.\nDesequilibre: Combine o deslocamento do corpo com a ação das duas mãos.\nProjete: Conduza o uke para a diagonal posterior direita, sem ceifar.",
+                    "video_url": "https://www.youtube.com/watch?v=lLU9wv52ni0",
+                    "sheet": "fichas-faixa-marrom-p07.jpg"
                   },
                   {
                     "name": "Obi-otoshi",
-                    "kind": "item"
+                    "kind": "item",
+                    "video_url": "https://www.youtube.com/watch?v=ff8U2TVZIYI"
                   },
                   {
                     "name": "Yama-arashi",
-                    "kind": "item"
+                    "kind": "item",
+                    "video_url": "https://www.youtube.com/watch?v=MGlyKmSuzdc"
                   },
                   {
                     "name": "Morote-gari",
-                    "kind": "item"
+                    "kind": "item",
+                    "video_url": "https://www.youtube.com/watch?v=BHLQS4K85bs"
                   },
                   {
                     "name": "Kuchiki-taoshi",
-                    "kind": "item"
+                    "kind": "item",
+                    "video_url": "https://www.youtube.com/watch?v=ZNL47q1aJNY"
                   },
                   {
                     "name": "Kibisu-gaeshi",
-                    "kind": "item"
+                    "kind": "item",
+                    "video_url": "https://www.youtube.com/watch?v=tJylJYfBliA"
                   }
                 ],
                 "description": "Técnicas de braço"
@@ -327,43 +466,98 @@
                 "children": [
                   {
                     "name": "Uki-goshi",
-                    "kind": "item"
+                    "kind": "item",
+                    "translation": "Quadril flutuante",
+                    "key_points": "Cintura envolvida\nEntrada rasa do quadril\nControle da manga",
+                    "common_error": "Entrar fundo e tentar levantar como no O-goshi.",
+                    "steps": "Aproxime: Desequilibre à frente e envolva a cintura por baixo da axila.\nEncaixe: Entre de forma rasa com o quadril junto ao uke.\nGire: Coordene a rotação do tronco com o controle da cintura e da manga.",
+                    "video_url": "https://www.youtube.com/watch?v=bPKwtB4lyOQ",
+                    "sheet": "fichas-faixa-amarela-p07.jpg"
                   },
                   {
                     "name": "O-goshi",
-                    "kind": "item"
+                    "kind": "item",
+                    "translation": "Grande projeção de quadril",
+                    "key_points": "Controle da cintura\nQuadril encaixado\nControle da manga",
+                    "common_error": "Tentar projetar com o quadril distante do uke.",
+                    "steps": "Desequilibre: Conduza o uke à frente e envolva sua cintura.\nEncaixe: Gire de costas para o uke e coloque o quadril abaixo do dele.\nProjete: Eleve com as pernas e gire o tronco, mantendo o controle da manga.",
+                    "video_url": "https://www.youtube.com/watch?v=yhu1mfy2vJ4",
+                    "sheet": "fichas-faixa-azul-p10.jpg"
                   },
                   {
                     "name": "Koshi-guruma",
-                    "kind": "item"
+                    "kind": "item",
+                    "translation": "Roda de quadril",
+                    "key_points": "Braço ao redor da nuca\nQuadril atravessado\nControle da manga",
+                    "common_error": "Puxar apenas o pescoço sem encaixar o quadril.",
+                    "steps": "Desequilibre: Conduza o uke à frente e mantenha controle da manga.\nEnvolva: Passe o braço ao redor da nuca e encaixe profundamente o quadril.\nGire: Rode o tronco e conduza o uke sobre o eixo do quadril.",
+                    "video_url": "https://www.youtube.com/watch?v=SU7Id6uVJ44",
+                    "sheet": "fichas-faixa-laranja-p08.jpg"
                   },
                   {
                     "name": "Tsurikomi-goshi",
-                    "kind": "item"
+                    "kind": "item",
+                    "translation": "Quadril com elevação e tração",
+                    "key_points": "Gola ativa: eleve a gola e conduza o uke à frente.\nQuadril baixo: leve o quadril à altura das coxas do uke.\nTração da manga: puxe a manga e mantenha o uke próximo.",
+                    "common_error": "Manter o quadril alto e tentar vencer só com os braços.",
+                    "steps": "Puxe e eleve: Use a gola e a manga para desequilibrar à frente.\nAbaixe: Leve o quadril à altura das coxas do uke.\nProjete: Eleve o quadril e continue a tração com as mãos.",
+                    "video_url": "https://www.youtube.com/watch?v=McfzA0yRVt4",
+                    "sheet": "fichas-faixa-laranja-p09.jpg"
                   },
                   {
                     "name": "Sode-tsurikomi-goshi",
-                    "kind": "item"
+                    "kind": "item",
+                    "video_url": "https://www.youtube.com/watch?v=QsmAxpmYLOI"
                   },
                   {
                     "name": "Harai-goshi",
-                    "kind": "item"
+                    "kind": "item",
+                    "translation": "Varredura de quadril",
+                    "key_points": "Controle de manga e gola: segure a gola com uma mão e a manga com a outra.\nQuadril próximo: aproxime o quadril ao uke.\nVarredura em contato: use a parte posterior da sua perna para varrer a perna do uke.",
+                    "common_error": "Varrer antes de aproximar o quadril.",
+                    "steps": "Desequilibre: Conduza o uke à diagonal anterior.\nEncaixe: Gire e aproxime o quadril, mantendo firme a perna de apoio.\nVarra: Combine a rotação do quadril com a varredura da perna em contato.",
+                    "video_url": "https://www.youtube.com/watch?v=qTo8HlAAkOo",
+                    "sheet": "fichas-faixa-laranja-p12.jpg"
                   },
                   {
                     "name": "Tsuri-goshi",
-                    "kind": "item"
+                    "kind": "item",
+                    "translation": "Projeção de quadril com elevação",
+                    "key_points": "Pegada na faixa: controle a lateral ou a parte de trás.\nQuadril encaixado: entre próximo ao uke.\nElevação: combine a pegada e o quadril.",
+                    "common_error": "Tentar levantar só com o braço, sem encaixar o quadril.",
+                    "steps": "Segure: Com a mão direita, segure a faixa pela lateral ou por trás.\nEncaixe: Desequilibre para a frente e gire, entrando com o quadril.\nProjete: Eleve o uke sobre o quadril e conduza a rotação.",
+                    "video_url": "https://www.youtube.com/watch?v=51Htlp7xEvE",
+                    "sheet": "fichas-faixa-verde-p02.jpg"
                   },
                   {
                     "name": "Hane-goshi",
-                    "kind": "item"
+                    "kind": "item",
+                    "translation": "Projeção com impulsão do quadril",
+                    "key_points": "Pegada alta na gola\nQuadril em contato\nImpulsão com a perna flexionada",
+                    "common_error": "Deixar espaço entre os corpos e perder o contato do quadril.",
+                    "steps": "Aproxime: Desequilibre à frente e traga o uke para perto.\nEncaixe: Aproxime o quadril e mantenha contato com a perna flexionada.\nImpulsione: Eleve o uke com a ação coordenada do quadril e da perna.",
+                    "video_url": "https://www.youtube.com/watch?v=M9_7De6A1kk",
+                    "sheet": "fichas-faixa-verde-p05.jpg"
                   },
                   {
                     "name": "Utsuri-goshi",
-                    "kind": "item"
+                    "kind": "item",
+                    "translation": "Transferência de quadril",
+                    "key_points": "Base firme: flexione os joelhos para conter a entrada.\nTransferência: traga o uke para o seu quadril.\nRotação: gire para concluir a projeção.",
+                    "common_error": "Girar antes de transferir o uke para o seu quadril.",
+                    "steps": "Contenha: Flexione os joelhos e controle a entrada de quadril do uke.\nTransfira: Envolva a cintura, eleve o uke e traga-o para o seu quadril.\nProjete: Gire o corpo e conduza o uke sobre o seu quadril.",
+                    "video_url": "https://www.youtube.com/watch?v=4pQd_bEnlf0",
+                    "sheet": "fichas-faixa-roxa-p05.jpg"
                   },
                   {
                     "name": "Ushiro-goshi",
-                    "kind": "item"
+                    "kind": "item",
+                    "translation": "Projeção de quadril por trás",
+                    "key_points": "Controle por trás: envolva a cintura do uke.\nElevação: mantenha o corpo próximo.\nFinalização: conduza o uke de costas ao tatame.",
+                    "common_error": "Elevar o uke com o corpo afastado.",
+                    "steps": "Posicione: Saia da linha do ataque e controle a cintura do uke por trás.\nEleve: Mantenha uma base firme e eleve o uke junto ao corpo.\nConduza: Guie a descida do uke sobre as costas, mantendo o controle.",
+                    "video_url": "https://www.youtube.com/watch?v=ORIYstuxYT8",
+                    "sheet": "fichas-faixa-marrom-p05.jpg"
                   }
                 ],
                 "description": "Técnicas de quadril"
@@ -374,63 +568,147 @@
                 "children": [
                   {
                     "name": "De-ashi-harai",
-                    "kind": "item"
+                    "kind": "item",
+                    "translation": "Varredura do pé avançado",
+                    "key_points": "Tempo do passo: observe o passo e a transferência de peso do uke.\nVarredura baixa no pé: retire o pé avançado com a sola antes de ele firmar o apoio.\nAção conjunta das mãos: mantenha a pegada na gola e na manga, atuando em conjunto.",
+                    "common_error": "Tentar varrer quando o pé já está pesado no tatame.",
+                    "steps": "Acompanhe: Observe o passo e a transferência de peso do uke.\nVarra: Retire o pé avançado com a sola antes de ele firmar o apoio.\nConduza: Coordene gola e manga com a varredura e controle a queda.",
+                    "video_url": "https://www.youtube.com/watch?v=4BUUvqxi_Kk",
+                    "sheet": "fichas-faixa-amarela-p04.jpg"
                   },
                   {
                     "name": "Hiza-guruma",
-                    "kind": "item"
+                    "kind": "item",
+                    "translation": "Roda de joelho",
+                    "key_points": "Desequilíbrio à frente: conduza o uke à diagonal anterior direita.\nSola no joelho: encoste a sola do pé esquerdo no joelho direito de uke.\nRotação pelas mãos: use as mãos para conduzir o uke ao redor do apoio.",
+                    "common_error": "Chutar o joelho em vez de criar um ponto de apoio.",
+                    "steps": "Desequilibre: Conduza o uke à diagonal anterior direita.\nApoie: Encoste a sola esquerda no joelho direito, sem chutar.\nGire: Conduza o tronco ao redor do apoio com as mãos.",
+                    "video_url": "https://www.youtube.com/watch?v=JPJx9-oAVns",
+                    "sheet": "fichas-faixa-amarela-p05.jpg"
                   },
                   {
                     "name": "Sasae-tsurikomi-ashi",
-                    "kind": "item"
+                    "kind": "item",
+                    "translation": "Bloqueio do pé com elevação e tração",
+                    "key_points": "Elevação e tração\nBloqueio no tornozelo\nRotação do tronco",
+                    "common_error": "Bloquear sem antes conduzir o peso do uke à frente.",
+                    "steps": "Eleve: Conduza o uke à diagonal anterior.\nBloqueie: Encoste a sola na frente do tornozelo, sem chutar.\nConduza: Gire o corpo e conduza o uke sobre o ponto de apoio.",
+                    "video_url": "https://www.youtube.com/watch?v=699i--pvYmE",
+                    "sheet": "fichas-faixa-amarela-p06.jpg"
                   },
                   {
                     "name": "O-soto-gari",
-                    "kind": "item"
+                    "kind": "item",
+                    "translation": "Grande ceifa externa",
+                    "common_error": "Ceifar de longe, sem desequilíbrio e sem contato.",
+                    "steps": "Desequilibre: Conduza o uke para trás e retire sua estabilidade.\nAproxime: Mantenha o tronco próximo e o pé de apoio firme.\nCeife: Passe a perna por fora e ceife por trás da perna de apoio do uke.",
+                    "video_url": "https://www.youtube.com/watch?v=c-A_nP7mKAc",
+                    "sheet": "fichas-faixa-azul-p09.jpg"
                   },
                   {
                     "name": "O-uchi-gari",
-                    "kind": "item"
+                    "kind": "item",
+                    "translation": "Grande ceifada interna",
+                    "key_points": "Desequilíbrio para trás\nEntrada por dentro\nCeifa da perna esquerda",
+                    "common_error": "Ceifar sem transferir o peso para a perna atacada.",
+                    "steps": "Desequilibre: Leve o peso do uke para o calcanhar esquerdo.\nEntre: Introduza a perna direita por dentro da base.\nCeife: Ceife a perna esquerda do uke e conduza-o para trás.",
+                    "video_url": "https://www.youtube.com/watch?v=0itJFhV9pDQ",
+                    "sheet": "fichas-faixa-azul-p11.jpg"
                   },
                   {
                     "name": "Ko-soto-gari",
-                    "kind": "item"
+                    "kind": "item",
+                    "translation": "Pequena ceifada externa",
+                    "key_points": "Desequilíbrio: conduza o uke para trás, sobre o calcanhar.\nCeifa baixa: sola do pé por trás do tornozelo do uke.\nApoio: mantenha firme o pé de apoio do tori.",
+                    "common_error": "Confundir a ceifa baixa com um chute alto.",
+                    "steps": "Desequilibre: Leve o peso do uke para trás.\nPosicione: Entre por fora e alcance o calcanhar.\nCeife: Retire o apoio com a sola e controle a queda.",
+                    "video_url": "https://www.youtube.com/watch?v=jeQ541ScLB4",
+                    "sheet": "fichas-faixa-laranja-p06.jpg"
                   },
                   {
                     "name": "Ko-uchi-gari",
-                    "kind": "item"
+                    "kind": "item",
+                    "translation": "Pequena ceifada interna",
+                    "key_points": "Desequilíbrio: para trás.\nCeifa por dentro.\nPé de apoio.",
+                    "common_error": "Atacar por fora em vez de entrar por dentro.",
+                    "steps": "Desequilibre: Conduza o peso do uke para trás.\nEntre: Leve o pé direito por dentro da base do uke.\nCeife: Use a sola para retirar o calcanhar direito pelo lado interno.",
+                    "video_url": "https://www.youtube.com/watch?v=3Jb3tZvr9Ng",
+                    "sheet": "fichas-faixa-laranja-p07.jpg"
                   },
                   {
                     "name": "Okuri-ashi-harai",
-                    "kind": "item"
+                    "kind": "item",
+                    "translation": "Varredura dos pés em deslocamento",
+                    "key_points": "Mesmo ritmo: mantenha o mesmo ritmo do deslocamento lateral.\nPés reunidos: varra um pé na direção do outro, trazendo os dois pés do uke juntos.\nVarredura contínua: mantenha a varredura dos dois pés de forma contínua durante o deslocamento.",
+                    "common_error": "Atacar fora do tempo do deslocamento lateral.",
+                    "steps": "Acompanhe: Desloque-se lateralmente junto com o uke.\nReúna: Varra um pé na direção do outro durante o movimento.\nConduza: Coordene a elevação das mãos com a varredura dos dois pés.",
+                    "video_url": "https://www.youtube.com/watch?v=nw1ZdRjrdRI",
+                    "sheet": "fichas-faixa-laranja-p10.jpg"
                   },
                   {
                     "name": "Uchi-mata",
-                    "kind": "item"
+                    "kind": "item",
+                    "translation": "Projeção pela parte interna da coxa",
+                    "key_points": "Desequilíbrio à frente: conduza o uke para a frente ou para a diagonal direita.\nApoio firme no pé esquerdo\nElevação pela parte interna da coxa",
+                    "common_error": "Tentar projetar apenas com a perna, sem desequilibrar.",
+                    "steps": "Desequilibre: Conduza o uke para a frente ou para a diagonal direita.\nPosicione: Gire e mantenha a base firme no pé de apoio.\nProjete: Eleve a coxa por dentro e complete o giro com as mãos.",
+                    "video_url": "https://www.youtube.com/watch?v=iUpSu5J-bgw",
+                    "sheet": "fichas-faixa-laranja-p13.jpg"
                   },
                   {
                     "name": "Ko-soto-gake",
-                    "kind": "item"
+                    "kind": "item",
+                    "translation": "Pequeno gancho externo",
+                    "key_points": "Desequilíbrio para trás\nGancho externo\nControle das pegadas",
+                    "common_error": "Fazer o gancho antes de tirar o equilíbrio.",
+                    "steps": "Desequilibre: Conduza o uke para trás ou para a diagonal posterior direita.\nEnganche: Prenda o tornozelo direito do uke por trás com o pé esquerdo.\nProjete: Mantenha o gancho e conduza o uke para trás.",
+                    "video_url": "https://www.youtube.com/watch?v=8b6kY4s4zH4",
+                    "sheet": "fichas-faixa-verde-p01.jpg"
                   },
                   {
                     "name": "Ashi-guruma",
-                    "kind": "item"
+                    "kind": "item",
+                    "translation": "Roda de perna",
+                    "key_points": "Desequilíbrio: uke conduzido para a frente.\nEixo da perna: perna estendida à frente do joelho.\nRotação: guie o uke em círculo.",
+                    "common_error": "Chutar o joelho em vez de criar um eixo para a rotação.",
+                    "steps": "Desequilibre: Conduza o uke para a diagonal anterior.\nPosicione: Gire e estenda a perna à frente do joelho do uke.\nGire: Use a perna como eixo e conduza a rotação com as mãos.",
+                    "video_url": "https://www.youtube.com/watch?v=ROeayhvom9U",
+                    "sheet": "fichas-faixa-verde-p04.jpg"
                   },
                   {
                     "name": "Harai-tsurikomi-ashi",
-                    "kind": "item"
+                    "kind": "item",
+                    "translation": "Varredura com elevação e tração",
+                    "key_points": "Elevação e tração: puxe e eleve o uke para a frente com a gola.\nVarredura pela frente: varra a frente do tornozelo direito do uke com a sola do pé esquerdo.\nBase equilibrada: mantenha o corpo unido e a base estável no pé direito.",
+                    "common_error": "Varrer sem elevar e conduzir o tronco do uke.",
+                    "steps": "Eleve: Conduza o uke para a frente com gola e manga.\nVarra: Varra a frente do tornozelo direito com a sola do pé esquerdo.\nCoordene: Combine a varredura com a elevação e a tração das mãos.",
+                    "video_url": "https://www.youtube.com/watch?v=gGPXvWL8VbE",
+                    "sheet": "fichas-faixa-verde-p06.jpg"
                   },
                   {
                     "name": "O-guruma",
-                    "kind": "item"
+                    "kind": "item",
+                    "translation": "Grande roda",
+                    "key_points": "Avanço conduzido\nEixo alto da perna\nRotação pelas mãos",
+                    "common_error": "Posicionar a perna sem primeiro romper o equilíbrio.",
+                    "steps": "Conduza: Aproveite o avanço do uke e desequilibre à frente.\nPosicione: Estenda a perna na região entre o baixo abdômen e a parte alta das coxas.\nGire: Use a perna como eixo e conduza o giro com as mãos.",
+                    "video_url": "https://www.youtube.com/watch?v=SnZciTAY9vc",
+                    "sheet": "fichas-faixa-roxa-p06.jpg"
                   },
                   {
                     "name": "O-soto-guruma",
-                    "kind": "item"
+                    "kind": "item",
+                    "translation": "Grande roda externa",
+                    "key_points": "Desequilíbrio para trás\nPerna atrás das duas pernas\nApoio firme",
+                    "common_error": "Não alcançar a segunda perna de uke.",
+                    "steps": "Desequilibre: Conduza o peso de uke para trás.\nPosicione: Estenda a perna por trás das duas pernas de uke.\nGire: Conduza o tronco para trás, usando a perna como eixo.",
+                    "video_url": "https://www.youtube.com/watch?v=92KbCm6pQeI",
+                    "sheet": "fichas-faixa-marrom-p01.jpg"
                   },
                   {
                     "name": "O-soto-otoshi",
-                    "kind": "item"
+                    "kind": "item",
+                    "video_url": "https://www.youtube.com/watch?v=2DsVvDw7b8g"
                   }
                 ],
                 "description": "Técnicas de perna e pé"
@@ -448,23 +726,43 @@
                 "children": [
                   {
                     "name": "Tomoe-nage",
-                    "kind": "item"
+                    "kind": "item",
+                    "translation": "Projeção em círculo",
+                    "key_points": "Desequilíbrio: traga o uke para a frente.\nApoio do pé: apoie a sola no baixo abdômen.\nGiro controlado: guie o uke por cima da cabeça.",
+                    "common_error": "Descer sem antes trazer o uke para a frente.",
+                    "steps": "Desequilibre: Conduza o uke para a frente, mantendo gola e manga.\nApoie: Desça para trás e coloque a sola no baixo abdômen do uke.\nProjete: Estenda a perna e conduza o uke por cima da sua cabeça.",
+                    "video_url": "https://www.youtube.com/watch?v=880WbHvHv6A",
+                    "sheet": "tomoe-nage.jpg"
                   },
                   {
                     "name": "Sumi-gaeshi",
-                    "kind": "item"
+                    "kind": "item",
+                    "translation": "Reversão pelo canto",
+                    "key_points": "Desequilíbrio: uke conduzido para a frente.\nEncaixe do pé: peito do pé sob a coxa do uke.\nSacrifício: desça para trás e conduza a rotação.",
+                    "common_error": "Apoiar a sola no abdômen em vez do peito do pé sob a coxa.",
+                    "steps": "Desequilibre: Conduza o uke para a frente.\nEncaixe: Apoie o peito do pé por dentro, sob a coxa.\nReverta: Desça de costas e eleve com a perna, guiando o uke por cima.",
+                    "video_url": "https://www.youtube.com/watch?v=5VhduA5xkbA",
+                    "sheet": "sumi-gaeshi.jpg"
                   },
                   {
                     "name": "Hikikomi-gaeshi",
-                    "kind": "item"
+                    "kind": "item",
+                    "video_url": "https://www.youtube.com/watch?v=92zUYWBp5N8"
                   },
                   {
                     "name": "Tawara-gaeshi",
-                    "kind": "item"
+                    "kind": "item",
+                    "video_url": "https://www.youtube.com/watch?v=TmTWgrmViZc"
                   },
                   {
                     "name": "Ura-nage",
-                    "kind": "item"
+                    "kind": "item",
+                    "translation": "Projeção para trás",
+                    "key_points": "Aproximação: envolva a cintura pelo lado direito.\nElevação: mantenha o uke junto ao corpo.\nDireção: conduza sobre o ombro esquerdo.",
+                    "common_error": "Tentar elevar o uke distante do corpo.",
+                    "steps": "Aproxime: Pelo lado direito do uke, envolva a cintura com os dois braços.\nEleve: Aproxime o corpo e eleve o uke com controle.\nProjete: Desça para trás e conduza o uke sobre o seu ombro esquerdo.",
+                    "video_url": "https://www.youtube.com/watch?v=Fgi9b8DJ5sQ",
+                    "sheet": "ura-nage.jpg"
                   }
                 ],
                 "description": "Sacrifício para trás"
@@ -475,43 +773,93 @@
                 "children": [
                   {
                     "name": "Yoko-otoshi",
-                    "kind": "item"
+                    "kind": "item",
+                    "translation": "Queda lateral",
+                    "key_points": "Desequilíbrio lateral\nPerna por fora\nQueda coordenada",
+                    "common_error": "Sentar antes de estabelecer o desequilíbrio lateral.",
+                    "steps": "Desequilibre: Leve o uke para o lado direito dele.\nDeslize: Estenda a perna esquerda por fora do pé direito do uke.\nDesça: Caia sobre o lado esquerdo e conduza a queda lateral.",
+                    "video_url": "https://www.youtube.com/watch?v=MnNG67pF_a0",
+                    "sheet": "fichas-faixa-verde-p03.jpg"
                   },
                   {
                     "name": "Tani-otoshi",
-                    "kind": "item"
+                    "kind": "item",
+                    "translation": "Queda no vale",
+                    "key_points": "Desequilíbrio para trás.\nPerna baixa atrás dos pés.\nQueda ao lado.",
+                    "common_error": "Cair sobre o joelho do uke em vez de descer ao lado.",
+                    "steps": "Desequilibre: Conduza o uke para trás pela manga e pela gola.\nEstenda: Deslize a perna baixa por trás dos pés do uke.\nDesça: Desça ao lado e acompanhe a queda, sem atingir os joelhos.",
+                    "video_url": "https://www.youtube.com/watch?v=3b9Me3Fohpk",
+                    "sheet": "fichas-faixa-roxa-p02.jpg"
                   },
                   {
                     "name": "Hane-makikomi",
-                    "kind": "item"
+                    "kind": "item",
+                    "translation": "Enrolamento com impulsão",
+                    "key_points": "Impulsão do Hane-goshi\nBraço preso sob a axila\nRotação e queda lateral",
+                    "common_error": "Interromper o giro depois de iniciar o envolvimento.",
+                    "steps": "Impulsione: Inicie a ação de Hane-goshi com o uke próximo.\nEnvolva: Solte a gola, passe o braço por fora e prenda o braço do uke sob a axila.\nAcompanhe: Continue a rotação e a queda lateral, mantendo o uke junto ao corpo.",
+                    "video_url": "https://www.youtube.com/watch?v=6CRBGLGz9j8",
+                    "sheet": "fichas-faixa-roxa-p03.jpg"
                   },
                   {
                     "name": "Soto-makikomi",
-                    "kind": "item"
+                    "kind": "item",
+                    "translation": "Enrolamento externo",
+                    "key_points": "Diagonal à frente: conduza o uke para a diagonal anterior direita.\nBraço envolvido: prenda o braço direito do uke sob sua axila direita.\nCorpos próximos: mantenha os corpos bem próximos durante o giro.",
+                    "common_error": "Girar deixando o braço e o corpo do uke soltos.",
+                    "steps": "Desequilibre: Conduza o uke para a diagonal anterior direita.\nEnvolva: Prenda o braço direito do uke sob sua axila direita.\nDesça: Continue o giro e leve o uke junto na queda.",
+                    "video_url": "https://www.youtube.com/watch?v=bWG9O1BVKtQ",
+                    "sheet": "fichas-faixa-roxa-p07.jpg"
                   },
                   {
                     "name": "Uki-waza",
-                    "kind": "item"
+                    "kind": "item",
+                    "translation": "Técnica flutuante",
+                    "key_points": "Diagonal anterior\nCorpo aberto\nSacrifício lateral",
+                    "common_error": "Deixar o uke recuperar a base antes de descer.",
+                    "steps": "Flutue: Leve o uke para a diagonal anterior direita.\nAbra: Abra o corpo e estenda o pé esquerdo por fora do pé direito.\nProjete: Caia sobre o lado esquerdo e conduza o uke por cima.",
+                    "video_url": "https://www.youtube.com/watch?v=weVOpJ63gII",
+                    "sheet": "uki-waza.jpg"
                   },
                   {
                     "name": "Yoko-wakare",
-                    "kind": "item"
+                    "kind": "item",
+                    "translation": "Separação lateral",
+                    "key_points": "Tração à frente: puxe o uke para a frente com a lapela e a manga.\nDuas pernas estendidas: mantenha as duas pernas estendidas à frente dele.\nCorpo como referência: use o seu corpo estendido como linha de projeção.",
+                    "common_error": "Descer sem conduzir o uke para a frente.",
+                    "steps": "Desequilibre: Conduza o uke para a frente ou diagonal anterior direita.\nEstenda: Desça de lado e estenda as duas pernas à frente dele.\nConduza: Projete o uke através da linha do seu corpo estendido.",
+                    "video_url": "https://www.youtube.com/watch?v=bp1tscHlePI",
+                    "sheet": "fichas-faixa-marrom-p03.jpg"
                   },
                   {
                     "name": "Yoko-guruma",
-                    "kind": "item"
+                    "kind": "item",
+                    "translation": "Roda lateral",
+                    "key_points": "Controle da cintura\nPerna entre a base\nQueda para o lado",
+                    "common_error": "Deixar a perna por fora da base do uke.",
+                    "steps": "Envolva: Controle o tronco do uke pelo lado.\nDeslize: Introduza uma perna profundamente entre as pernas do uke.\nGire: Caia de lado e conduza o uke por cima do ombro.",
+                    "video_url": "https://www.youtube.com/watch?v=MehP6I5cY2c",
+                    "sheet": "yoko-guruma.jpg"
                   },
                   {
                     "name": "Yoko-gake",
-                    "kind": "item"
+                    "kind": "item",
+                    "translation": "Gancho lateral",
+                    "key_points": "Desequilíbrio lateral\nSola em contato com o pé\nQueda lateral coordenada",
+                    "common_error": "Sacrificar a base antes de estabelecer o desequilíbrio lateral.",
+                    "steps": "Desequilibre: Conduza o uke a frente e depois para o lado direito.\nVarra: Use a sola do pé esquerdo contra o pé direito do uke.\nAcompanhe: Caia sobre o lado esquerdo e mantenha o controle.",
+                    "video_url": "https://www.youtube.com/watch?v=tP1Sj1uDfSo",
+                    "sheet": "yoko-gake.jpg"
                   },
                   {
                     "name": "Uchi-makikomi",
-                    "kind": "item"
+                    "kind": "item",
+                    "video_url": "https://www.youtube.com/watch?v=5BowcjduxVc"
                   },
                   {
                     "name": "Harai-makikomi",
-                    "kind": "item"
+                    "kind": "item",
+                    "video_url": "https://www.youtube.com/watch?v=VBaHzKaCXss"
                   }
                 ],
                 "description": "Sacrifício para o lado"
@@ -549,83 +897,184 @@
               },
               {
                 "name": "O-uchi-gari → O-soto-gari",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Sequência",
+                "key_points": "Ataque por dentro: busque o desequilíbrio com o O-uchi-gari.\nReação e ajuste: se o uke retira a perna atacada, reposicione o apoio e conduza o peso para trás.\nCeife por fora: ajuste a distância e entre no O-soto-gari.",
+                "common_error": "Trocar de golpe sem reajustar o apoio e a distância.",
+                "steps": "Prepare: Ataque com controle de manga e gola.\nAjuste: Reposicione os pés conforme a reação.\nControle: Complete a ceifa externa sem pausa.",
+                "sheet": "fichas-faixa-azul-p13.jpg"
               },
               {
                 "name": "De-ashi-harai → O-soto-gari",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Sequência",
+                "key_points": "De-ashi-harai: varra o pé avançado antes de ele firmar o apoio.\nReação e ajuste: se o uke retira o pé e desloca o peso para trás, ajuste a distância.\nO-soto-gari: entre ao lado do uke e ceife por fora.",
+                "common_error": "Trocar de golpe sem recuperar a distância.",
+                "steps": "Prepare: Ataque no tempo do passo.\nAjuste: Reposicione o apoio conforme a reação.\nControle: Una a ação das mãos à ceifa.",
+                "sheet": "fichas-faixa-amarela-p08.jpg"
               },
               {
                 "name": "Hiza-guruma → O-soto-gari",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Sequência",
+                "key_points": "Hiza-guruma: apoie a sola no joelho e conduza o uke à frente.\nReação e ajuste: se o uke recupera a postura e recua o peso, retire o pé e reajuste a base.\nO-soto-gari: aproxime o tronco e ceife a perna por fora.",
+                "common_error": "Chutar o joelho ou entrar no segundo golpe sem reajustar os pés.",
+                "steps": "Prepare: Crie desequilíbrio com as mãos.\nAjuste: Recoloque o pé no tatame antes de mudar o ataque.\nControle: Coordene a ceifa com a condução do tronco.",
+                "sheet": "fichas-faixa-amarela-p09.jpg"
               },
               {
                 "name": "Seoi-nage → O-uchi-gari",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Sequência",
+                "key_points": "Seoi-nage: entre girando e encaixe o cotovelo sob a axila.\nReação e ajuste: se o uke resiste levando o peso para trás, desfaça o giro e reposicione os pés.\nO-uchi-gari: ataque por dentro e conduza o uke para trás.",
+                "common_error": "Forçar o Seoi-nage contra a reação sem reajustar a entrada.",
+                "steps": "Prepare: Preserve a pegada na manga e na gola.\nAjuste: Recupere a posição de frente para o uke.\nControle: Una a ceifa interna ao desequilíbrio.",
+                "sheet": "fichas-faixa-amarela-p10.jpg"
               },
               {
                 "name": "O-uchi-gari → Tai-otoshi",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Sequência",
+                "key_points": "O-uchi-gari: ataque a perna por dentro e conduza o peso para trás.\nReação e ajuste: se o uke retira a perna e retorna à frente, gire e reposicione a base.\nTai-otoshi: conduza com as mãos, colocando a perna à frente da base do uke.",
+                "common_error": "Girar sem trazer o peso do uke para a frente.",
+                "steps": "Prepare: Busque uma reação ao ataque interno.\nAjuste: Mude o sentido do desequilíbrio.\nControle: Continue a tração sem carregar no quadril.",
+                "sheet": "fichas-faixa-laranja-p14.jpg"
               },
               {
                 "name": "Sasae-tsurikomi-ashi → O-soto-gari",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Sequência",
+                "key_points": "Sasae-tsurikomi-ashi: bloqueie o tornozelo e conduza o uke à diagonal anterior.\nReação e ajuste: se o uke se recupera para trás, retire o pé e aproxime a base.\nO-soto-gari: entre por fora e ceife atrás da perna de apoio.",
+                "common_error": "Mudar de ataque sem reposicionar o apoio.",
+                "steps": "Prepare: Una bloqueio, elevação e tração.\nAjuste: Recoloque o pé e ajuste a distância.\nControle: Mantenha o tronco próximo durante a ceifa.",
+                "sheet": "fichas-faixa-laranja-p15.jpg"
               },
               {
                 "name": "Ko-uchi-gari → Seoi-nage",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Sequência",
+                "key_points": "Ko-uchi-gari: ataque o calcanhar pelo lado interno.\nReação e ajuste: se o uke retira o pé e retorna à frente, acompanhe a reação com o giro.\nSeoi-nage: entre sob o centro do uke, com as costas próximas.",
+                "common_error": "Girar antes de recuperar o próprio apoio.",
+                "steps": "Prepare: Mantenha o controle de manga e gola.\nAjuste: Recoloque o pé e gire com equilíbrio.\nControle: Conduza o uke sobre o ombro.",
+                "sheet": "fichas-faixa-laranja-p16.jpg"
               },
               {
                 "name": "Uchi-mata → Ko-uchi-gari",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Sequência: da projeção à ceifada interna",
+                "key_points": "Uchi-mata: ataque por dentro da coxa e provoque a reação.\nReação e ajuste: se uke recupera o apoio antes da projeção, retome a frente dele.\nKo-uchi-gari: ataque por dentro o calcanhar que recebe o peso.",
+                "common_error": "Manter o corpo virado e tentar alcançar o pé sem reposicionar.",
+                "steps": "Prepare: Prepare o Uchi-mata com desequilíbrio à frente.\nAjuste: Recoloque o pé e acompanhe a reação de uke.\nControle: Ceife o calcanhar por dentro com as mãos conduzindo para trás.",
+                "sheet": "fichas-faixa-laranja-p17.jpg"
               },
               {
                 "name": "Harai-goshi → O-soto-gari",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Sequência",
+                "key_points": "Harai-goshi: aproxime o quadril e ataque com a varredura.\nReação e ajuste: se o uke resiste recuperando o peso para trás, desfaça o giro e ajuste os pés.\nO-soto-gari: entre ao lado e ceife a perna por fora.",
+                "common_error": "Tentar ceifar por fora mantendo a entrada de quadril.",
+                "steps": "Prepare: Crie desequilíbrio antes da varredura.\nAjuste: Recupere a base para mudar de direção.\nControle: Una a condução do tronco à ceifa.",
+                "sheet": "fichas-faixa-laranja-p18.jpg"
               },
               {
                 "name": "Ko-uchi-gari → Hane-goshi",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Sequência",
+                "key_points": "Ko-uchi-gari: ataque o calcanhar por dentro.\nReação e ajuste: se o uke retira a perna e retorna à frente, gire e aproxime o quadril.\nHane-goshi: una o quadril à perna flexionada para impulsionar.",
+                "common_error": "Entrar no quadril deixando espaço entre os corpos.",
+                "steps": "Prepare: Provoque a reação com a ceifa interna.\nAjuste: Recupere o apoio e aproxime os corpos.\nControle: Coordene quadril, perna e mãos.",
+                "sheet": "fichas-faixa-verde-p09.jpg"
               },
               {
                 "name": "De-ashi-harai → Tai-otoshi",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Sequência",
+                "key_points": "De-ashi-harai: ataque o pé avançado no tempo do passo.\nReação e ajuste: se o uke recompõe o passo e vem à frente, gire e ajuste a base.\nTai-otoshi: conduza com as mãos sobre a linha da perna estendida.",
+                "common_error": "Parar o movimento entre a varredura e o giro.",
+                "steps": "Prepare: Observe a transferência de peso.\nAjuste: Mantenha o uke em movimento.\nControle: Projete sem carregar no quadril.",
+                "sheet": "fichas-faixa-verde-p10.jpg"
               },
               {
                 "name": "Sasae-tsurikomi-ashi → O-uchi-gari → Ko-uchi-gari (san-dan-gake)",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Sequência de ataques: da reação à continuação",
+                "key_points": "SASAE: bloqueie o tornozelo e provoque a reação.\nO-UCHI: se uke resiste antes da queda, ajuste os apoios e ceife por dentro.\nKO-UCHI: se uke retira a perna, ataque por dentro o outro calcanhar.",
+                "common_error": "Repetir os ataques sem ajustar os apoios.",
+                "steps": "Prepare: Conduza o movimento e observe a resposta.\nAjuste: Recoloque os pés entre os ataques.\nControle: Mantenha as pegadas e acompanhe a mudança do peso.",
+                "sheet": "fichas-faixa-verde-p11.jpg"
               },
               {
                 "name": "Ippon-seoi-nage → Ko-uchi-gari",
-                "kind": "item"
+                "kind": "item",
+                "key_points": "Ippon-seoi-nage: entre com o braço sob a axila e controle a manga.\nReação e ajuste: se uke resiste antes da projeção, desfaça o giro e ajuste a pegada.\nKo-uchi-gari: retome a frente e ataque o calcanhar por dentro.",
+                "common_error": "Tentar alcançar o calcanhar sem desfazer o giro.",
+                "steps": "Prepare: Prepare o desequilíbrio e a entrada de Ippon-seoi-nage.\nAjuste: Acompanhe a defesa sem perder o controle de uke.\nControle: Reposicione os apoios e ceife por dentro.",
+                "sheet": "fichas-faixa-roxa-p09.jpg"
               },
               {
                 "name": "Hiza-guruma → Ko-soto-gake",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Sequência",
+                "key_points": "Hiza-guruma: apoie a sola no joelho e conduza o tronco.\nReação e ajuste: se o uke resiste recuando, retire o pé e acompanhe para o lado externo.\nKo-soto-gake: enganche por fora e conduza o peso para trás.",
+                "common_error": "Tentar o gancho sem acompanhar o deslocamento.",
+                "steps": "Prepare: Crie uma reação ao ataque à frente.\nAjuste: Reorganize a distância e os apoios.\nControle: Mantenha o gancho e o controle do tronco.",
+                "sheet": "fichas-faixa-roxa-p10.jpg"
               },
               {
                 "name": "Uchi-mata → O-uchi-gari",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Sequência: da grande ceifada interna",
+                "key_points": "Uchi-mata: entre por dentro da coxa e provoque a defesa.\nReação e ajuste: se uke resiste antes da projeção, desfaça o giro e ajuste os apoios.\nO-uchi-gari: aproveite o peso recuando e ceife a perna por dentro.",
+                "common_error": "Ceifar sem desfazer o giro e sem mudar o desequilíbrio.",
+                "steps": "Prepare: Prepare o ataque à frente com Uchi-mata.\nAjuste: Retome a posição de frente e observe a base de uke.\nControle: Entre entre as pernas e conclua o O-uchi-gari.",
+                "sheet": "fichas-faixa-roxa-p11.jpg"
               },
               {
                 "name": "O-soto-gari → O-soto-guruma",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Sequência",
+                "key_points": "O-soto-gari: ataque por fora e leve o peso do uke para trás.\nReação e ajuste: se o uke aproxima a outra perna para defender, reajuste o alcance da perna atacante.\nO-soto-guruma: estenda a perna atrás das duas pernas e conduza a rotação.",
+                "common_error": "Trocar para a roda sem controlar o peso do uke.",
+                "steps": "Prepare: Mantenha o desequilíbrio para trás.\nAjuste: Acompanhe a reorganização da base do uke.\nControle: Use a perna como eixo atrás das duas pernas.",
+                "video_url": "https://www.youtube.com/watch?v=g3xPwcNEt5A",
+                "sheet": "fichas-faixa-roxa-p12.jpg"
               },
               {
                 "name": "Harai-goshi → Harai-makikomi",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Sequência",
+                "common_error": "Enrolar sem prender o braço e sem manter a varredura.",
+                "steps": "Prepare: Entre no harai-goshi com desequilíbrio à frente.\nAjuste: Se uke resiste, solte a gola e passe o braço por fora do braço de uke.\nControle: Prenda o braço sob a axila e acompanhe a queda com a varredura.",
+                "video_url": "https://www.youtube.com/watch?v=VBaHzKaCXss",
+                "sheet": "fichas-faixa-marrom-p09.jpg"
               },
               {
                 "name": "Hane-goshi → O-uchi-gari",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Sequência: da projeção à ceifa interna",
+                "key_points": "Hane-goshi: entre com o quadril próximo e a perna flexionada.\nReação e ajuste: se o uke resiste para trás antes da projeção, desfaça a entrada e recupere o apoio.\nO-uchi-gari: ataque a perna por dentro e conduza o peso para trás.",
+                "common_error": "Entrar no O-uchi mantendo o corpo de costas.",
+                "steps": "Prepare: Crie desequilíbrio e contato de quadril.\nAjuste: Volte a ficar de frente para o uke.\nControle: Coordene a ceifa interna com as mãos.",
+                "sheet": "fichas-faixa-marrom-p10.jpg"
               },
               {
                 "name": "De-ashi-harai → Ko-uchi-gari → O-uchi-gari (san-dan-gake)",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Sequência",
+                "key_points": "DE-ASHI: ataque o pé em deslocamento e provoque a defesa.\nKO-UCHI: se uke recupera o apoio, ajuste os pés e ataque o calcanhar por dentro.\nO-UCHI: se uke retira esse pé, entre por dentro da outra perna.",
+                "common_error": "Tentar as três técnicas sem ler a reação de uke.",
+                "steps": "Prepare: Observe o deslocamento e o momento do apoio.\nAjuste: Reposicione os pés conforme a reação.\nControle: Mantenha as pegadas e acompanhe a transferência do peso.",
+                "sheet": "fichas-faixa-marrom-p11.jpg"
               },
               {
                 "name": "Ushiro-goshi → Utsuri-goshi",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Sequência",
+                "key_points": "Ushiro-goshi: tori posiciona-se por trás, levanta o uke no quadril.\nTransição: uke baseia os pés e se inclina para frente. Tori mantém o controle e troca o quadril.\nUtsuri-goshi: tori projeta para a frente usando o novo quadril.",
+                "common_error": "Não levantar.",
+                "steps": "Prepare: Levanta o uke por trás.\nAjuste: Troca o quadril.\nControle: Projeta.",
+                "video_url": "https://www.youtube.com/watch?v=4pQd_bEnlf0",
+                "sheet": "fichas-faixa-marrom-p12.jpg"
               }
             ],
             "description": "Combinação: encadear golpes diferentes aproveitando a reação do oponente."
@@ -655,31 +1104,56 @@
                 "children": [
                   {
                     "name": "O-soto-gari → O-soto-gaeshi",
-                    "kind": "item"
+                    "kind": "item",
+                    "common_error": "Reagir quando o equilíbrio já foi perdido.",
+                    "steps": "Ataque: Uke inicia o o-soto-gari.\nResposta: Antes de perder o equilíbrio, tori inverte a ceifa com o-soto-gaeshi.\nControle: Conduza o tronco para trás e mantenha as pegadas.",
+                    "video_url": "https://www.youtube.com/watch?v=8ZjM3X_EANo",
+                    "sheet": "fichas-faixa-amarela-p11.jpg"
                   },
                   {
                     "name": "O-uchi-gari → O-uchi-gaeshi",
-                    "kind": "item"
+                    "kind": "item",
+                    "common_error": "Confundir a perna atacante com a perna de apoio.",
+                    "steps": "Ataque: Uke entra com o-uchi-gari à direita.\nResposta: Tori usa a perna esquerda contra a perna direita atacante.\nControle: Varra a perna que ceifa e conduza uke para trás.",
+                    "video_url": "https://www.youtube.com/watch?v=JMQzmOrNgOs",
+                    "sheet": "fichas-faixa-laranja-p20.jpg"
                   },
                   {
                     "name": "Harai-goshi → Harai-goshi-gaeshi",
-                    "kind": "item"
+                    "kind": "item",
+                    "video_url": "https://www.youtube.com/watch?v=4U3It-7PPsc"
                   },
                   {
                     "name": "Harai-goshi → Ushiro-goshi",
-                    "kind": "item"
+                    "kind": "item",
+                    "common_error": "Tentar elevar uke com o corpo afastado.",
+                    "steps": "Ataque: Uke gira para entrar no harai-goshi.\nResposta: Tori baixa a base e envolve a cintura por trás.\nControle: Eleve uke junto ao corpo e conduza a descida.",
+                    "video_url": "https://www.youtube.com/watch?v=ORIYstuxYT8",
+                    "sheet": "fichas-faixa-verde-p13.jpg"
                   },
                   {
                     "name": "Koshi-guruma → Utsuri-goshi",
-                    "kind": "item"
+                    "kind": "item",
+                    "common_error": "Girar antes de transferir uke para o quadril.",
+                    "steps": "Ataque: Uke gira para o koshi-guruma.\nResposta: Tori contém a entrada, envolve a cintura e eleva uke.\nControle: Transfira uke para seu quadril e conclua a rotação.",
+                    "video_url": "https://www.youtube.com/watch?v=4pQd_bEnlf0",
+                    "sheet": "fichas-faixa-verde-p15.jpg"
                   },
                   {
                     "name": "O-soto-gari → Sukui-nage (Te-guruma)",
-                    "kind": "item"
+                    "kind": "item",
+                    "common_error": "Tentar levantar só pela cintura, sem recolher a coxa.",
+                    "steps": "Ataque: Uke inicia o o-soto-gari.\nResposta: Tori mantém a base e recolhe a coxa por baixo.\nControle: Eleve uke e conduza a projeção para trás.",
+                    "video_url": "https://www.youtube.com/watch?v=vU6aJ2kFxoI",
+                    "sheet": "fichas-faixa-roxa-p14.jpg"
                   },
                   {
                     "name": "Hane-goshi → Utsuri-goshi",
-                    "kind": "item"
+                    "kind": "item",
+                    "common_error": "Tentar responder após perder o equilíbrio.",
+                    "steps": "Ataque: Uke inicia o hane-goshi.\nResposta: Tori impede a elevação, envolve a cintura e ergue uke.\nControle: Transfira uke para seu quadril e conclua a rotação.",
+                    "video_url": "https://www.youtube.com/watch?v=4pQd_bEnlf0",
+                    "sheet": "fichas-faixa-marrom-p16.jpg"
                   }
                 ]
               },
@@ -689,35 +1163,60 @@
                 "children": [
                   {
                     "name": "Uchi-mata → Uchi-mata-sukashi",
-                    "kind": "item"
+                    "kind": "item",
+                    "common_error": "Entrar sob uke como se fosse uma projeção de quadril.",
+                    "steps": "Ataque: Uke entra com uchi-mata.\nResposta: Tori esquiva a perna que varre, preservando o equilíbrio.\nControle: As mãos ampliam a rotação de uke para a frente.",
+                    "video_url": "https://www.youtube.com/watch?v=V-RS3uhtVWM",
+                    "sheet": "fichas-faixa-verde-p12.jpg"
                   },
                   {
                     "name": "Ko-uchi-gari → Ko-uchi-gaeshi",
-                    "kind": "item"
+                    "kind": "item",
+                    "video_url": "https://www.youtube.com/watch?v=_MWAdYi_LC4"
                   },
                   {
                     "name": "De-ashi-harai → Tsubame-gaeshi",
-                    "kind": "item"
+                    "kind": "item",
+                    "common_error": "Deixar o pé ameaçado preso no chão.",
+                    "steps": "Ataque: Uke tenta varrer com de-ashi-harai.\nResposta: Retire o pé ameaçado, flexionando o joelho.\nControle: Retorne a varredura sobre o pé atacante, aproveitando o tempo.",
+                    "video_url": "https://www.youtube.com/watch?v=GwweWqqFB5g",
+                    "sheet": "fichas-faixa-laranja-p19.jpg"
                   },
                   {
                     "name": "Hiza-guruma → O-uchi-gari",
-                    "kind": "item"
+                    "kind": "item",
+                    "common_error": "Insistir na resposta com o joelho ainda bloqueado.",
+                    "steps": "Ataque: Uke tenta bloquear o joelho com hiza-guruma.\nResposta: Tori evita o bloqueio e reajusta a distância.\nControle: Entre por dentro e ceife com o-uchi-gari.",
+                    "sheet": "fichas-faixa-amarela-p12.jpg"
                   },
                   {
                     "name": "Tai-otoshi → Harai-goshi",
-                    "kind": "item"
+                    "kind": "item",
+                    "common_error": "Girar enquanto ainda está preso no bloqueio.",
+                    "steps": "Ataque: Uke inicia o tai-otoshi.\nResposta: Tori esquiva a perna estendida e reposiciona a base.\nControle: Após recuperar a frente de uke, entre no harai-goshi.",
+                    "sheet": "fichas-faixa-laranja-p22.jpg"
                   },
                   {
                     "name": "Tai-otoshi → O-soto-gari",
-                    "kind": "item"
+                    "kind": "item",
+                    "common_error": "Tentar ceifar antes de recuperar o equilíbrio.",
+                    "steps": "Ataque: Uke inicia o tai-otoshi.\nResposta: Tori evita o bloqueio e reposiciona-se por fora.\nControle: Desequilibre para trás e ceife com o-soto-gari.",
+                    "sheet": "fichas-faixa-roxa-p13.jpg"
                   },
                   {
                     "name": "Tomoe-nage → Ko-soto-gari",
-                    "kind": "item"
+                    "kind": "item",
+                    "key_points": "Ataque do uke: uke inicia o Tomoe-nage e começa a sentar para colocar o pé no abdômen de tori.\nResposta do tori: antes de ser elevado, tori afasta o quadril e ceifa por fora o pé de apoio do uke.\nKo-soto-gari: tori conduz uke para trás e mantém o controle da gola e da manga.",
+                    "common_error": "Ficar em cima do uke.",
+                    "steps": "Prepare: O uke senta para o tomoe.\nAjuste: Tori afasta o quadril e ceifa o pé de apoio.\nControle: Tori mantém a gola e a manga.",
+                    "sheet": "tomoe-nage-ko-soto-gari.jpg"
                   },
                   {
                     "name": "Ko-soto-gake → Uchi-mata",
-                    "kind": "item"
+                    "kind": "item",
+                    "common_error": "Reagir quando o gancho já quebrou sua base.",
+                    "steps": "Ataque: Uke tenta enganchar por fora com ko-soto-gake.\nResposta: Antes de perder o apoio, tori gira e aproxima o quadril.\nControle: Varra a parte interna da coxa com uchi-mata.",
+                    "sheet": "fichas-faixa-marrom-p17.jpg"
                   }
                 ]
               },
@@ -727,31 +1226,56 @@
                 "children": [
                   {
                     "name": "Ataque do oponente → Tani-otoshi",
-                    "kind": "item"
+                    "kind": "item",
+                    "video_url": "https://www.youtube.com/watch?v=3b9Me3Fohpk"
                   },
                   {
                     "name": "Ataque do oponente → Sumi-gaeshi",
-                    "kind": "item"
+                    "kind": "item",
+                    "video_url": "https://www.youtube.com/watch?v=5VhduA5xkbA"
                   },
                   {
                     "name": "Koshi-guruma → Tani-otoshi",
-                    "kind": "item"
+                    "kind": "item",
+                    "common_error": "Cair sobre o joelho de uke.",
+                    "steps": "Ataque: Uke gira para o koshi-guruma.\nResposta: Tori impede o encaixe do quadril e se mantém atrás.\nControle: Desça ao lado, com a perna baixa atrás dos pés de uke.",
+                    "video_url": "https://www.youtube.com/watch?v=3b9Me3Fohpk",
+                    "sheet": "fichas-faixa-laranja-p21.jpg"
                   },
                   {
                     "name": "Ko-soto-gake → Tomoe-nage",
-                    "kind": "item"
+                    "kind": "item",
+                    "key_points": "Ataque do uke: o uke aplica o ko-soto-gake.\nResposta do tori: tori senta, evitando o gancho, e coloca o pé na barriga do uke.\nContragolpe: tori projeta em círculo, com o tomoe-nage.",
+                    "common_error": "Sentar longe.",
+                    "steps": "Prepare: O uke tenta o gancho.\nAjuste: Tori senta e coloca o pé na barriga.\nControle: Projeta em círculo.",
+                    "video_url": "https://www.youtube.com/watch?v=880WbHvHv6A",
+                    "sheet": "ko-soto-gake-tomoe-nage.jpg"
                   },
                   {
                     "name": "Hane-goshi → Tani-otoshi",
-                    "kind": "item"
+                    "kind": "item",
+                    "common_error": "Tentar a resposta depois de perder os apoios.",
+                    "steps": "Ataque: Uke inicia o hane-goshi.\nResposta: Tori impede a elevação e mantém o equilíbrio atrás de uke.\nControle: Desça ao lado, com a perna baixa atrás dos pés de uke.",
+                    "video_url": "https://www.youtube.com/watch?v=3b9Me3Fohpk",
+                    "sheet": "fichas-faixa-roxa-p15.jpg"
                   },
                   {
                     "name": "Tai-otoshi → Yoko-guruma",
-                    "kind": "item"
+                    "kind": "item",
+                    "key_points": "Resposta após impedir a projeção",
+                    "common_error": "Deixar as duas pernas por fora na entrada.",
+                    "steps": "Ataque: Uke gira para entrar no tai-otoshi.\nResposta: Tori preserva a base e controla o tronco de uke.\nControle: Deslize a perna entre as de uke e caia ao lado.",
+                    "video_url": "https://www.youtube.com/watch?v=MehP6I5cY2c",
+                    "sheet": "tai-otoshi-yoko-guruma.jpg"
                   },
                   {
                     "name": "Kata-guruma → Tawara-gaeshi",
-                    "kind": "item"
+                    "kind": "item",
+                    "translation": "Tawara-gaeshi",
+                    "common_error": "Soltar o abraço do tronco durante a projeção.",
+                    "steps": "Ataque: Uke baixa o tronco para entrar no kata-guruma.\nResposta: Tori envolve o tronco de uke com os dois braços.\nControle: Ao deitar para trás, conduz uke por cima do corpo.",
+                    "video_url": "https://www.youtube.com/watch?v=TmTWgrmViZc",
+                    "sheet": "fichas-faixa-marrom-p15.jpg"
                   }
                 ]
               }
@@ -772,55 +1296,117 @@
             "children": [
               {
                 "name": "Kesa-gatame",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Imobilização em faixa (echarpe)",
+                "key_points": "Controle da cabeça\nBraço preso sob a axila\nQuadril próximo e base aberta",
+                "common_error": "Deixar o quadril afastado e perder o controle do tronco.",
+                "steps": "Prepare: Envolva a cabeça e mantenha o braço próximo preso sob a axila.\nAjuste: Aproxime o quadril das costelas do uke.\nControle: Abra a base, com uma perna à frente e outra atrás.",
+                "video_url": "https://www.youtube.com/watch?v=NDaQuJOFBYk",
+                "sheet": "hon-kesa-gatame.jpg"
               },
               {
                 "name": "Kuzure-kesa-gatame",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Kesa-gatame modificada",
+                "key_points": "Braço sob a axila\nControle do braço próximo\nBase aberta",
+                "common_error": "Perder o controle do braço e deixar espaço entre os troncos.",
+                "steps": "Prepare: Passe o braço por baixo da axila distante do uke.\nAjuste: Prenda o braço próximo e mantenha o contato do tronco.\nControle: Abra a base e aproxime o quadril.",
+                "video_url": "https://www.youtube.com/watch?v=Q2fb9jaoUFQ",
+                "sheet": "kuzure-kesa-gatame.jpg"
               },
               {
                 "name": "Ushiro-kesa-gatame",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Imobilização lateral invertida",
+                "common_error": "Deixar espaço entre o seu quadril e o tronco do uke.",
+                "steps": "Oriente: Fique voltado para os pés do uke.\nControle: Prenda o braço e mantenha contato com o tronco.\nEstabilize: Abra a base e acompanhe as tentativas de saída.",
+                "video_url": "https://www.youtube.com/watch?v=SBapox2M2dE",
+                "sheet": "fichas-faixa-laranja-p25.jpg"
               },
               {
                 "name": "Kata-gatame",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Imobilização do ombro",
+                "key_points": "Cabeça e braço controlados\nMãos unidas\nBase estável",
+                "common_error": "Deixar espaço para o uke retirar o braço.",
+                "steps": "Prepare: Conduza o braço do uke para junto da cabeça dele.\nAjuste: Envolva cabeça e braço; una as mãos.\nControle: Mantenha a cabeça junto ao braço e estabilize a base.",
+                "video_url": "https://www.youtube.com/watch?v=zQR3IOXxO_Q",
+                "sheet": "kata-gatame.jpg"
               },
               {
                 "name": "Kami-shiho-gatame",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Imobilização superior dos quatro pontos",
+                "key_points": "Controle por cima da cabeça\nPegadas na faixa\nCotovelos próximos",
+                "common_error": "Deixar espaço entre os troncos e perder o controle dos ombros.",
+                "steps": "Prepare: Posicione-se por cima da cabeça do uke, mantendo contato entre os troncos.\nAjuste: Passe os braços sob os ombros e segure a faixa.\nControle: Mantenha os cotovelos próximos e a base baixa.",
+                "video_url": "https://www.youtube.com/watch?v=HFuMjOv0WN8",
+                "sheet": "fichas-faixa-azul-p16.jpg"
               },
               {
                 "name": "Kuzure-kami-shiho-gatame",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Kami-shiho-gatame modificada",
+                "key_points": "Controle assimétrico\nPeito próximo\nBase em diagonal",
+                "common_error": "Deixar espaço e perder o controle do braço.",
+                "steps": "Prepare: Posicione-se além da cabeça, um pouco de lado.\nAjuste: Controle um braço e firme as pegadas no judogi.\nControle: Mantenha o peito próximo e ajuste a base.",
+                "video_url": "https://www.youtube.com/watch?v=YUrogQWdwiY",
+                "sheet": "fichas-faixa-amarela-p15.jpg"
               },
               {
                 "name": "Yoko-shiho-gatame",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Imobilização lateral dos quatro pontos",
+                "common_error": "Perder as pegadas e deixar espaço para o uke girar.",
+                "steps": "Prepare: Posicione o peito sobre o peito do uke, de lado.\nAjuste: Controle a gola por trás do pescoço e passe o outro braço entre as pernas para segurar faixa ou calça.\nControle: Mantenha o quadril baixo e a base estável.",
+                "video_url": "https://www.youtube.com/watch?v=TT7XJVSEQxA",
+                "sheet": "fichas-faixa-azul-p15.jpg"
               },
               {
                 "name": "Tate-shiho-gatame",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Imobilização montada",
+                "common_error": "Permanecer sentado e deixar espaço entre os troncos.",
+                "steps": "Posicione: Mantenha um joelho de cada lado do tronco do uke.\nAproxime: Abaixe o tronco e mantenha contato de peito com peito.\nControle: Controle a parte superior e ajuste a base à reação do uke.",
+                "video_url": "https://www.youtube.com/watch?v=55-rFmBx53g",
+                "sheet": "fichas-faixa-laranja-p23.jpg"
               },
               {
                 "name": "Uki-gatame",
-                "kind": "item"
+                "kind": "item",
+                "video_url": "https://www.youtube.com/watch?v=e_lAjik1SUM"
               },
               {
                 "name": "Ura-gatame",
-                "kind": "item"
+                "kind": "item",
+                "video_url": "https://www.youtube.com/watch?v=eeAHZB0v3XY"
               },
               {
                 "name": "Kuzure-yoko-shiho-gatame",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Yoko-shiho-gatame modificada",
+                "key_points": "Controle do braço: segure a manga e mantenha o braço de uke controlado junto ao tronco.\nPressão de peito: mantenha o peito sobre o uke e o quadril baixo, fixando seus ombros no tatame.\nControle superior: controle a região do ombro e mantenha os ombros de uke no tatame.",
+                "common_error": "Perder o controle do braço ou deixar espaço sob o peito.",
+                "steps": "Prepare: Ajuste a pegada no braço e no ombro.\nAjuste: Mantenha o peito sobre uke e o quadril baixo.\nControle: Abra a base e acompanhe as tentativas de saída.",
+                "sheet": "fichas-faixa-amarela-p16.jpg"
               },
               {
                 "name": "Kuzure-tate-shiho-gatame",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Tate-shiho-gatame modificada",
+                "key_points": "Controle do braço: envolva um dos braços do uke por baixo do seu corpo e mantenha-o bem controlado junto ao peito.\nPeso e estabilidade: mantenha o peito sobre o uke, com o quadril baixo e postura estável.\nPernas enganchadas: mantenha os joelhos bem abertos e os pés enganchando por fora das pernas do uke, para evitar a fuga.",
+                "common_error": "Deixar o braço do uke livre para a ponte.",
+                "steps": "Prepare: Montado, controlando um braço do uke por baixo.\nAjuste: Pernas enganchadas.\nControle: Peso no peito do uke.",
+                "sheet": "fichas-faixa-verde-p19.jpg"
               },
               {
                 "name": "Makura-kesa-gatame",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Kesa-gatame travesseiro",
+                "key_points": "Cabeça apoiada\nControle do braço\nMão na própria coxa",
+                "common_error": "Deixar a cabeça sem apoio e perder o controle do tronco.",
+                "steps": "Prepare: Aproxime a coxa para apoiar a cabeça do uke.\nAjuste: Envolva a cabeça e segure o tecido da própria coxa.\nControle: Mantenha o braço próximo controlado e a base aberta.",
+                "sheet": "fichas-faixa-laranja-p24.jpg"
               }
             ],
             "description": "Imobilizações"
@@ -831,47 +1417,98 @@
             "children": [
               {
                 "name": "Nami-juji-jime",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Estrangulamento cruzado normal",
+                "key_points": "Braços cruzados\nPalmas para baixo\nPolegares por dentro",
+                "common_error": "Segurar as golas sem cruzar os braços.",
+                "steps": "Prepare: Estabilize a posição de frente para uke.\nAjuste: Cruze os braços e introduza os polegares nas golas.\nControle: Mantenha as palmas para baixo e a base estável.",
+                "video_url": "https://www.youtube.com/watch?v=k2cHry9HByQ",
+                "sheet": "fichas-faixa-marrom-p22.jpg"
               },
               {
                 "name": "Gyaku-juji-jime",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Estrangulamento cruzado invertido",
+                "key_points": "Braços cruzados\nPalmas para cima\nDedos por dentro",
+                "common_error": "Deixar as pegadas rasas ou os braços sem cruzar.",
+                "steps": "Prepare: Estabilize a posição de frente para uke.\nAjuste: Cruze os braços, com os dedos por dentro das golas.\nControle: Mantenha as palmas para cima e a base estável.",
+                "video_url": "https://www.youtube.com/watch?v=t3tQriIPdlI",
+                "sheet": "fichas-faixa-marrom-p23.jpg"
               },
               {
                 "name": "Kata-juji-jime",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Estrangulamento cruzado misto",
+                "key_points": "Braços cruzados\nUma palma para cima\nOutra palma para baixo",
+                "common_error": "Usar a mesma orientação nas duas mãos.",
+                "steps": "Prepare: Estabilize a posição de frente para uke.\nAjuste: Cruze os braços com uma pegada de cada tipo.\nControle: Mantenha a base e as mãos nas golas opostas.",
+                "video_url": "https://www.youtube.com/watch?v=3VZVUAmiMD8",
+                "sheet": "fichas-faixa-marrom-p24.jpg"
               },
               {
                 "name": "Hadaka-jime",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Estrangulamento sem a gola",
+                "key_points": "Posicione o antebraço: por trás, posicione o antebraço sob o queixo do uke.\nUna as mãos: nesta variação, una as mãos à frente do ombro do uke.\nMantenha o controle: ajuste lentamente e solte ao sinal do parceiro.",
+                "common_error": "Pressionar a boca em vez do pescoço.",
+                "steps": "Prepare: Por trás, posicione o antebraço sob o queixo do uke.\nAjuste: Una as mãos à frente do ombro do uke.\nControle: Ajuste lentamente e solte ao sinal do parceiro.",
+                "video_url": "https://www.youtube.com/watch?v=9f0n8jez7iA",
+                "sheet": "fichas-faixa-roxa-p29.jpg"
               },
               {
                 "name": "Okuri-eri-jime",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Estrangulamento deslizando a gola",
+                "key_points": "Gola alta\nTronco estável\nLapela oposta",
+                "common_error": "Pegar as duas mãos na mesma lapela.",
+                "steps": "Prepare: Posicione-se atrás e estabilize o tronco.\nAjuste: Uma mão na gola alta; a outra na lapela oposta.\nControle: Trabalhe as duas pegadas sem torcer o pescoço.",
+                "video_url": "https://www.youtube.com/watch?v=EiqyoVcIAi8",
+                "sheet": "fichas-faixa-roxa-p30.jpg"
               },
               {
                 "name": "Kata-ha-jime",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Estrangulamento de uma asa",
+                "key_points": "Braço elevado\nControle por trás\nPegada na gola",
+                "common_error": "Perder o controle do braço elevado.",
+                "steps": "Prepare: Posicione-se atrás e firme a pegada na gola.\nAjuste: Passe o outro braço sob a axila e eleve o braço de uke.\nControle: Ajuste a mão atrás da nuca e estabilize o tronco.",
+                "video_url": "https://www.youtube.com/watch?v=yaTGgRjnwB8",
+                "sheet": "fichas-faixa-marrom-p21.jpg"
               },
               {
                 "name": "Sode-guruma-jime",
-                "kind": "item"
+                "kind": "item",
+                "video_url": "https://www.youtube.com/watch?v=E3nvQzClcAU"
               },
               {
                 "name": "Kata-te-jime",
-                "kind": "item"
+                "kind": "item",
+                "video_url": "https://www.youtube.com/watch?v=cHeIs-fSqwE"
               },
               {
                 "name": "Ryo-te-jime",
-                "kind": "item"
+                "kind": "item",
+                "video_url": "https://www.youtube.com/watch?v=-RHC4V7TQiY"
               },
               {
                 "name": "Tsukkomi-jime",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Estrangulamento de empurrão",
+                "key_points": "Lapela conduzida: conduza a gola até a lateral do pescoço.\nBase estável: mantenha a postura firme e o equilíbrio.\nControle do tecido: mantenha a outra lapela presa.",
+                "common_error": "Empurrar o queixo em vez de trabalhar a lapela.",
+                "steps": "Prepare: Fique de frente e firme as pegadas nas lapelas.\nAjuste: Conduza a gola até a lateral do pescoço.\nControle: Mantenha a outra lapela presa e a postura estável.",
+                "video_url": "https://www.youtube.com/watch?v=dKKpnD3eLcY",
+                "sheet": "fichas-faixa-marrom-p26.jpg"
               },
               {
                 "name": "Sankaku-jime",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Estrangulamento em triângulo",
+                "key_points": "Triângulo: envolva o pescoço e um braço do uke com as pernas.\nFechamento: encaixe o pé atrás do joelho oposto.\nControle: ajuste o ângulo e mantenha o conjunto estável.",
+                "common_error": "Cruzar os pés sem fechar o triângulo atrás do joelho.",
+                "steps": "Prepare: Um braço dentro, outro fora do triângulo.\nAjuste: Feche atrás do joelho, sem apenas cruzar os pés.\nControle: Aplique gradualmente e solte ao sinal.",
+                "video_url": "https://www.youtube.com/watch?v=lq1CUBRAm7s",
+                "sheet": "fichas-faixa-marrom-p25.jpg"
               }
             ],
             "description": "Estrangulamentos"
@@ -882,39 +1519,83 @@
             "children": [
               {
                 "name": "Ude-garami",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Chave de braço entrelaçada",
+                "key_points": "Controle o punho: segure o punho do uke junto ao tatame.\nFeche a pegada: passe o outro braço sob o braço flexionado e segure seu próprio punho.\nEstabilize: mantenha o tronco próximo e o controle lateral.",
+                "common_error": "Segurar apenas o braço do uke, sem fechar a pegada no próprio punho.",
+                "steps": "Prepare: Braço flexionado, ombro estabilizado.\nAjuste: Pegada em quatro, sem perder o punho.\nControle: Movimento gradual e soltura imediata ao sinal.",
+                "video_url": "https://www.youtube.com/watch?v=AIlTvZb4RlE",
+                "sheet": "fichas-faixa-roxa-p32.jpg"
               },
               {
                 "name": "Ude-hishigi-juji-gatame",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Chave de braço cruzada (armlock)",
+                "key_points": "Controle do braço: segure o punho do uke e mantenha o braço entre as pernas, com os joelhos próximos.\nPolegar para cima: mantenha o polegar do uke voltado para cima.\nQuadril no solo: mantenha o quadril bem apoiado no tatame e estabilize a posição.",
+                "common_error": "Joelhos abertos: o uke tira o braço.",
+                "steps": "Prepare: Controle o braço entre as pernas, com os joelhos próximos.\nAjuste: Mantenha o polegar do uke voltado para cima.\nControle: Ajuste o quadril lentamente e solte ao sinal de desistência.",
+                "video_url": "https://www.youtube.com/watch?v=OWgSOlCuMXw",
+                "sheet": "fichas-faixa-roxa-p31.jpg"
               },
               {
                 "name": "Ude-hishigi-ude-gatame",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Chave de braço com as mãos",
+                "key_points": "Posição do braço: mantenha o braço do uke alinhado, com o punho junto ao seu ombro.\nControle das mãos: trave suas mãos sobre o cotovelo do uke.\nDireção da pressão: aplique a pressão para dentro, mantendo o cotovelo alinhado.",
+                "common_error": "Deixar o uke dobrar o cotovelo.",
+                "steps": "Prepare: Braço do uke alinhado e punho junto ao seu ombro.\nAjuste: Mãos travadas sobre o cotovelo.\nControle: Pressão para dentro.",
+                "video_url": "https://www.youtube.com/watch?v=SBf0aTma1VI",
+                "sheet": "fichas-faixa-marrom-p27.jpg"
               },
               {
                 "name": "Ude-hishigi-hiza-gatame",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Chave de braço com o joelho",
+                "key_points": "Fixe o braço: controle o braço do uke junto ao seu corpo.\nPosicione o joelho: use o joelho para controlar o cotovelo.\nMantenha a base: preserve o contato e ajuste lentamente.",
+                "common_error": "Apoiar o joelho fora da linha do cotovelo.",
+                "steps": "Prepare: Estabilize o braço e a postura do uke.\nAjuste: Alinhe o joelho com o cotovelo.\nControle: Aplique gradualmente e solte ao sinal.",
+                "video_url": "https://www.youtube.com/watch?v=H2HtAJdiJcE",
+                "sheet": "fichas-faixa-marrom-p28.jpg"
               },
               {
                 "name": "Ude-hishigi-waki-gatame",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Chave de braço com a axila",
+                "key_points": "Fixação: prenda o braço do uke sob a axila.\nPegada: controle o punho com as duas mãos.\nEstabilidade: mantenha o apoio e ajuste sem movimentos bruscos.",
+                "common_error": "Cair ou lançar o peso bruscamente sobre o braço.",
+                "steps": "Prepare: Controle o braço e estabeleça uma base estável.\nAjuste: Alinhe o cotovelo sob a axila.\nControle: Aplique gradualmente e solte ao sinal.",
+                "video_url": "https://www.youtube.com/watch?v=8F5p1zuJRG0",
+                "sheet": "fichas-faixa-marrom-p29.jpg"
               },
               {
                 "name": "Ude-hishigi-hara-gatame",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Chave de braço com o abdômen",
+                "key_points": "Controle do punho: mantenha o braço estendido e estabilize o punho.\nApoio no abdômen: encoste o cotovelo do uke ao abdômen.\nBase estável: preserve o apoio e ajuste o corpo gradualmente.",
+                "common_error": "Perder o apoio do cotovelo contra o abdômen.",
+                "steps": "Prepare: Controle o braço e o ombro.\nAjuste: Alinhe o cotovelo com o abdômen.\nControle: Ajuste devagar e solte ao sinal.",
+                "video_url": "https://www.youtube.com/watch?v=ZzEycg8R_9M",
+                "sheet": "fichas-faixa-marrom-p30.jpg"
               },
               {
                 "name": "Ude-hishigi-ashi-gatame",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Chave de braço com a perna",
+                "key_points": "Perna no cotovelo: a perna pressiona o cotovelo estendido do uke.\nControle do punho: segure o punho do uke com as duas mãos.\nQuadril firme: mantenha o quadril próximo e estável para aumentar o controle.",
+                "common_error": "Perna solta sobre o braço.",
+                "steps": "Prepare: Perna pressiona o cotovelo estendido do uke.\nAjuste: Controle do punho com as mãos.\nControle: Quadril firme.",
+                "video_url": "https://www.youtube.com/watch?v=ClY7g_pX-4s",
+                "sheet": "fichas-faixa-marrom-p31.jpg"
               },
               {
                 "name": "Ude-hishigi-te-gatame",
-                "kind": "item"
+                "kind": "item",
+                "video_url": "https://www.youtube.com/watch?v=6DnvhY0tQVM"
               },
               {
                 "name": "Ude-hishigi-sankaku-gatame",
-                "kind": "item"
+                "kind": "item",
+                "video_url": "https://www.youtube.com/watch?v=WefAmW4azhk"
               }
             ],
             "description": "Chaves de articulação"
@@ -925,63 +1606,135 @@
             "children": [
               {
                 "name": "Virada do uke em 4 apoios para kesa-gatame",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Para kesa-gatame",
+                "key_points": "Controle inicial: retire o apoio do braço próximo e acompanhe o tronco.\nVirada: incline uke para o lado e acompanhe a rotação.\nImobilização: controle os braços e acompanhe o tronco.",
+                "common_error": "Tentar virar sem retirar o apoio do braço.",
+                "steps": "Prepare: Controle os braços e o tronco.\nAjuste: Retire o apoio e acompanhe a virada.\nControle: Ajuste a cabeça, o braço e a base.",
+                "sheet": "fichas-faixa-azul-p17.jpg"
               },
               {
                 "name": "Virada do uke em decúbito ventral para kami-shiho-gatame",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Virada",
+                "key_points": "Controla: a faixa e a gola.\nLevanta um lado: do uke e passa.\nFinaliza na kami-shiho-gatame.",
+                "common_error": "Deixar o uke retomar os 4 apoios.",
+                "steps": "Prepare: Controla a faixa e a gola.\nAjuste: Levanta um lado do uke e passa.\nControle: Finaliza na kami-shiho-gatame.",
+                "sheet": "fichas-faixa-azul-p18.jpg"
               },
               {
                 "name": "Virada pelo braço (uke em decúbito ventral)",
-                "kind": "item"
+                "kind": "item",
+                "translation": "(uke em decúbito ventral)",
+                "key_points": "Início: tori controla o braço de uke e a gola, com uke em decúbito ventral.\nVirada: tori rola o uke sobre o ombro, mantendo o controle do braço e da gola.\nImobilização: tori finaliza em imobilização, controlando o braço e a cabeça de uke.",
+                "common_error": "Soltar a gola na virada.",
+                "steps": "Prepare: Controla o braço e a gola.\nAjuste: Rola o uke sobre o ombro.\nControle: Finaliza em imobilização.",
+                "sheet": "fichas-faixa-amarela-p17.jpg"
               },
               {
                 "name": "Virada pela faixa (uke em decúbito ventral)",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Virada",
+                "key_points": "Início: tori, por trás de uke em decúbito ventral, pega a faixa por cima.\nPassagem da perna: tori levanta o quadril de uke e passa a perna.\nFinalização: tori completa a virada e estabiliza em tate-shiho-gatame.",
+                "common_error": "Puxar a faixa sem levantar o quadril.",
+                "steps": "Prepare: Pega a faixa por cima.\nAjuste: Levanta o quadril do uke e passa a perna.\nControle: Finaliza na tate ou kami-shiho.",
+                "sheet": "fichas-faixa-laranja-p26.jpg"
               },
               {
                 "name": "Virada com finalização em estrangulamento",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Exemplo: controle para okuri-eri-jime",
+                "key_points": "Controle inicial: estabeleça a pegada na gola com uke em quatro apoios.\nTransição: conduza a virada e estabilize-se atrás de uke.\nControle final: ajuste a gola alta e a lapela oposta.",
+                "common_error": "Soltar a gola durante a transição.",
+                "steps": "Prepare: Controle a gola e acompanhe o tronco.\nAjuste: Mantenha as pegadas durante a virada.\nControle: Estabilize antes de ajustar as lapelas.",
+                "sheet": "fichas-faixa-marrom-p32.jpg"
               },
               {
                 "name": "Virada com finalização em chave",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Virada",
+                "common_error": "Perder o braço na virada.",
+                "steps": "Prepare: Controla o braço do uke em 4 apoios.\nAjuste: Rola e entra na juji-gatame.\nControle: Finaliza.",
+                "sheet": "fichas-faixa-marrom-p33.jpg"
               },
               {
                 "name": "Nogare da kesa-gatame",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Exemplo com kuzure-kesa-gatame",
+                "common_error": "Tentar afastar o parceiro apenas com os braços.",
+                "steps": "Prepare: Aproxime os pés e prepare o movimento do quadril.\nAjuste: Faça uma ponte curta para criar espaço.\nRecupere: Aproveite a abertura para inserir o joelho.",
+                "video_url": "https://www.youtube.com/watch?v=5_TS0YHdxcQ",
+                "sheet": "fichas-faixa-amarela-p18.jpg"
               },
               {
                 "name": "Nogare da yoko-shiho-gatame",
-                "kind": "item"
+                "kind": "item",
+                "common_error": "Mover só os braços e manter o quadril parado.",
+                "steps": "Prepare: Crie espaço sem estender completamente os braços.\nAjuste: Gire o quadril e leve o joelho para baixo do tronco do parceiro.\nRecupere: Se abrir espaço, recupere as pernas entre os corpos.",
+                "video_url": "https://www.youtube.com/watch?v=yK_GSamSPko",
+                "sheet": "fichas-faixa-laranja-p27.jpg"
               },
               {
                 "name": "Nogare da kami-shiho-gatame",
-                "kind": "item"
+                "kind": "item",
+                "common_error": "Tentar sair sem deslocar o corpo.",
+                "steps": "Prepare: Crie espaço sob o tronco do parceiro.\nAjuste: Deslize o corpo para longe e aproxime os joelhos.\nRecupere: Insira joelhos ou pés entre os corpos para recuperar a guarda.",
+                "video_url": "https://www.youtube.com/watch?v=seGsXy9I4G8",
+                "sheet": "fichas-faixa-verde-p20.jpg"
               },
               {
                 "name": "Nogare da tate-shiho-gatame",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Escapada",
+                "key_points": "Situação inicial: uke mantém a montada. Tori prende um braço e o pé do parceiro do mesmo lado.\nPonte para o lado preso: tori faz a ponte e gira para o lado em que retirou os apoios do parceiro.\nRola e passa por cima: tori completa o giro e fica por cima, dentro da guarda de uke.",
+                "common_error": "Ponte reta, sem prender o braço.",
+                "steps": "Prepare: Prenda braço e pé do parceiro do mesmo lado.\nAjuste: Ponte para o lado preso.\nControle: Role e estabilize por cima.",
+                "video_url": "https://www.youtube.com/watch?v=JMJBjnst_DA",
+                "sheet": "fichas-faixa-verde-p21.jpg"
               },
               {
                 "name": "Nogare da kata-gatame",
-                "kind": "item"
+                "kind": "item",
+                "key_points": "Tentativa de inserir o joelho sob o quadril",
+                "common_error": "Puxar o braço preso com força, sem criar espaço.",
+                "steps": "Prepare: Crie espaço mantendo o braço protegido.\nAjuste: Gire para o lado do parceiro e aproxime o joelho.\nRecupere: Insira o joelho sob o quadril para reduzir o controle.",
+                "video_url": "https://www.youtube.com/watch?v=7hP1-W2yovk",
+                "sheet": "nogare-da-kata-gatame.jpg"
               },
               {
                 "name": "Fusegi no solo (defesa com as pernas)",
-                "kind": "item"
+                "kind": "item",
+                "key_points": "Guarda com as pernas: mantenha as pernas entre o parceiro e o seu corpo.\nMãos firmes: controle as mangas do uke.\nProteja o quadril: mova o quadril e mantenha as pernas ativas para não ser passado.",
+                "common_error": "Deixar o quadril parado e perder o controle das pernas.",
+                "steps": "Prepare: Pernas entre o parceiro e o seu corpo (guarda).\nAjuste: Mãos controlam as mangas.\nControle: Quadril se move para não ser passado.",
+                "sheet": "fichas-faixa-amarela-p03.jpg"
               },
               {
                 "name": "Passagem de guarda para imobilização",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Do meio das pernas para a imobilização",
+                "key_points": "Controle: tori controla as duas pernas de uke, mantendo os joelhos fechados.\nPassagem: tori empurra um joelho de uke para o lado e passa a perna, mantendo o controle do quadril.\nImobilização: tori estabelece a imobilização em kesa-gatame ou yoko-shiho-gatame, mantendo o controle do tronco de uke.",
+                "common_error": "Passar sem controlar o quadril.",
+                "steps": "Prepare: Controle as pernas e mantenha a base.\nAjuste: Ultrapasse as pernas sem perder o controle do quadril.\nControle: Estabilize o tronco antes de ajustar a imobilização.",
+                "sheet": "fichas-faixa-verde-p23.jpg"
               },
               {
                 "name": "Passagem de guarda para chave ou estrangulamento",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Exemplo: passagem para juji-gatame",
+                "key_points": "Passagem: ultrapasse as pernas mantendo o controle do braço.\nEstabilização: controle o tronco antes de mudar a posição das pernas.\nJuji-gatame: estabilize o braço entre os joelhos.",
+                "common_error": "Buscar a finalização antes de estabilizar.",
+                "steps": "Prepare: Passe a guarda com controle.\nAjuste: Estabilize o tronco e isole o braço.\nControle: Ajuste a chave lentamente e solte ao sinal.",
+                "sheet": "fichas-faixa-roxa-p34.jpg"
               },
               {
                 "name": "Defesa em guarda com finalização",
-                "kind": "item"
+                "kind": "item",
+                "translation": "Exemplo: da guarda para juji-gatame",
+                "key_points": "Guarda: controle o braço e limite a postura de uke.\nEntrada: gire o quadril e passe uma perna sobre a cabeça, mantendo a outra no tronco.\nJuji-gatame: estabilize o braço entre os joelhos e controle o punho.",
+                "common_error": "Perder o braço durante o giro do quadril.",
+                "steps": "Prepare: Mantenha o controle do braço.\nAjuste: Gire o quadril para alinhar a entrada.\nControle: Aproxime os joelhos e solte ao sinal.",
+                "sheet": "fichas-faixa-marrom-p34.jpg"
               }
             ],
             "description": "Transições no solo cobradas no programa de faixas"
@@ -1024,15 +1777,29 @@
                 "children": [
                   {
                     "name": "Uki-otoshi",
-                    "kind": "item"
+                    "kind": "item",
+                    "common_error": "Antecipar a projeção antes do terceiro passo.",
+                    "steps": "Prepare: Recue em tsugi-ashi e conduza uke para a frente.\nAjuste: Na forma direita, apoie o joelho esquerdo e mantenha o pé direito à frente.\nControle: Projete pelas mãos, mantendo o controle da manga.",
+                    "video_url": "https://www.youtube.com/watch?v=bkhBZzE2HpM",
+                    "sheet": "fichas-faixa-verde-p16.jpg"
                   },
                   {
                     "name": "Seoi-nage",
-                    "kind": "item"
+                    "kind": "item",
+                    "key_points": "Braço sob a axila\nCostas em contato\nControle do braço do ataque",
+                    "common_error": "Entrar sem controlar o braço do ataque.",
+                    "steps": "Prepare: Uke avança com golpe descendente de punho.\nAjuste: Desvie o ataque, gire e encaixe o braço sob a axila.\nControle: Una as costas ao tronco e projete para a frente.",
+                    "video_url": "https://www.youtube.com/watch?v=bkhBZzE2HpM",
+                    "sheet": "fichas-faixa-verde-p17.jpg"
                   },
                   {
                     "name": "Kata-guruma",
-                    "kind": "item"
+                    "kind": "item",
+                    "key_points": "Carga sobre os ombros\nApoio na coxa\nManga controlada",
+                    "common_error": "Segurar os dois pulsos e perder o apoio na coxa.",
+                    "steps": "Prepare: Conduza uke para a frente com o deslocamento.\nAjuste: Baixe o quadril e passe a mão por dentro da coxa.\nControle: Eleve sobre os ombros e projete na diagonal à frente.",
+                    "video_url": "https://www.youtube.com/watch?v=bkhBZzE2HpM",
+                    "sheet": "fichas-faixa-verde-p18.jpg"
                   }
                 ]
               },
@@ -1042,15 +1809,30 @@
                 "children": [
                   {
                     "name": "Uki-goshi",
-                    "kind": "item"
+                    "kind": "item",
+                    "key_points": "Entrada lateral\nCintura envolvida\nRotação do quadril",
+                    "common_error": "Entrar com o quadril profundo demais.",
+                    "steps": "Prepare: Uke avança com golpe descendente de punho.\nAjuste: Entre de lado e envolva a cintura, desviando do ataque.\nControle: Mantenha o contato e projete pela rotação do quadril.",
+                    "video_url": "https://www.youtube.com/watch?v=bkhBZzE2HpM",
+                    "sheet": "fichas-faixa-roxa-p17.jpg"
                   },
                   {
                     "name": "Harai-goshi",
-                    "kind": "item"
+                    "kind": "item",
+                    "key_points": "Manga controlada\nContato do quadril\nVarredura em contato",
+                    "common_error": "Varrer no vazio, sem contato e sem desequilíbrio.",
+                    "steps": "Prepare: Conduza uke com o deslocamento e ajuste a pegada nas costas.\nAjuste: Encoste o quadril e desequilibre para a diagonal à frente.\nControle: Varra em contato com a perna de uke e acompanhe a queda.",
+                    "video_url": "https://www.youtube.com/watch?v=bkhBZzE2HpM",
+                    "sheet": "fichas-faixa-roxa-p18.jpg"
                   },
                   {
                     "name": "Tsurikomi-goshi",
-                    "kind": "item"
+                    "kind": "item",
+                    "key_points": "Gola alta\nControle da manga\nQuadril baixo",
+                    "common_error": "Soltar a manga ou elevar sem baixar o quadril.",
+                    "steps": "Prepare: Conduza uke para a frente com pegadas na manga e na gola alta.\nAjuste: Gire, flexione os joelhos e posicione o quadril baixo.\nControle: Coordene a elevação do quadril com a ação das duas mãos.",
+                    "video_url": "https://www.youtube.com/watch?v=bkhBZzE2HpM",
+                    "sheet": "fichas-faixa-roxa-p19.jpg"
                   }
                 ]
               },
@@ -1060,15 +1842,28 @@
                 "children": [
                   {
                     "name": "Okuri-ashi-harai",
-                    "kind": "item"
+                    "kind": "item",
+                    "common_error": "Varrer fora do tempo ou usar o pé do lado errado.",
+                    "steps": "Prepare: Desloque-se para a direita em tsugi-ashi, aumentando o ritmo.\nAjuste: No terceiro passo, varra o tornozelo direito de uke com a sola esquerda.\nControle: Junte os dois pés de uke e acompanhe a projeção pelas mãos.",
+                    "video_url": "https://www.youtube.com/watch?v=bkhBZzE2HpM",
+                    "sheet": "fichas-faixa-marrom-p18.jpg"
                   },
                   {
                     "name": "Sasae-tsurikomi-ashi",
-                    "kind": "item"
+                    "kind": "item",
+                    "common_error": "Bloquear a canela.",
+                    "steps": "Prepare: Tori recua puxando o uke.\nAjuste: Bloqueia o pé e eleva com as mãos.\nControle: Rotação do tronco.",
+                    "video_url": "https://www.youtube.com/watch?v=bkhBZzE2HpM",
+                    "sheet": "fichas-faixa-marrom-p19.jpg"
                   },
                   {
                     "name": "Uchi-mata",
-                    "kind": "item"
+                    "kind": "item",
+                    "key_points": "Condução circular\nEntrada por dentro\nControle das pegadas",
+                    "common_error": "Atacar por fora da perna ou sem preparar o desequilíbrio.",
+                    "steps": "Prepare: Conduza uke em círculo e provoque a transferência do peso.\nAjuste: Entre entre as pernas e desequilibre para a frente.\nControle: Eleve a coxa por dentro e acompanhe a projeção.",
+                    "video_url": "https://www.youtube.com/watch?v=bkhBZzE2HpM",
+                    "sheet": "fichas-faixa-marrom-p20.jpg"
                   }
                 ]
               },
@@ -1078,15 +1873,33 @@
                 "children": [
                   {
                     "name": "Tomoe-nage",
-                    "kind": "item"
+                    "kind": "item",
+                    "translation": "Projeção em círculo",
+                    "key_points": "Desequilíbrio: traga o uke para a frente.\nApoio do pé: apoie a sola no baixo abdômen.\nGiro controlado: guie o uke por cima da cabeça.",
+                    "common_error": "Descer sem antes trazer o uke para a frente.",
+                    "steps": "Desequilibre: Conduza o uke para a frente, mantendo gola e manga.\nApoie: Desça para trás e coloque a sola no baixo abdômen do uke.\nProjete: Estenda a perna e conduza o uke por cima da sua cabeça.",
+                    "video_url": "https://www.youtube.com/watch?v=bkhBZzE2HpM",
+                    "sheet": "tomoe-nage.jpg"
                   },
                   {
                     "name": "Ura-nage",
-                    "kind": "item"
+                    "kind": "item",
+                    "translation": "Projeção para trás",
+                    "key_points": "Aproximação: envolva a cintura pelo lado direito.\nElevação: mantenha o uke junto ao corpo.\nDireção: conduza sobre o ombro esquerdo.",
+                    "common_error": "Tentar elevar o uke distante do corpo.",
+                    "steps": "Aproxime: Pelo lado direito do uke, envolva a cintura com os dois braços.\nEleve: Aproxime o corpo e eleve o uke com controle.\nProjete: Desça para trás e conduza o uke sobre o seu ombro esquerdo.",
+                    "video_url": "https://www.youtube.com/watch?v=bkhBZzE2HpM",
+                    "sheet": "ura-nage.jpg"
                   },
                   {
                     "name": "Sumi-gaeshi",
-                    "kind": "item"
+                    "kind": "item",
+                    "translation": "Reversão pelo canto",
+                    "key_points": "Desequilíbrio: uke conduzido para a frente.\nEncaixe do pé: peito do pé sob a coxa do uke.\nSacrifício: desça para trás e conduza a rotação.",
+                    "common_error": "Apoiar a sola no abdômen em vez do peito do pé sob a coxa.",
+                    "steps": "Desequilibre: Conduza o uke para a frente.\nEncaixe: Apoie o peito do pé por dentro, sob a coxa.\nReverta: Desça de costas e eleve com a perna, guiando o uke por cima.",
+                    "video_url": "https://www.youtube.com/watch?v=bkhBZzE2HpM",
+                    "sheet": "sumi-gaeshi.jpg"
                   }
                 ]
               },
@@ -1096,15 +1909,33 @@
                 "children": [
                   {
                     "name": "Yoko-gake",
-                    "kind": "item"
+                    "kind": "item",
+                    "translation": "Gancho lateral",
+                    "key_points": "Desequilíbrio lateral\nSola em contato com o pé\nQueda lateral coordenada",
+                    "common_error": "Sacrificar a base antes de estabelecer o desequilíbrio lateral.",
+                    "steps": "Desequilibre: Conduza o uke a frente e depois para o lado direito.\nVarra: Use a sola do pé esquerdo contra o pé direito do uke.\nAcompanhe: Caia sobre o lado esquerdo e mantenha o controle.",
+                    "video_url": "https://www.youtube.com/watch?v=bkhBZzE2HpM",
+                    "sheet": "yoko-gake.jpg"
                   },
                   {
                     "name": "Yoko-guruma",
-                    "kind": "item"
+                    "kind": "item",
+                    "translation": "Roda lateral",
+                    "key_points": "Controle da cintura\nPerna entre a base\nQueda para o lado",
+                    "common_error": "Deixar a perna por fora da base do uke.",
+                    "steps": "Envolva: Controle o tronco do uke pelo lado.\nDeslize: Introduza uma perna profundamente entre as pernas do uke.\nGire: Caia de lado e conduza o uke por cima do ombro.",
+                    "video_url": "https://www.youtube.com/watch?v=bkhBZzE2HpM",
+                    "sheet": "yoko-guruma.jpg"
                   },
                   {
                     "name": "Uki-waza",
-                    "kind": "item"
+                    "kind": "item",
+                    "translation": "Técnica flutuante",
+                    "key_points": "Diagonal anterior\nCorpo aberto\nSacrifício lateral",
+                    "common_error": "Deixar o uke recuperar a base antes de descer.",
+                    "steps": "Flutue: Leve o uke para a diagonal anterior direita.\nAbra: Abra o corpo e estenda o pé esquerdo por fora do pé direito.\nProjete: Caia sobre o lado esquerdo e conduza o uke por cima.",
+                    "video_url": "https://www.youtube.com/watch?v=bkhBZzE2HpM",
+                    "sheet": "uki-waza.jpg"
                   }
                 ]
               }
@@ -1121,23 +1952,38 @@
                 "children": [
                   {
                     "name": "Kesa-gatame",
-                    "kind": "item"
+                    "kind": "item",
+                    "translation": "Imobilização em faixa (echarpe)",
+                    "key_points": "Controle da cabeça\nBraço preso sob a axila\nQuadril próximo e base aberta",
+                    "common_error": "Deixar o quadril afastado e perder o controle do tronco.",
+                    "steps": "Prepare: Envolva a cabeça e mantenha o braço próximo preso sob a axila.\nAjuste: Aproxime o quadril das costelas do uke.\nControle: Abra a base, com uma perna à frente e outra atrás.",
+                    "video_url": "https://www.youtube.com/watch?v=e1eAt15CEMY",
+                    "sheet": "hon-kesa-gatame.jpg"
                   },
                   {
                     "name": "Kata-gatame",
-                    "kind": "item"
+                    "kind": "item",
+                    "translation": "Imobilização do ombro",
+                    "key_points": "Cabeça e braço controlados\nMãos unidas\nBase estável",
+                    "common_error": "Deixar espaço para o uke retirar o braço.",
+                    "steps": "Prepare: Conduza o braço do uke para junto da cabeça dele.\nAjuste: Envolva cabeça e braço; una as mãos.\nControle: Mantenha a cabeça junto ao braço e estabilize a base.",
+                    "video_url": "https://www.youtube.com/watch?v=e1eAt15CEMY",
+                    "sheet": "kata-gatame.jpg"
                   },
                   {
                     "name": "Kami-shiho-gatame",
-                    "kind": "item"
+                    "kind": "item",
+                    "video_url": "https://www.youtube.com/watch?v=e1eAt15CEMY"
                   },
                   {
                     "name": "Yoko-shiho-gatame",
-                    "kind": "item"
+                    "kind": "item",
+                    "video_url": "https://www.youtube.com/watch?v=e1eAt15CEMY"
                   },
                   {
                     "name": "Kuzure-kami-shiho-gatame",
-                    "kind": "item"
+                    "kind": "item",
+                    "video_url": "https://www.youtube.com/watch?v=e1eAt15CEMY"
                   }
                 ]
               },
@@ -1147,23 +1993,28 @@
                 "children": [
                   {
                     "name": "Kata-juji-jime",
-                    "kind": "item"
+                    "kind": "item",
+                    "video_url": "https://www.youtube.com/watch?v=e1eAt15CEMY"
                   },
                   {
                     "name": "Hadaka-jime",
-                    "kind": "item"
+                    "kind": "item",
+                    "video_url": "https://www.youtube.com/watch?v=e1eAt15CEMY"
                   },
                   {
                     "name": "Okuri-eri-jime",
-                    "kind": "item"
+                    "kind": "item",
+                    "video_url": "https://www.youtube.com/watch?v=e1eAt15CEMY"
                   },
                   {
                     "name": "Kata-ha-jime",
-                    "kind": "item"
+                    "kind": "item",
+                    "video_url": "https://www.youtube.com/watch?v=e1eAt15CEMY"
                   },
                   {
                     "name": "Gyaku-juji-jime",
-                    "kind": "item"
+                    "kind": "item",
+                    "video_url": "https://www.youtube.com/watch?v=e1eAt15CEMY"
                   }
                 ]
               },
@@ -1173,23 +2024,28 @@
                 "children": [
                   {
                     "name": "Ude-garami",
-                    "kind": "item"
+                    "kind": "item",
+                    "video_url": "https://www.youtube.com/watch?v=e1eAt15CEMY"
                   },
                   {
                     "name": "Ude-hishigi-juji-gatame",
-                    "kind": "item"
+                    "kind": "item",
+                    "video_url": "https://www.youtube.com/watch?v=e1eAt15CEMY"
                   },
                   {
                     "name": "Ude-hishigi-ude-gatame",
-                    "kind": "item"
+                    "kind": "item",
+                    "video_url": "https://www.youtube.com/watch?v=e1eAt15CEMY"
                   },
                   {
                     "name": "Ude-hishigi-hiza-gatame",
-                    "kind": "item"
+                    "kind": "item",
+                    "video_url": "https://www.youtube.com/watch?v=e1eAt15CEMY"
                   },
                   {
                     "name": "Ashi-garami",
-                    "kind": "item"
+                    "kind": "item",
+                    "video_url": "https://www.youtube.com/watch?v=e1eAt15CEMY"
                   }
                 ]
               }
