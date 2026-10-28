@@ -14,7 +14,10 @@ use App\Services\AuditService;
 use App\Support\Progression\TechniqueTemplateCatalog;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use Throwable;
 
 /** Catálogo de técnicas em árvore por associação e modalidade (ADR-014). */
 class TechniqueCatalogService
@@ -161,11 +164,25 @@ class TechniqueCatalogService
             throw ValidationException::withMessages(['template_key' => 'Selecione um modelo válido.']);
         }
 
-        return DB::transaction(function () use ($association, $martialArt, $key, $template, $actor, $updateCurriculum): array {
+        $written = [];
+        try {
+            return $this->applyTemplateLocked($association, $martialArt, $key, $template, $actor, $updateCurriculum, $written);
+        } catch (Throwable $exception) {
+            Storage::disk('local')->delete($written);
+
+            throw $exception;
+        }
+    }
+
+    /** @param  list<string>  $written  fichas gravadas no disco, apagadas se a transação falhar */
+    private function applyTemplateLocked(Association $association, MartialArt $martialArt, string $key, array $template, User $actor, bool $updateCurriculum, array &$written): array
+    {
+        return DB::transaction(function () use ($association, $martialArt, $key, $template, $actor, $updateCurriculum, &$written): array {
             $items = TechniqueItem::query()->where('association_id', $association->id)->where('martial_art_id', $martialArt->id)->lockForUpdate()->get();
             $byPath = collect($this->paths($items))->flip()->map(fn (int $id) => $items->firstWhere('id', $id));
             $created = 0;
-            $create = function (array $nodes, ?TechniqueItem $parent, string $prefix, ?string $knowledge) use (&$create, &$created, $association, $martialArt, $byPath): void {
+            $studied = 0;
+            $create = function (array $nodes, ?TechniqueItem $parent, string $prefix, ?string $knowledge) use (&$create, &$created, &$studied, &$written, $association, $martialArt, $byPath, $key): void {
                 foreach (array_values($nodes) as $index => $node) {
                     $path = $prefix === '' ? $node['name'] : $prefix.' > '.$node['name'];
                     $nodeKnowledge = $knowledge ?? $node['knowledge'];
@@ -180,6 +197,7 @@ class TechniqueCatalogService
                         $byPath->put($path, $item);
                         $created++;
                     }
+                    $studied += $this->fillStudyContent($association, $item, $node, $key, $written) ? 1 : 0;
                     $create($node['children'] ?? [], $item, $path, $nodeKnowledge);
                 }
             };
@@ -224,15 +242,47 @@ class TechniqueCatalogService
                 $questions++;
             }
             $this->audit->record('technique_template.applied', 'created', $martialArt, null, [
-                'template_key' => $key, 'items_created' => $created, 'entries_created' => $entries, 'questions_created' => $questions, 'missing_ranks' => $missing,
+                'template_key' => $key, 'items_created' => $created, 'study_filled' => $studied, 'entries_created' => $entries, 'questions_created' => $questions, 'missing_ranks' => $missing,
                 'curriculum_updated' => $updateCurriculum, 'entries_updated' => $sync['updated'], 'entries_removed' => $sync['removed'], 'entries_kept' => $sync['kept'],
             ], ['association_id' => $association->id]);
 
             return [
-                'items_created' => $created, 'entries_created' => $entries, 'entries_updated' => $sync['updated'], 'entries_removed' => $sync['removed'],
+                'items_created' => $created, 'study_filled' => $studied, 'entries_created' => $entries, 'entries_updated' => $sync['updated'], 'entries_removed' => $sync['removed'],
                 'entries_kept' => $sync['kept'], 'questions_created' => $questions, 'missing_ranks' => $missing,
             ];
         });
+    }
+
+    /**
+     * Material de estudo do modelo: preenche só os campos vazios do item, para não sobrescrever o que a associação
+     * escreveu, e copia a ficha para o disco privado quando o item ainda não tem uma.
+     *
+     * @param  list<string>  $written
+     */
+    private function fillStudyContent(Association $association, TechniqueItem $item, array $node, string $key, array &$written): bool
+    {
+        if ($item->kind !== 'item') {
+            return false;
+        }
+        $changes = [];
+        foreach (TechniqueTemplateCatalog::STUDY_FIELDS as $field) {
+            if (filled($node[$field] ?? null) && blank($item->{$field})) {
+                $changes[$field] = $node[$field];
+            }
+        }
+        if (isset($node['sheet']) && $item->sheet_path === null) {
+            $extension = pathinfo($node['sheet'], PATHINFO_EXTENSION);
+            $path = 'technique-sheets/'.$association->id.'/'.$item->id.'-'.Str::random(20).'.'.$extension;
+            Storage::disk('local')->put($path, file_get_contents($this->templates->sheetPath($key, $node['sheet'])));
+            $written[] = $path;
+            $changes += ['sheet_path' => $path, 'sheet_mime' => array_search($extension, TechniqueStudyService::SHEET_MIMES, true), 'sheet_name' => $node['sheet']];
+        }
+        if ($changes === []) {
+            return false;
+        }
+        $item->update($changes);
+
+        return true;
     }
 
     /**

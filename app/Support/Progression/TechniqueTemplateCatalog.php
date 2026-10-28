@@ -9,6 +9,9 @@ use RuntimeException;
 /** Modelos de catálogo de técnicas e currículo mantidos em resources/data/technique-templates.json (ADR-014). */
 class TechniqueTemplateCatalog
 {
+    /** Campos de estudo que o modelo pode trazer em cada item; ao reaplicar, só preenchem o que está vazio. */
+    public const STUDY_FIELDS = ['translation', 'key_points', 'common_error', 'steps', 'video_url'];
+
     private ?array $templates = null;
 
     public function all(): array
@@ -30,6 +33,12 @@ class TechniqueTemplateCatalog
         }
 
         return $this->templates = $templates;
+    }
+
+    /** Pasta das fichas do modelo (imagem ou PDF), copiadas para o disco privado ao aplicar. */
+    public function sheetPath(string $key, string $sheet): string
+    {
+        return resource_path('data/technique-sheets/'.$key.'/'.$sheet);
     }
 
     public function find(?string $key): ?array
@@ -75,6 +84,15 @@ class TechniqueTemplateCatalog
                 throw new RuntimeException("O modelo de técnicas {$key} tem item incompleto ou repetido.");
             }
             $names[$node['name']] = true;
+            foreach (self::STUDY_FIELDS as $field) {
+                if (isset($node[$field]) && (! is_string($node[$field]) || $node['kind'] !== 'item')) {
+                    throw new RuntimeException("O modelo de técnicas {$key} tem material de estudo inválido.");
+                }
+            }
+            if (isset($node['sheet']) && (! is_string($node['sheet']) || $node['kind'] !== 'item' || ! preg_match('/^[a-z0-9-]+\.(jpg|png|webp|pdf)$/', $node['sheet'])
+                || ! is_file($this->sheetPath($key, $node['sheet'])))) {
+                throw new RuntimeException("O modelo de técnicas {$key} tem ficha ausente: {$node['name']}.");
+            }
             $path = $prefix === '' ? $node['name'] : $prefix.' > '.$node['name'];
             $paths[$path] = true;
             $this->collectPaths($key, $node['children'] ?? [], $path, $paths);

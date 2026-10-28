@@ -14,6 +14,7 @@ use App\Services\Progression\CurriculumService;
 use App\Services\Sports\CatalogService;
 use App\Support\Progression\TechniqueTemplateCatalog;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
@@ -30,6 +31,7 @@ class TechniqueCatalogTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        Storage::fake('local');
         [$this->association, $this->manager] = $this->context(['martial_art.view', 'curriculum.manage']);
         $this->judo = app(CatalogService::class)->createMartialArt($this->association, ['name' => 'Judô', 'status' => 'active'], 'judo_cbj_2023');
     }
@@ -64,7 +66,7 @@ class TechniqueCatalogTest extends TestCase
         $entry = RankCurriculumEntry::query()->firstOrFail();
         $entry->update(['required_level' => 4]);
         $this->post(route('associations.techniques.template', [$this->association, $this->judo]), ['template_key' => 'judo_kodokan_2026'])
-            ->assertSessionHas('status', 'Modelo aplicado: 0 item(ns), 0 exigência(s) de currículo e 0 pergunta(s) de quiz incluídos.');
+            ->assertSessionHas('status', 'Modelo aplicado: 0 item(ns), 0 exigência(s) de currículo e 0 pergunta(s) de quiz incluídos; 0 item(ns) receberam material de estudo.');
         $this->assertSame($items, TechniqueItem::query()->count());
         $this->assertSame($entries, RankCurriculumEntry::query()->count());
         $this->assertSame(4, $entry->fresh()->required_level);
@@ -72,6 +74,34 @@ class TechniqueCatalogTest extends TestCase
         $this->get(route('associations.techniques.index', [$this->association, $this->judo]))->assertOk()
             ->assertSee('Conhecimento Teórico')->assertSee('Conhecimento Prático')->assertSee('Ippon-seoi-nage');
         $this->get(route('associations.curriculum.show', [$this->association, $this->judo]))->assertOk();
+    }
+
+    public function test_template_brings_study_material_and_reapplying_fills_only_empty_fields(): void
+    {
+        $this->actingAs($this->manager)->post(route('associations.techniques.template', [$this->association, $this->judo]), ['template_key' => 'judo_kodokan_2026'])
+            ->assertSessionHasNoErrors();
+        $item = TechniqueItem::query()->where('name', 'De-ashi-harai')->whereNotNull('sheet_path')->firstOrFail();
+        $this->assertSame('Varredura do pé avançado', $item->translation);
+        $this->assertNotEmpty($item->keyPointList());
+        $this->assertNotEmpty($item->stepList());
+        $this->assertNotNull($item->common_error);
+        $this->assertStringStartsWith('https://www.youtube-nocookie.com/embed/', (string) $item->videoEmbedUrl());
+        $this->assertSame('image/jpeg', $item->sheet_mime);
+        Storage::disk('local')->assertExists($item->sheet_path);
+        $this->assertGreaterThan(140, TechniqueItem::query()->whereNotNull('sheet_path')->count());
+        $this->assertGreaterThan(140, TechniqueItem::query()->whereNotNull('video_url')->count());
+
+        // O que a associação escreveu fica; o campo que ela esvaziou volta do modelo.
+        $item->update(['translation' => 'Rasteira no pé da frente', 'common_error' => null]);
+        $sheet = $item->sheet_path;
+        $files = count(Storage::disk('local')->allFiles('technique-sheets'));
+        $this->post(route('associations.techniques.template', [$this->association, $this->judo]), ['template_key' => 'judo_kodokan_2026'])
+            ->assertSessionHas('status', 'Modelo aplicado: 0 item(ns), 0 exigência(s) de currículo e 0 pergunta(s) de quiz incluídos; 1 item(ns) receberam material de estudo.');
+        $item->refresh();
+        $this->assertSame('Rasteira no pé da frente', $item->translation);
+        $this->assertNotNull($item->common_error);
+        $this->assertSame($sheet, $item->sheet_path);
+        $this->assertSame($files, count(Storage::disk('local')->allFiles('technique-sheets')));
     }
 
     public function test_reapplying_with_curriculum_update_aligns_untouched_template_entries_and_keeps_manual_ones(): void

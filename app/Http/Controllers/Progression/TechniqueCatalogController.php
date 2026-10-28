@@ -87,7 +87,7 @@ class TechniqueCatalogController extends Controller
     {
         $this->ensureMartialArt($association, $martialArt);
         $result = $service->applyTemplate($association, $martialArt, $request->validated('template_key'), $request->user(), $request->boolean('update_curriculum'));
-        $message = "Modelo aplicado: {$result['items_created']} item(ns), {$result['entries_created']} exigência(s) de currículo e {$result['questions_created']} pergunta(s) de quiz incluídos.";
+        $message = "Modelo aplicado: {$result['items_created']} item(ns), {$result['entries_created']} exigência(s) de currículo e {$result['questions_created']} pergunta(s) de quiz incluídos; {$result['study_filled']} item(ns) receberam material de estudo.";
         if ($request->boolean('update_curriculum')) {
             $message .= " Currículo do modelo atualizado: {$result['entries_updated']} exigência(s) alterada(s) e {$result['entries_removed']} retirada(s); {$result['entries_kept']} ajuste(s) da associação mantido(s).";
         }
