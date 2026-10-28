@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-10-28 — Marcar grupo inteiro na aula vira opção da associação
+
+- nova opção "Permitir marcar o grupo inteiro nas técnicas da aula" em Modalidades › Configurações (vale para a associação toda), começando desligada;
+- desligada, os grupos das técnicas da aula ficam sem caixa e servem só para organizar; o professor marca técnica a técnica e o servidor recusa grupo novo;
+- grupos já marcados em aulas anteriores continuam contando para os alunos e aparecem como "grupo inteiro";
+- migration `2026_10_28_000029_add_allow_group_pick_to_progression_settings`; `SessionTechniquesTest` e `QuizTest` ampliados.
+
 ## 2026-10-27 — Corrigir o início da matrícula na turma
 
 - administrador do sistema e gestor da associação corrigem a data inicial da matrícula em "Corrigir início", na ficha do aluno e na página da turma, com motivo obrigatório e auditoria;

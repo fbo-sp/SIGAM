@@ -17,6 +17,7 @@ class ProgressionSettingsRequest extends FormRequest
             'quiz_question_count' => ['required', 'integer', 'min:1', 'max:50'],
             'quiz_minimum_score' => ['required', 'integer', 'min:1', 'max:100'],
             'assessment_reminder_weeks' => ['required', 'integer', 'min:1', 'max:52'],
+            'allow_group_pick' => ['boolean'],
         ];
     }
 }

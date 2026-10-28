@@ -7,6 +7,7 @@ use App\Models\ClassGroup;
 use App\Models\ClassSession;
 use App\Models\ClassSessionTechnique;
 use App\Models\MartialArt;
+use App\Models\ProgressionSetting;
 use App\Models\TechniqueItem;
 use App\Services\Progression\StudentProgressService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -31,7 +32,13 @@ class SessionTechniquesTest extends TestCase
         $nage = TechniqueItem::query()->where('name', 'Nage-waza')->sole();
         $url = route('operation.session.techniques', [$this->dojo, $session]);
 
-        $this->actingAs($user)->get(route('operation.session', [$this->dojo, $session]))->assertOk()->assertSee('Técnicas trabalhadas')->assertSee('Marcar o grupo inteiro')->assertSee('id="tecnica-'.$this->items['O-goshi']->id.'"', false);
+        $this->actingAs($user)->get(route('operation.session', [$this->dojo, $session]))->assertOk()->assertSee('Técnicas trabalhadas')
+            ->assertDontSee('Marcar o grupo inteiro')->assertDontSee('id="tecnica-'.$nage->id.'"', false)->assertSee('id="tecnica-'.$this->items['O-goshi']->id.'"', false);
+        $this->post($url, ['techniques' => [$nage->id]])->assertSessionHasErrors('techniques');
+        $this->assertSame(0, ClassSessionTechnique::query()->count());
+
+        ProgressionSetting::query()->create(['association_id' => $this->association->id, ...ProgressionSetting::DEFAULTS, 'allow_group_pick' => true]);
+        $this->get(route('operation.session', [$this->dojo, $session]))->assertOk()->assertSee('Marcar o grupo inteiro')->assertSee('id="tecnica-'.$nage->id.'"', false);
         $this->post($url, ['techniques' => [$nage->id, $this->items['O-goshi']->id]])->assertSessionHasNoErrors()->assertSessionHas('status', 'Técnicas trabalhadas salvas.');
         $this->post($url, ['techniques' => [$nage->id, $this->items['O-goshi']->id]])->assertSessionHas('status', 'Técnicas sem alteração.');
         $this->assertSame(2, ClassSessionTechnique::query()->whereNull('removed_at')->count());
@@ -44,6 +51,13 @@ class SessionTechniquesTest extends TestCase
         $this->assertNull($removed->fresh()->removed_at);
         $this->assertSame(2, ClassSessionTechnique::query()->count());
         $this->assertDatabaseHas('audit_logs', ['association_id' => $this->association->id, 'event_type' => 'class_session.techniques_saved']);
+
+        // Desligada a opção, o grupo já marcado continua valendo e aparece como "grupo inteiro", mas não se marca grupo novo.
+        ProgressionSetting::query()->where('association_id', $this->association->id)->update(['allow_group_pick' => false]);
+        $this->get(route('operation.session', [$this->dojo, $session]))->assertOk()->assertSee('grupo inteiro')->assertSee('id="tecnica-'.$nage->id.'"', false);
+        $this->post($url, ['techniques' => [$nage->id, $this->items['O-goshi']->id]])->assertSessionHasNoErrors();
+        $other = TechniqueItem::query()->where('kind', 'group')->whereKeyNot($nage->id)->where('martial_art_id', $this->art->id)->firstOrFail();
+        $this->post($url, ['techniques' => [$nage->id, $other->id]])->assertSessionHasErrors('techniques');
 
         $karate = MartialArt::query()->create(['association_id' => $this->association->id, 'name' => 'Karatê']);
         $foreign = TechniqueItem::query()->create(['association_id' => $this->association->id, 'martial_art_id' => $karate->id, 'kind' => 'group', 'knowledge_type' => 'practical', 'name' => 'Kihon', 'status' => 'active']);

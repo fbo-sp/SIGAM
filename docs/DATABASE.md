@@ -160,7 +160,7 @@ Antes da produção, revisar retenção, backup/restore e os requisitos legais d
 
 `class_session_techniques` liga aula e item do catálogo, única por `(class_session_id, technique_item_id)`. Desmarcar preenche `removed_at`/`removed_by_user_id`; marcar de novo limpa os campos.
 
-`progression_settings` tem uma linha por associação (perguntas por quiz, padrão 10; nota mínima da prova oficial, padrão 70; semanas para o lembrete de avaliação, padrão 8). Sem linha, valem os padrões de `ProgressionSetting::DEFAULTS`.
+`progression_settings` tem uma linha por associação (perguntas por quiz, padrão 10; nota mínima da prova oficial, padrão 70; semanas para o lembrete de avaliação, padrão 8; `allow_group_pick`, se a aula aceita marcar um grupo inteiro, padrão desligado). Sem linha, valem os padrões de `ProgressionSetting::DEFAULTS`.
 
 `quiz_questions` (graduação, item teórico opcional, enunciado, explicação, situação) e `quiz_question_options` (texto, `is_correct`, ordem) formam o banco de perguntas. `quiz_releases` guarda a liberação da prova oficial pelo professor (`open`, `used` ou `cancelled`). `quiz_attempts` guarda cada tentativa (`training` ou `official`), com `quiz_release_id` único (uma tentativa por liberação), nota, nota mínima vigente e aprovação; `quiz_attempt_answers` guarda a ordem sorteada das alternativas (`option_ids` em JSON), a alternativa escolhida e o acerto, única por `(quiz_attempt_id, quiz_question_id)`. Nada disso é apagado.
 

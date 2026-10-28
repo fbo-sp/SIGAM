@@ -6,6 +6,7 @@ use App\Models\ClassSession;
 use App\Models\ClassSessionTechnique;
 use App\Models\Dojo;
 use App\Models\MartialArt;
+use App\Models\ProgressionSetting;
 use App\Models\Student;
 use App\Models\TechniqueItem;
 use App\Models\User;
@@ -50,6 +51,13 @@ class SessionTechniqueService
             ->where('status', 'active')->whereKey($itemIds->all())->pluck('id');
         if ($valid->count() !== $itemIds->count()) {
             throw ValidationException::withMessages(['techniques' => 'Escolha técnicas ativas do catálogo da modalidade da turma.']);
+        }
+        if (! ProgressionSetting::for($dojo->association_id)->allow_group_pick) {
+            // Grupo inteiro só quando a associação permite; o grupo já marcado antes continua valendo (decisão de 28/10/2026).
+            $newGroups = TechniqueItem::query()->whereKey($itemIds->diff($this->marked($session))->all())->where('kind', 'group')->exists();
+            if ($newGroups) {
+                throw ValidationException::withMessages(['techniques' => 'Marque as técnicas uma a uma. A associação não permite marcar o grupo inteiro.']);
+            }
         }
 
         return DB::transaction(function () use ($user, $dojo, $session, $itemIds): array {

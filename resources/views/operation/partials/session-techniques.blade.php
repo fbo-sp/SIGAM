@@ -22,7 +22,7 @@
     $collect($techniqueTree->all(), []);
 @endphp
 @if($techniqueTree->isNotEmpty() && ($canMarkTechniques || $markedTechniques !== []))
-<section class="section-block" id="tecnicas"><div class="section-heading"><h2>Técnicas trabalhadas</h2><p>{{ $canMarkTechniques ? 'Marque o grupo inteiro ou abra a seta para marcar técnicas específicas. Contam para os alunos presentes.' : 'Registradas nesta aula.' }}</p></div>
+<section class="section-block" id="tecnicas"><div class="section-heading"><h2>Técnicas trabalhadas</h2><p>{{ $canMarkTechniques ? (($allowGroupPick ?? true) ? 'Marque o grupo inteiro ou abra a seta para marcar técnicas específicas.' : 'Abra os grupos e marque as técnicas e conhecimentos trabalhados.').' Contam para os alunos presentes.' : 'Registradas nesta aula.' }}</p></div>
 @if($canMarkTechniques)
 <form method="post" action="{{ route('operation.session.techniques', [$dojo, $session]) }}">@csrf
 @error('techniques')<div class="alert alert-danger">{{ $message }}</div>@enderror
