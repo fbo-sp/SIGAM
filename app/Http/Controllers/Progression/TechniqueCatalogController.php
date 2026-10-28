@@ -10,6 +10,7 @@ use App\Models\Association;
 use App\Models\MartialArt;
 use App\Models\TechniqueItem;
 use App\Services\Progression\TechniqueCatalogService;
+use App\Services\Progression\TechniqueStudyService;
 use App\Support\Progression\TechniqueTemplateCatalog;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -60,10 +61,16 @@ class TechniqueCatalogController extends Controller
         ]);
     }
 
-    public function update(TechniqueItemRequest $request, Association $association, MartialArt $martialArt, TechniqueItem $item, TechniqueCatalogService $service): RedirectResponse
+    public function update(TechniqueItemRequest $request, Association $association, MartialArt $martialArt, TechniqueItem $item, TechniqueCatalogService $service, TechniqueStudyService $study): RedirectResponse
     {
         $this->ensureItem($association, $martialArt, $item);
-        $service->save($association, $martialArt, $request->validated(), $item);
+        $item = $service->save($association, $martialArt, $request->safe()->except(['sheet', 'remove_sheet']), $item);
+        if ($request->boolean('remove_sheet')) {
+            $study->removeSheet($association, $item);
+        }
+        if ($request->hasFile('sheet')) {
+            $study->storeSheet($association, $item, $request->file('sheet'));
+        }
 
         return redirect()->route('associations.techniques.index', [$association, $martialArt])->with('status', 'Item do catálogo atualizado.');
     }

@@ -13,6 +13,8 @@ O portal funciona como um aplicativo: um início curto e um assunto por subtela.
 
 Cada modalidade tem o "Progresso técnico" (`portal/alunos/{student}/progresso`): começa pelo Perfil técnico (radares do nível atual contra o pedido pela próxima graduação; sem próxima graduação ou sem currículo, uma mensagem explica) e, abaixo, quatro atalhos com resumo que abrem subtelas com "← Progresso" (`progresso/quiz`, `falta`, `aulas` e `evolucao`): Quiz teórico, O que falta (requisitos do exame e itens a trabalhar agrupados por grupo de técnicas, recolhidos, com a contagem de cada grupo), Nas aulas (o que foi trabalhado nos últimos 90 dias) e Evolução (avaliações, sem as observações do professor). O indicador Quiz do início abre direto o Quiz teórico (ver `progression.md`). A troca de dependente permanece visível no topo e as seções têm atalhos adequados para celular.
 
+"Estudar" (`portal/alunos/{student}/estudar`, aba da barra inferior e atalho do início e do progresso, só com modalidade ativa) mostra todo o catálogo ativo da modalidade, decisão de Fabio em 28/10/2026, com busca e filtros Para melhorar (itens da próxima faixa abaixo do pedido ou com dica do professor), Próxima faixa, Já aprendidas e Todo o catálogo. Abre em Para melhorar quando há algum item nele. A página da técnica (`estudar/{item}`) traz vídeo embutido do YouTube (`youtube-nocookie`) ou Vimeo, a faixa em que o item entra no currículo, tradução, dica do professor, o que o professor avalia, erro comum, passo a passo, a situação do aluno, a ficha e técnicas do mesmo grupo. "Estudei esta técnica" grava um estudo por dia em `technique_study_logs` (`TechniqueStudyService::markStudied`), que o professor vê na ficha de acompanhamento; não muda a avaliação.
+
 Não existe cadastro público. Uma conta só acessa o portal quando possui `portal.access`, `association_id`, `person_id` e vínculo válido com o aluno.
 
 ## Autorização relacional
@@ -32,10 +34,10 @@ Um documento aparece somente quando `documents.student_id` corresponde ao aluno 
 ## Mapa de código
 
 - domínio: `app/Services/Portal/PortalAccessService.php`;
-- HTTP: `app/Http/Controllers/Portal/PortalController.php` e `app/Http/Requests/Portal/`;
+- HTTP: `app/Http/Controllers/Portal/PortalController.php`, `PortalProgressionController.php`, `PortalStudyController.php` e `app/Http/Requests/Portal/`;
 - interface: `resources/views/portal/` e `public/css/modules.css`;
 - rotas: grupo `portal.*` em `routes/web.php`;
-- testes: `tests/Feature/PortalAccessTest.php`.
+- testes: `tests/Feature/PortalAccessTest.php`, `QuizTest.php` e `StudyAreaTest.php`.
 
 ## Manutenção futura
 

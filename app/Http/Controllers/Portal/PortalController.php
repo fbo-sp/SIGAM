@@ -29,6 +29,7 @@ class PortalController extends Controller
         'frequencia' => 'Frequência',
         'financeiro' => 'Financeiro',
         'progresso' => 'Progresso e quiz',
+        'estudar' => 'Estudar',
         'campeonatos' => 'Campeonatos',
         'historico' => 'Histórico e federações',
         'documentos' => 'Documentos',
@@ -82,7 +83,7 @@ class PortalController extends Controller
 
     public function section(Request $request, Student $student, string $section, PortalAccessService $access): View
     {
-        abort_unless(isset(self::SECTIONS[$section]) && $section !== 'progresso', 404);
+        abort_unless(isset(self::SECTIONS[$section]) && ! in_array($section, ['progresso', 'estudar'], true), 404);
         $student = $access->resolveStudent($request->user(), $student);
         $students = $access->studentsFor($request->user());
         $associationId = $request->user()->association_id;

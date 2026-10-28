@@ -19,6 +19,7 @@ use App\Services\Progression\QuizService;
 use App\Services\Progression\SessionAssessmentService;
 use App\Services\Progression\SessionTechniqueService;
 use App\Services\Progression\StudentProgressService;
+use App\Services\Progression\TechniqueStudyService;
 use App\Support\Progression\AssessmentLevel;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -49,6 +50,7 @@ class DojoProgressionController extends Controller
             'history' => $this->assessments->history($student, $martialArt),
             'worked' => $this->progress->worked($dojo->association, $student, $martialArt, today()->subDays(90), today()),
             'levels' => AssessmentLevel::labels(),
+            'studied' => app(TechniqueStudyService::class)->studyCounts($student, $martialArt),
             'dojo' => $dojo,
             'association' => null,
             'canAssess' => $this->assessments->assessorTeacherId($request->user(), $dojo, $student, $martialArt) !== null,
