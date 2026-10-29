@@ -21,7 +21,9 @@ use App\Models\TeacherAssociationMembership;
 use App\Models\TeacherProfile;
 use App\Models\User;
 use App\Services\Attendance\AttendanceService;
+use App\Services\Attendance\SessionGenerator;
 use App\Services\Classes\ClassGroupService;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -415,6 +417,61 @@ class DojoClassHubTest extends TestCase
         $this->actingAs($this->dojoManager())->get(route('operation.classes', $this->dojo))->assertOk()->assertSeeInOrder(['Professora Ana', 'principal', 'Professora Bia', 'auxiliar']);
         $this->get(route('operation.classes.show', [$this->dojo, $group]))->assertOk()
             ->assertSeeInOrder(['id="professores"', 'PA', 'Professora Ana', 'id="alunos"', 'data-modal-open="matricular"', '<dialog'], false);
+    }
+
+    public function test_manager_corrects_schedule_time_and_every_session_of_it(): void
+    {
+        $manager = $this->dojoManager();
+        [$anaUser, $ana] = $this->teacher('Professora Ana');
+        $group = $this->group('Noite', $ana);
+        $schedule = ClassSchedule::query()->create(['class_group_id' => $group->id, 'weekday' => 1, 'start_time' => '18:00', 'end_time' => '19:00', 'valid_from' => '2026-09-01', 'status' => 'active']);
+        app(SessionGenerator::class)->generateForGroup($group, Carbon::parse('2026-09-01'), Carbon::parse('2026-11-16'));
+        $sessions = ClassSession::query()->where('class_group_id', $group->id)->get()->keyBy(fn ($session) => $session->session_date->toDateString());
+        $sessions['2026-09-07']->update(['attendance_state' => 'closed', 'status' => 'held']);
+        $student = $this->student('A-1');
+        AttendanceRecord::query()->create(['class_session_id' => $sessions['2026-09-07']->id, 'student_id' => $student->id, 'status' => 'present', 'recorded_at' => now(), 'recorded_by_user_id' => $manager->id]);
+        $sessions['2026-09-14']->update(['status' => 'cancelled', 'cancellation_reason' => 'Feriado']);
+        $moved = app(AttendanceService::class)->reschedule($this->association, $sessions['2026-10-26'], ['session_date' => '2026-10-27', 'start_time' => '17:00', 'end_time' => '18:00', 'reason' => 'Evento']);
+        $total = ClassSession::query()->where('class_group_id', $group->id)->count();
+        $url = route('operation.classes.schedules.correct', [$this->dojo, $group, $schedule]);
+
+        $this->actingAs($manager)->get(route('operation.classes.show', [$this->dojo, $group]))->assertOk()->assertSee('Corrigir horário')
+            ->assertSee('Ao salvar, 13 aula(s) deste horário passam para o horário correto')->assertSee('5 aula(s) passada(s), 1 com chamada finalizada')
+            ->assertSee('8 próxima(s) aula(s), incluindo 1 reagendada(s) à parte')->assertSee('Não mudam: 1 aula(s) cancelada(s).');
+        $this->actingAs($anaUser)->post($url, ['start_time' => '19:30', 'end_time' => '21:00', 'reason' => 'Cadastrado errado'])->assertForbidden();
+        $this->actingAs($manager)->post($url, ['start_time' => '19:30', 'end_time' => '19:00', 'reason' => 'Cadastrado errado'])->assertSessionHasErrors('end_time');
+        $this->post($url, ['start_time' => '19:30', 'end_time' => '21:00', 'reason' => 'Cadastrado errado'])->assertSessionHasNoErrors()
+            ->assertSessionHas('status', 'Horário corrigido para 19:30 às 21:00 em 13 aula(s).');
+
+        $this->assertSame(['19:30', '21:00'], [substr($schedule->fresh()->start_time, 0, 5), substr($schedule->fresh()->end_time, 0, 5)]);
+        $this->assertSame(1, ClassSchedule::query()->where('class_group_id', $group->id)->count());
+        $this->assertSame(0, ClassSession::query()->where('class_group_id', $group->id)->whereNotIn('status', ['cancelled', 'rescheduled'])->whereTime('start_time', '!=', '19:30:00')->count());
+        $this->assertSame('19:30', substr($moved->fresh()->start_time, 0, 5));
+        $this->assertSame('2026-10-27', $moved->fresh()->session_date->toDateString());
+        $this->assertSame('cancelled', $sessions['2026-09-14']->fresh()->status);
+        $this->assertSame(1, AttendanceRecord::query()->where('class_session_id', $sessions['2026-09-07']->id)->count());
+        $this->assertDatabaseHas('audit_logs', ['event_type' => 'class_schedule.time_corrected', 'entity_id' => $schedule->id]);
+
+        app(SessionGenerator::class)->generateForGroup($group, Carbon::parse('2026-09-01'), Carbon::parse('2026-12-07'));
+        $this->assertSame($total, ClassSession::query()->where('class_group_id', $group->id)->count());
+    }
+
+    public function test_schedule_correction_refuses_clash_and_works_in_association_area(): void
+    {
+        $group = $this->group('Noite');
+        $schedule = ClassSchedule::query()->create(['class_group_id' => $group->id, 'weekday' => 1, 'start_time' => '18:00', 'end_time' => '19:00', 'valid_from' => '2026-09-01', 'status' => 'active']);
+        app(SessionGenerator::class)->generateForGroup($group, Carbon::parse('2026-10-01'), Carbon::parse('2026-10-31'));
+        ClassSession::query()->create(['class_group_id' => $group->id, 'session_date' => '2026-10-19', 'start_time' => '20:00', 'end_time' => '21:00', 'status' => 'planned', 'attendance_state' => 'open']);
+        $manager = User::factory()->create(['association_id' => $this->association->id]);
+        $manager->roles()->attach($this->role('association', ['class.view', 'class.manage']), ['association_id' => $this->association->id]);
+        $url = route('associations.classes.schedules.correct', [$this->association, $group, $schedule]);
+
+        $this->actingAs($manager)->get(route('associations.classes.show', [$this->association, $group]))->assertOk()->assertSee('Corrigir horário');
+        $this->post($url, ['start_time' => '20:00', 'end_time' => '21:00', 'reason' => 'Cadastrado errado'])
+            ->assertSessionHasErrors(['start_time' => 'Já existe uma aula desta turma em 19/10/2026 às 20:00. Ajuste essa aula antes de corrigir.']);
+        $this->assertSame('18:00', substr($schedule->fresh()->start_time, 0, 5));
+        $this->post($url, ['start_time' => '18:30', 'end_time' => '19:30', 'reason' => 'Cadastrado errado'])->assertSessionHas('status', 'Horário corrigido para 18:30 às 19:30 em 4 aula(s).');
+        $this->actingAs(User::factory()->create(['association_id' => $this->association->id]))->post($url, ['start_time' => '19:00', 'end_time' => '20:00', 'reason' => 'Teste'])->assertForbidden();
     }
 
     private function dojoManager(): User

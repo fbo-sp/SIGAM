@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-10-29 — Corrigir horário da turma
+
+- na agenda da turma (dojo e associação), cada horário atual tem "Corrigir horário" para os gestores: corrige o horário cadastrado errado e todas as aulas dele, passadas e futuras, inclusive com chamada finalizada e reagendadas à parte; aulas canceladas continuam canceladas;
+- a janela mostra quantas aulas mudam e pede o motivo, gravado na auditoria (`class_schedule.time_corrected`); conflito com outra aula da turma no mesmo dia e horário é recusado;
+- sem migration; `DojoClassHubTest` ampliado.
+
 ## 2026-10-29 — Importação reconhece alunos já cadastrados
 
 - a prévia da importação de alunos procura cada linha entre os alunos da associação pelo CPF, depois pelo RG e depois pelo nome (com a data de nascimento quando as duas existem) e mostra o aluno encontrado, como foi encontrado e as diferenças;

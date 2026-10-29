@@ -8,6 +8,7 @@ use App\Http\Requests\Classes\EnrollmentRequest;
 use App\Http\Requests\Classes\FutureSessionsRequest;
 use App\Http\Requests\Classes\ScheduleRequest;
 use App\Http\Requests\Classes\ScheduleSetRequest;
+use App\Http\Requests\Classes\ScheduleTimeCorrectionRequest;
 use App\Models\Association;
 use App\Models\ClassGroup;
 use App\Models\ClassSchedule;
@@ -16,6 +17,7 @@ use App\Models\Student;
 use App\Models\TeacherProfile;
 use App\Services\Attendance\FutureSessionMaintainer;
 use App\Services\Classes\ClassGroupService;
+use App\Services\Classes\ScheduleCorrectionService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
@@ -58,6 +60,15 @@ class ClassGroupController extends Controller
         $result = $service->replaceScheduleSet($association, $classGroup, $request->validated());
 
         return back()->with('status', "Nova agenda salva. {$result['created']} aula(s) criada(s), {$result['cancelled']} cancelada(s) e {$result['preserved']} preservada(s).");
+    }
+
+    public function correctScheduleTime(ScheduleTimeCorrectionRequest $request, Association $association, ClassGroup $classGroup, ClassSchedule $schedule, ScheduleCorrectionService $service): RedirectResponse
+    {
+        $this->ensureGroup($association, $classGroup);
+        abort_unless($schedule->class_group_id === $classGroup->id && $schedule->status === 'active', 404);
+        $result = $service->correct($association, $classGroup, $schedule, $request->validated());
+
+        return back()->with('status', 'Horário corrigido para '.$request->string('start_time').' às '.$request->string('end_time')." em {$result['updated']} aula(s).");
     }
 
     public function replaceSchedule(ScheduleRequest $request, Association $association, ClassGroup $classGroup, ClassSchedule $schedule, ClassGroupService $service): RedirectResponse
