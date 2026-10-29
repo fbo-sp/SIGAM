@@ -12,9 +12,11 @@ use App\Http\Requests\Classes\EnrollmentStartRequest;
 use App\Http\Requests\Classes\FutureSessionsRequest;
 use App\Http\Requests\Classes\PastSessionsRequest;
 use App\Http\Requests\Classes\ScheduleSetRequest;
+use App\Http\Requests\Classes\ScheduleTimeCorrectionRequest;
 use App\Models\ClassEnrollment;
 use App\Models\ClassGroup;
 use App\Models\ClassGroupTeacher;
+use App\Models\ClassSchedule;
 use App\Models\Dojo;
 use App\Models\DojoTeacherAssignment;
 use App\Models\MartialArt;
@@ -23,6 +25,7 @@ use App\Services\Access\OperationalScope;
 use App\Services\Attendance\FutureSessionMaintainer;
 use App\Services\Classes\ClassGroupService;
 use App\Services\Classes\EnrollmentStartCorrectionService;
+use App\Services\Classes\ScheduleCorrectionService;
 use App\Services\Classes\TeacherWorkspaceService;
 use App\Services\Progression\AssessmentService;
 use App\Services\Progression\ProgressionPanelService;
@@ -187,6 +190,15 @@ class DojoClassController extends Controller
         $result = $service->replaceScheduleSet($dojo->association, $classGroup, $request->validated());
 
         return back()->with('status', "Nova agenda salva. {$result['created']} aula(s) criada(s), {$result['cancelled']} cancelada(s) e {$result['preserved']} preservada(s).");
+    }
+
+    public function correctScheduleTime(ScheduleTimeCorrectionRequest $request, Dojo $dojo, ClassGroup $classGroup, ClassSchedule $schedule, ScheduleCorrectionService $service): RedirectResponse
+    {
+        $this->authorizeManage($request, $dojo, 'class.manage', $classGroup);
+        abort_unless($schedule->class_group_id === $classGroup->id && $schedule->status === 'active', 404);
+        $result = $service->correct($dojo->association, $classGroup, $schedule, $request->validated());
+
+        return back()->with('status', 'Horário corrigido para '.$request->string('start_time').' às '.$request->string('end_time')." em {$result['updated']} aula(s).");
     }
 
     public function refreshFutureSessions(FutureSessionsRequest $request, Dojo $dojo, ClassGroup $classGroup, FutureSessionMaintainer $maintainer): RedirectResponse

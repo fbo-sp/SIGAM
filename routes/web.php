@@ -134,6 +134,7 @@ Route::middleware(['auth', 'active', 'association.context'])->group(function ():
         Route::post('/turmas/{classGroup}/professores', [DojoClassController::class, 'assignTeacher'])->name('classes.teachers.store');
         Route::post('/turmas/{classGroup}/professores/{assignment}/encerrar', [DojoClassController::class, 'endTeacher'])->name('classes.teachers.end');
         Route::post('/turmas/{classGroup}/agenda/substituir', [DojoClassController::class, 'replaceScheduleSet'])->name('classes.schedules.replace-set');
+        Route::post('/turmas/{classGroup}/horarios/{schedule}/corrigir', [DojoClassController::class, 'correctScheduleTime'])->name('classes.schedules.correct');
         Route::post('/turmas/{classGroup}/aulas/atualizar', [DojoClassController::class, 'refreshFutureSessions'])->name('classes.sessions.refresh');
         Route::post('/turmas/{classGroup}/aulas/passadas', [DojoClassController::class, 'generatePastSessions'])->name('classes.sessions.past');
         Route::get('/aulas', 'sessions')->name('sessions');
@@ -279,6 +280,7 @@ Route::middleware(['auth', 'active', 'association.context'])->group(function ():
         Route::post('/turmas/{classGroup}/agenda/substituir', [ClassGroupController::class, 'replaceScheduleSet'])->middleware('permission:class.manage')->name('classes.schedules.replace-set');
         Route::post('/turmas/{classGroup}/aulas/atualizar', [ClassGroupController::class, 'refreshFutureSessions'])->middleware('permission:class.manage')->name('classes.sessions.refresh');
         Route::post('/turmas/{classGroup}/horarios/{schedule}/substituir', [ClassGroupController::class, 'replaceSchedule'])->middleware('permission:class.manage')->name('classes.schedules.replace');
+        Route::post('/turmas/{classGroup}/horarios/{schedule}/corrigir', [ClassGroupController::class, 'correctScheduleTime'])->middleware('permission:class.manage')->name('classes.schedules.correct');
         Route::post('/turmas/{classGroup}/matriculas', [ClassGroupController::class, 'enroll'])->middleware('permission:enrollment.manage')->name('classes.enrollments.store');
 
         Route::get('/aulas', [AttendanceController::class, 'index'])->middleware('permission:session.view')->name('attendance.index');
