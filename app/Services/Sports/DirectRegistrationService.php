@@ -290,7 +290,8 @@ class DirectRegistrationService
         }
 
         $person = Person::query()->create([
-            ...Arr::only($data, ['full_name', 'cpf', 'birth_date', 'email', 'mobile']),
+            // Os formulários enviam só os campos validados; a importação de alunos também traz RG, telefone e endereço.
+            ...Arr::only($data, ['full_name', 'cpf', 'birth_date', 'email', 'mobile', 'identity_document', 'phone', 'postal_code', 'street', 'number', 'complement', 'district', 'city', 'state']),
             'country' => 'BR',
             'status' => 'active',
         ]);
