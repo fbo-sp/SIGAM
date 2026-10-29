@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Portal;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\People\BirthdayController;
 use App\Http\Requests\Portal\PortalChampionshipRegistrationRequest;
 use App\Http\Requests\Portal\PortalContactRequest;
 use App\Models\AttendanceRecord;
@@ -14,6 +15,7 @@ use App\Models\QuizRelease;
 use App\Models\Student;
 use App\Services\AuditService;
 use App\Services\Championship\ChampionshipRegistrationService;
+use App\Services\People\BirthdayService;
 use App\Services\Portal\PortalAccessService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -48,7 +50,7 @@ class PortalController extends Controller
     }
 
     /** Início do aluno: indicadores principais e atalhos para as subtelas. */
-    public function show(Request $request, Student $student, PortalAccessService $access): View
+    public function show(Request $request, Student $student, PortalAccessService $access, BirthdayService $birthdays): View
     {
         $student = $access->resolveStudent($request->user(), $student);
         $students = $access->studentsFor($request->user());
@@ -78,7 +80,13 @@ class PortalController extends Controller
             'quiz' => QuizRelease::query()->where('student_id', $student->id)->where('status', 'open')->with('rank')->latest('id')->first(),
         ];
 
-        return view('portal.show', compact('student', 'students', 'indicators'));
+        // Aviso de aniversário: o próprio aluno sempre; colegas e professores da turma até o × fechar o aviso do dia.
+        $birthday = [
+            'self' => BirthdayService::isOn($student->person->birth_date, today()),
+            'others' => $request->cookie(BirthdayController::DISMISS_COOKIE) === today()->toDateString() ? collect() : $birthdays->todayForClassmates($student),
+        ];
+
+        return view('portal.show', compact('student', 'students', 'indicators', 'birthday'));
     }
 
     public function section(Request $request, Student $student, string $section, PortalAccessService $access): View

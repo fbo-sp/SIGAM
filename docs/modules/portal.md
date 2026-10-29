@@ -23,13 +23,17 @@ Não existe cadastro público. Uma conta só acessa o portal quando possui `port
 
 ## Escritas permitidas
 
-O portal atualiza apenas e-mail, telefone, celular e contato de emergência. Nome, CPF, nascimento, matrícula, graduação e situação não são aceitos. A atualização usa transação, lock da pessoa e auditoria que registra apenas os nomes dos campos alterados.
+O portal atualiza apenas e-mail, telefone, celular, contato de emergência e a opção de esconder o aniversário dos colegas (`PUT portal/alunos/{student}/aniversario`, mesma regra dos contatos: o próprio aluno ou o responsável legal). Nome, CPF, nascimento, matrícula, graduação e situação não são aceitos. A atualização usa transação, lock da pessoa e auditoria que registra apenas os nomes dos campos alterados.
 
 Inscrições são sempre de competidor. Pessoa, aluno, dojo e tipo de participação são derivados no servidor; `ChampionshipRegistrationService` continua validando janela, modalidade, histórico, filiação e duplicidade.
 
 ## Privacidade
 
 Um documento aparece somente quando `documents.student_id` corresponde ao aluno autorizado. O arquivo permanece no disco privado, passa por rota autenticada e cada download é auditado. A permissão administrativa `document.download` não é concedida ao portal. O financeiro é somente leitura e não expõe observações internas.
+
+## Aniversários
+
+O início do aluno mostra "Feliz aniversário" no dia do próprio aniversário e um aviso para cada colega de turma ou professor da turma que faz aniversário hoje, só com nome e turma, sem idade, e sem quem escondeu o aniversário. O × fecha os avisos até o fim do dia neste navegador (cookie). Detalhes em `modules/organization-people.md`.
 
 ## Mapa de código
 

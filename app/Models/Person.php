@@ -40,7 +40,7 @@ class Person extends Model
 
     protected function casts(): array
     {
-        return ['birth_date' => 'date'];
+        return ['birth_date' => 'date', 'hide_birthday' => 'boolean'];
     }
 
     /**

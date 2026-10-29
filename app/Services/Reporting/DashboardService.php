@@ -13,12 +13,13 @@ use App\Models\Payment;
 use App\Models\Student;
 use App\Models\User;
 use App\Services\Classes\TeacherWorkspaceService;
+use App\Services\People\BirthdayService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 class DashboardService
 {
-    public function __construct(private readonly TeacherWorkspaceService $workspace) {}
+    public function __construct(private readonly TeacherWorkspaceService $workspace, private readonly BirthdayService $birthdays) {}
 
     public function for(User $user): array
     {
@@ -69,7 +70,8 @@ class DashboardService
 
         return ['kind' => $kind, 'metrics' => $metrics, 'lists' => ['by_dojo' => $byDojo, 'by_modality' => $byModality], 'dojo' => $dojoId ? $user->dojo : null,
             'agenda' => $kind === 'dojo' && $this->workspace->usesNavigation($user) ? $this->workspace->agenda($user) : null,
-            'championships' => $kind === 'dojo' ? $this->championships($user) : collect()];
+            'championships' => $kind === 'dojo' ? $this->championships($user) : collect(),
+            'birthdays' => $this->managerBirthdays($user, $kind)];
     }
 
     private function teacher(User $user): array
@@ -80,7 +82,32 @@ class DashboardService
             'today_classes' => $agenda['today']->count(),
             'pending_attendance' => $agenda['pending']->count() + $agenda['today']->where('session.attendance_state', 'open')->count(),
             'classes' => $this->workspace->groups($user)->count(),
-        ], 'championships' => $this->championships($user)];
+        ], 'championships' => $this->championships($user), 'birthdays' => $this->teacherBirthdays($user)];
+    }
+
+    /** Cartão do painel do gestor: aniversariantes de hoje e total do mês, no alcance de quem vê os alunos. */
+    private function managerBirthdays(User $user, string $kind): ?array
+    {
+        $context = $kind === 'association' ? $this->birthdays->association($user, $user->association) : ($user->dojo ? $this->birthdays->dojo($user, $user->dojo) : null);
+        if (! $context) {
+            return null;
+        }
+        $month = $this->birthdays->month($context, today()->year, today()->month);
+
+        return ['today' => $month->where('today', true)->values(), 'month_count' => $month->count(),
+            'url' => $kind === 'association' ? route('associations.birthdays', $user->association_id) : route('operation.birthdays', $user->dojo_id)];
+    }
+
+    /** Tela Hoje do professor: aviso de quem faz aniversário hoje e a lista do mês das turmas dele. */
+    private function teacherBirthdays(User $user): ?array
+    {
+        $context = $this->birthdays->teacher($user);
+        if (! $context) {
+            return null;
+        }
+        $month = $this->birthdays->month($context, today()->year, today()->month);
+
+        return ['today' => $month->where('today', true)->reject(fn (array $row) => $row['person']->id === $user->person_id)->values(), 'month' => $month];
     }
 
     private function championships(User $user): Collection
