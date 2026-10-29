@@ -7,7 +7,7 @@ Exportar em Excel e PDF os dados que cada perfil já vê nas telas (pedido de Fa
 1. base e lista de alunos (Excel), disponível;
 2. frequência resumida e detalhada (Excel), com registro de quem deu a aula ao finalizar a chamada, disponível;
 3. lista de presença (PDF): chamada fechada, em branco por aula e grade do mês, disponível;
-4. técnicas ministradas (Excel com gráficos nativos), comparando com o currículo da próxima faixa.
+4. técnicas ministradas (Excel com gráficos nativos), comparando com o currículo da próxima faixa, disponível.
 
 ## Alcance
 
@@ -40,6 +40,16 @@ O cartão "Frequência" tem período (padrão: o mês atual; até 366 dias), doj
 
 A lista da aula sai pelo botão na página da aula, no dojo (`operacao/dojos/{dojo}/aulas/{session}/lista-presenca`, gestor do dojo ou professor da aula com `report.export`, pela mesma regra de `OperationalScope::sessions`) e na associação (`associacoes/{association}/aulas/{session}/lista-presenca`). Aula cancelada ou reagendada não tem lista. A grade do mês fica no cartão "Lista de presença" da tela Relatórios (`relatorios/grade-presenca`, `grade_turma` e `mes`), nos três níveis; mês sem aulas é recusado com aviso.
 
+## Técnicas ministradas
+
+Cartão "Técnicas ministradas" com turma e período (padrão o mês atual, até 366 dias). `TechniquesTaughtReport` usa `CurriculumCoverageService::forClass` só com aulas de chamada finalizada (`closedOnly`), a mesma cobertura da tela da turma:
+
+- aba **Resumo:** aulas finalizadas, aulas com técnicas marcadas, itens do currículo da turma, abordados, cobertura e não abordados; tabela por grupo (aulas com o grupo, itens abordados, itens no currículo, cobertura com cores) e dois gráficos nativos do Excel: barras "Aulas com cada grupo" e colunas empilhadas "Itens do currículo abordados e não abordados por grupo" (dados nas colunas escondidas T e U);
+- aba **Por técnica:** cada item do currículo e cada técnica marcada, com aulas, % das aulas, primeira e última data, alunos que precisam e uma coluna por aula com ■ azul onde foi trabalhada; grupo marcado inteiro aparece como "(grupo inteiro)";
+- aba **Não abordadas:** itens do currículo da próxima faixa que não apareceram no período, com as faixas que pedem, quantos alunos precisam e a última vez em aula da turma (qualquer período) ou "Nunca".
+
+O currículo da turma é o acumulado da próxima faixa de cada aluno ativo matriculado hoje.
+
 ## PDF
 
 `App\Support\Export\PdfReport` renderiza uma view de `resources/views/reports/pdf` sem acesso remoto, PHP ou JavaScript embutidos, com a fonte DejaVu Sans (acentos) e o rodapé "Gerado em ... por ..." e "Página N de M" em todas as páginas. `sigam:production:check` informa se as extensões `dom` e `mbstring` estão disponíveis.
@@ -50,9 +60,9 @@ A lista da aula sai pelo botão na página da aula, no dojo (`operacao/dojos/{do
 
 ## Mapa do código
 
-- `app/Services/Reporting/ReportScope.php`, `ReportContext.php`, `StudentListReport.php`, `AttendanceReportData.php`, `AttendanceSummaryReport.php`, `AttendanceDetailReport.php`, `AttendanceListReport.php`;
+- `app/Services/Reporting/ReportScope.php`, `ReportContext.php`, `StudentListReport.php`, `AttendanceReportData.php`, `AttendanceSummaryReport.php`, `AttendanceDetailReport.php`, `AttendanceListReport.php`, `TechniquesTaughtReport.php`;
 - `app/Http/Controllers/Reporting/ReportController.php`;
 - `app/Support/Export/XlsxReport.php` e `PdfReport.php`;
 - views `resources/views/reports/pdf/*` (folhas PDF) e `attendance/partials/list-pdf` (botão na aula);
 - view `resources/views/reports/index.blade.php`;
-- testes `tests/Feature/ReportsTest.php` e `AttendanceReportsTest.php` e `AttendanceListPdfTest.php`.
+- testes `tests/Feature/ReportsTest.php` e `AttendanceReportsTest.php` e `AttendanceListPdfTest.php` e `TechniquesTaughtReportTest.php`.

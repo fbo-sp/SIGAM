@@ -24,12 +24,14 @@ class CurriculumCoverageService
     public function __construct(private readonly StudentProgressService $progress) {}
 
     /**
-     * @return array{sessions: int, sessions_with_techniques: int, students: int, overall: array, ranks: Collection, without_next: Collection}
+     * @param  bool  $closedOnly  só aulas com chamada finalizada (relatório de técnicas ministradas)
+     * @return array{sessions: int, sessions_with_techniques: int, students: int, overall: array, ranks: Collection, without_next: Collection, session_list: Collection, marks: Collection, axes: array}
      */
-    public function forClass(Association $association, ClassGroup $group, CarbonInterface $from, CarbonInterface $until): array
+    public function forClass(Association $association, ClassGroup $group, CarbonInterface $from, CarbonInterface $until, bool $closedOnly = false): array
     {
         $group->loadMissing('martialArt');
         $sessions = ClassSession::query()->where('class_group_id', $group->id)->whereNotIn('status', ['cancelled', 'rescheduled'])
+            ->when($closedOnly, fn ($query) => $query->where('attendance_state', 'closed'))
             ->where('session_date', '>=', $from->toDateString())->where('session_date', '<', $until->copy()->addDay()->toDateString())
             ->where('session_date', '<', today()->addDay()->toDateString())->orderBy('session_date')->orderBy('start_time')->get(['id', 'session_date', 'start_time']);
         $marks = ClassSessionTechnique::query()->whereIn('class_session_id', $sessions->pluck('id'))->whereNull('removed_at')->get(['class_session_id', 'technique_item_id']);
@@ -69,6 +71,9 @@ class CurriculumCoverageService
             'without_next' => $withoutNext,
             'monthly' => $this->monthly($sessions, $marks, $axes, $from, $until),
             'map' => $this->map($sessions, $marks, $axes),
+            'session_list' => $sessions,
+            'marks' => $marks,
+            'axes' => $axes,
         ];
     }
 

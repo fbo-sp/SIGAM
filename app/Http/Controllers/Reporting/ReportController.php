@@ -14,6 +14,7 @@ use App\Services\Reporting\AttendanceSummaryReport;
 use App\Services\Reporting\ReportContext;
 use App\Services\Reporting\ReportScope;
 use App\Services\Reporting\StudentListReport;
+use App\Services\Reporting\TechniquesTaughtReport;
 use Carbon\CarbonImmutable;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -32,7 +33,23 @@ class ReportController extends Controller
         private readonly AttendanceSummaryReport $summary,
         private readonly AttendanceDetailReport $detail,
         private readonly AttendanceListReport $lists,
+        private readonly TechniquesTaughtReport $techniques,
     ) {}
+
+    public function associationTechniques(Request $request, Association $association): StreamedResponse
+    {
+        return $this->techniquesExport($request, $this->scope->association($request->user(), $association));
+    }
+
+    public function dojoTechniques(Request $request, Dojo $dojo): StreamedResponse
+    {
+        return $this->techniquesExport($request, $this->scope->dojo($request->user(), $dojo));
+    }
+
+    public function teacherTechniques(Request $request): StreamedResponse
+    {
+        return $this->techniquesExport($request, $this->scope->teacher($request->user()));
+    }
 
     public function associationSessionList(Request $request, Association $association, ClassSession $session): Response
     {
@@ -135,6 +152,14 @@ class ReportController extends Controller
         ], ['grade_turma.required' => 'Escolha a turma.']);
 
         return $this->lists->grid($context, $context->classes->firstWhere('id', (int) $data['grade_turma']), CarbonImmutable::createFromFormat('!Y-m', $data['mes']));
+    }
+
+    private function techniquesExport(Request $request, ReportContext $context): StreamedResponse
+    {
+        $data = $request->validate(['tecnicas_turma' => ['required', 'integer', Rule::in($context->classes->pluck('id')->all())]], ['tecnicas_turma.required' => 'Escolha a turma.']);
+        $period = $this->period($request);
+
+        return $this->techniques->export($context, $context->classes->firstWhere('id', (int) $data['tecnicas_turma']), $period['from'], $period['to']);
     }
 
     private function attendanceExport(Request $request, ReportContext $context, string $kind): StreamedResponse
