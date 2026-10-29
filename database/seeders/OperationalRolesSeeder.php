@@ -27,6 +27,7 @@ class OperationalRolesSeeder extends Seeder
                 'assessment.manage' => 'Avaliar a técnica dos alunos das próprias turmas',
                 'progression.report' => 'Consultar painéis do acompanhamento técnico',
                 'announcement.send' => 'Enviar avisos às turmas e pessoas do próprio alcance',
+                'report.export' => 'Exportar relatórios em Excel e PDF no próprio alcance',
                 'import.manage' => 'Importar alunos e presenças por planilha',
                 'charge.view' => 'Consultar cobranças do dojo',
                 'student_plan.manage' => 'Vincular planos aos alunos do dojo',

@@ -44,6 +44,7 @@ As especificações originais permanecem em `../Especificação/` como baseline 
 | Planos e benefícios | Consolidado por origem de dojo | `modules/finance-plans-benefits.md` |
 | Cobranças recorrentes | Consolidado por origem de dojo | `modules/recurring-charges.md` |
 | Pagamentos e relatórios | Implementado | `modules/payments-reports.md` |
+| Relatórios exportáveis | Etapa 1: lista de alunos em Excel nos três níveis | `modules/reports.md`, `adr/ADR-015-relatorios-exportaveis.md` |
 | Federações e filiações | Implementado | `modules/federations-memberships.md` |
 | Campeonatos | Compartilhado entre associação e operação local | `modules/championships.md` |
 | Portal do aluno e responsável | Implementado | `modules/portal.md` |

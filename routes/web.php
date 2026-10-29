@@ -42,6 +42,7 @@ use App\Http\Controllers\Progression\QuizBankController;
 use App\Http\Controllers\Progression\StudentProgressionController;
 use App\Http\Controllers\Progression\TechniqueCatalogController;
 use App\Http\Controllers\Progression\TechniqueSheetController;
+use App\Http\Controllers\Reporting\ReportController;
 use App\Http\Controllers\Sports\CatalogController;
 use App\Http\Controllers\Sports\DirectRegistrationController;
 use App\Http\Controllers\Sports\StudentController;
@@ -78,6 +79,8 @@ Route::middleware(['auth', 'active', 'association.context'])->group(function ():
     Route::get('/meus-dojos', [OperationalController::class, 'index'])->name('operation.index');
     Route::get('/professor/turmas', [TeacherWorkspaceController::class, 'classes'])->name('teacher.classes');
     Route::get('/professor/alunos', [TeacherWorkspaceController::class, 'students'])->name('teacher.students');
+    Route::get('/professor/relatorios', [ReportController::class, 'teacherIndex'])->name('teacher.reports.index');
+    Route::get('/professor/relatorios/alunos', [ReportController::class, 'teacherStudents'])->middleware('throttle:20,1')->name('teacher.reports.students');
     Route::get('/professor/estudar', [TeacherStudyController::class, 'index'])->name('teacher.study');
     Route::get('/professor/estudar/{item}', [TeacherStudyController::class, 'show'])->whereNumber('item')->name('teacher.study.item');
     foreach (['/associacoes/{association}/avisos' => 'associations.announcements.', '/operacao/dojos/{dojo}/avisos' => 'operation.announcements.'] as $path => $name) {
@@ -92,6 +95,8 @@ Route::middleware(['auth', 'active', 'association.context'])->group(function ():
     Route::prefix('/operacao/dojos/{dojo}')->name('operation.')->controller(OperationalController::class)->group(function (): void {
         Route::get('/', 'show')->name('home');
         Route::get('/alunos', 'students')->name('students');
+        Route::get('/relatorios', [ReportController::class, 'dojoIndex'])->name('reports.index');
+        Route::get('/relatorios/alunos', [ReportController::class, 'dojoStudents'])->middleware('throttle:20,1')->name('reports.students');
         Route::get('/alunos/novo', [DirectRegistrationController::class, 'createDojoStudent'])->name('students.direct.create');
         Route::post('/alunos', [DirectRegistrationController::class, 'storeDojoStudent'])->name('students.direct.store');
         Route::get('/alunos/{student}/dados', [DojoStudentPersonController::class, 'edit'])->name('students.person.edit');
@@ -307,6 +312,8 @@ Route::middleware(['auth', 'active', 'association.context'])->group(function ():
         Route::post('/financeiro/cobrancas/{charge}/pagamentos', [PaymentController::class, 'store'])->middleware('permission:payment.manage')->name('payments.store');
         Route::post('/financeiro/pagamentos/{payment}/estornar', [PaymentController::class, 'reverse'])->middleware('permission:payment.reverse')->name('payments.reverse');
         Route::get('/financeiro/alunos/{student}/extrato', [ChargeController::class, 'statement'])->middleware('permission:charge.view')->name('charges.statement');
+        Route::get('/relatorios', [ReportController::class, 'associationIndex'])->middleware('permission:report.export')->name('reports.index');
+        Route::get('/relatorios/alunos', [ReportController::class, 'associationStudents'])->middleware(['permission:report.export', 'throttle:20,1'])->name('reports.students');
         Route::get('/financeiro/relatorios', [FinancialReportController::class, 'index'])->middleware('permission:finance.report')->name('finance.reports.index');
         Route::get('/financeiro/relatorios/exportar', [FinancialReportController::class, 'export'])->middleware('permission:finance.report')->name('finance.reports.export');
     });

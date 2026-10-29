@@ -78,6 +78,7 @@ class DatabaseSeeder extends Seeder
             'role.manage' => 'Administrar papéis e permissões',
             'audit.view' => 'Visualizar auditoria',
             'announcement.send' => 'Enviar avisos às turmas e pessoas do próprio alcance',
+            'report.export' => 'Exportar relatórios em Excel e PDF no próprio alcance',
         ])->map(fn (string $description, string $code) => Permission::query()->updateOrCreate(
             ['code' => $code],
             ['description' => $description],
