@@ -14,6 +14,7 @@
 @if(app(\App\Services\Access\OperationalScope::class)->canTeacher(auth()->user(), $dojo, 'announcement.send') || app(\App\Services\Access\OperationalScope::class)->canDojo(auth()->user(), $dojo, 'announcement.send'))<a class="card portal-shortcut" href="{{ route('operation.announcements.create', $dojo) }}">@include('portal.partials.icon', ['name' => 'avisos'])<span>Enviar aviso{{ $workspace->dojos(auth()->user())->count() > 1 ? ' · '.$dojo->name : '' }}</span></a>@endif
 @endforeach
 @if($workspace->dojos(auth()->user())->contains(fn ($dojo) => app(\App\Services\Access\OperationalScope::class)->canTeacher(auth()->user(), $dojo, 'report.export')))<a class="card portal-shortcut" href="{{ route('teacher.reports.index') }}">@include('portal.partials.icon', ['name' => 'documentos'])<span>Relatórios</span></a>@endif
+<a class="card portal-shortcut" href="{{ route('teacher.pending') }}">@include('portal.partials.icon', ['name' => 'documentos'])<span>Cadastros incompletos</span></a>
 <a class="card portal-shortcut" href="{{ route('teacher.birthdays') }}">@include('portal.partials.icon', ['name' => 'avisos'])<span>Aniversariantes</span></a>
 <a class="card portal-shortcut" href="{{ route('teacher.study') }}">@include('portal.partials.icon', ['name' => 'estudar'])<span>Estudar</span></a>
 <a class="card portal-shortcut" href="{{ route('operation.index') }}">@include('portal.partials.icon', ['name' => 'historico'])<span>Meus dojos</span></a>

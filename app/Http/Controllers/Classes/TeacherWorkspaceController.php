@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Dojo;
 use App\Services\Access\OperationalScope;
 use App\Services\Classes\TeacherWorkspaceService;
+use App\Services\People\PendingDataService;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -21,7 +22,7 @@ class TeacherWorkspaceController extends Controller
         return view('teacher.classes', ['classes' => $this->workspace->classes($request->user())]);
     }
 
-    public function students(Request $request): View
+    public function students(Request $request, PendingDataService $pending): View
     {
         abort_unless($this->workspace->usesNavigation($request->user()), 403);
         $validated = $request->validate(['busca' => ['nullable', 'string', 'max:120'], 'filtro' => ['nullable', 'in:faltando,prontos']]);
@@ -45,6 +46,9 @@ class TeacherWorkspaceController extends Controller
             ->map(fn ($set, $dojoId) => ['dojo' => $announceDojos[$dojoId], 'student_ids' => $set->map(fn (array $row) => $row['student']->id)->unique()->values()->all()])
             ->values();
 
-        return view('teacher.students', compact('rows', 'search', 'filter', 'counts', 'announceDojos', 'announceGroups'));
+        $pendingContext = $pending->teacher($user);
+        $pendingCount = $pendingContext ? $pending->list($pendingContext)->count() : 0;
+
+        return view('teacher.students', compact('rows', 'search', 'filter', 'counts', 'announceDojos', 'announceGroups', 'pendingCount'));
     }
 }

@@ -38,10 +38,8 @@ class StudentService
             if ($student->status !== 'pre_registration') {
                 throw ValidationException::withMessages(['status' => 'Somente um pré-cadastro pode ser ativado.']);
             }
-            if ($student->person->birth_date === null) {
-                throw ValidationException::withMessages(['birth_date' => 'Informe a data de nascimento da pessoa antes de ativar o aluno.']);
-            }
-            if ($association->requires_minor_guardian && $student->person->birth_date->age < 18 && ! $student->guardians()->where('is_legal_guardian', true)->where(fn ($query) => $query->whereNull('end_date')->orWhere('end_date', '>=', today()))->exists()) {
+            // Sem data de nascimento o aluno pode ser ativado e fica com pendência de cadastro (decisão de Fabio em 29/10/2026).
+            if ($association->requires_minor_guardian && $student->person->birth_date !== null && $student->person->birth_date->age < 18 && ! $student->guardians()->where('is_legal_guardian', true)->where(fn ($query) => $query->whereNull('end_date')->orWhere('end_date', '>=', today()))->exists()) {
                 throw ValidationException::withMessages(['guardian' => 'Cadastre ao menos um responsável legal vigente antes de ativar um aluno menor.']);
             }
             $student->update(['status' => 'active']);

@@ -1,0 +1,3 @@
+{{-- Aviso de cadastro incompleto: $items, $title, $text opcional e $url/$label do botão. --}}
+@php($labels = collect($items)->map(fn ($item) => \App\Services\People\PendingDataService::ITEMS[$item][1]))
+<section class="card pending-banner" role="status"><span class="pending-icon" aria-hidden="true">!</span><div><strong>{{ $title }}</strong><p>{{ $text ?? 'Falta: '.$labels->join(', ', ' e ').'.' }}@if(! isset($text) && in_array('birth', $items, true)) Sem a data, não aparece em aniversários e não pode entrar em turma com faixa etária nem em campeonato.@endif</p></div>@if($url ?? null)<a class="button {{ ($primary ?? true) ? 'button-primary' : 'button-secondary' }}" href="{{ $url }}">{{ $label ?? 'Completar' }}</a>@endif</section>
