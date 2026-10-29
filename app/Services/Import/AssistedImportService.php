@@ -83,7 +83,7 @@ class AssistedImportService
 
         $sheet = $type === 'students' ? 'Alunos' : 'Presenças';
         $rows = $this->reader->read($file->getRealPath(), $extension, $sheet);
-        $required = $type === 'students' ? ['nome_completo', 'data_nascimento', 'data_entrada', 'modalidade'] : ['matricula_aluno', 'turma', 'data_aula', 'horario_inicio', 'situacao'];
+        $required = $type === 'students' ? ['nome_completo', 'data_entrada', 'modalidade'] : ['matricula_aluno', 'turma', 'data_aula', 'horario_inicio', 'situacao'];
         $present = array_keys($rows[0]['values'] ?? []);
         if ($missing = array_diff($required, $present)) {
             throw ValidationException::withMessages(['file' => 'Faltam colunas obrigatórias: '.implode(', ', $missing).'.']);
@@ -222,7 +222,8 @@ class AssistedImportService
         if (mb_strlen(trim((string) ($raw['nome_completo'] ?? ''))) > 255) {
             $errors[] = 'O nome completo deve ter até 255 caracteres.';
         }
-        if ($birth === null) {
+        $birthText = trim((string) ($raw['data_nascimento'] ?? ''));
+        if ($birthText !== '' && $birth === null) {
             $errors[] = 'Informe a data de nascimento no formato DD/MM/AAAA.';
         }
         if ($birth !== null && Carbon::parse($birth)->isFuture()) {
@@ -297,6 +298,15 @@ class AssistedImportService
             $accessible ? $review[] = 'O responsável existente será reutilizado.' : $errors[] = 'O CPF do responsável exige revisão pelo gestor da associação.';
         }
         $activate = $this->yes($raw['ativar'] ?? 'sim');
+        // Sem nascimento o aluno entra como pré-cadastro (decisão de Fabio em 29/10/2026); a ativação continua exigindo a data.
+        if ($birth === null && $birthText === '') {
+            $activate = false;
+            $review[] = 'Sem data de nascimento: o aluno entra como pré-cadastro e só pode ser ativado depois de completar a data.';
+        }
+        // Matrícula em turma exige aluno ativo: no pré-cadastro a turma fica para depois da ativação.
+        if (! $activate && $group !== null) {
+            $review[] = "A turma {$group->name} fica para matricular depois de ativar o aluno.";
+        }
         $minor = $birth && Carbon::parse($birth)->age < 18;
         if ($activate && $association->requires_minor_guardian && $minor && trim((string) ($raw['nome_responsavel'] ?? '')) === '' && ! $guardian) {
             $errors[] = 'Informe um responsável legal para ativar o aluno menor de idade.';
@@ -412,7 +422,7 @@ class AssistedImportService
             'guardian_is_legal' => $data['guardian_is_legal'], 'guardian_is_financial' => false, 'guardian_is_primary' => true, 'guardian_notifications' => true,
         ]);
         $student = $result['model'];
-        if ($data['class_group_id'] && ! $student->enrollments()->where('class_group_id', $data['class_group_id'])->where('status', 'active')->exists()) {
+        if ($data['class_group_id'] && $data['activate'] && ! $student->enrollments()->where('class_group_id', $data['class_group_id'])->where('status', 'active')->exists()) {
             $this->classes->enroll($association, ClassGroup::query()->findOrFail($data['class_group_id']), ['student_id' => $student->id, 'start_date' => $data['entry_date']]);
         }
 
