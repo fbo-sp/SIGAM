@@ -53,15 +53,20 @@ O comando completa a meta de 4 ou 8 aulas de cada turma e ignora as opções leg
 
 A criação da turma e as transições de agenda/chamada executam o mesmo serviço. O scheduler horário recupera qualquer execução interrompida sem worker residente. `SessionGenerator` permanece interno para reconciliação por intervalo da agenda versionada; `generateForGroup` cria aulas passadas de uma turma (ação "Gerar aulas passadas" e importação de presenças), sem duplicar.
 
+### Quem deu a aula
+
+Ao salvar ou finalizar, a chamada pergunta "Quem deu esta aula?" (decisão de Fabio em 28/10/2026, para a frequência detalhada): o professor da aula e os auxiliares presentes. As opções são o principal da turma, o professor previsto, os professores da turma na data e os professores vinculados ao dojo (para substituições). A sugestão é quem está fazendo a chamada, se for um desses professores; senão o previsto ou o principal, com os auxiliares da turma marcados. Finalizar sem escolha (importação, envio antigo) grava a sugestão; professor fora das opções é recusado. O registro fica em `class_session_staff` (`SessionStaffService`) e entra na auditoria de `attendance.saved`/`attendance.closed`. Ele não muda `planned_teacher_id` nem `actual_teacher_id`, então o acesso de cada professor à aula continua o mesmo. A chamada fechada mostra "Professor da aula" e "Auxiliares"; aulas fechadas antes disso mostram o professor previsto.
+
 ## Mapa do código
 
 - migration `2026_08_30_000007_create_sessions_and_attendance_tables.php`;
-- models `ClassSession` e `AttendanceRecord`;
-- `FutureSessionMaintainer`, `SessionGenerator`, `AttendanceService` e `SessionVisitorService`;
+- migration `2026_10_29_000032_create_class_session_staff_table.php`;
+- models `ClassSession`, `ClassSessionStaff` e `AttendanceRecord`;
+- `FutureSessionMaintainer`, `SessionGenerator`, `AttendanceService`, `SessionStaffService` e `SessionVisitorService`;
 - `AttendanceController` e requests homônimos;
 - comando `GenerateClassSessions`;
 - views `resources/views/attendance`, JS progressivo `public/js/attendance.js`;
-- testes `tests/Feature/AttendanceTest.php`.
+- testes `tests/Feature/AttendanceTest.php`, `AttendanceYesNoTest.php` e `SessionStaffTest.php`.
 
 ## Auditoria, UX e aceite
 

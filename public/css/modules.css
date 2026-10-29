@@ -122,3 +122,4 @@
 .report-preview{margin:0;padding:.65rem .8rem;border-radius:.5rem;background:#eaf2fb}
 .session-staff{padding:1rem 1.1rem;margin:1rem 0 0;border:1px solid var(--border);display:grid;gap:.75rem}.session-staff legend{font-weight:800;padding:0 .3rem}.staff-assistants{display:flex;flex-wrap:wrap;gap:.45rem}.check-pill{display:inline-flex;align-items:center;gap:.4rem;padding:.5rem .75rem;border:1px solid var(--border);border-radius:999px;background:var(--surface);font-weight:600;min-height:44px}.session-staff .field-label{display:block;font-weight:700;margin-bottom:.35rem}
 .staff-summary{margin:.75rem 0;color:var(--muted)}
+.report-card+.report-card{margin-top:1rem}

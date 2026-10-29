@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-10-29 — Relatórios exportáveis, etapa 2: frequência e quem deu a aula
+
+- a chamada pergunta "Quem deu esta aula?": professor da aula (sugere quem está fazendo a chamada) e auxiliares presentes, com os professores da turma e do dojo como opção; a chamada fechada mostra os dois, e aulas antigas mostram o professor previsto;
+- Relatórios ganham o cartão "Frequência" com período (padrão o mês atual, até 366 dias), dojo e turma: frequência resumida (por turma e por aluno, % com cores) e detalhada (aula a aula com professor, auxiliares e SIM/NÃO) em Excel, nos três níveis;
+- só chamadas finalizadas contam; chamadas abertas aparecem à parte; cada download fica na auditoria;
+- planilhas saem em paisagem ajustadas à largura para imprimir;
+- 1 migration (`class_session_staff`); `SessionStaffTest` e `AttendanceReportsTest` novos.
+
 ## 2026-10-29 — Relatórios exportáveis, etapa 1: lista de alunos
 
 - nova tela "Relatórios" na associação, no dojo e no professor (Mais), com a permissão nova `report.export` (Gestor da Associação, `dojo_operator` e `dojo_teacher`; o `db:seed` da instalação concede);
