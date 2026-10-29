@@ -57,3 +57,11 @@ document.querySelectorAll('[data-filter-list]').forEach(input => {
         });
     });
 });
+// Marca a mesma escolha em todas as linhas do formulário: data-check-all="valor" (importação: Ignorar/Atualizar todas).
+document.querySelectorAll('[data-check-all]').forEach(button => {
+    button.addEventListener('click', () => {
+        button.closest('form').querySelectorAll(`input[type="radio"][value="${button.dataset.checkAll}"]`).forEach(radio => {
+            radio.checked = true;
+        });
+    });
+});

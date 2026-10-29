@@ -18,6 +18,6 @@ class ImportProcessRequest extends FormRequest
 
     public function rules(): array
     {
-        return ['confirm_reviews' => ['boolean']];
+        return ['confirm_reviews' => ['boolean'], 'acoes' => ['nullable', 'array', 'max:5000'], 'acoes.*' => ['string', 'in:ignore,update,new']];
     }
 }
