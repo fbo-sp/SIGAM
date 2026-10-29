@@ -35,7 +35,7 @@ use Throwable;
 
 class AssistedImportService
 {
-    public const STUDENT_HEADERS = ['nome_completo', 'cpf', 'data_nascimento', 'email', 'celular', 'data_entrada', 'modalidade', 'graduacao', 'turma', 'ativar', 'nome_responsavel', 'cpf_responsavel', 'parentesco', 'responsavel_legal', 'observacoes'];
+    public const STUDENT_HEADERS = ['nome_completo', 'cpf', 'data_nascimento', 'email', 'celular', 'data_entrada', 'modalidade', 'graduacao', 'turma', 'ativar', 'nome_responsavel', 'cpf_responsavel', 'parentesco', 'responsavel_legal', 'observacoes', 'rg', 'telefone', 'cep', 'endereco', 'numero', 'complemento', 'bairro', 'cidade', 'uf'];
 
     public const ATTENDANCE_HEADERS = ['matricula_aluno', 'turma', 'data_aula', 'horario_inicio', 'situacao', 'observacoes'];
 
@@ -245,6 +245,29 @@ class AssistedImportService
         if ($mobile !== null && ! in_array(strlen($mobile), [10, 11], true)) {
             $errors[] = 'O celular deve ter 10 ou 11 dígitos.';
         }
+        $phone = InputNormalizer::digits($raw['telefone'] ?? null);
+        if ($phone !== null && ! in_array(strlen($phone), [10, 11], true)) {
+            $errors[] = 'O telefone deve ter 10 ou 11 dígitos, com DDD.';
+        }
+        $postalCode = InputNormalizer::digits($raw['cep'] ?? null);
+        if ($postalCode !== null && strlen($postalCode) !== 8) {
+            $errors[] = 'O CEP deve ter 8 dígitos.';
+        }
+        $state = $this->nullable($raw['uf'] ?? null);
+        $state = $state === null ? null : mb_strtoupper($state);
+        if ($state !== null && ! preg_match('/^[A-Z]{2}$/', $state)) {
+            $errors[] = 'A UF deve ter 2 letras, como SP.';
+        }
+        // Endereço e RG são opcionais (decisão de Fabio em 29/10/2026); textos acima do tamanho da coluna recusam a linha.
+        $address = ['identity_document' => 40, 'street' => 255, 'number' => 30, 'complement' => 255, 'district' => 255, 'city' => 255];
+        $columns = ['identity_document' => 'rg', 'street' => 'endereco', 'number' => 'numero', 'complement' => 'complemento', 'district' => 'bairro', 'city' => 'cidade'];
+        $extra = [];
+        foreach ($address as $field => $limit) {
+            $extra[$field] = $this->nullable($raw[$columns[$field]] ?? null);
+            if ($extra[$field] !== null && mb_strlen($extra[$field]) > $limit) {
+                $errors[] = "A coluna {$columns[$field]} deve ter até {$limit} caracteres.";
+            }
+        }
         $identity = $cpf ?: mb_strtolower(trim((string) ($raw['nome_completo'] ?? ''))).'|'.$birth;
         if (isset($seen[$identity])) {
             $errors[] = "Cadastro repetido no arquivo (linha {$seen[$identity]}).";
@@ -282,7 +305,7 @@ class AssistedImportService
         $normalized = [
             'idempotency_key' => (string) Str::uuid(), 'person_id' => $existing?->id,
             'person' => ['full_name' => trim((string) ($raw['nome_completo'] ?? '')), 'cpf' => $cpf, 'birth_date' => $birth,
-                'email' => $email, 'mobile' => $mobile],
+                'email' => $email, 'mobile' => $mobile, 'phone' => $phone, 'postal_code' => $postalCode, 'state' => $state] + $extra,
             'entry_date' => $entry, 'martial_art_id' => $art?->id, 'rank_id' => $rank?->id, 'class_group_id' => $group?->id,
             'activate' => $activate, 'notes' => $this->nullable($raw['observacoes'] ?? null), 'guardian_person_id' => $guardian?->id,
             'guardian' => ['full_name' => trim((string) ($raw['nome_responsavel'] ?? '')), 'cpf' => $guardianCpf],

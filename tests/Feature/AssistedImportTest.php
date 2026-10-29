@@ -33,6 +33,7 @@ class AssistedImportTest extends TestCase
         $reader = app(SpreadsheetReader::class);
 
         $this->assertSame('Maria de Souza', $reader->read(resource_path('imports/modelo_importacao_judoma.xlsx'), 'xlsx', 'Alunos')[0]['values']['nome_completo']);
+        $this->assertSame('SP', $reader->read(resource_path('imports/modelo_importacao_judoma.xlsx'), 'xlsx', 'Alunos')[0]['values']['uf']);
         $this->assertSame('ALU-000001-000001', $reader->read(resource_path('imports/modelo_importacao_judoma.xlsx'), 'xlsx', 'Presenças')[0]['values']['matricula_aluno']);
     }
 
@@ -63,6 +64,32 @@ class AssistedImportTest extends TestCase
         ])->assertRedirect(route('associations.imports.show', [$association, $batch]));
         $this->assertDatabaseCount('import_batches', 1);
         $this->assertDatabaseCount('students', 1);
+    }
+
+    public function test_student_file_imports_identity_document_phone_and_address(): void
+    {
+        Storage::fake('local');
+        [$association, $dojo, , $user] = $this->context(['import.manage', 'student.manage']);
+        $header = 'nome_completo;data_nascimento;data_entrada;modalidade;rg;telefone;cep;endereco;numero;complemento;bairro;cidade;uf';
+        $csv = implode("\n", [
+            $header,
+            'Aluno Endereço;10/01/2000;01/10/2026;Judô;12.345.678-9;(11) 3333-0000;01001-000;Rua Exemplo;100;Apto 1;Centro;São Paulo;sp',
+            'Aluno Ruim;11/01/2000;01/10/2026;Judô;;3333;123;;;;;;São Paulo',
+        ]);
+
+        $this->actingAs($user)->post(route('associations.imports.store', $association), [
+            'dojo_id' => $dojo->id, 'import_type' => 'students', 'file' => UploadedFile::fake()->createWithContent('alunos.csv', $csv),
+        ])->assertSessionHasNoErrors();
+        $batch = ImportBatch::query()->firstOrFail();
+        $this->assertSame(1, $batch->ready_rows);
+        $message = ImportRow::query()->where('row_number', 3)->value('message');
+        $this->assertStringContainsString('O telefone deve ter 10 ou 11 dígitos', $message);
+        $this->assertStringContainsString('O CEP deve ter 8 dígitos.', $message);
+        $this->assertStringContainsString('A UF deve ter 2 letras', $message);
+
+        $this->post(route('associations.imports.process', [$association, $batch]))->assertSessionHasNoErrors();
+        $this->assertDatabaseHas('people', ['full_name' => 'Aluno Endereço', 'identity_document' => '12.345.678-9', 'phone' => '1133330000',
+            'postal_code' => '01001000', 'street' => 'Rua Exemplo', 'number' => '100', 'complement' => 'Apto 1', 'district' => 'Centro', 'city' => 'São Paulo', 'state' => 'SP']);
     }
 
     public function test_existing_cpf_requires_explicit_review_confirmation_and_is_reused(): void

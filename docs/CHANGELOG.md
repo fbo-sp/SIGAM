@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-10-29 — Importação de alunos com RG, telefone e endereço
+
+- a planilha de alunos aceita as colunas opcionais `rg`, `telefone`, `cep`, `endereco`, `numero`, `complemento`, `bairro`, `cidade` e `uf`, gravadas no cadastro da pessoa nova; os modelos CSV e Excel trazem as colunas;
+- telefone fora de 10 ou 11 dígitos, CEP sem 8 dígitos ou UF sem 2 letras recusam a linha na prévia;
+- sem migration; `AssistedImportTest` ampliado.
+
 ## 2026-10-29 — Aniversariantes do mês
 
 - nova tela Aniversariantes na associação (filtros de mês, dojo, turma e alunos/professores), no dojo e no professor (Mais), com dia, foto, turma e a idade que a pessoa faz; cartão "Hoje" no painel do gestor da associação e do dojo;

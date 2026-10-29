@@ -1,2 +1,2 @@
-nome_completo;cpf;data_nascimento;email;celular;data_entrada;modalidade;graduacao;turma;ativar;nome_responsavel;cpf_responsavel;parentesco;responsavel_legal;observacoes
-Maria de Souza;;15/04/2012;maria.exemplo@teste.invalid;11999990000;01/10/2026;Judô;Faixa Branca;Infantil;sim;Ana de Souza;;mãe;sim;Exemplo fictício: apague esta linha
+nome_completo;cpf;data_nascimento;email;celular;data_entrada;modalidade;graduacao;turma;ativar;nome_responsavel;cpf_responsavel;parentesco;responsavel_legal;observacoes;rg;telefone;cep;endereco;numero;complemento;bairro;cidade;uf
+Maria de Souza;;15/04/2012;maria.exemplo@teste.invalid;11999990000;01/10/2026;Judô;Faixa Branca;Infantil;sim;Ana de Souza;;mãe;sim;Exemplo fictício: apague esta linha;12.345.678-9;1133330000;01001000;Rua Exemplo;100;Apto 1;Centro;São Paulo;SP
