@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-10-29 — Relatórios exportáveis, etapa 1: lista de alunos
+
+- nova tela "Relatórios" na associação, no dojo e no professor (Mais), com a permissão nova `report.export` (Gestor da Associação, `dojo_operator` e `dojo_teacher`; o `db:seed` da instalação concede);
+- lista de alunos em Excel com filtros de dojo, turma e situação e "Ver total" antes de baixar; cada perfil exporta só o seu alcance, e o professor recebe a lista sem CPF e e-mail;
+- cada download fica na auditoria (`report.exported`) sem dados pessoais;
+- biblioteca PhpSpreadsheet incluída (o pacote já traz a pasta vendor); `sigam:production:check` informa se as extensões do Excel estão disponíveis;
+- sem migration; `ReportsTest` novo.
+
 ## 2026-10-28 — Explicação, cuidado e segurança na tela de estudo; Estudar do professor
 
 - a página da técnica do portal mostra, logo abaixo do nome, a explicação da técnica (campo "Descrição para estudo" do catálogo); "Erro comum" passa a se chamar "Cuidado" e um bloco verde "Segurança" vem logo abaixo; cada bloco só aparece quando está preenchido;
