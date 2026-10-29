@@ -92,6 +92,32 @@ class AssistedImportTest extends TestCase
             'postal_code' => '01001000', 'street' => 'Rua Exemplo', 'number' => '100', 'complement' => 'Apto 1', 'district' => 'Centro', 'city' => 'São Paulo', 'state' => 'SP']);
     }
 
+    public function test_student_without_birth_date_enters_as_pre_registration_without_class(): void
+    {
+        Storage::fake('local');
+        [$association, $dojo, $art, $user] = $this->context(['import.manage', 'student.manage']);
+        $group = ClassGroup::query()->create(['association_id' => $association->id, 'dojo_id' => $dojo->id, 'martial_art_id' => $art->id, 'name' => 'Manhã', 'start_date' => '2026-01-01', 'status' => 'active']);
+        $csv = implode("\n", [
+            'nome_completo;data_nascimento;data_entrada;modalidade;turma;ativar',
+            'Sem Data;;01/10/2026;Judô;Manhã;sim',
+            'Data Errada;31/31/2010;01/10/2026;Judô;;sim',
+        ]);
+
+        $this->actingAs($user)->post(route('associations.imports.store', $association), [
+            'dojo_id' => $dojo->id, 'import_type' => 'students', 'file' => UploadedFile::fake()->createWithContent('alunos.csv', $csv),
+        ])->assertSessionHasNoErrors();
+        $batch = ImportBatch::query()->firstOrFail();
+        $this->assertSame([1, 1], [$batch->review_rows, $batch->invalid_rows]);
+        $this->assertStringContainsString('pré-cadastro', ImportRow::query()->where('row_number', 2)->value('message'));
+        $this->assertStringContainsString('A turma Manhã fica para matricular depois', ImportRow::query()->where('row_number', 2)->value('message'));
+
+        $this->post(route('associations.imports.process', [$association, $batch]), ['confirm_reviews' => '1'])->assertSessionHasNoErrors();
+        $student = Student::query()->whereHas('person', fn ($person) => $person->where('full_name', 'Sem Data'))->firstOrFail();
+        $this->assertSame('pre_registration', $student->status);
+        $this->assertNull($student->person->birth_date);
+        $this->assertFalse(ClassEnrollment::query()->where('class_group_id', $group->id)->exists());
+    }
+
     public function test_existing_cpf_requires_explicit_review_confirmation_and_is_reused(): void
     {
         Storage::fake('local');

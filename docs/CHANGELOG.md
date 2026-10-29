@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-10-29 — Importação de alunos sem data de nascimento
+
+- a data de nascimento deixa de ser obrigatória na planilha de alunos: sem ela, a linha fica em revisão e o aluno entra como pré-cadastro; ativar continua exigindo a data;
+- aluno importado como pré-cadastro não é matriculado na turma da planilha (a matrícula exige aluno ativo); a prévia avisa que a turma fica para depois;
+- sem migration; `AssistedImportTest` ampliado.
+
 ## 2026-10-29 — Importação de alunos com RG, telefone e endereço
 
 - a planilha de alunos aceita as colunas opcionais `rg`, `telefone`, `cep`, `endereco`, `numero`, `complemento`, `bairro`, `cidade` e `uf`, gravadas no cadastro da pessoa nova; os modelos CSV e Excel trazem as colunas;
