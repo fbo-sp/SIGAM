@@ -5,6 +5,7 @@
 @php($visitorCount = $roster->where('type', 'visitor')->count())
 <nav class="breadcrumbs"><a href="{{ route('associations.attendance.index', $association) }}">Aulas</a><span>/</span><span>{{ $session->classGroup->name }}</span></nav>
 <div class="page-heading"><div><span class="eyebrow">{{ $session->session_date->format('d/m/Y') }} · {{ substr($session->start_time,0,5) }}</span><h1>{{ $session->classGroup->name }}</h1><p>{{ $session->classGroup->dojo->name }} · {{ $regularCount }} matriculado(s) · {{ $visitorCount }} visitante(s)</p></div><span class="status-pill {{ $session->attendance_state === 'open' ? 'status-inactive' : '' }}">{{ $session->attendance_state === 'closed' ? 'Chamada fechada' : 'Chamada aberta' }}</span></div>
+@include('attendance.partials.list-pdf', ['listUrl' => auth()->user()->hasPermission('report.export', $association->id) ? route('associations.attendance.list', [$association, $session]) : null])
 @if($regularCount === 0)<div class="alert alert-info"><strong>Nenhum aluno matriculado nesta turma para esta data.</strong> A chamada lista os alunos matriculados. @if(auth()->user()->hasPermission('enrollment.manage', $association->id))<a href="{{ route('operation.classes.show', [$session->classGroup->dojo, $session->classGroup]) }}#alunos">Matricular alunos na turma</a>@endif</div>@endif
 @if($session->status === 'cancelled')<div class="alert alert-warning"><strong>Aula cancelada.</strong> {{ $session->cancellation_reason }}</div>@endif
 @if($canManageVisitors)
