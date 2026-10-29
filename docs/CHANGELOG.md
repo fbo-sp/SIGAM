@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-10-29 — Relatórios exportáveis, etapa 4: técnicas ministradas
+
+- Relatórios ganham o cartão "Técnicas ministradas" (turma e período) com Excel de três abas: Resumo com indicadores, tabela por grupo e dois gráficos nativos; Por técnica com uma coluna por aula; Não abordadas com o currículo da próxima faixa dos alunos que não apareceu no período;
+- só aulas com chamada finalizada contam; a lista "Próximos relatórios" sai da tela, porque os cinco relatórios pedidos estão entregues;
+- sem migration; `TechniquesTaughtReportTest` novo.
+
 ## 2026-10-29 — Relatórios exportáveis, etapa 3: lista de presença em PDF
 
 - a página da aula ganha o botão "Baixar lista de presença (PDF)" quando a chamada está finalizada (SIM/NÃO, totais, professor, auxiliares e técnicas) e "Imprimir lista em branco (PDF)" para aula aberta ou futura (caixas SIM e NÃO, linhas para visitante e assinatura), no dojo e na associação, para quem tem `report.export`;

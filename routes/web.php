@@ -83,6 +83,7 @@ Route::middleware(['auth', 'active', 'association.context'])->group(function ():
     Route::get('/professor/relatorios/alunos', [ReportController::class, 'teacherStudents'])->middleware('throttle:20,1')->name('teacher.reports.students');
     Route::get('/professor/relatorios/frequencia-{kind}', [ReportController::class, 'teacherAttendance'])->whereIn('kind', ['resumida', 'detalhada'])->middleware('throttle:20,1')->name('teacher.reports.attendance');
     Route::get('/professor/relatorios/grade-presenca', [ReportController::class, 'teacherGrid'])->middleware('throttle:20,1')->name('teacher.reports.grid');
+    Route::get('/professor/relatorios/tecnicas', [ReportController::class, 'teacherTechniques'])->middleware('throttle:20,1')->name('teacher.reports.techniques');
     Route::get('/professor/estudar', [TeacherStudyController::class, 'index'])->name('teacher.study');
     Route::get('/professor/estudar/{item}', [TeacherStudyController::class, 'show'])->whereNumber('item')->name('teacher.study.item');
     foreach (['/associacoes/{association}/avisos' => 'associations.announcements.', '/operacao/dojos/{dojo}/avisos' => 'operation.announcements.'] as $path => $name) {
@@ -101,6 +102,7 @@ Route::middleware(['auth', 'active', 'association.context'])->group(function ():
         Route::get('/relatorios/alunos', [ReportController::class, 'dojoStudents'])->middleware('throttle:20,1')->name('reports.students');
         Route::get('/relatorios/frequencia-{kind}', [ReportController::class, 'dojoAttendance'])->whereIn('kind', ['resumida', 'detalhada'])->middleware('throttle:20,1')->name('reports.attendance');
         Route::get('/relatorios/grade-presenca', [ReportController::class, 'dojoGrid'])->middleware('throttle:20,1')->name('reports.grid');
+        Route::get('/relatorios/tecnicas', [ReportController::class, 'dojoTechniques'])->middleware('throttle:20,1')->name('reports.techniques');
         Route::get('/aulas/{session}/lista-presenca', [ReportController::class, 'dojoSessionList'])->middleware('throttle:20,1')->name('session.list');
         Route::get('/alunos/novo', [DirectRegistrationController::class, 'createDojoStudent'])->name('students.direct.create');
         Route::post('/alunos', [DirectRegistrationController::class, 'storeDojoStudent'])->name('students.direct.store');
@@ -321,6 +323,7 @@ Route::middleware(['auth', 'active', 'association.context'])->group(function ():
         Route::get('/relatorios/alunos', [ReportController::class, 'associationStudents'])->middleware(['permission:report.export', 'throttle:20,1'])->name('reports.students');
         Route::get('/relatorios/frequencia-{kind}', [ReportController::class, 'associationAttendance'])->whereIn('kind', ['resumida', 'detalhada'])->middleware(['permission:report.export', 'throttle:20,1'])->name('reports.attendance');
         Route::get('/relatorios/grade-presenca', [ReportController::class, 'associationGrid'])->middleware(['permission:report.export', 'throttle:20,1'])->name('reports.grid');
+        Route::get('/relatorios/tecnicas', [ReportController::class, 'associationTechniques'])->middleware(['permission:report.export', 'throttle:20,1'])->name('reports.techniques');
         Route::get('/aulas/{session}/lista-presenca', [ReportController::class, 'associationSessionList'])->middleware(['permission:report.export', 'throttle:20,1'])->name('attendance.list');
         Route::get('/financeiro/relatorios', [FinancialReportController::class, 'index'])->middleware('permission:finance.report')->name('finance.reports.index');
         Route::get('/financeiro/relatorios/exportar', [FinancialReportController::class, 'export'])->middleware('permission:finance.report')->name('finance.reports.export');

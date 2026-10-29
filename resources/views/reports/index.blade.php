@@ -46,7 +46,15 @@
 @foreach(['grade_turma', 'mes'] as $field)@error($field)<p class="field-error" role="alert">{{ $message }}</p>@enderror @endforeach
 </section>
 
-<section class="section-block"><div class="section-heading"><h2>Próximos relatórios</h2><p>Chegam nas próximas versões, com os mesmos filtros.</p></div>
-<div class="card list-card">@foreach(['Técnicas ministradas (Excel com gráficos)'] as $next)<div class="list-row"><span>{{ $next }}</span><span class="status-pill status-inactive">Em breve</span></div>@endforeach</div>
+<section class="card report-card" aria-labelledby="relatorio-tecnicas">
+<div class="report-card-head"><span class="report-icon" aria-hidden="true">XLS</span><div><h2 id="relatorio-tecnicas">Técnicas ministradas</h2><p>Resumo com gráficos, técnicas aula a aula e o currículo da próxima faixa dos alunos que ainda não apareceu na turma.</p></div></div>
+<form class="report-filters" method="get" action="{{ route($prefix.'techniques', $params) }}">
+<div class="field"><label for="tecnicas_turma">Turma</label><select id="tecnicas_turma" name="tecnicas_turma" required><option value="">Escolha a turma</option>@foreach($context->classes as $class)<option value="{{ $class->id }}" @selected((int) old('tecnicas_turma') === $class->id)>{{ $class->name }}{{ $context->dojos->count() > 1 ? ' · '.$class->dojo?->name : '' }}</option>@endforeach</select></div>
+<div class="field"><label for="tec_de">De</label><input id="tec_de" type="date" name="de" value="{{ $period['from']->toDateString() }}" required></div>
+<div class="field"><label for="tec_ate">Até</label><input id="tec_ate" type="date" name="ate" value="{{ $period['to']->toDateString() }}" required></div>
+<div class="report-actions"><button class="button button-primary" type="submit">Baixar Excel</button></div>
+</form>
+@error('tecnicas_turma')<p class="field-error" role="alert">{{ $message }}</p>@enderror
+<p class="form-help">Só aulas com chamada finalizada contam.</p>
 </section>
 @endsection

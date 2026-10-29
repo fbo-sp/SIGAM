@@ -121,6 +121,40 @@ class XlsxReport
         $sheet->getStyle($range)->setConditionalStyles($conditionals);
     }
 
+    /** Aba livre (resumo com indicadores e gráficos), com o mesmo título e as linhas de filtro e geração. */
+    public function blankSheet(string $name, string $title, string $subtitle, string $generated): Worksheet
+    {
+        $sheet = $this->first ? $this->book->getActiveSheet() : $this->book->createSheet();
+        $this->first = false;
+        $sheet->setTitle(mb_substr($name, 0, 31));
+        $sheet->setCellValue('A1', $title);
+        $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(14)->getColor()->setARGB(self::NAVY);
+        $sheet->setCellValueExplicit('A2', $subtitle, DataType::TYPE_STRING);
+        $sheet->setCellValueExplicit('A3', $generated, DataType::TYPE_STRING);
+        $sheet->getStyle('A2:A3')->getFont()->setSize(9)->getColor()->setARGB('FF555555');
+        $sheet->getPageSetup()->setOrientation(PageSetup::ORIENTATION_LANDSCAPE)->setPaperSize(PageSetup::PAPERSIZE_A4)->setFitToWidth(1)->setFitToHeight(0);
+
+        return $sheet;
+    }
+
+    /** Linha de cabeçalho azul numa aba livre. @param list<string> $labels */
+    public function headerRow(Worksheet $sheet, int $row, array $labels): void
+    {
+        foreach (array_values($labels) as $index => $label) {
+            $sheet->setCellValue(Coordinate::stringFromColumnIndex($index + 1).$row, $label);
+        }
+        $style = $sheet->getStyle('A'.$row.':'.Coordinate::stringFromColumnIndex(count($labels)).$row);
+        $style->getFont()->setBold(true)->getColor()->setARGB('FFFFFFFF');
+        $style->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB(self::NAVY);
+        $style->getAlignment()->setWrapText(true);
+    }
+
+    /** Grava um valor com as mesmas regras das abas de lista (texto nunca vira fórmula). */
+    public function cell(Worksheet $sheet, string $cell, mixed $value): void
+    {
+        $this->put($sheet, $cell, $value);
+    }
+
     public function notes(string $name, array $lines): void
     {
         $sheet = $this->book->createSheet()->setTitle($name);
@@ -133,7 +167,7 @@ class XlsxReport
     public function download(string $filename): StreamedResponse
     {
         $this->book->setActiveSheetIndex(0);
-        $writer = new Xlsx($this->book);
+        $writer = (new Xlsx($this->book))->setIncludeCharts(true);
 
         return response()->streamDownload(fn () => $writer->save('php://output'), $filename, [
             'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
@@ -143,7 +177,7 @@ class XlsxReport
 
     public function save(string $path): void
     {
-        (new Xlsx($this->book))->save($path);
+        (new Xlsx($this->book))->setIncludeCharts(true)->save($path);
     }
 
     private function put(Worksheet $sheet, string $cell, mixed $value): void
