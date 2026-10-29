@@ -16,6 +16,7 @@ use App\Models\Student;
 use App\Services\AuditService;
 use App\Services\Championship\ChampionshipRegistrationService;
 use App\Services\People\BirthdayService;
+use App\Services\People\PendingDataService;
 use App\Services\Portal\PortalAccessService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -50,7 +51,7 @@ class PortalController extends Controller
     }
 
     /** Início do aluno: indicadores principais e atalhos para as subtelas. */
-    public function show(Request $request, Student $student, PortalAccessService $access, BirthdayService $birthdays): View
+    public function show(Request $request, Student $student, PortalAccessService $access, BirthdayService $birthdays, PendingDataService $pending): View
     {
         $student = $access->resolveStudent($request->user(), $student);
         $students = $access->studentsFor($request->user());
@@ -86,7 +87,11 @@ class PortalController extends Controller
             'others' => $request->cookie(BirthdayController::DISMISS_COOKIE) === today()->toDateString() ? collect() : $birthdays->todayForClassmates($student),
         ];
 
-        return view('portal.show', compact('student', 'students', 'indicators', 'birthday'));
+        // "Complete seus dados": só o que o próprio aluno ou o responsável legal consegue preencher pelo portal.
+        $missing = $access->canEditContact($request->user(), $student)
+            ? array_values(array_intersect(PendingDataService::PORTAL_ITEMS, $pending->forStudent($student))) : [];
+
+        return view('portal.show', compact('student', 'students', 'indicators', 'birthday', 'missing'));
     }
 
     public function section(Request $request, Student $student, string $section, PortalAccessService $access): View

@@ -10,6 +10,8 @@
 <nav class="breadcrumbs"><a href="{{ route('associations.students.index', $association) }}">Alunos</a><span>/</span><a href="{{ route('associations.students.show', [$association, $student]) }}">{{ $name }}</a><span>/</span><span>Acompanhamento</span></nav>
 @endif
 <div class="page-heading"><div><span class="eyebrow">{{ $martialArt->name }} · acompanhamento técnico</span><h1>{{ $name }}</h1>
+@if($dojo)@php($pendingItems = app(\App\Services\People\PendingDataService::class)->forStudent($student))
+@if($pendingItems)@include('people.partials.pending-banner', ['items' => $pendingItems, 'title' => 'Cadastro incompleto', 'url' => app(\App\Services\Access\OperationalScope::class)->canDojo(auth()->user(), $dojo, 'student.manage') ? route('operation.students.person.edit', [$dojo, $student]) : null])@endif @endif
 <p>{{ $snapshot['current_rank']?->display_name ?? 'Sem graduação registrada' }}@if($snapshot['next_rank']) · rumo a <strong>{{ $snapshot['next_rank']->display_name }}</strong>@endif</p></div>
 @if($canAssess && $snapshot['next_rank'])<a class="button button-primary" href="{{ route('operation.progression.assess', [$dojo, $student, $martialArt]) }}">Avaliar</a>@endif</div>
 

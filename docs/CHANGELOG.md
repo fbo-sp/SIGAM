@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-10-29 — Cadastros incompletos e aluno ativo sem data de nascimento
+
+- a data de nascimento deixa de ser obrigatória para ativar o aluno (cadastro direto, ativação e importação, que agora importa esses alunos ativos e matriculados); continua exigida em turma com faixa etária, campeonato e idade mínima de graduação;
+- nova tela Cadastros incompletos na associação, no dojo e no professor, com filtros e etiquetas por pendência: sem nascimento, menor sem responsável, sem contato de emergência, sem telefone, sem turma, sem CPF e sem endereço;
+- cartão "Atenção" no painel do gestor, aviso na ficha do aluno, alerta na tela Hoje e atalho na aba Alunos do professor, e "Complete seus dados" no portal para contatos e emergência;
+- sem migration; `PendingDataTest` novo e `AssistedImportTest` ajustado.
+
 ## 2026-10-29 — Importação de alunos sem data de nascimento
 
 - a data de nascimento deixa de ser obrigatória na planilha de alunos: sem ela, a linha fica em revisão e o aluno entra como pré-cadastro; ativar continua exigindo a data;

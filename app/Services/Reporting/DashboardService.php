@@ -14,12 +14,13 @@ use App\Models\Student;
 use App\Models\User;
 use App\Services\Classes\TeacherWorkspaceService;
 use App\Services\People\BirthdayService;
+use App\Services\People\PendingDataService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 class DashboardService
 {
-    public function __construct(private readonly TeacherWorkspaceService $workspace, private readonly BirthdayService $birthdays) {}
+    public function __construct(private readonly TeacherWorkspaceService $workspace, private readonly BirthdayService $birthdays, private readonly PendingDataService $pending) {}
 
     public function for(User $user): array
     {
@@ -71,7 +72,9 @@ class DashboardService
         return ['kind' => $kind, 'metrics' => $metrics, 'lists' => ['by_dojo' => $byDojo, 'by_modality' => $byModality], 'dojo' => $dojoId ? $user->dojo : null,
             'agenda' => $kind === 'dojo' && $this->workspace->usesNavigation($user) ? $this->workspace->agenda($user) : null,
             'championships' => $kind === 'dojo' ? $this->championships($user) : collect(),
-            'birthdays' => $this->managerBirthdays($user, $kind)];
+            'birthdays' => $this->managerBirthdays($user, $kind),
+            'pending' => $this->pendingSummary($kind === 'association' ? $this->pending->association($user, $user->association) : ($user->dojo ? $this->pending->dojo($user, $user->dojo) : null),
+                fn () => $kind === 'association' ? route('associations.pending', $user->association_id) : route('operation.pending', $user->dojo_id))];
     }
 
     private function teacher(User $user): array
@@ -82,7 +85,19 @@ class DashboardService
             'today_classes' => $agenda['today']->count(),
             'pending_attendance' => $agenda['pending']->count() + $agenda['today']->where('session.attendance_state', 'open')->count(),
             'classes' => $this->workspace->groups($user)->count(),
-        ], 'championships' => $this->championships($user), 'birthdays' => $this->teacherBirthdays($user)];
+        ], 'championships' => $this->championships($user), 'birthdays' => $this->teacherBirthdays($user),
+            'pending' => $this->pendingSummary($this->pending->teacher($user), fn () => route('teacher.pending'))];
+    }
+
+    /** Pendências de cadastro do alcance: total de alunos e contagem por tipo, para o cartão do gestor e o alerta do professor. */
+    private function pendingSummary(?ReportContext $context, callable $url): ?array
+    {
+        if (! $context) {
+            return null;
+        }
+        $rows = $this->pending->list($context);
+
+        return $rows->isEmpty() ? null : ['total' => $rows->count(), 'counts' => $this->pending->counts($rows), 'url' => $url()];
     }
 
     /** Cartão do painel do gestor: aniversariantes de hoje e total do mês, no alcance de quem vê os alunos. */

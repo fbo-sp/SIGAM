@@ -8,6 +8,7 @@
 <a href="{{ route('teacher.students', array_filter(['busca' => $search])) }}" @if(! $filter) aria-current="page" @endif>Todos</a>
 <a href="{{ route('teacher.students', array_filter(['busca' => $search, 'filtro' => 'faltando'])) }}" @if($filter === 'faltando') aria-current="page" @endif>Faltando ({{ $counts['faltando'] }})</a>
 <a href="{{ route('teacher.students', array_filter(['busca' => $search, 'filtro' => 'prontos'])) }}" @if($filter === 'prontos') aria-current="page" @endif>Prontos ({{ $counts['prontos'] }})</a>
+@if($pendingCount)<a href="{{ route('teacher.pending') }}">Cadastro incompleto ({{ $pendingCount }})</a>@endif
 </nav>
 @if($announceGroups->isNotEmpty())
 <div class="row-actions teacher-announce">@foreach($announceGroups as $group)<a class="button button-secondary" href="{{ route('operation.announcements.create', [$group['dojo'], 'target_type' => 'people', 'student_ids' => $group['student_ids']]) }}">Avisar {{ count($group['student_ids']) === 1 ? 'este aluno' : 'estes '.count($group['student_ids']).' alunos' }}@if($announceGroups->count() > 1) ({{ $group['dojo']->name }})@endif</a>@endforeach</div>

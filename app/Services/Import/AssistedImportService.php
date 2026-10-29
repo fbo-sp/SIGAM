@@ -298,11 +298,6 @@ class AssistedImportService
             $accessible ? $review[] = 'O responsável existente será reutilizado.' : $errors[] = 'O CPF do responsável exige revisão pelo gestor da associação.';
         }
         $activate = $this->yes($raw['ativar'] ?? 'sim');
-        // Sem nascimento o aluno entra como pré-cadastro (decisão de Fabio em 29/10/2026); a ativação continua exigindo a data.
-        if ($birth === null && $birthText === '') {
-            $activate = false;
-            $review[] = 'Sem data de nascimento: o aluno entra como pré-cadastro e só pode ser ativado depois de completar a data.';
-        }
         // Matrícula em turma exige aluno ativo: no pré-cadastro a turma fica para depois da ativação.
         if (! $activate && $group !== null) {
             $review[] = "A turma {$group->name} fica para matricular depois de ativar o aluno.";

@@ -68,6 +68,12 @@ Telas: `associacoes/{association}/aniversariantes`, `operacao/dojos/{dojo}/anive
 
 No portal, o aluno (ou o responsável) vê no início um aviso no dia do aniversário dos colegas com matrícula vigente na mesma turma e dos professores dessas turmas, só com nome e turma, sem idade. O × grava um cookie com a data e esconde os avisos até o fim do dia neste navegador. O próprio aniversariante vê "Feliz aniversário". Em Meus dados, o próprio aluno ou o responsável legal escolhe esconder o aniversário dos colegas (`people.hide_birthday`, auditado como `person.birthday_privacy_changed`); gestores e professores continuam vendo. Tudo é calculado ao abrir a tela, sem cron, e-mail ou notificação no sino.
 
+### Cadastros incompletos
+
+Decisões de Fabio em 29/10/2026. A data de nascimento deixa de ser exigida para ativar o aluno (cadastro direto, ativação e importação); ela continua obrigatória onde a idade decide algo: turma com faixa etária, inscrição em campeonato e idade mínima de graduação. Sem a data, a regra "menor precisa de responsável legal" não é verificada na ativação e o aluno fica com pendência.
+
+`PendingDataService` (`app/Services/People`) calcula, ao abrir a tela, as pendências dos alunos ativos e em pré-cadastro: sem nascimento e menor sem responsável legal vigente (vermelhas); sem contato de emergência (nome e telefone), sem telefone nem celular (do aluno ou de responsável vigente), aluno ativo sem matrícula vigente, sem CPF e sem endereço (rua e cidade) (amarelas). O alcance é o mesmo dos aniversariantes: `student.view` na associação, `student.view` pela regra do dojo e as turmas do professor (só alunos ativos matriculados nelas). Aparece no cartão "Atenção" do painel do gestor da associação e do dojo, na tela Cadastros incompletos (`associacoes/{association}/cadastros-incompletos`, `operacao/dojos/{dojo}/cadastros-incompletos` e `professor/cadastros-incompletos`, filtros de dojo, turma, busca e tipo), no aviso da ficha do aluno (associação e acompanhamento do dojo), no alerta da tela Hoje e no atalho da aba Alunos do professor. Quem corrige usa as telas de edição existentes: na associação, a ficha do aluno e a edição da pessoa (`person.manage`); no dojo, "Dados do aluno" (`student.manage`); o professor só vê. No portal, o próprio aluno ou o responsável legal vê "Complete seus dados" quando faltam contato de emergência ou telefone, que o portal já permite editar. Sem tabela nova, sem cron.
+
 Limitação conhecida: um CPF já existente apenas em outra associação não pode ser vinculado automaticamente por um gestor, pois isso revelaria ou apropriaria identidade sem verificação. O fluxo de vinculação/mesclagem controlada será definido antes de operação multiassociação ampla.
 
 ## Mapa do código
@@ -99,6 +105,6 @@ A matriz definitiva de visibilidade por campo permanece vinculada à decisão D-
 
 ## Testes e critérios de aceite
 
-`OrganizationManagementTest` cobre criação/normalização/auditoria, escopo entre associações, vínculo de dojo e bloqueio em associação inativa. `PersonManagementTest` cobre vínculo central, normalização, CPF duplicado, ausência de permissão e IDOR. `BirthdayTest` cobre os aniversariantes nos três níveis, a regra de 29/02, o aviso do portal e a opção de esconder.
+`OrganizationManagementTest` cobre criação/normalização/auditoria, escopo entre associações, vínculo de dojo e bloqueio em associação inativa. `PersonManagementTest` cobre vínculo central, normalização, CPF duplicado, ausência de permissão e IDOR. `PendingDataTest` cobre as pendências nos três níveis, o filtro por tipo, os avisos da ficha, do painel, do professor e do portal e a ativação sem data de nascimento. `BirthdayTest` cobre os aniversariantes nos três níveis, a regra de 29/02, o aviso do portal e a opção de esconder.
 
 Aceite: gestor autorizado mantém dojos e pessoas da sua associação; usuário externo recebe 403/404; cadastro duplicado de CPF não é criado; inativação não apaga registros; migrations e testes passam em SQLite e MySQL.

@@ -137,3 +137,11 @@
 .birthday-month-nav{display:flex;align-items:center;justify-content:space-between;gap:.75rem;margin:.75rem .1rem;color:var(--muted);font-size:.9rem}.birthday-month-nav a{font-weight:700;text-decoration:none}.birthday-month-nav span{text-align:center}
 .birthday-card{display:grid;gap:.4rem;padding:1.2rem;margin-bottom:1rem;box-shadow:none}.birthday-card h2{margin:0;font-size:1.15rem}.birthday-card p{margin:0;color:var(--muted)}.birthday-card a{font-weight:800}
 .birthday-more{margin:.6rem 0 0;text-align:center;font-weight:700}
+/* Pendências de cadastro: cartão do painel, aviso, etiquetas e lista. */
+.pending-card{display:grid;gap:.5rem;padding:1.2rem;margin-bottom:1rem;box-shadow:none;border-left:4px solid #e0a100}.pending-card h2{margin:0;font-size:1.15rem}.pending-card>a{font-weight:800}
+.pending-tags{display:flex;flex-wrap:wrap;gap:.3rem;margin-top:.35rem}.pending-card .pending-tags{margin:0}
+.pending-tag{padding:.25rem .6rem;border-radius:999px;background:#fff3cd;color:#764f00;font-size:.75rem;font-weight:700;text-decoration:none;white-space:nowrap}.pending-tag.is-high{background:#ffe2e0;color:#8f1d15}
+.pending-banner{display:flex;flex-wrap:wrap;gap:.8rem;align-items:flex-start;padding:.9rem 1rem;margin:0 0 1rem;box-shadow:none;background:#fff8e6;border-color:#f1d58a}.pending-banner>div{flex:1;min-width:12rem}.pending-banner p{margin:.2rem 0 0;color:#5f4a12}.pending-banner .button{flex:none}
+.pending-icon{flex:none;width:2.2rem;height:2.2rem;border-radius:50%;display:grid;place-items:center;background:#fff;font-weight:900;color:#b07800}
+.pending-list .list-row{align-items:flex-start}.pending-list .list-row:hover{background:inherit}.pending-who{display:flex;gap:.6rem;align-items:center;min-width:0}.pending-who>span:last-child{display:grid;min-width:0}
+.pending-filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));align-items:end}

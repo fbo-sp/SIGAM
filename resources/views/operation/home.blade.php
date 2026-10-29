@@ -6,6 +6,7 @@
 <div class="page-heading"><div><span class="eyebrow">Operação do dojo</span><h1>{{ $dojo->name }}</h1><p>Você verá somente as funções autorizadas para esta unidade.</p></div></div>
 <section class="quick-grid" aria-label="Funções do dojo">
     @if($capabilities['student.view'])<article class="card quick-card"><h2>Alunos</h2><p>Vínculos regulares ativos nesta unidade.</p><a class="card-link" href="{{ route('operation.students', $dojo) }}">Ver alunos</a></article>@endif
+    @if($capabilities['student.view'])<article class="card quick-card"><h2>Cadastros incompletos</h2><p>Alunos do dojo com dados que faltam.</p><a class="card-link" href="{{ route('operation.pending', $dojo) }}">Ver pendências</a></article>@endif
     @if($capabilities['student.view'])<article class="card quick-card"><h2>Aniversariantes</h2><p>Alunos e professores do dojo que fazem aniversário no mês.</p><a class="card-link" href="{{ route('operation.birthdays', $dojo) }}">Ver aniversariantes</a></article>@endif
     @if($capabilities['class.view'])<article class="card quick-card"><h2>Turmas</h2><p>Turmas autorizadas para sua função.</p><a class="card-link" href="{{ route('operation.classes', $dojo) }}">Ver turmas</a></article>@endif
     @if($capabilities['session.view'])<article class="card quick-card"><h2>Aulas e chamada</h2><p>Professores veem apenas as aulas em que atuam.</p><a class="card-link" href="{{ route('operation.sessions', $dojo) }}">Ver aulas</a></article>@endif

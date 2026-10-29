@@ -338,10 +338,8 @@ class DirectRegistrationService
     private function activateStudent(Association $association, Student $student): void
     {
         $student->load('person');
-        if ($student->person->birth_date === null) {
-            throw ValidationException::withMessages(['person.birth_date' => 'Informe a data de nascimento antes de concluir o cadastro.']);
-        }
-        if ($association->requires_minor_guardian && $student->person->birth_date->age < 18
+        // Sem data de nascimento o cadastro é concluído e fica com pendência (decisão de Fabio em 29/10/2026).
+        if ($association->requires_minor_guardian && $student->person->birth_date !== null && $student->person->birth_date->age < 18
             && ! $student->guardians()->where('is_legal_guardian', true)
                 ->where(fn ($query) => $query->whereNull('end_date')->orWhereDate('end_date', '>=', today()))->exists()) {
             throw ValidationException::withMessages(['guardian_is_legal' => 'Para concluir o cadastro de menor, informe um responsável legal vigente.']);
