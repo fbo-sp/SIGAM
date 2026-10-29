@@ -22,7 +22,21 @@
 @if($context->isTeacher())<p class="form-help">Só alunos com matrícula ativa nas suas turmas. CPF e e-mail não entram na lista do professor.</p>@endif
 </section>
 
+<section class="card report-card" aria-labelledby="relatorio-frequencia">
+<div class="report-card-head"><span class="report-icon" aria-hidden="true">XLS</span><div><h2 id="relatorio-frequencia">Frequência</h2><p><strong>Resumida:</strong> aulas, presenças, faltas e % por aluno e turma. <strong>Detalhada:</strong> aula a aula, com quem deu a aula e os auxiliares.</p></div></div>
+<form class="report-filters" method="get" action="{{ route($prefix.'attendance', $params + ['kind' => 'resumida']) }}">
+<div class="field"><label for="freq_de">De</label><input id="freq_de" type="date" name="de" value="{{ $period['from']->toDateString() }}" required></div>
+<div class="field"><label for="freq_ate">Até</label><input id="freq_ate" type="date" name="ate" value="{{ $period['to']->toDateString() }}" required></div>
+@if($context->dojos->count() > 1)<div class="field"><label for="freq_dojo_id">Dojo</label><select id="freq_dojo_id" name="dojo_id"><option value="">Todos</option>@foreach($context->dojos as $dojo)<option value="{{ $dojo->id }}" @selected($filters['dojo_id'] === $dojo->id)>{{ $dojo->name }}</option>@endforeach</select></div>@endif
+<div class="field"><label for="freq_class_group_id">Turma</label><select id="freq_class_group_id" name="class_group_id"><option value="">{{ $context->isTeacher() ? 'Todas as suas turmas' : 'Todas' }}</option>@foreach($context->classes as $class)<option value="{{ $class->id }}" @selected($filters['class_group_id'] === $class->id)>{{ $class->name }}{{ $context->dojos->count() > 1 ? ' · '.$class->dojo?->name : '' }}</option>@endforeach</select></div>
+<div class="report-actions"><button class="button button-secondary" type="submit" formaction="{{ route($prefix.'index', $params) }}" name="previa" value="frequencia">Ver total</button><button class="button button-primary" type="submit">Baixar resumida</button><button class="button button-primary" type="submit" formaction="{{ route($prefix.'attendance', $params + ['kind' => 'detalhada']) }}">Baixar detalhada</button></div>
+</form>
+@error('ate')<p class="field-error" role="alert">{{ $message }}</p>@enderror
+@if($attendancePreview !== null)<p class="report-preview" role="status"><strong>{{ $attendancePreview['closed'] }} aula(s) com chamada finalizada</strong>@if($attendancePreview['open']) e {{ $attendancePreview['open'] }} com chamada aberta (não contam)@endif · {{ $attendancePreview['students'] }} aluno(s) · {{ $attendancePreview['lines'] }} linha(s) na detalhada.@if($attendancePreview['lines'] > $detailLimit) A detalhada traz as primeiras {{ $detailLimit }}; filtre por turma ou período.@endif</p>@endif
+<p class="form-help">Só chamadas finalizadas contam. Período de até 366 dias; aulas futuras ficam fora.</p>
+</section>
+
 <section class="section-block"><div class="section-heading"><h2>Próximos relatórios</h2><p>Chegam nas próximas versões, com os mesmos filtros.</p></div>
-<div class="card list-card">@foreach(['Lista de presença (PDF)', 'Frequência resumida (Excel)', 'Frequência detalhada (Excel)', 'Técnicas ministradas (Excel com gráficos)'] as $next)<div class="list-row"><span>{{ $next }}</span><span class="status-pill status-inactive">Em breve</span></div>@endforeach</div>
+<div class="card list-card">@foreach(['Lista de presença (PDF)', 'Técnicas ministradas (Excel com gráficos)'] as $next)<div class="list-row"><span>{{ $next }}</span><span class="status-pill status-inactive">Em breve</span></div>@endforeach</div>
 </section>
 @endsection

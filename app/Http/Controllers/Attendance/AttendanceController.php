@@ -80,7 +80,8 @@ class AttendanceController extends Controller
     public function store(AttendanceRequest $request, Association $association, ClassSession $session, AttendanceService $service): RedirectResponse
     {
         $this->ensureSession($association, $session);
-        $service->save($association, $session, $request->user(), $request->validated('records'), $request->boolean('close_attendance'));
+        $service->save($association, $session, $request->user(), $request->validated('records'), $request->boolean('close_attendance'),
+            $request->filled('staff_lead') ? ['lead' => $request->validated('staff_lead'), 'assistants' => $request->validated('staff_assistants') ?? []] : null);
 
         return back()->with('status', $request->boolean('close_attendance') ? 'Chamada finalizada.' : 'Chamada salva.');
     }

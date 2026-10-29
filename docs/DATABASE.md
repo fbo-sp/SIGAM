@@ -22,6 +22,7 @@
 | `000020`–`000021` | importação assistida e retenção de arquivos/payloads |
 | `000022` | meta de 4/8 próximas aulas |
 | `000023` | origem financeira por dojo e participação dojo–campeonato |
+| `000032` | quem deu a aula e auxiliares presentes (`class_session_staff`) |
 
 Os nomes completos em `database/migrations/` são a fonte canônica. Uma mudança deve acrescentar nova migration e analisar todas as anteriores que tocaram a tabela; nunca compacte o histórico de uma instalação existente.
 
@@ -153,6 +154,8 @@ Antes da produção, revisar retenção, backup/restore e os requisitos legais d
 ## Acompanhamento técnico
 
 `technique_items` guarda a árvore de técnicas por associação e modalidade (`parent_id` aponta para o grupo; `kind` é `group` ou `item`; `knowledge_type` é `theoretical` ou `practical`, herdado do grupo principal; `status` ativo ou inativo, sem exclusão física). O índice `technique_items_tree_index` cobre a leitura por associação, modalidade e grupo. Para a área de estudo do portal (migration `2026_10_28_000030`), o item tem `translation` (nome em português), `key_points` e `steps` (texto, uma linha por ponto ou passo, até 5), `common_error`, `safety_note` (até 300 caracteres, migration `2026_10_28_000031`) e a ficha (`sheet_path` no disco privado, `sheet_mime`, `sheet_name`).
+
+`class_session_staff` (migration `2026_10_29_000032`) guarda quem deu cada aula e os auxiliares presentes, gravado ao salvar ou finalizar a chamada: aula, professor, `role` (`lead` ou `assistant`) e quem registrou; único por `(class_session_id, teacher_profile_id)`, chaves estrangeiras sem exclusão em cascata. Não substitui `planned_teacher_id`/`actual_teacher_id`, que seguem decidindo o acesso.
 
 `technique_study_logs` guarda o "Estudei esta técnica" do portal: associação, aluno, item, usuário e `studied_on`, único por `(student_id, technique_item_id, studied_on)` (um estudo por dia). Só de inclusão.
 

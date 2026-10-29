@@ -7,7 +7,9 @@ use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Conditional;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -75,10 +77,48 @@ class XlsxReport
                 $sheet->getStyle("A{$row}:{$last}{$row}")->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FFF6F8FB');
             }
         }
+        $sheet->getPageSetup()->setOrientation(PageSetup::ORIENTATION_LANDSCAPE)->setPaperSize(PageSetup::PAPERSIZE_A4)->setFitToWidth(1)->setFitToHeight(0);
+        $sheet->getPageSetup()->setRowsToRepeatAtTopByStartAndEnd(self::HEADER_ROW, self::HEADER_ROW);
         $sheet->freezePane('B'.(self::HEADER_ROW + 1));
         $sheet->setAutoFilter('A'.self::HEADER_ROW.':'.$last.max($row, self::HEADER_ROW));
 
         return $sheet;
+    }
+
+    /** Coluna de frequência: 0% e cor verde (75% ou mais), amarela (50% a 74%) ou vermelha (abaixo de 50%). */
+    public function percentColumn(Worksheet $sheet, string $column): void
+    {
+        $first = self::HEADER_ROW + 1;
+        $range = $column.$first.':'.$column.max($first, $sheet->getHighestRow());
+        $sheet->getStyle($range)->getNumberFormat()->setFormatCode('0%');
+        $cell = $column.$first;
+        $this->conditions($sheet, $range, [
+            "AND(ISNUMBER({$cell}),{$cell}>=0.75)" => 'FFD9F2E3',
+            "AND(ISNUMBER({$cell}),{$cell}>=0.5,{$cell}<0.75)" => 'FFFFF2CC',
+            "AND(ISNUMBER({$cell}),{$cell}<0.5)" => 'FFF8D7DA',
+        ]);
+    }
+
+    /** @param  array<string, string>  $colors  texto exato => cor de fundo */
+    public function valueColors(Worksheet $sheet, string $column, array $colors): void
+    {
+        $first = self::HEADER_ROW + 1;
+        $cell = $column.$first;
+        $this->conditions($sheet, $column.$first.':'.$column.max($first, $sheet->getHighestRow()),
+            collect($colors)->mapWithKeys(fn (string $color, string $text) => [$cell.'="'.str_replace('"', '""', $text).'"' => $color])->all());
+    }
+
+    /** @param  array<string, string>  $rules  fórmula relativa à primeira célula => cor de fundo */
+    private function conditions(Worksheet $sheet, string $range, array $rules): void
+    {
+        $conditionals = [];
+        foreach ($rules as $formula => $color) {
+            $conditional = (new Conditional)->setConditionType(Conditional::CONDITION_EXPRESSION)->addCondition($formula);
+            $conditional->getStyle()->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($color);
+            $conditional->getStyle()->getFill()->getEndColor()->setARGB($color);
+            $conditionals[] = $conditional;
+        }
+        $sheet->getStyle($range)->setConditionalStyles($conditionals);
     }
 
     public function notes(string $name, array $lines): void

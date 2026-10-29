@@ -5,7 +5,7 @@
 Exportar em Excel e PDF os dados que cada perfil já vê nas telas (pedido de Fabio em 28/10/2026). Proposta, respostas e modelos aprovados: `/mnt/project-files/sigam/proposta-relatorios.md` e `/mnt/project-files/sigam/relatorios-modelos/`. A entrega é por etapas:
 
 1. base e lista de alunos (Excel), disponível;
-2. frequência resumida e detalhada (Excel), com registro de quem deu a aula ao finalizar a chamada;
+2. frequência resumida e detalhada (Excel), com registro de quem deu a aula ao finalizar a chamada, disponível;
 3. lista de presença (PDF): chamada fechada, em branco por aula e grade do mês;
 4. técnicas ministradas (Excel com gráficos nativos), comparando com o currículo da próxima faixa.
 
@@ -23,14 +23,21 @@ A tela "Relatórios" existe em três níveis, com a permissão `report.export`:
 
 `StudentListReport`: matrícula, nome (social quando houver), nascimento, idade, dojos com vínculo vigente, modalidades e faixa atual, turmas com matrícula ativa, situação, entrada, CPF, e-mail, celular do aluno e o responsável principal com telefone. Situação: "Ativos e pré-cadastro" (padrão), "Só ativos" ou "Todos". O professor vê só alunos ativos com matrícula ativa nas turmas dele, e a lista dele não tem CPF nem e-mail (decisão de Fabio). Limite de 5.000 linhas por arquivo.
 
+## Frequência
+
+O cartão "Frequência" tem período (padrão: o mês atual; até 366 dias), dojo e turma, "Ver total" (aulas finalizadas, abertas, alunos e linhas da detalhada) e dois downloads. `AttendanceReportData` monta a base: cada aula da turma no período, até hoje, para cada aluno com matrícula ativa ou encerrada que cobre a data da aula. Aulas canceladas ou reagendadas ficam fora; visitas também. Só chamada finalizada conta (decisão de Fabio); SIM, reposição e experimental contam presença, e NÃO ou aluno sem marcação contam falta. As turmas são as ativas do alcance.
+
+- `AttendanceSummaryReport` (resumida): aba "Por turma" com matrícula, aluno, faixa, turma, aulas no período, presenças, faltas, frequência (verde 75% ou mais, amarelo 50% a 74%, vermelho abaixo de 50%) e chamadas abertas, que não contam; aba "Por aluno" soma as turmas; aba "Sobre" explica as regras.
+- `AttendanceDetailReport` (detalhada): uma linha por aula de cada aluno com data, dia, início, professor da aula, auxiliares presentes, presença (SIM, NÃO, "—" na chamada aberta, "Sem marcação") e chamada (Finalizada ou Aberta). Sem registro de quem deu a aula, mostra o previsto com "(previsto)". Limite de 10.000 linhas, com aviso no subtítulo.
+
 ## Excel
 
-`App\Support\Export\XlsxReport` (PhpSpreadsheet) padroniza título, linha de filtros, linha "Gerado em ... por ... (perfil)", cabeçalho azul fixo com filtro do Excel e linhas alternadas. Texto é gravado sempre como texto, então um nome que começa com `=` não vira fórmula; datas viram data do Excel. O arquivo é gerado na hora (sem fila nem worker) e não fica guardado no servidor. `sigam:production:check` informa se as extensões `zip` e `xmlwriter` estão disponíveis.
+`App\Support\Export\XlsxReport` (PhpSpreadsheet) padroniza título, linha de filtros, linha "Gerado em ... por ... (perfil)", cabeçalho azul fixo com filtro do Excel e linhas alternadas. Texto é gravado sempre como texto, então um nome que começa com `=` não vira fórmula; datas viram data do Excel. A frequência usa formatação condicional e a folha sai em paisagem, ajustada à largura. O arquivo é gerado na hora (sem fila nem worker) e não fica guardado no servidor. `sigam:production:check` informa se as extensões `zip` e `xmlwriter` estão disponíveis.
 
 ## Mapa do código
 
-- `app/Services/Reporting/ReportScope.php`, `ReportContext.php`, `StudentListReport.php`;
+- `app/Services/Reporting/ReportScope.php`, `ReportContext.php`, `StudentListReport.php`, `AttendanceReportData.php`, `AttendanceSummaryReport.php`, `AttendanceDetailReport.php`;
 - `app/Http/Controllers/Reporting/ReportController.php`;
 - `app/Support/Export/XlsxReport.php`;
 - view `resources/views/reports/index.blade.php`;
-- teste `tests/Feature/ReportsTest.php`.
+- testes `tests/Feature/ReportsTest.php` e `AttendanceReportsTest.php`.

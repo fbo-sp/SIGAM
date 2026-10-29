@@ -20,11 +20,12 @@ class AttendanceService
     /** Status antigos que equivalem a SIM ou NÃO e são mantidos quando o professor confirma a mesma resposta. */
     private const EQUIVALENT_STATUSES = ['present' => ['makeup', 'trial'], 'absent' => ['excused_absence']];
 
-    public function __construct(private readonly AuditService $audit, private readonly FutureSessionMaintainer $futureSessions) {}
+    public function __construct(private readonly AuditService $audit, private readonly FutureSessionMaintainer $futureSessions, private readonly SessionStaffService $staff) {}
 
-    public function save(Association $association, ClassSession $session, User $user, array $records, bool $close): void
+    /** @param  array{lead?: mixed, assistants?: mixed}|null  $staff  professor da aula e auxiliares presentes */
+    public function save(Association $association, ClassSession $session, User $user, array $records, bool $close, ?array $staff = null): void
     {
-        DB::transaction(function () use ($association, $session, $user, $records, $close): void {
+        DB::transaction(function () use ($association, $session, $user, $records, $close, $staff): void {
             $locked = ClassSession::query()->lockForUpdate()->with('classGroup')->findOrFail($session->id);
             $this->assertSession($association, $locked);
             abort_unless($user->hasPermission('attendance.manage', $association->id) || app(OperationalScope::class)->canSession($user, $locked, 'attendance.manage'), 403);
@@ -48,6 +49,7 @@ class AttendanceService
                 $status = in_array($existing->get($row['student']->id), self::EQUIVALENT_STATUSES[$record['status']] ?? [], true) ? $existing->get($row['student']->id) : $record['status'];
                 $locked->records()->updateOrCreate(['student_id' => $record['student_id']], ['participation_type' => $row['type'], 'status' => $status, 'notes' => $record['notes'] ?? null, 'recorded_at' => now(), 'recorded_by_user_id' => $user->id]);
             }
+            $staffSaved = $this->staff->store($locked, $user, $staff, $close);
             if ($close) {
                 $expectedIds = $roster->keys()->map(fn ($id) => (int) $id)->all();
                 $recorded = $locked->records()->whereIn('student_id', $expectedIds)->pluck('student_id')->map(fn ($id) => (int) $id)->sort()->values()->all();
@@ -60,10 +62,10 @@ class AttendanceService
                     $visitor->update(['status' => in_array($status, ['present', 'makeup', 'trial'], true) ? 'attended' : 'no_show']);
                 });
                 $locked->update(['attendance_state' => 'closed', 'status' => 'held', 'closed_by_user_id' => $user->id, 'closed_at' => now()]);
-                $this->audit->record('attendance.closed', 'updated', $locked, ['attendance_state' => 'open'], ['attendance_state' => 'closed']);
+                $this->audit->record('attendance.closed', 'updated', $locked, ['attendance_state' => 'open'], ['attendance_state' => 'closed', 'staff' => $staffSaved]);
                 $this->futureSessions->maintain($locked->class_group_id);
             } else {
-                $this->audit->record('attendance.saved', 'updated', $locked, null, ['record_count' => count($records)]);
+                $this->audit->record('attendance.saved', 'updated', $locked, null, ['record_count' => count($records), 'staff' => $staffSaved]);
             }
         });
     }

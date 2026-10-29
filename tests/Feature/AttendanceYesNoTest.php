@@ -30,7 +30,7 @@ class AttendanceYesNoTest extends TestCase
         $save = route('operation.attendance', [$this->dojo, $session]);
 
         $this->actingAs($user)->get($page)->assertOk()->assertSee('0 de 2')->assertSee('Todos SIM')->assertSee('value="present"', false)
-            ->assertSee('value="absent"', false)->assertDontSee('<select', false)->assertDontSee('checked', false);
+            ->assertSee('value="absent"', false)->assertDontSee('<select name="records', false)->assertDontSee('checked', false);
 
         // Só a Ana foi marcada: a Bia fica em branco, não é gravada e a chamada não fecha.
         $this->post($save, ['records' => [['student_id' => $ana->id, 'status' => 'present'], ['student_id' => $bia->id]], 'close_attendance' => '0'])->assertSessionHasNoErrors();
@@ -65,6 +65,6 @@ class AttendanceYesNoTest extends TestCase
 
         $manager = $this->associationUser(['session.view', 'attendance.manage']);
         $this->actingAs($manager)->get(route('associations.attendance.show', [$this->association, $session]))->assertOk()
-            ->assertSee('Todos SIM')->assertSee('class="yes-no-yes"', false)->assertDontSee('<select', false);
+            ->assertSee('Todos SIM')->assertSee('class="yes-no-yes"', false)->assertDontSee('<select name="records', false);
     }
 }
