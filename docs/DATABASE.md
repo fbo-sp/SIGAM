@@ -23,6 +23,7 @@
 | `000022` | meta de 4/8 próximas aulas |
 | `000023` | origem financeira por dojo e participação dojo–campeonato |
 | `000032` | quem deu a aula e auxiliares presentes (`class_session_staff`) |
+| `000033` | opção de esconder o aniversário dos colegas (`people.hide_birthday`) |
 
 Os nomes completos em `database/migrations/` são a fonte canônica. Uma mudança deve acrescentar nova migration e analisar todas as anteriores que tocaram a tabela; nunca compacte o histórico de uma instalação existente.
 
@@ -43,7 +44,7 @@ erDiagram
 
 CPF e CNPJ são armazenados somente com dígitos e são únicos quando informados. E-mail de login é normalizado em minúsculas. Auditoria não possui fluxo normal de update/delete.
 
-`dojos.code` é único por associação. Pessoas permanecem globais e são vinculadas por `association_person_roles`, inicialmente com o tipo técnico `registered_person`; esse vínculo não concede acesso nem perfil esportivo. Consulte `modules/organization-people.md` para invariantes e mapa do código. `people.photo_path` guarda a base dos arquivos da foto no disco privado (`photos/{person}/{uuid}`, sufixos `-thumb.jpg` e `-medium.jpg`); nulo quando não há foto.
+`dojos.code` é único por associação. Pessoas permanecem globais e são vinculadas por `association_person_roles`, inicialmente com o tipo técnico `registered_person`; esse vínculo não concede acesso nem perfil esportivo. Consulte `modules/organization-people.md` para invariantes e mapa do código. `people.photo_path` guarda a base dos arquivos da foto no disco privado (`photos/{person}/{uuid}`, sufixos `-thumb.jpg` e `-medium.jpg`); nulo quando não há foto. `people.hide_birthday` (migration `2026_10_29_000033`, padrão falso) esconde o aniversário só dos colegas no portal; gestores e professores continuam vendo.
 
 ## Cadastro esportivo
 

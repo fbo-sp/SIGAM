@@ -30,6 +30,7 @@ use App\Http\Controllers\Notifications\AnnouncementController;
 use App\Http\Controllers\Notifications\NotificationController;
 use App\Http\Controllers\Organization\AssociationController;
 use App\Http\Controllers\Organization\DojoController;
+use App\Http\Controllers\People\BirthdayController;
 use App\Http\Controllers\People\PersonController;
 use App\Http\Controllers\People\PersonPhotoController;
 use App\Http\Controllers\Portal\PortalController;
@@ -84,6 +85,8 @@ Route::middleware(['auth', 'active', 'association.context'])->group(function ():
     Route::get('/professor/relatorios/frequencia-{kind}', [ReportController::class, 'teacherAttendance'])->whereIn('kind', ['resumida', 'detalhada'])->middleware('throttle:20,1')->name('teacher.reports.attendance');
     Route::get('/professor/relatorios/grade-presenca', [ReportController::class, 'teacherGrid'])->middleware('throttle:20,1')->name('teacher.reports.grid');
     Route::get('/professor/relatorios/tecnicas', [ReportController::class, 'teacherTechniques'])->middleware('throttle:20,1')->name('teacher.reports.techniques');
+    Route::get('/professor/aniversariantes', [BirthdayController::class, 'teacher'])->name('teacher.birthdays');
+    Route::post('/aniversarios/fechar-aviso', [BirthdayController::class, 'dismiss'])->middleware('throttle:30,1')->name('birthdays.dismiss');
     Route::get('/professor/estudar', [TeacherStudyController::class, 'index'])->name('teacher.study');
     Route::get('/professor/estudar/{item}', [TeacherStudyController::class, 'show'])->whereNumber('item')->name('teacher.study.item');
     foreach (['/associacoes/{association}/avisos' => 'associations.announcements.', '/operacao/dojos/{dojo}/avisos' => 'operation.announcements.'] as $path => $name) {
@@ -98,6 +101,7 @@ Route::middleware(['auth', 'active', 'association.context'])->group(function ():
     Route::prefix('/operacao/dojos/{dojo}')->name('operation.')->controller(OperationalController::class)->group(function (): void {
         Route::get('/', 'show')->name('home');
         Route::get('/alunos', 'students')->name('students');
+        Route::get('/aniversariantes', [BirthdayController::class, 'dojo'])->name('birthdays');
         Route::get('/relatorios', [ReportController::class, 'dojoIndex'])->name('reports.index');
         Route::get('/relatorios/alunos', [ReportController::class, 'dojoStudents'])->middleware('throttle:20,1')->name('reports.students');
         Route::get('/relatorios/frequencia-{kind}', [ReportController::class, 'dojoAttendance'])->whereIn('kind', ['resumida', 'detalhada'])->middleware('throttle:20,1')->name('reports.attendance');
@@ -180,6 +184,7 @@ Route::middleware(['auth', 'active', 'association.context'])->group(function ():
         Route::get('/alunos/{student}', [PortalController::class, 'show'])->name('students.show');
         Route::get('/alunos/{student}/{section}', [PortalController::class, 'section'])->whereIn('section', ['turmas', 'frequencia', 'financeiro', 'campeonatos', 'historico', 'documentos', 'dados'])->name('students.section');
         Route::put('/alunos/{student}/contato', [PortalController::class, 'updateContact'])->name('students.contact.update');
+        Route::put('/alunos/{student}/aniversario', [BirthdayController::class, 'privacy'])->name('students.birthday.update');
         Route::get('/alunos/{student}/documentos/{document}', [PortalController::class, 'download'])->name('students.documents.download');
         Route::post('/alunos/{student}/campeonatos/{championship}', [PortalController::class, 'register'])->name('students.championships.register');
         Route::get('/alunos/{student}/progresso', [PortalProgressionController::class, 'show'])->name('progress');
@@ -200,6 +205,7 @@ Route::middleware(['auth', 'active', 'association.context'])->group(function ():
     Route::put('/associacoes/{association}', [AssociationController::class, 'update'])->middleware('permission:association.manage')->name('associations.update');
 
     Route::prefix('/associacoes/{association}')->name('associations.')->group(function (): void {
+        Route::get('/aniversariantes', [BirthdayController::class, 'association'])->middleware('permission:student.view')->name('birthdays');
         Route::get('/importacoes', [AssistedImportController::class, 'index'])->name('imports.index');
         Route::post('/importacoes', [AssistedImportController::class, 'store'])->name('imports.store');
         Route::get('/importacoes/{batch}', [AssistedImportController::class, 'show'])->name('imports.show');

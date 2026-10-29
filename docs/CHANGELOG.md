@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-10-29 — Aniversariantes do mês
+
+- nova tela Aniversariantes na associação (filtros de mês, dojo, turma e alunos/professores), no dojo e no professor (Mais), com dia, foto, turma e a idade que a pessoa faz; cartão "Hoje" no painel do gestor da associação e do dojo;
+- a tela Hoje do professor mostra o aviso de quem faz aniversário hoje nas turmas dele (com o horário da aula) e a lista do mês, incluindo os professores das turmas;
+- no portal, colegas de turma veem no dia um aviso com nome e turma, sem idade, que pode ser fechado; o aniversariante vê "Feliz aniversário"; em Meus dados o aluno ou o responsável legal pode esconder o aniversário dos colegas (gestores e professores continuam vendo);
+- 29/02 aparece em 28/02 nos anos não bissextos; tudo é calculado ao abrir a tela, sem cron, e-mail ou sino;
+- 1 migration (`people.hide_birthday`); `BirthdayTest` novo.
+
 ## 2026-10-29 — Relatórios exportáveis, etapa 4: técnicas ministradas
 
 - Relatórios ganham o cartão "Técnicas ministradas" (turma e período) com Excel de três abas: Resumo com indicadores, tabela por grupo e dois gráficos nativos; Por técnica com uma coluna por aula; Não abordadas com o currículo da próxima faixa dos alunos que não apareceu no período;

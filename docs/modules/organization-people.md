@@ -60,6 +60,14 @@ A imagem nunca tem link público. As telas que já autorizaram ver a pessoa gera
 
 O ajuste exige a extensão GD do PHP. Sem ela o sistema continua funcionando, mas o envio de foto é recusado com mensagem; `sigam:production:check` informa a disponibilidade da GD sem mudar o resultado.
 
+### Aniversariantes
+
+Decisões de Fabio em 29/10/2026. `BirthdayService` (`app/Services/People`) monta os aniversariantes do mês pelo mês da data de nascimento, filtrado no SQL, com o mesmo alcance de quem já vê os alunos: na associação, `student.view` (todos os dojos, filtros de dojo, turma e alunos/professores); no dojo, `student.view` pela regra do dojo (alunos com vínculo vigente no dojo e professores vinculados a ele); o professor vê os alunos com matrícula vigente nas turmas que consegue abrir (principal ou auxiliar vigente) e os professores dessas turmas. Entram só alunos ativos e professores com perfil ativo; quem não tem data de nascimento fica de fora. Quem nasceu em 29/02 aparece em 28/02 nos anos não bissextos.
+
+Telas: `associacoes/{association}/aniversariantes`, `operacao/dojos/{dojo}/aniversariantes` e `professor/aniversariantes` (mês, turma e "Mostrar", com links para o mês anterior e o seguinte), cartão no painel do gestor da associação e do dojo (hoje com idade e total do mês), aviso do dia e lista do mês na tela Hoje do professor. Gestores e professores veem a idade que a pessoa faz.
+
+No portal, o aluno (ou o responsável) vê no início um aviso no dia do aniversário dos colegas com matrícula vigente na mesma turma e dos professores dessas turmas, só com nome e turma, sem idade. O × grava um cookie com a data e esconde os avisos até o fim do dia neste navegador. O próprio aniversariante vê "Feliz aniversário". Em Meus dados, o próprio aluno ou o responsável legal escolhe esconder o aniversário dos colegas (`people.hide_birthday`, auditado como `person.birthday_privacy_changed`); gestores e professores continuam vendo. Tudo é calculado ao abrir a tela, sem cron, e-mail ou notificação no sino.
+
 Limitação conhecida: um CPF já existente apenas em outra associação não pode ser vinculado automaticamente por um gestor, pois isso revelaria ou apropriaria identidade sem verificação. O fluxo de vinculação/mesclagem controlada será definido antes de operação multiassociação ampla.
 
 ## Mapa do código
@@ -76,7 +84,7 @@ Controllers coordenam HTTP; regras de escrita ficam nos serviços. Novos relacio
 
 ## Auditoria e dados pessoais
 
-Eventos: `association.created|updated`, `dojo.created|updated`, `person.created|updated` e `person.photo_updated|removed`. Auditoria de pessoa guarda nome/status na criação; na edição registra status e nomes dos campos alterados, sem copiar CPF, contatos, endereço ou observações. CPF aparece mascarado na página de leitura e não é exportado no CSV inicial.
+Eventos: `association.created|updated`, `dojo.created|updated`, `person.created|updated`, `person.photo_updated|removed` e `person.birthday_privacy_changed`. Auditoria de pessoa guarda nome/status na criação; na edição registra status e nomes dos campos alterados, sem copiar CPF, contatos, endereço ou observações. CPF aparece mascarado na página de leitura e não é exportado no CSV inicial.
 
 A matriz definitiva de visibilidade por campo permanece vinculada à decisão D-02. Até sua aprovação, evitar incluir CPF, documento, nascimento, endereço e emergência em novas listagens, logs ou exports.
 
@@ -91,6 +99,6 @@ A matriz definitiva de visibilidade por campo permanece vinculada à decisão D-
 
 ## Testes e critérios de aceite
 
-`OrganizationManagementTest` cobre criação/normalização/auditoria, escopo entre associações, vínculo de dojo e bloqueio em associação inativa. `PersonManagementTest` cobre vínculo central, normalização, CPF duplicado, ausência de permissão e IDOR.
+`OrganizationManagementTest` cobre criação/normalização/auditoria, escopo entre associações, vínculo de dojo e bloqueio em associação inativa. `PersonManagementTest` cobre vínculo central, normalização, CPF duplicado, ausência de permissão e IDOR. `BirthdayTest` cobre os aniversariantes nos três níveis, a regra de 29/02, o aviso do portal e a opção de esconder.
 
 Aceite: gestor autorizado mantém dojos e pessoas da sua associação; usuário externo recebe 403/404; cadastro duplicado de CPF não é criado; inativação não apaga registros; migrations e testes passam em SQLite e MySQL.

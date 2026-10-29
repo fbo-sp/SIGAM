@@ -124,3 +124,16 @@
 .staff-summary{margin:.75rem 0;color:var(--muted)}
 .report-card+.report-card{margin-top:1rem}
 .report-icon-pdf{background:#fdecea;color:#b42318}.session-pdf{margin:-.5rem 0 1rem}
+/* Aniversariantes: aviso do dia, lista do mês e cartão do painel. */
+.birthday-banner{display:flex;gap:.8rem;align-items:center;padding:.9rem 1rem;margin:0 0 1rem;box-shadow:none;background:linear-gradient(90deg,#fff4d6,#ffe9f0);border-color:#f6d58e}.birthday-banner>div{display:grid;gap:.15rem;min-width:0}.birthday-banner small{color:#6b5a2e}.birthday-banner form{margin-left:auto}
+.birthday-icon{flex:none;width:2.6rem;height:2.6rem;border-radius:50%;display:grid;place-items:center;background:#fff;font-size:1.4rem}
+.birthday-close{min-width:2.5rem;min-height:2.5rem;border:0;border-radius:50%;background:transparent;color:#6b5a2e;font-size:1.3rem;cursor:pointer}.birthday-close:hover{background:rgba(255,255,255,.6)}
+.birthday-banner.is-self{background:linear-gradient(90deg,#e9f0ff,#f3e9ff);border-color:#c8d6ff}.birthday-banner.is-self small{color:#3d4a6b}
+.birthday-list .list-row{justify-content:flex-start;gap:.75rem}.birthday-list .list-row:hover{background:inherit}.birthday-list .list-row.is-today{background:#fff8fb}
+.birthday-list .list-row>.birthday-day{flex:none;display:block;width:2.6rem;text-align:center;font-weight:800;color:var(--primary)}.birthday-day small{display:block;font-size:.7rem;font-weight:600}
+.birthday-who{display:flex;align-items:center;gap:.6rem;flex:1;min-width:0}.birthday-who>span:last-child{display:grid;min-width:0}.birthday-who strong{overflow-wrap:anywhere}
+.birthday-tag{flex:none;margin-left:auto;padding:.25rem .6rem;border-radius:999px;background:#eef2f8;color:var(--muted);font-size:.72rem;font-weight:700;white-space:nowrap}.birthday-tag.is-today{background:#ffe2ec;color:#b4235a;font-weight:800}
+.birthday-filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));align-items:end}
+.birthday-month-nav{display:flex;align-items:center;justify-content:space-between;gap:.75rem;margin:.75rem .1rem;color:var(--muted);font-size:.9rem}.birthday-month-nav a{font-weight:700;text-decoration:none}.birthday-month-nav span{text-align:center}
+.birthday-card{display:grid;gap:.4rem;padding:1.2rem;margin-bottom:1rem;box-shadow:none}.birthday-card h2{margin:0;font-size:1.15rem}.birthday-card p{margin:0;color:var(--muted)}.birthday-card a{font-weight:800}
+.birthday-more{margin:.6rem 0 0;text-align:center;font-weight:700}
