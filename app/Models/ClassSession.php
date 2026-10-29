@@ -36,6 +36,11 @@ class ClassSession extends Model
         return $this->belongsTo(TeacherProfile::class, 'planned_teacher_id');
     }
 
+    public function staff(): HasMany
+    {
+        return $this->hasMany(ClassSessionStaff::class);
+    }
+
     public function records(): HasMany
     {
         return $this->hasMany(AttendanceRecord::class);

@@ -145,8 +145,10 @@ class OperationalController extends Controller
             'records' => ['required', 'array', 'min:1'], 'records.*.student_id' => ['required', 'integer', 'distinct'],
             'records.*.status' => ['nullable', Rule::in(AttendanceService::RECORDABLE_STATUSES)],
             'close_attendance' => ['nullable', 'boolean'],
+            'staff_lead' => ['nullable', 'integer'], 'staff_assistants' => ['nullable', 'array'], 'staff_assistants.*' => ['integer'],
         ]);
-        $service->save($dojo->association, $session, $request->user(), $data['records'], $request->boolean('close_attendance'));
+        $service->save($dojo->association, $session, $request->user(), $data['records'], $request->boolean('close_attendance'),
+            $request->filled('staff_lead') ? ['lead' => $data['staff_lead'], 'assistants' => $data['staff_assistants'] ?? []] : null);
 
         return redirect()->route('operation.session', [$dojo, $session])->with('status', 'Chamada salva.');
     }
