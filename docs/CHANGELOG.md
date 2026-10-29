@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-10-29 — Relatórios exportáveis, etapa 3: lista de presença em PDF
+
+- a página da aula ganha o botão "Baixar lista de presença (PDF)" quando a chamada está finalizada (SIM/NÃO, totais, professor, auxiliares e técnicas) e "Imprimir lista em branco (PDF)" para aula aberta ou futura (caixas SIM e NÃO, linhas para visitante e assinatura), no dojo e na associação, para quem tem `report.export`;
+- Relatórios ganham o cartão "Lista de presença" com a grade do mês da turma em PDF (uma coluna por aula, P ou F a caneta, rubrica do professor);
+- biblioteca Dompdf incluída; `sigam:production:check` informa se as extensões do PDF estão disponíveis;
+- sem migration; `AttendanceListPdfTest` novo.
+
 ## 2026-10-29 — Relatórios exportáveis, etapa 2: frequência e quem deu a aula
 
 - a chamada pergunta "Quem deu esta aula?": professor da aula (sugere quem está fazendo a chamada) e auxiliares presentes, com os professores da turma e do dojo como opção; a chamada fechada mostra os dois, e aulas antigas mostram o professor previsto;

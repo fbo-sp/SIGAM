@@ -36,7 +36,17 @@
 <p class="form-help">Só chamadas finalizadas contam. Período de até 366 dias; aulas futuras ficam fora.</p>
 </section>
 
+<section class="card report-card" aria-labelledby="relatorio-grade">
+<div class="report-card-head"><span class="report-icon report-icon-pdf" aria-hidden="true">PDF</span><div><h2 id="relatorio-grade">Lista de presença</h2><p><strong>Grade do mês:</strong> os alunos da turma e uma coluna por aula, para marcar P ou F a caneta. A lista de cada aula (finalizada ou em branco) fica na página da aula.</p></div></div>
+<form class="report-filters" method="get" action="{{ route($prefix.'grid', $params) }}">
+<div class="field"><label for="grade_turma">Turma</label><select id="grade_turma" name="grade_turma" required><option value="">Escolha a turma</option>@foreach($context->classes as $class)<option value="{{ $class->id }}" @selected((int) old('grade_turma') === $class->id)>{{ $class->name }}{{ $context->dojos->count() > 1 ? ' · '.$class->dojo?->name : '' }}</option>@endforeach</select></div>
+<div class="field"><label for="grade_mes">Mês</label><input id="grade_mes" type="month" name="mes" value="{{ old('mes', now()->format('Y-m')) }}" required></div>
+<div class="report-actions"><button class="button button-primary" type="submit">Baixar grade do mês</button></div>
+</form>
+@foreach(['grade_turma', 'mes'] as $field)@error($field)<p class="field-error" role="alert">{{ $message }}</p>@enderror @endforeach
+</section>
+
 <section class="section-block"><div class="section-heading"><h2>Próximos relatórios</h2><p>Chegam nas próximas versões, com os mesmos filtros.</p></div>
-<div class="card list-card">@foreach(['Lista de presença (PDF)', 'Técnicas ministradas (Excel com gráficos)'] as $next)<div class="list-row"><span>{{ $next }}</span><span class="status-pill status-inactive">Em breve</span></div>@endforeach</div>
+<div class="card list-card">@foreach(['Técnicas ministradas (Excel com gráficos)'] as $next)<div class="list-row"><span>{{ $next }}</span><span class="status-pill status-inactive">Em breve</span></div>@endforeach</div>
 </section>
 @endsection

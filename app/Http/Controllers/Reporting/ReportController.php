@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Reporting;
 
 use App\Http\Controllers\Controller;
 use App\Models\Association;
+use App\Models\ClassSession;
 use App\Models\Dojo;
+use App\Services\Access\OperationalScope;
 use App\Services\Reporting\AttendanceDetailReport;
+use App\Services\Reporting\AttendanceListReport;
 use App\Services\Reporting\AttendanceReportData;
 use App\Services\Reporting\AttendanceSummaryReport;
 use App\Services\Reporting\ReportContext;
@@ -13,6 +16,7 @@ use App\Services\Reporting\ReportScope;
 use App\Services\Reporting\StudentListReport;
 use Carbon\CarbonImmutable;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
@@ -27,7 +31,40 @@ class ReportController extends Controller
         private readonly AttendanceReportData $attendance,
         private readonly AttendanceSummaryReport $summary,
         private readonly AttendanceDetailReport $detail,
+        private readonly AttendanceListReport $lists,
     ) {}
+
+    public function associationSessionList(Request $request, Association $association, ClassSession $session): Response
+    {
+        abort_unless($request->user()->hasPermission(ReportScope::PERMISSION, $association->id), 403);
+        abort_unless($session->classGroup->association_id === $association->id, 404);
+
+        return $this->lists->session($association, $session, $request->user(), 'association');
+    }
+
+    /** Gestor do dojo ou professor da aula com `report.export`, pela mesma regra que abre a aula. */
+    public function dojoSessionList(Request $request, Dojo $dojo, ClassSession $session, OperationalScope $operational): Response
+    {
+        abort_unless($operational->sessions($request->user(), $dojo, ReportScope::PERMISSION)->whereKey($session->id)->exists(), 404);
+        $dojo->loadMissing('association');
+
+        return $this->lists->session($dojo->association, $session, $request->user(), $operational->canDojo($request->user(), $dojo, ReportScope::PERMISSION) ? 'dojo' : 'teacher');
+    }
+
+    public function associationGrid(Request $request, Association $association): Response
+    {
+        return $this->grid($request, $this->scope->association($request->user(), $association));
+    }
+
+    public function dojoGrid(Request $request, Dojo $dojo): Response
+    {
+        return $this->grid($request, $this->scope->dojo($request->user(), $dojo));
+    }
+
+    public function teacherGrid(Request $request): Response
+    {
+        return $this->grid($request, $this->scope->teacher($request->user()));
+    }
 
     public function associationIndex(Request $request, Association $association): View
     {
@@ -88,6 +125,16 @@ class ReportController extends Controller
 
         return view('reports.index', compact('context', 'filters', 'preview', 'period', 'attendancePreview') + ['statuses' => StudentListReport::STATUSES,
             'limit' => StudentListReport::LIMIT, 'detailLimit' => AttendanceDetailReport::LIMIT]);
+    }
+
+    private function grid(Request $request, ReportContext $context): Response
+    {
+        $data = $request->validate([
+            'grade_turma' => ['required', 'integer', Rule::in($context->classes->pluck('id')->all())],
+            'mes' => ['required', 'date_format:Y-m'],
+        ], ['grade_turma.required' => 'Escolha a turma.']);
+
+        return $this->lists->grid($context, $context->classes->firstWhere('id', (int) $data['grade_turma']), CarbonImmutable::createFromFormat('!Y-m', $data['mes']));
     }
 
     private function attendanceExport(Request $request, ReportContext $context, string $kind): StreamedResponse

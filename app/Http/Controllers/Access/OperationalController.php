@@ -115,7 +115,9 @@ class OperationalController extends Controller
 
         $assessUrl = app(SessionAssessmentService::class)->available($request->user(), $dojo, $session) ? route('operation.session.assess', [$dojo, $session]) : null;
 
-        return view('operation.session', compact('dojo', 'session', 'roster', 'records', 'canRecord', 'canReopen', 'canManageVisitors', 'enrollUrl', 'techniqueTree', 'markedTechniques', 'canMarkTechniques', 'assessUrl', 'allowGroupPick'));
+        $listUrl = $this->scope->sessions($request->user(), $dojo, 'report.export')->whereKey($session->id)->exists() ? route('operation.session.list', [$dojo, $session]) : null;
+
+        return view('operation.session', compact('dojo', 'session', 'roster', 'records', 'canRecord', 'canReopen', 'canManageVisitors', 'enrollUrl', 'techniqueTree', 'markedTechniques', 'canMarkTechniques', 'assessUrl', 'allowGroupPick', 'listUrl'));
     }
 
     public function addVisitor(SessionVisitorRequest $request, Dojo $dojo, ClassSession $session, SessionVisitorService $service)
