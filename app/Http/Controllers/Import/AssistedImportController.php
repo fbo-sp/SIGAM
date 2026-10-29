@@ -43,13 +43,15 @@ class AssistedImportController extends Controller
         $service->authorizeBatch($association, $batch, $request->user());
         $batch->load(['dojo', 'creator']);
         $rows = $batch->rows()->orderBy('row_number')->paginate(50);
+        $counts = $batch->rows()->selectRaw('status, COUNT(*) AS total')->groupBy('status')->pluck('total', 'status');
+        $duplicates = $batch->rows()->where('status', 'duplicate')->orderBy('row_number')->limit(5000)->get();
 
-        return view('imports.show', compact('association', 'batch', 'rows'));
+        return view('imports.show', compact('association', 'batch', 'rows', 'counts', 'duplicates'));
     }
 
     public function process(ImportProcessRequest $request, Association $association, ImportBatch $batch, AssistedImportService $service): RedirectResponse
     {
-        $result = $service->process($association, $batch, $request->user(), $request->boolean('confirm_reviews'));
+        $result = $service->process($association, $batch, $request->user(), $request->boolean('confirm_reviews'), (array) $request->validated('acoes', []));
         $message = $result['completed']
             ? "Importação concluída. {$result['processed']} linha(s) processada(s) nesta etapa."
             : "{$result['processed']} linha(s) processada(s). Ainda faltam {$result['remaining']}; clique em continuar.";

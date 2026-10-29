@@ -20,6 +20,7 @@ use App\Services\Attendance\AttendanceService;
 use App\Services\Attendance\SessionGenerator;
 use App\Services\AuditService;
 use App\Services\Classes\ClassGroupService;
+use App\Services\People\PersonService;
 use App\Services\Sports\DirectRegistrationService;
 use App\Support\Import\SpreadsheetReader;
 use App\Support\Normalization\InputNormalizer;
@@ -37,6 +38,9 @@ class AssistedImportService
 {
     public const STUDENT_HEADERS = ['nome_completo', 'cpf', 'data_nascimento', 'email', 'celular', 'data_entrada', 'modalidade', 'graduacao', 'turma', 'ativar', 'nome_responsavel', 'cpf_responsavel', 'parentesco', 'responsavel_legal', 'observacoes', 'rg', 'telefone', 'cep', 'endereco', 'numero', 'complemento', 'bairro', 'cidade', 'uf'];
 
+    /** Situações que ainda serão processadas; "duplicate" é aluno já cadastrado aguardando a escolha da prévia. */
+    public const PENDING = ['ready', 'review', 'duplicate'];
+
     public const ATTENDANCE_HEADERS = ['matricula_aluno', 'turma', 'data_aula', 'horario_inicio', 'situacao', 'observacoes'];
 
     public function __construct(
@@ -47,6 +51,8 @@ class AssistedImportService
         private readonly OperationalScope $scope,
         private readonly AuditService $audit,
         private readonly SessionGenerator $sessions,
+        private readonly StudentDuplicateFinder $duplicates,
+        private readonly PersonService $people,
     ) {}
 
     public function batches(Association $association, User $user): Builder
@@ -104,6 +110,9 @@ class AssistedImportService
                     'file_size' => $file->getSize(), 'file_hash' => $hash, 'status' => 'reviewing',
                 ]);
                 $seen = [];
+                if ($type === 'students') {
+                    $this->duplicates->load($association);
+                }
                 foreach ($rows as $source) {
                     $values = [...$source['values'], '_row_number' => $source['row_number']];
                     [$status, $message, $normalized] = $type === 'students'
@@ -130,8 +139,11 @@ class AssistedImportService
         return ['batch' => $batch, 'replayed' => false];
     }
 
-    /** @return array{processed: int, remaining: int, completed: bool} */
-    public function process(Association $association, ImportBatch $batch, User $user, bool $confirmReviews): array
+    /**
+     * @param  array<int|string, string>  $choices  escolha por linha já cadastrada: ignore, update ou new (só homônimo)
+     * @return array{processed: int, remaining: int, completed: bool}
+     */
+    public function process(Association $association, ImportBatch $batch, User $user, bool $confirmReviews, array $choices = []): array
     {
         $this->authorizeBatch($association, $batch, $user);
         if ($batch->status === 'expired') {
@@ -143,14 +155,20 @@ class AssistedImportService
         if ($batch->review_rows > 0 && $batch->confirmed_at === null && ! $confirmReviews) {
             throw ValidationException::withMessages(['confirm_reviews' => 'Confirme que revisou as linhas sinalizadas antes de continuar.']);
         }
+        $this->saveChoices($batch, $choices);
         $batch->update(['status' => 'processing', 'confirmed_at' => $batch->confirmed_at ?: now()]);
-        $rows = $batch->rows()->whereIn('status', ['ready', 'review'])->orderBy('row_number')->limit(100)->get();
+        $rows = $batch->rows()->whereIn('status', self::PENDING)->orderBy('row_number')->limit(100)->get();
         $processed = 0;
         foreach ($rows as $row) {
             try {
                 DB::transaction(function () use ($association, $batch, $row, $user): void {
                     $locked = ImportRow::query()->lockForUpdate()->findOrFail($row->id);
-                    if (! in_array($locked->status, ['ready', 'review'], true)) {
+                    if (! in_array($locked->status, self::PENDING, true)) {
+                        return;
+                    }
+                    if ($locked->status === 'duplicate') {
+                        $this->processDuplicate($association, $batch, $user, $locked);
+
                         return;
                     }
                     $wasReview = $locked->status === 'review';
@@ -174,7 +192,7 @@ class AssistedImportService
             }
         }
         $this->recount($batch);
-        $remaining = $batch->rows()->whereIn('status', ['ready', 'review'])->count();
+        $remaining = $batch->rows()->whereIn('status', self::PENDING)->count();
         $completed = $remaining === 0;
         $batch->update(['status' => $completed ? 'completed' : 'processing', 'completed_at' => $completed ? now() : null]);
         $this->audit->record('assisted_import.processed', 'updated', $batch, null, [
@@ -182,6 +200,96 @@ class AssistedImportService
         ], ['association_id' => $association->id]);
 
         return compact('processed', 'remaining', 'completed');
+    }
+
+    /** Guarda na linha a escolha feita na prévia; "new" só vale para quem foi encontrado pelo nome (homônimo). */
+    private function saveChoices(ImportBatch $batch, array $choices): void
+    {
+        if ($choices === []) {
+            return;
+        }
+        $batch->rows()->where('status', 'duplicate')->whereIn('id', array_map('intval', array_keys($choices)))->get()
+            ->each(function (ImportRow $row) use ($choices): void {
+                $payload = $row->normalized_payload;
+                $action = (string) $choices[$row->id];
+                if (! in_array($action, ['ignore', 'update', 'new'], true) || ($action === 'new' && $payload['duplicate']['by'] !== 'name')) {
+                    throw ValidationException::withMessages(["acoes.{$row->id}" => "Escolha inválida para a linha {$row->row_number}."]);
+                }
+                if (($payload['duplicate']['action'] ?? 'ignore') !== $action) {
+                    $payload['duplicate']['action'] = $action;
+                    $row->update(['normalized_payload' => $payload]);
+                }
+            });
+    }
+
+    /** Executa a escolha da linha já cadastrada. Chamado com a linha travada; a situação final impede repetir o efeito. */
+    private function processDuplicate(Association $association, ImportBatch $batch, User $user, ImportRow $row): void
+    {
+        $data = $row->normalized_payload;
+        $duplicate = $data['duplicate'];
+        $action = $duplicate['action'] ?? 'ignore';
+        $student = Student::query()->where('association_id', $association->id)->findOrFail($duplicate['student_id']);
+        if ($action === 'ignore') {
+            $row->update(['status' => 'ignored', 'message' => "Ignorada: já cadastrado como {$student->registration_number}.",
+                'result_type' => Student::class, 'result_id' => $student->id, 'processed_at' => now()]);
+
+            return;
+        }
+        if ($action === 'new') {
+            $created = $this->processStudent($association, $batch->dojo, $user, $data);
+            $row->update(['status' => 'processed', 'message' => "Cadastrado como novo aluno (homônimo de {$student->registration_number}).",
+                'result_type' => Student::class, 'result_id' => $created->id, 'processed_at' => now()]);
+
+            return;
+        }
+
+        $person = Person::query()->lockForUpdate()->findOrFail($student->person_id);
+        $updates = StudentDuplicateFinder::updates($person, $data['person']);
+        if (isset($updates['cpf']) && Person::query()->withTrashed()->where('cpf', $updates['cpf'])->whereKeyNot($person->id)->exists()) {
+            throw ValidationException::withMessages(['cpf' => 'O CPF da planilha já pertence a outra pessoa. Revise a linha.']);
+        }
+        if ($updates !== []) {
+            $this->people->update($association, $person, $updates);
+        }
+        $parts = [$updates === [] ? "Nada a atualizar em {$student->registration_number}." : "Atualizado {$student->registration_number}: "
+            .implode(', ', array_map(fn (string $field) => mb_strtolower(StudentDuplicateFinder::FIELDS[$field]), array_keys($updates))).'.'];
+        $parts[] = $this->enrollDuplicate($association, $student->fresh(), $data);
+        $row->update(['status' => 'processed', 'message' => Str::limit(implode(' ', array_filter($parts)), 1000),
+            'result_type' => Student::class, 'result_id' => $student->id, 'processed_at' => now()]);
+    }
+
+    /**
+     * Matricula na turma da planilha quando o aluno ainda não está nela, sem encerrar outras matrículas. Se a matrícula
+     * não for possível (aluno inativo, outro dojo, outra modalidade), os dados continuam atualizados e o motivo fica na linha.
+     */
+    private function enrollDuplicate(Association $association, Student $student, array $data): ?string
+    {
+        if (! $data['class_group_id']) {
+            return null;
+        }
+        $group = ClassGroup::query()->where('association_id', $association->id)->findOrFail($data['class_group_id']);
+        $today = today()->toDateString();
+        if ($student->enrollments()->where('class_group_id', $group->id)->where('status', 'active')->coveringDate($today)->exists()) {
+            return null;
+        }
+        if ($student->status !== 'active') {
+            return "Não matriculado em {$group->name}: o aluno não está ativo.";
+        }
+        $starts = array_filter([
+            $data['entry_date'], $group->start_date?->toDateString(),
+            $student->dojoHistory()->where('dojo_id', $group->dojo_id)->whereDate('start_date', '<=', $today)
+                ->where(fn ($end) => $end->whereNull('end_date')->orWhereDate('end_date', '>=', $today))->min('start_date'),
+            $student->martialArts()->where('martial_art_id', $group->martial_art_id)->where('status', 'active')->whereDate('start_date', '<=', $today)
+                ->where(fn ($end) => $end->whereNull('end_date')->orWhereDate('end_date', '>=', $today))->min('start_date'),
+        ]);
+        $start = collect($starts)->map(fn ($date) => Carbon::parse($date)->toDateString())->max();
+        try {
+            $this->classes->enroll($association, $group, ['student_id' => $student->id, 'start_date' => $start]);
+        } catch (ValidationException $exception) {
+            return "Não matriculado em {$group->name}: ".collect($exception->errors())->flatten()->first();
+        }
+
+        return "Matriculado em {$group->name}.";
     }
 
     public function authorizeBatch(Association $association, ImportBatch $batch, User $user): void
@@ -288,7 +396,10 @@ class AssistedImportService
             $errors[] = 'A turma não foi encontrada neste dojo.';
         }
         $existing = $cpf ? Person::query()->withTrashed()->where('cpf', $cpf)->first() : null;
-        if ($existing) {
+        $personData = ['full_name' => trim((string) ($raw['nome_completo'] ?? '')), 'cpf' => $cpf, 'birth_date' => $birth,
+            'email' => $email, 'mobile' => $mobile, 'phone' => $phone, 'postal_code' => $postalCode, 'state' => $state] + $extra;
+        $match = $this->duplicates->find($association, $personData);
+        if ($existing && ($match['by'] ?? null) !== 'cpf') {
             $accessible = ! $existing->trashed() && $existing->status === 'active' && $existing->associations()->whereKey($association->id)->wherePivot('status', 'active')->exists();
             $accessible ? $review[] = 'O CPF já existe e o cadastro será reutilizado.' : $errors[] = 'Este CPF exige revisão pelo gestor da associação.';
         }
@@ -309,13 +420,18 @@ class AssistedImportService
 
         $normalized = [
             'idempotency_key' => (string) Str::uuid(), 'person_id' => $existing?->id,
-            'person' => ['full_name' => trim((string) ($raw['nome_completo'] ?? '')), 'cpf' => $cpf, 'birth_date' => $birth,
-                'email' => $email, 'mobile' => $mobile, 'phone' => $phone, 'postal_code' => $postalCode, 'state' => $state] + $extra,
+            'person' => $personData,
             'entry_date' => $entry, 'martial_art_id' => $art?->id, 'rank_id' => $rank?->id, 'class_group_id' => $group?->id,
             'activate' => $activate, 'notes' => $this->nullable($raw['observacoes'] ?? null), 'guardian_person_id' => $guardian?->id,
             'guardian' => ['full_name' => trim((string) ($raw['nome_responsavel'] ?? '')), 'cpf' => $guardianCpf],
             'guardian_relationship' => $this->relationship($raw['parentesco'] ?? null), 'guardian_is_legal' => $this->yes($raw['responsavel_legal'] ?? null),
         ];
+        if ($match && $errors === []) {
+            $normalized['duplicate'] = $this->duplicates->describe($match['student'], $match['by'], $personData, $group);
+            $verb = $match['by'] === 'name' ? 'Parece ser' : 'Já cadastrado como';
+
+            return ['duplicate', "{$verb} {$match['student']->registration_number} (".StudentDuplicateFinder::MATCH_NOTES[$match['by']].').', $normalized];
+        }
 
         return $this->rowResult($errors, $review, $normalized);
     }

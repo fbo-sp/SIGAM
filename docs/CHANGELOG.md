@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-10-29 — Importação reconhece alunos já cadastrados
+
+- a prévia da importação de alunos procura cada linha entre os alunos da associação pelo CPF, depois pelo RG e depois pelo nome (com a data de nascimento quando as duas existem) e mostra o aluno encontrado, como foi encontrado e as diferenças;
+- para cada linha: Ignorar (padrão), Atualizar com a planilha (substitui os dados preenchidos, célula vazia mantém, e matricula na turma da planilha sem encerrar outras) ou, só quando foi pelo nome, Cadastrar como novo aluno; botões Ignorar todas e Atualizar todas;
+- sem migration; `ImportDuplicatesTest` novo.
+
 ## 2026-10-29 — Cadastros incompletos e aluno ativo sem data de nascimento
 
 - a data de nascimento deixa de ser obrigatória para ativar o aluno (cadastro direto, ativação e importação, que agora importa esses alunos ativos e matriculados); continua exigida em turma com faixa etária, campeonato e idade mínima de graduação;
