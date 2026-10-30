@@ -30,6 +30,8 @@ Alunos: `nome_completo`, `cpf`, `data_nascimento`, `email`, `celular`, `data_ent
 
 Presenças: `matricula_aluno`, `turma`, `data_aula`, `horario_inicio`, `situacao`, `observacoes`. Situações aceitas: presente, falta, falta justificada, reposição e experimental. A combinação turma/data/início precisa localizar exatamente uma aula aberta. Se a aula ainda não existe, a data é até hoje, está dentro do período da turma e há horário da turma nesse dia da semana e início, a linha fica em revisão e a aula é criada ao processar (`SessionGenerator::generateForGroup`). Datas futuras são recusadas.
 
+Responsáveis (decisão de Fabio em 30/10/2026; `GuardianImportRows`): uma linha por vínculo com `matricula_aluno` (ou `nome_aluno` e `nascimento_aluno`), `nome_responsavel` (obrigatório), `cpf`, `celular`, `email`, `parentesco` (mãe, pai, avô/avó, tutor, outro), `legal`, `financeiro`, `principal` e `avisos` (sim/não; `avisos` vazio vale sim). O aluno precisa ter vínculo vigente no dojo do lote. A prévia mostra pessoa nova, "mesma pessoa da linha N", pessoa existente pelo CPF ou pelo nome com celular (em revisão), vínculo que já existe ("Já existe", sem efeito), aluno não encontrado e vínculo repetido no arquivo. Processar usa `GuardianService::add`, com as mesmas regras da tela; a importação não envia convites do portal.
+
 Os modelos oficiais ficam em `resources/imports`. O XLSX contém instruções e listas de escolha. O relatório CSV usa `CsvWriter`, neutralizando células que poderiam virar fórmula.
 
 ## Alunos já cadastrados

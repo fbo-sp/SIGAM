@@ -87,6 +87,10 @@ Sem permissão nova. A tela da associação exige `student.view` na associação
 
 Sem permissão nova: o mesmo alcance dos aniversariantes. O professor vê as pendências dos alunos ativos das turmas que abre, sem editar. A correção usa as permissões já existentes (`person.manage` na associação, `student.manage` no dojo, contatos no portal pelo próprio aluno ou responsável legal).
 
+## Responsáveis dos alunos
+
+Sem permissão nova (decisão de Fabio em 30/10/2026). Associação: `student.manage`. Dojo: `student.manage` pela regra do dojo, só alunos com vínculo vigente no dojo. Professor: só alunos com matrícula vigente em turma ativa em que é principal ou auxiliar vigente, no dojo em que entra. Todos adicionam, editam, encerram e liberam o portal (`GuardianService::canManage`). O portal abre para `portal.access` ou para quem tem o próprio cadastro de aluno ou vínculo vigente de responsável; só o próprio aluno e o responsável legal alteram dados por lá.
+
 ## Avisos (`announcement.send`)
 
 `announcement.send` libera o envio de avisos escritos por pessoas (`AnnouncementService`, ver `modules/notifications-dashboards.md`). Na associação vem do perfil Gestor (todas as permissões não pessoais) e permite toda a associação, dojos, turmas ou pessoas. No dojo está nos papéis `dojo_operator` (todo o dojo, turmas do dojo, alunos com vínculo vigente e professores vinculados ao dojo) e `dojo_teacher` (só turmas em que é principal ou auxiliar vigente e os alunos delas, sem professores como destinatários). O alcance é recalculado no serviço; ids do formulário só restringem. Avisos do professor saem direto (decisão do Fabio, 2026-10-27); o gestor do dojo vê os avisos do dojo, o professor só os próprios e a associação todos.

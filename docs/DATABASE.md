@@ -24,6 +24,7 @@
 | `000023` | origem financeira por dojo e participação dojo–campeonato |
 | `000032` | quem deu a aula e auxiliares presentes (`class_session_staff`) |
 | `000033` | opção de esconder o aniversário dos colegas (`people.hide_birthday`) |
+| `000034` | aluno que precisa de responsável mesmo sendo maior de idade (`students.requires_guardian`) |
 
 Os nomes completos em `database/migrations/` são a fonte canônica. Uma mudança deve acrescentar nova migration e analisar todas as anteriores que tocaram a tabela; nunca compacte o histórico de uma instalação existente.
 
@@ -61,6 +62,8 @@ erDiagram
     STUDENT_MARTIAL_ARTS ||--o{ STUDENT_RANK_HISTORY : progresses
     TEACHER_PROFILES ||--o{ TEACHER_MARTIAL_ARTS : qualifies
 ```
+
+`student_guardians` não é apagada: encerrar grava `end_date`; vigente é `start_date <= hoje` e `end_date` vazio ou futuro (`StudentGuardian::scopeCurrent`). `students.requires_guardian` (boolean, padrão falso) marca o maior de idade que precisa de responsável, sem guardar diagnóstico.
 
 O ponteiro de graduação atual nunca substitui `student_rank_history`. O mesmo vale para `primary_dojo_id` e `student_dojo_history`. Consulte `modules/sports-registry.md`.
 

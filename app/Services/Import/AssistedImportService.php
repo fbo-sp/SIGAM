@@ -53,7 +53,10 @@ class AssistedImportService
         private readonly SessionGenerator $sessions,
         private readonly StudentDuplicateFinder $duplicates,
         private readonly PersonService $people,
+        private readonly GuardianImportRows $guardianRows,
     ) {}
+
+    public const TYPES = ['students' => 'Alunos', 'attendance' => 'Presenças', 'guardians' => 'Responsáveis'];
 
     public function batches(Association $association, User $user): Builder
     {
@@ -72,8 +75,8 @@ class AssistedImportService
     public function create(Association $association, Dojo $dojo, User $user, string $type, UploadedFile $file): array
     {
         $this->authorize($association, $dojo, $user, $type);
-        if (! in_array($type, ['students', 'attendance'], true)) {
-            throw ValidationException::withMessages(['import_type' => 'Escolha alunos ou presenças.']);
+        if (! array_key_exists($type, self::TYPES)) {
+            throw ValidationException::withMessages(['import_type' => 'Escolha alunos, presenças ou responsáveis.']);
         }
         $extension = strtolower((string) $file->getClientOriginalExtension());
         if (! in_array($extension, ['csv', 'xlsx'], true)) {
@@ -87,9 +90,12 @@ class AssistedImportService
             return ['batch' => $existing, 'replayed' => true];
         }
 
-        $sheet = $type === 'students' ? 'Alunos' : 'Presenças';
-        $rows = $this->reader->read($file->getRealPath(), $extension, $sheet);
-        $required = $type === 'students' ? ['nome_completo', 'data_entrada', 'modalidade'] : ['matricula_aluno', 'turma', 'data_aula', 'horario_inicio', 'situacao'];
+        $rows = $this->reader->read($file->getRealPath(), $extension, self::TYPES[$type]);
+        $required = match ($type) {
+            'students' => ['nome_completo', 'data_entrada', 'modalidade'],
+            'guardians' => GuardianImportRows::REQUIRED,
+            default => ['matricula_aluno', 'turma', 'data_aula', 'horario_inicio', 'situacao'],
+        };
         $present = array_keys($rows[0]['values'] ?? []);
         if ($missing = array_diff($required, $present)) {
             throw ValidationException::withMessages(['file' => 'Faltam colunas obrigatórias: '.implode(', ', $missing).'.']);
@@ -112,12 +118,16 @@ class AssistedImportService
                 $seen = [];
                 if ($type === 'students') {
                     $this->duplicates->load($association);
+                } elseif ($type === 'guardians') {
+                    $this->guardianRows->load($dojo);
                 }
                 foreach ($rows as $source) {
                     $values = [...$source['values'], '_row_number' => $source['row_number']];
-                    [$status, $message, $normalized] = $type === 'students'
-                        ? $this->studentRow($association, $dojo, $values, $seen)
-                        : $this->attendanceRow($association, $dojo, $values, $seen);
+                    [$status, $message, $normalized] = match ($type) {
+                        'students' => $this->studentRow($association, $dojo, $values, $seen),
+                        'guardians' => $this->guardianRows->preview($association, $dojo, $values, $seen),
+                        default => $this->attendanceRow($association, $dojo, $values, $seen),
+                    };
                     $batch->rows()->create([
                         'row_number' => $source['row_number'], 'row_hash' => hash('sha256', json_encode($source['values'])),
                         'raw_payload' => $source['values'], 'normalized_payload' => $normalized, 'status' => $status,
@@ -173,9 +183,11 @@ class AssistedImportService
                     }
                     $wasReview = $locked->status === 'review';
                     $previousMessage = $locked->message;
-                    $result = $batch->import_type === 'students'
-                        ? $this->processStudent($association, $batch->dojo, $user, $locked->normalized_payload)
-                        : $this->processAttendance($association, $user, $locked->normalized_payload);
+                    $result = match ($batch->import_type) {
+                        'students' => $this->processStudent($association, $batch->dojo, $user, $locked->normalized_payload),
+                        'guardians' => $this->guardianRows->process($association, $batch, $user, $locked),
+                        default => $this->processAttendance($association, $user, $locked->normalized_payload),
+                    };
                     $locked->update([
                         'status' => 'processed',
                         'message' => $wasReview ? 'Importado após revisão. '.$previousMessage : 'Importado com sucesso.',

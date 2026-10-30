@@ -2,7 +2,7 @@
 @section('title', 'Revisar importação — JUDOMA')
 @section('content')
 <nav class="breadcrumbs"><a href="{{ route('associations.imports.index', $association) }}">Importações</a><span>/</span><span>Lote #{{ $batch->id }}</span></nav>
-<div class="page-heading"><div><span class="eyebrow">{{ $batch->import_type === 'students' ? 'Alunos' : 'Presenças' }} · {{ $batch->dojo->name }}</span><h1>Revise antes de importar</h1><p>{{ $batch->original_name }}. O arquivo original é privado e não fica disponível para download.</p></div></div>
+<div class="page-heading"><div><span class="eyebrow">{{ \App\Services\Import\AssistedImportService::TYPES[$batch->import_type] ?? $batch->import_type }} · {{ $batch->dojo->name }}</span><h1>Revise antes de importar</h1><p>{{ $batch->original_name }}. O arquivo original é privado e não fica disponível para download.</p></div></div>
 
 <div class="metric-grid">
     <div class="metric-card"><strong>{{ $batch->total_rows }}</strong><span>Total</span></div>
@@ -51,7 +51,7 @@
 @if(($batch->invalid_rows + $batch->failed_rows) > 0)<p><a class="button button-secondary" href="{{ route('associations.imports.errors', [$association, $batch]) }}">Baixar lista de erros</a></p>@endif
 
 <div class="card table-wrap"><table><thead><tr><th>Linha</th><th>Situação</th><th>Mensagem</th></tr></thead><tbody>
-@foreach($rows as $row)<tr><td>{{ $row->row_number }}</td><td><span class="status-pill {{ in_array($row->status, ['invalid', 'failed']) ? 'status-inactive' : '' }}">{{ ['ready' => 'Pronta', 'review' => 'Revisar', 'invalid' => 'Inválida', 'processed' => 'Processada', 'already_processed' => 'Já processada', 'failed' => 'Falhou', 'duplicate' => 'Já cadastrado', 'ignored' => 'Ignorada'][$row->status] ?? $row->status }}</span></td><td>{{ $row->message }}</td></tr>@endforeach
+@foreach($rows as $row)<tr><td>{{ $row->row_number }}</td><td><span class="status-pill {{ in_array($row->status, ['invalid', 'failed']) ? 'status-inactive' : '' }}">{{ ['ready' => 'Pronta', 'review' => 'Revisar', 'invalid' => 'Inválida', 'processed' => 'Processada', 'already_processed' => $batch->import_type === 'guardians' ? 'Já existe' : 'Já processada', 'failed' => 'Falhou', 'duplicate' => 'Já cadastrado', 'ignored' => 'Ignorada'][$row->status] ?? $row->status }}</span></td><td>@if($batch->import_type === 'guardians' && ($row->normalized_payload['full_name'] ?? '') !== '')<strong>{{ \App\Services\Import\GuardianImportRows::title($row->normalized_payload) }}</strong><br>@endif {{ $row->message }}</td></tr>@endforeach
 </tbody></table></div>
 {{ $rows->links() }}
 @endsection

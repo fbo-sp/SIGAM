@@ -15,6 +15,10 @@ use Illuminate\Support\Facades\DB;
 
 class PortalAccessService
 {
+    /** O que o próprio aluno e o responsável legal alteram pelo portal (decisão de Fabio em 30/10/2026: contatos, emergência e endereço). */
+    public const EDITABLE_FIELDS = ['email', 'phone', 'mobile', 'emergency_contact_name', 'emergency_contact_phone',
+        'postal_code', 'street', 'number', 'complement', 'district', 'city', 'state'];
+
     public function __construct(private readonly AuditService $audit) {}
 
     /** @return Collection<int, Student> */
@@ -76,10 +80,33 @@ class PortalAccessService
         })();
     }
 
+    /** @var array<int, bool> */
+    private array $enterCache = [];
+
+    /**
+     * Quem entra no portal: o perfil Portal ou, automaticamente (decisão de Fabio em 30/10/2026), quem tem o próprio
+     * cadastro de aluno ou um vínculo vigente de responsável na associação da conta, como o gestor ou o professor que é pai.
+     */
+    public function canEnter(User $user): bool
+    {
+        return $this->enterCache[$user->id] ??= $user->hasPermission('portal.access', $user->association_id)
+            || ($user->association_id && $user->person_id && $this->authorizedQuery($user)->exists());
+    }
+
+    /** Dependentes vigentes da conta (sem o próprio cadastro de aluno), para o atalho "Meus dependentes". @return Collection<int, Student> */
+    public function dependents(User $user): Collection
+    {
+        if (! $user->association_id || ! $user->person_id) {
+            return collect();
+        }
+
+        return $this->authorizedQuery($user)->where('person_id', '!=', $user->person_id)->with('person')->orderBy('registration_number')->get();
+    }
+
     /** Aluno cujos "Meus dados" o nome no topo abre: o próprio cadastro de aluno, senão o primeiro aluno sob responsabilidade. */
     public function accountStudent(User $user): ?Student
     {
-        if (! $user->hasPermission('portal.access', $user->association_id)) {
+        if (! $this->canEnter($user)) {
             return null;
         }
         $students = $this->studentsFor($user);
@@ -119,7 +146,7 @@ class PortalAccessService
 
         return DB::transaction(function () use ($user, $student, $data): Person {
             $person = Person::query()->lockForUpdate()->findOrFail($student->person_id);
-            $allowed = collect($data)->only(['email', 'phone', 'mobile', 'emergency_contact_name', 'emergency_contact_phone'])->all();
+            $allowed = collect($data)->only(self::EDITABLE_FIELDS)->all();
             $changedFields = collect($allowed)->filter(fn ($value, string $field) => $person->{$field} !== $value)->keys()->values()->all();
 
             if ($changedFields !== []) {

@@ -20,6 +20,13 @@ class PortalContactRequest extends FormRequest
             'mobile' => InputNormalizer::digits($this->mobile),
             'emergency_contact_name' => InputNormalizer::nullableText($this->emergency_contact_name),
             'emergency_contact_phone' => InputNormalizer::digits($this->emergency_contact_phone),
+            'postal_code' => InputNormalizer::digits($this->postal_code),
+            'street' => InputNormalizer::nullableText($this->street),
+            'number' => InputNormalizer::nullableText($this->number),
+            'complement' => InputNormalizer::nullableText($this->complement),
+            'district' => InputNormalizer::nullableText($this->district),
+            'city' => InputNormalizer::nullableText($this->city),
+            'state' => ($state = InputNormalizer::nullableText($this->state)) === null ? null : mb_strtoupper($state),
         ]);
     }
 
@@ -31,6 +38,13 @@ class PortalContactRequest extends FormRequest
             'mobile' => ['nullable', 'string', 'between:10,11'],
             'emergency_contact_name' => ['nullable', 'string', 'max:255'],
             'emergency_contact_phone' => ['nullable', 'string', 'between:10,11'],
+            'postal_code' => ['nullable', 'string', 'size:8'],
+            'street' => ['nullable', 'string', 'max:255'],
+            'number' => ['nullable', 'string', 'max:30'],
+            'complement' => ['nullable', 'string', 'max:255'],
+            'district' => ['nullable', 'string', 'max:255'],
+            'city' => ['nullable', 'string', 'max:255'],
+            'state' => ['nullable', 'string', 'regex:/^[A-Z]{2}$/'],
         ];
     }
 }

@@ -41,7 +41,11 @@ class PortalAccessTest extends TestCase
         $this->get(route('portal.students.section', [$other, 'financeiro']))->assertNotFound();
         $this->get(route('portal.students.show', $other))->assertNotFound();
 
-        $withoutPermission = User::factory()->create(['association_id' => $association->id, 'person_id' => $student->person_id]);
+        // Sem o perfil Portal, o próprio cadastro de aluno já abre o portal (decisão de 30/10/2026); sem vínculo, não.
+        $ownRecord = User::factory()->create(['association_id' => $association->id, 'person_id' => $other->person_id]);
+        $this->actingAs($ownRecord)->get(route('portal.index'))->assertRedirect(route('portal.students.show', $other));
+        $stranger = Person::query()->create(['full_name' => 'Sem vínculo']);
+        $withoutPermission = User::factory()->create(['association_id' => $association->id, 'person_id' => $stranger->id]);
         $this->actingAs($withoutPermission)->get(route('portal.index'))->assertForbidden();
     }
 
@@ -68,13 +72,17 @@ class PortalAccessTest extends TestCase
         $user = $this->portalUser($association, $guardian);
 
         $this->actingAs($user)->put(route('portal.students.contact.update', $student), [
-            'email' => 'NOVO@EXEMPLO.COM', 'mobile' => '(11) 99999-1111', 'full_name' => 'Nome adulterado',
+            'email' => 'NOVO@EXEMPLO.COM', 'mobile' => '(11) 99999-1111', 'full_name' => 'Nome adulterado', 'cpf' => '52998224725', 'birth_date' => '2000-01-01',
+            'postal_code' => '01310-100', 'street' => 'Avenida Paulista', 'number' => '1000', 'district' => 'Bela Vista', 'city' => 'São Paulo', 'state' => 'sp',
         ])->assertSessionHasNoErrors();
 
         $person = $student->person->fresh();
         $this->assertSame('novo@exemplo.com', $person->email);
         $this->assertSame('11999991111', $person->mobile);
         $this->assertNotSame('Nome adulterado', $person->full_name);
+        $this->assertNull($person->cpf);
+        $this->assertSame(['01310100', 'Avenida Paulista', '1000', 'Bela Vista', 'São Paulo', 'SP'], [$person->postal_code, $person->street, $person->number, $person->district, $person->city, $person->state]);
+        $this->put(route('portal.students.contact.update', $student), ['state' => 'São Paulo'])->assertSessionHasErrors('state');
         $this->assertDatabaseHas('audit_logs', ['event_type' => 'portal.contact.updated', 'association_id' => $association->id]);
 
         $guardian->update(['full_name' => 'Responsável sem poder legal']);
@@ -120,8 +128,8 @@ class PortalAccessTest extends TestCase
         $this->get(route('portal.students.show', $student))->assertOk()
             ->assertSee('Próxima aula')->assertSee('Frequência no mês')->assertSee('Mensalidade')->assertSee('Em dia')
             ->assertSee(route('portal.students.section', [$student, 'documentos']), false)->assertSee('class="portal-tabbar"', false)
-            ->assertDontSee('Salvar contatos')->assertDontSee('Ver pagamentos');
-        foreach (['turmas' => 'Turmas e horários', 'frequencia' => 'Frequência', 'financeiro' => 'Nenhuma cobrança encontrada', 'campeonatos' => 'Campeonatos', 'historico' => 'Nenhum histórico registrado', 'documentos' => 'Nenhum documento disponível', 'dados' => 'Salvar contatos'] as $section => $text) {
+            ->assertDontSee('Salvar dados')->assertDontSee('Ver pagamentos');
+        foreach (['turmas' => 'Turmas e horários', 'frequencia' => 'Frequência', 'financeiro' => 'Nenhuma cobrança encontrada', 'campeonatos' => 'Campeonatos', 'historico' => 'Nenhum histórico registrado', 'documentos' => 'Nenhum documento disponível', 'dados' => 'Salvar dados'] as $section => $text) {
             $this->get(route('portal.students.section', [$student, $section]))->assertOk()->assertSee($text)->assertSee('← Início');
         }
         $dados = route('portal.students.section', [$student, 'dados']);

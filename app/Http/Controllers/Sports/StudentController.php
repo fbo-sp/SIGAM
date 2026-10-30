@@ -5,14 +5,13 @@ namespace App\Http\Controllers\Sports;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Classes\EndEnrollmentRequest;
 use App\Http\Requests\Classes\EnrollmentStartRequest;
-use App\Http\Requests\Sports\GuardianRequest;
 use App\Models\Association;
 use App\Models\ClassEnrollment;
 use App\Models\ClassGroup;
-use App\Models\Person;
 use App\Models\Student;
 use App\Services\Classes\ClassGroupService;
 use App\Services\Classes\EnrollmentStartCorrectionService;
+use App\Services\Sports\GuardianService;
 use App\Services\Sports\StudentService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -34,7 +33,6 @@ class StudentController extends Controller
     {
         $this->ensureStudent($association, $student);
         $student->load(['person.user', 'primaryDojo', 'guardians.person.user', 'martialArts.martialArt', 'martialArts.currentRank', 'martialArts.rankHistory.rank', 'federationMemberships.federation', 'federationMemberships.martialArt', 'federationMemberships.rank', 'championshipRegistrations.championship', 'championshipRegistrations.result', 'championshipRegistrations.charge']);
-        $guardianCandidates = Person::query()->whereHas('associations', fn ($query) => $query->whereKey($association->id))->whereKeyNot($student->person_id)->orderBy('full_name')->limit(200)->get();
         $historyFilters = ['year' => $request->filled('history_year') ? $request->integer('history_year') : null, 'martial_art_id' => $request->filled('history_martial_art_id') ? $request->integer('history_martial_art_id') : null];
         $enrollments = $student->enrollments()->with('classGroup.dojo:id,name', 'classGroup.martialArt:id,name')
             ->orderByRaw("case when status = 'active' then 0 else 1 end")->orderByDesc('start_date')->get();
@@ -43,15 +41,10 @@ class StudentController extends Controller
         $availableClasses = ClassGroup::query()->where('association_id', $association->id)->whereIn('dojo_id', $currentDojoIds)->where('status', 'active')
             ->whereNotIn('id', $enrollments->where('status', 'active')->pluck('class_group_id'))->with('dojo:id,name')->orderBy('name')->get();
 
-        return view('sports.students.show', compact('association', 'student', 'guardianCandidates', 'historyFilters', 'enrollments', 'availableClasses'));
-    }
-
-    public function addGuardian(GuardianRequest $request, Association $association, Student $student, StudentService $service): RedirectResponse
-    {
-        $this->ensureStudent($association, $student);
-        $service->addGuardian($association, $student, $request->validated());
-
-        return back()->with('status', 'Responsável vinculado ao aluno.');
+        return view('sports.students.show', [
+            ...compact('association', 'student', 'historyFilters', 'enrollments', 'availableClasses'),
+            ...app(GuardianService::class)->viewData($request->user(), $student),
+        ]);
     }
 
     public function enroll(Request $request, Association $association, Student $student, ClassGroupService $service): RedirectResponse

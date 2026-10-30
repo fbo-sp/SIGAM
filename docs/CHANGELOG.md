@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-10-30 — Responsáveis dos alunos
+
+- bloco Responsáveis na ficha do aluno (associação) e na nova tela `operacao/dojos/{dojo}/alunos/{student}/responsaveis` (gestor do dojo e professor das turmas do aluno, principal ou auxiliar), para aluno ativo e em pré-cadastro: adicionar em janela (pessoa nova ou já cadastrada; CPF, ou nome com o mesmo celular, reaproveita o cadastro), editar parentesco e marcações, encerrar vínculo (grava a data de fim, nunca apaga) e liberar o portal (convite só com o perfil Portal);
+- marcação "Precisa de responsável mesmo sendo maior de idade" (`students.requires_guardian`, sem diagnóstico): entra em "Sem responsável legal" nos Cadastros incompletos e na regra de ativação, como o menor;
+- portal automático para quem tem o próprio cadastro de aluno ou vínculo vigente de responsável, mesmo sem o perfil Portal (middleware `portal`); atalho "Meu(s) dependente(s)" no painel do gestor e do professor;
+- no portal, o próprio aluno e o responsável legal corrigem também o endereço;
+- importação de responsáveis (novo tipo, CSV e aba "Responsáveis" no Excel), uma linha por vínculo;
+- 1 migration (`000034`); `GuardianManagementTest` e `GuardianImportTest` novos; `PortalAccessTest` e `PendingDataTest` ajustados.
+
 ## 2026-10-29 — Corrigir horário da turma
 
 - na agenda da turma (dojo e associação), cada horário atual tem "Corrigir horário" para os gestores: corrige o horário cadastrado errado e todas as aulas dele, passadas e futuras, inclusive com chamada finalizada e reagendadas à parte; aulas canceladas continuam canceladas;

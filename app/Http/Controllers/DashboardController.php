@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\Portal\PortalAccessService;
 use App\Services\Reporting\DashboardService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -13,7 +14,7 @@ class DashboardController extends Controller
     public function __invoke(Request $request, DashboardService $dashboards): View|RedirectResponse
     {
         $dashboard = $dashboards->for($request->user());
-        if ($dashboard['kind'] === 'personal' && $request->user()->hasPermission('portal.access', $request->user()->association_id)) {
+        if ($dashboard['kind'] === 'personal' && app(PortalAccessService::class)->canEnter($request->user())) {
             return redirect()->route('portal.index');
         }
 

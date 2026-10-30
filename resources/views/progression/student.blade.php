@@ -13,7 +13,7 @@
 @if($dojo)@php($pendingItems = app(\App\Services\People\PendingDataService::class)->forStudent($student))
 @if($pendingItems)@include('people.partials.pending-banner', ['items' => $pendingItems, 'title' => 'Cadastro incompleto', 'url' => app(\App\Services\Access\OperationalScope::class)->canDojo(auth()->user(), $dojo, 'student.manage') ? route('operation.students.person.edit', [$dojo, $student]) : null])@endif @endif
 <p>{{ $snapshot['current_rank']?->display_name ?? 'Sem graduação registrada' }}@if($snapshot['next_rank']) · rumo a <strong>{{ $snapshot['next_rank']->display_name }}</strong>@endif</p></div>
-@if($canAssess && $snapshot['next_rank'])<a class="button button-primary" href="{{ route('operation.progression.assess', [$dojo, $student, $martialArt]) }}">Avaliar</a>@endif</div>
+<div class="row-actions">@if($dojo && app(\App\Services\Sports\GuardianService::class)->canManage(auth()->user(), $student, $dojo))<a class="button button-secondary" href="{{ route('operation.students.guardians.index', [$dojo, $student]) }}">Responsáveis</a>@endif @if($canAssess && $snapshot['next_rank'])<a class="button button-primary" href="{{ route('operation.progression.assess', [$dojo, $student, $martialArt]) }}">Avaliar</a>@endif</div></div>
 
 @if($options->count() > 1)
 <nav class="section-tabs" aria-label="Modalidades">@foreach($options as $option)<a href="{{ $switchUrl($option->martial_art_id) }}" @if($option->martial_art_id === $martialArt->id) aria-current="page" @endif>{{ $option->martialArt->name }}</a>@endforeach</nav>

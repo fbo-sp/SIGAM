@@ -38,7 +38,17 @@ stateDiagram-v2
 
 Na entrega atual, a interface executa até `active` e permite adicionar vínculo regular em outro dojo sem duplicar o aluno. Suspensão, transferência e desligamento completos não possuem fluxo próprio na interface atual. Uma futura implementação deve criar transições auditáveis e preservar `exit_date`/`exit_reason`, sem sobrescrever ou excluir períodos anteriores.
 
-Quando `associations.requires_minor_guardian = true`, ativação de menor de 18 anos exige responsável legal vigente. Data de nascimento ausente sempre bloqueia ativação. Múltiplos dojos/modalidades são permitidos no modelo; um dojo permanece marcado como principal por período.
+Quando `associations.requires_minor_guardian = true`, ativação de menor de 18 anos, ou de aluno marcado com `students.requires_guardian` ("precisa de responsável mesmo sendo maior de idade", sem registrar diagnóstico), exige responsável legal vigente (`Student::needsGuardian`). Data de nascimento ausente sempre bloqueia ativação. Múltiplos dojos/modalidades são permitidos no modelo; um dojo permanece marcado como principal por período.
+
+## Responsáveis
+
+Decisões de Fabio em 30/10/2026. `GuardianService` concentra as regras; o bloco é `sports/students/partials/guardians.blade.php`.
+
+- Quem cuida: gestor da associação (`student.manage`) na ficha do aluno; gestor do dojo (`student.manage` no dojo) para alunos com vínculo vigente no dojo; professor para alunos com matrícula vigente em turma ativa em que é principal ou auxiliar vigente. Dojo e professor usam `operacao/dojos/{dojo}/alunos/{student}/responsaveis`.
+- Adicionar: pessoa nova (nome, CPF, celular, e-mail) ou já cadastrada. Na associação, qualquer pessoa ativa dela; no dojo, só os responsáveis vigentes dos outros alunos que a conta vê (irmãos). CPF igual reaproveita a pessoa (CPF fora da associação é recusado); sem CPF, nome igual (sem acentos e maiúsculas) com o mesmo celular também reaproveita. O cadastro reaproveitado só ganha celular, e-mail e CPF que estavam vazios. Vínculo vigente repetido é recusado; marcar principal desmarca os outros.
+- Editar muda parentesco e marcações; encerrar grava `end_date` (até hoje), tira o "principal" e nunca apaga.
+- Liberar portal cria a conta só com o perfil Portal e envia o convite (`UserAccountService::invitePortal`, sem exigir `user.manage`). Quem já tem conta na associação entra no portal sozinho.
+- Eventos: `student.guardian_added`, `student.guardian_updated`, `student.guardian_ended`, `student.requires_guardian_changed` (contexto com `dojo_id` quando vem do dojo).
 
 ## Mapa do código
 
@@ -46,7 +56,7 @@ Quando `associations.requires_minor_guardian = true`, ativação de menor de 18 
 - models: `MartialArt`, `Rank`, `Student*`, `Teacher*`;
 - requests: `app/Http/Requests/Sports`;
 - controllers: `app/Http/Controllers/Sports`;
-- serviços transacionais: `CatalogService`, `DirectRegistrationService` (criação de aluno e professor) e `StudentService` (responsáveis e ativação);
+- serviços transacionais: `CatalogService`, `DirectRegistrationService` (criação de aluno e professor) e `StudentService` (ativação) e `GuardianService` (responsáveis);
 - catálogo opcional de templates: `app/Support/Sports/RankTemplateCatalog.php` e `resources/data/rank-templates.json`;
 - views: `resources/views/sports`;
 - comportamento progressivo do formulário: `public/js/martial-art-templates.js`;

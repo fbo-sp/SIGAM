@@ -48,10 +48,10 @@ class PendingDataTest extends TestCase
 
         $manager = $this->associationUser(['association.view', 'student.view']);
         $response = $this->actingAs($manager)->get(route('associations.pending', $this->association))->assertOk()
-            ->assertSee('Todos (5)')->assertSee('Sem nascimento (1)')->assertSee('Menor sem responsável (1)')->assertSee('Sem turma (1)')
+            ->assertSee('Todos (5)')->assertSee('Sem nascimento (1)')->assertSee('Sem responsável legal (1)')->assertSee('Sem turma (1)')
             ->assertSee('Sem contato de emergência (1)')->assertSee('Sem telefone (1)')->assertSee('Sem endereço (1)')->assertSee('Sem CPF (5)')
             ->assertDontSee('Completo');
-        $this->assertSame(1, substr_count($response->getContent(), 'Menor sem responsável</span>'));
+        $this->assertSame(1, substr_count($response->getContent(), 'Sem responsável legal</span>'));
 
         $this->get(route('associations.pending', [$this->association, 'tipo' => 'birth']))->assertOk()->assertSee('Sem Data')->assertDontSee('Sem Contato</strong>', false);
         $this->get(route('associations.pending', [$this->association, 'busca' => 'Turma']))->assertOk()->assertSee('Sem Turma')->assertSee('Todos (1)');

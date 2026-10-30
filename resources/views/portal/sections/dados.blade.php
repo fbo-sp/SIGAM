@@ -2,8 +2,8 @@
 @section('title', $title.' — JUDOMA')
 @section('content')
 <div class="portal-page">
-@include('portal.partials.header', ['subtitle' => 'Apenas os contatos abaixo podem ser alterados pelo portal.'])
-<dl class="card details-grid"><div><dt>Nome</dt><dd>{{ $student->person->full_name }}</dd></div><div><dt>Matrícula</dt><dd>{{ $student->registration_number }}</dd></div><div><dt>E-mail</dt><dd>{{ $student->person->email ?: 'Não informado' }}</dd></div><div><dt>Celular</dt><dd>{{ $student->person->mobile ?: ($student->person->phone ?: 'Não informado') }}</dd></div><div><dt>Contato de emergência</dt><dd>{{ $student->person->emergency_contact_name ?: 'Não informado' }}{{ $student->person->emergency_contact_phone ? ' · '.$student->person->emergency_contact_phone : '' }}</dd></div></dl>
+@include('portal.partials.header', ['subtitle' => 'Pelo portal você altera os contatos, a emergência e o endereço. Nome, CPF e nascimento são corrigidos pela gestão.'])
+<dl class="card details-grid"><div><dt>Nome</dt><dd>{{ $student->person->full_name }}</dd></div><div><dt>Matrícula</dt><dd>{{ $student->registration_number }}</dd></div><div><dt>E-mail</dt><dd>{{ $student->person->email ?: 'Não informado' }}</dd></div><div><dt>Celular</dt><dd>{{ $student->person->mobile ?: ($student->person->phone ?: 'Não informado') }}</dd></div><div><dt>Contato de emergência</dt><dd>{{ $student->person->emergency_contact_name ?: 'Não informado' }}{{ $student->person->emergency_contact_phone ? ' · '.$student->person->emergency_contact_phone : '' }}</dd></div>@php($address = collect([trim(collect([$student->person->street, $student->person->number])->filter()->implode(', ')), $student->person->complement, $student->person->district, trim(collect([$student->person->city, $student->person->state])->filter()->implode('/'))])->filter()->implode(' · '))<div><dt>Endereço</dt><dd>{{ $address ?: 'Não informado' }}</dd></div></dl>
     <section class="card portal-access-card"><div><h2>Senha de acesso</h2><p>Você entra no JUDOMA com {{ auth()->user()->email }}.</p></div><a class="button button-primary" href="{{ route('account.show') }}">Trocar senha</a></section>
     @if($canEditContact)
     <form class="card portal-access-card" method="post" action="{{ route('portal.students.birthday.update', $student) }}">@csrf @method('PUT')<div><h2>Aniversário</h2><p>{{ $student->person->hide_birthday ? 'Escondido: os colegas de turma não recebem aviso no dia. Gestores e professores continuam vendo.' : 'No dia do aniversário, os colegas de turma veem um aviso com o nome e a turma, sem a idade.' }}</p></div><input type="hidden" name="hide_birthday" value="{{ $student->person->hide_birthday ? 0 : 1 }}"><button class="button button-secondary" type="submit">{{ $student->person->hide_birthday ? 'Mostrar aos colegas' : 'Esconder dos colegas' }}</button></form>
@@ -15,10 +15,18 @@
             <div class="field"><label for="mobile">Celular</label><input id="mobile" name="mobile" inputmode="numeric" value="{{ old('mobile', $student->person->mobile) }}"></div>
             <div class="field"><label for="emergency_contact_name">Contato de emergência</label><input id="emergency_contact_name" name="emergency_contact_name" value="{{ old('emergency_contact_name', $student->person->emergency_contact_name) }}"></div>
             <div class="field"><label for="emergency_contact_phone">Telefone de emergência</label><input id="emergency_contact_phone" name="emergency_contact_phone" inputmode="numeric" value="{{ old('emergency_contact_phone', $student->person->emergency_contact_phone) }}"></div>
-        </div></fieldset><div class="form-actions"><button class="button button-primary" type="submit">Salvar contatos</button></div>
+        </div></fieldset><fieldset><legend>Endereço</legend><div class="form-grid">
+            <div class="field"><label for="postal_code">CEP</label><input id="postal_code" name="postal_code" inputmode="numeric" maxlength="9" value="{{ old('postal_code', $student->person->postal_code) }}">@error('postal_code')<p class="field-error">{{ $message }}</p>@enderror</div>
+            <div class="field field-wide"><label for="street">Rua</label><input id="street" name="street"  value="{{ old('street', $student->person->street) }}">@error('street')<p class="field-error">{{ $message }}</p>@enderror</div>
+            <div class="field"><label for="number">Número</label><input id="number" name="number"  value="{{ old('number', $student->person->number) }}">@error('number')<p class="field-error">{{ $message }}</p>@enderror</div>
+            <div class="field"><label for="complement">Complemento</label><input id="complement" name="complement"  value="{{ old('complement', $student->person->complement) }}">@error('complement')<p class="field-error">{{ $message }}</p>@enderror</div>
+            <div class="field"><label for="district">Bairro</label><input id="district" name="district"  value="{{ old('district', $student->person->district) }}">@error('district')<p class="field-error">{{ $message }}</p>@enderror</div>
+            <div class="field"><label for="city">Cidade</label><input id="city" name="city"  value="{{ old('city', $student->person->city) }}">@error('city')<p class="field-error">{{ $message }}</p>@enderror</div>
+            <div class="field"><label for="state">UF</label><input id="state" name="state" maxlength="2" value="{{ old('state', $student->person->state) }}">@error('state')<p class="field-error">{{ $message }}</p>@enderror</div>
+        </div></fieldset><div class="form-actions"><button class="button button-primary" type="submit">Salvar dados</button></div>
     </form>
     @endif
-    @unless($canEditContact)<p class="form-help">Somente o próprio aluno ou o responsável legal altera os contatos.</p>@endunless
+    @unless($canEditContact)<p class="form-help">Somente o próprio aluno ou o responsável legal altera os contatos e o endereço.</p>@endunless
 @include('portal.partials.tabbar', ['current' => 'mais'])
 </div>
 @endsection
