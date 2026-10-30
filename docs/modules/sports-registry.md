@@ -48,6 +48,7 @@ Decisões de Fabio em 30/10/2026. `GuardianService` concentra as regras; o bloco
 - Adicionar: pessoa nova (nome, CPF, celular, e-mail) ou já cadastrada. Na associação, qualquer pessoa ativa dela; no dojo, só os responsáveis vigentes dos outros alunos que a conta vê (irmãos). CPF igual reaproveita a pessoa (CPF fora da associação é recusado); sem CPF, nome igual (sem acentos e maiúsculas) com o mesmo celular também reaproveita. O cadastro reaproveitado só ganha celular, e-mail e CPF que estavam vazios. Vínculo vigente repetido é recusado; marcar principal desmarca os outros.
 - Editar muda parentesco e marcações; encerrar grava `end_date` (até hoje), tira o "principal" e nunca apaga.
 - Liberar portal cria a conta só com o perfil Portal e envia o convite (`UserAccountService::invitePortal`, sem exigir `user.manage`). Quem já tem conta na associação entra no portal sozinho.
+- Edição de pessoas: bloco Dependentes (alunos pelos quais a pessoa responde, `GuardianService::dependents`) com "Adicionar dependente" entre os alunos ativos e em pré-cadastro da associação, e o bloco Responsáveis quando a pessoa também é aluno; exige `person.manage` e `student.manage`.
 - Eventos: `student.guardian_added`, `student.guardian_updated`, `student.guardian_ended`, `student.requires_guardian_changed` (contexto com `dojo_id` quando vem do dojo).
 
 ## Mapa do código

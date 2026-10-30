@@ -239,6 +239,7 @@ Route::middleware(['auth', 'active', 'association.context'])->group(function ():
         Route::get('/pessoas/{person}', [PersonController::class, 'show'])->middleware('permission:person.view')->name('people.show');
         Route::get('/pessoas/{person}/editar', [PersonController::class, 'edit'])->middleware('permission:person.manage')->name('people.edit');
         Route::put('/pessoas/{person}', [PersonController::class, 'update'])->middleware('permission:person.manage')->name('people.update');
+        Route::post('/pessoas/{person}/dependentes', [GuardianController::class, 'storeDependent'])->middleware(['permission:person.manage', 'permission:student.manage'])->name('people.dependents.store');
 
         Route::get('/modalidades', [CatalogController::class, 'index'])->middleware('permission:martial_art.view')->name('catalog.index');
         Route::post('/modalidades', [CatalogController::class, 'storeMartialArt'])->middleware('permission:martial_art.manage')->name('martial-arts.store');
