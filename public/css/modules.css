@@ -160,3 +160,18 @@
 .schedule-actions{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:.5rem;flex-shrink:0}
 .schedule-impact{padding:.8rem 1rem;border-radius:.7rem;background:#f1f5ff;font-size:.92rem}.schedule-impact ul{margin:.3rem 0 0;padding-left:1.1rem}.schedule-impact-keep{margin:.5rem 0 0;color:#764f00}
 .list-row:has(.schedule-actions){flex-wrap:wrap}.schedule-help{margin:.75rem .2rem 1rem;text-align:left}
+
+/* Atalho "Meus dependentes" */
+.dependents-shortcut{display:flex;align-items:center;gap:.8rem;padding:1rem 1.1rem;margin:0 0 1.25rem;color:inherit;text-decoration:none;box-shadow:none}.dependents-shortcut>span:nth-child(2){display:grid;gap:.15rem}.dependents-shortcut small{color:var(--muted)}
+.dependents-count{display:grid;place-items:center;flex-shrink:0;width:2.6rem;height:2.6rem;border-radius:50%;background:#e9f0ff;color:#0b46bd;font-weight:800}.dependents-go{margin-left:auto;font-weight:800;color:var(--primary);white-space:nowrap}
+
+/* Responsáveis do aluno */
+.guardians-block .section-heading-row{align-items:flex-end}.guardian-need{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem;padding:1rem 1.1rem;margin:0 0 1rem;box-shadow:none}
+.guardian-need label{display:flex;gap:.6rem;align-items:flex-start;flex:1 1 16rem}.guardian-need input{width:1.15rem;height:1.15rem;margin-top:.15rem}.guardian-need span{display:grid;gap:.15rem}.guardian-need small,.guardian-need-note,.guardian-hint{color:var(--muted);font-size:.88rem}.guardian-hint{margin:0}
+.guardian-list{display:grid}.guardian-row{display:grid;gap:.4rem;padding:1rem 1.1rem;border-bottom:1px solid var(--border)}.guardian-row:last-child{border-bottom:0}.guardian-head span{display:grid;gap:.15rem}.guardian-head small{color:var(--muted)}
+.guardian-tags{display:flex;flex-wrap:wrap;gap:.3rem}.guardian-tag{padding:.15rem .55rem;border-radius:99px;font-size:.74rem;font-weight:800;background:#eef0f3;color:#3d4757}.guardian-tag.is-on{background:#e9f0ff;color:#0b46bd}.guardian-tag.is-ok{background:#eaf8ef;color:#176b38}.guardian-tag.is-warn{background:#fff3cd;color:#764f00}
+.guardian-actions{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.3rem}.guardian-actions .button{min-height:2.4rem;padding:.4rem .8rem}
+.guardian-mode{display:grid;grid-template-columns:1fr 1fr;margin:0;padding:0;border:1px solid var(--border);border-radius:.7rem;overflow:hidden}.guardian-mode label{position:relative;margin:0}.guardian-mode input{position:absolute;opacity:0}.guardian-mode span{display:block;padding:.65rem;text-align:center;font-weight:800;cursor:pointer}
+.guardian-mode input:checked+span{background:var(--primary);color:#fff}.guardian-mode input:focus-visible+span{outline:3px solid rgba(21,94,239,.28);outline-offset:-3px}.guardian-mode input:disabled+span{color:var(--muted);cursor:not-allowed}
+.guardian-fields{padding:0}.guardian-checks{display:grid;gap:.45rem}.guardian-checks label{display:flex;gap:.5rem;align-items:center;font-weight:600}.guardian-checks input{width:1.1rem;height:1.1rem}
+.guardians-block .modal .form-stack{padding:0}.button-danger{color:#fff;background:var(--danger)}.button-danger:hover{background:#8f1d15}

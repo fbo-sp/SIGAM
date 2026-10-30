@@ -47,6 +47,7 @@ use App\Http\Controllers\Progression\TechniqueSheetController;
 use App\Http\Controllers\Reporting\ReportController;
 use App\Http\Controllers\Sports\CatalogController;
 use App\Http\Controllers\Sports\DirectRegistrationController;
+use App\Http\Controllers\Sports\GuardianController;
 use App\Http\Controllers\Sports\StudentController;
 use App\Http\Controllers\Sports\TeacherController;
 use App\Http\Controllers\Sports\TeacherInvitationManagementController;
@@ -115,6 +116,14 @@ Route::middleware(['auth', 'active', 'association.context'])->group(function ():
         Route::post('/alunos', [DirectRegistrationController::class, 'storeDojoStudent'])->name('students.direct.store');
         Route::get('/alunos/{student}/dados', [DojoStudentPersonController::class, 'edit'])->name('students.person.edit');
         Route::put('/alunos/{student}/dados', [DojoStudentPersonController::class, 'update'])->name('students.person.update');
+        Route::prefix('/alunos/{student}/responsaveis')->name('students.guardians.')->controller(GuardianController::class)->group(function (): void {
+            Route::get('/', 'dojo')->name('index');
+            Route::post('/', 'storeDojo')->name('store');
+            Route::post('/precisa', 'requiresDojo')->name('requires');
+            Route::put('/{guardian}', 'updateDojo')->name('update');
+            Route::post('/{guardian}/encerrar', 'endDojo')->name('end');
+            Route::post('/{guardian}/portal', 'portalDojo')->middleware('throttle:20,1')->name('portal');
+        });
         Route::get('/acompanhamento', [DojoProgressionController::class, 'panel'])->name('progression.panel');
         Route::get('/alunos/{student}/acompanhamento', [DojoProgressionController::class, 'show'])->name('progression.show');
         Route::get('/alunos/{student}/acompanhamento/{martialArt}/avaliar', [DojoProgressionController::class, 'edit'])->name('progression.assess');
@@ -183,7 +192,7 @@ Route::middleware(['auth', 'active', 'association.context'])->group(function ():
 
     Route::get('/tecnicas/{item}/ficha', TechniqueSheetController::class)->name('techniques.sheet');
 
-    Route::prefix('/portal')->name('portal.')->middleware('permission:portal.access')->group(function (): void {
+    Route::prefix('/portal')->name('portal.')->middleware('portal')->group(function (): void {
         Route::get('/', [PortalController::class, 'index'])->name('index');
         Route::get('/alunos/{student}', [PortalController::class, 'show'])->name('students.show');
         Route::get('/alunos/{student}/{section}', [PortalController::class, 'section'])->whereIn('section', ['turmas', 'frequencia', 'financeiro', 'campeonatos', 'historico', 'documentos', 'dados'])->name('students.section');
@@ -260,7 +269,13 @@ Route::middleware(['auth', 'active', 'association.context'])->group(function ():
         Route::post('/alunos/cadastro-direto', [DirectRegistrationController::class, 'storeAssociationStudent'])->middleware('permission:student.manage')->name('students.direct.store');
         Route::get('/alunos/{student}', [StudentController::class, 'show'])->middleware('permission:student.view')->name('students.show');
         Route::get('/alunos/{student}/acompanhamento', [StudentProgressionController::class, 'show'])->middleware('permission:assessment.view')->name('students.progression');
-        Route::post('/alunos/{student}/responsaveis', [StudentController::class, 'addGuardian'])->middleware('permission:student.manage')->name('students.guardians.store');
+        Route::prefix('/alunos/{student}/responsaveis')->name('students.guardians.')->middleware('permission:student.manage')->controller(GuardianController::class)->group(function (): void {
+            Route::post('/', 'store')->name('store');
+            Route::post('/precisa', 'requires')->name('requires');
+            Route::put('/{guardian}', 'update')->name('update');
+            Route::post('/{guardian}/encerrar', 'end')->name('end');
+            Route::post('/{guardian}/portal', 'portal')->middleware('throttle:20,1')->name('portal');
+        });
         Route::post('/alunos/{student}/ativar', [StudentController::class, 'activate'])->middleware('permission:student.manage')->name('students.activate');
         Route::post('/alunos/{student}/turmas', [StudentController::class, 'enroll'])->middleware('permission:enrollment.manage')->name('students.enrollments.store');
         Route::post('/alunos/{student}/turmas/{enrollment}/encerrar', [StudentController::class, 'endEnrollment'])->middleware('permission:enrollment.manage')->name('students.enrollments.end');

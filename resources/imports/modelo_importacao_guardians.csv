@@ -1,0 +1,3 @@
+matricula_aluno;nome_aluno;nascimento_aluno;nome_responsavel;cpf;celular;email;parentesco;legal;financeiro;principal;avisos
+ALU-000001-000001;;;Marta Ribeiro (exemplo fictício: apague esta linha);;11988880000;marta@example.com;mãe;sim;sim;sim;sim
+;Pedro Ribeiro;10/05/2016;José Ribeiro (exemplo fictício: apague esta linha);;11977771111;;avô;não;não;não;sim

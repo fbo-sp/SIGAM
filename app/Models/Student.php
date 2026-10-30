@@ -11,11 +11,11 @@ class Student extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['association_id', 'person_id', 'registration_number', 'entry_date', 'primary_dojo_id', 'status', 'exit_date', 'exit_reason', 'notes'];
+    protected $fillable = ['association_id', 'person_id', 'registration_number', 'entry_date', 'primary_dojo_id', 'status', 'requires_guardian', 'exit_date', 'exit_reason', 'notes'];
 
     protected function casts(): array
     {
-        return ['entry_date' => 'date', 'exit_date' => 'date'];
+        return ['entry_date' => 'date', 'exit_date' => 'date', 'requires_guardian' => 'boolean'];
     }
 
     public function association(): BelongsTo
@@ -31,6 +31,14 @@ class Student extends Model
     public function primaryDojo(): BelongsTo
     {
         return $this->belongsTo(Dojo::class, 'primary_dojo_id');
+    }
+
+    /** Menor de 18 anos ou marcado como "precisa de responsável mesmo sendo maior de idade". Sem nascimento, só a marcação conta. */
+    public function needsGuardian(): bool
+    {
+        $birth = $this->person?->birth_date;
+
+        return $this->requires_guardian || ($birth !== null && $birth->age < 18);
     }
 
     public function guardians(): HasMany

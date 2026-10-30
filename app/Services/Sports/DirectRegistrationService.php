@@ -339,9 +339,7 @@ class DirectRegistrationService
     {
         $student->load('person');
         // Sem data de nascimento o cadastro é concluído e fica com pendência (decisão de Fabio em 29/10/2026).
-        if ($association->requires_minor_guardian && $student->person->birth_date !== null && $student->person->birth_date->age < 18
-            && ! $student->guardians()->where('is_legal_guardian', true)
-                ->where(fn ($query) => $query->whereNull('end_date')->orWhereDate('end_date', '>=', today()))->exists()) {
+        if ($association->requires_minor_guardian && $student->needsGuardian() && ! $student->guardians()->current()->where('is_legal_guardian', true)->exists()) {
             throw ValidationException::withMessages(['guardian_is_legal' => 'Para concluir o cadastro de menor, informe um responsável legal vigente.']);
         }
         $student->update(['status' => 'active']);

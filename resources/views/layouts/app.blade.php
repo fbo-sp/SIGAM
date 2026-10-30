@@ -20,7 +20,7 @@
                 @php($portalOnly = auth()->user()->hasPermission('portal.access', $navAssociation) && ! collect(['dashboard.association', 'dashboard.dojo', 'dashboard.teacher'])->contains(fn ($code) => auth()->user()->hasPermission($code, $navAssociation)))
                 <a href="{{ route('dashboard') }}">Início</a>
                 @if(! $portalOnly || \App\Models\DojoRoleAssignment::query()->where('user_id', auth()->id())->whereNull('revoked_at')->exists())<a href="{{ route('operation.index') }}">Meus dojos</a>@endif
-                @if(! $portalOnly && auth()->user()->hasPermission('portal.access', $navAssociation))
+                @if(! $portalOnly && app(\App\Services\Portal\PortalAccessService::class)->canEnter(auth()->user()))
                     <a href="{{ route('portal.index') }}">Meu portal</a>
                 @endif
                 @if(auth()->user()->hasPermission('association.view', auth()->user()->association_id))

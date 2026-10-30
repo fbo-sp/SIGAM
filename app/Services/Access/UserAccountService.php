@@ -79,10 +79,32 @@ class UserAccountService
         }
         $roles = AssociationRoleCatalog::ensure()->only($codes);
         $this->assertCanGrant($actor, $association, $roles);
-        $email = mb_strtolower(trim((string) $data['email']));
+        $user = $this->createAccount($actor, $association, (int) $data['person_id'], (string) $data['email'], $roles);
 
-        $user = DB::transaction(function () use ($actor, $association, $data, $roles, $email): User {
-            $person = $this->activePeople($association)->lockForUpdate()->find($data['person_id']);
+        return ['user' => $user, 'sent' => $this->sendActivation($user, $association)];
+    }
+
+    /**
+     * Libera o portal para um responsável (decisão de Fabio em 30/10/2026): gestores da associação e do dojo e o
+     * professor enviam o convite sem precisar de `user.manage`. Quem chama já provou que pode cuidar dos responsáveis
+     * do aluno (GuardianService); a conta nasce só com o perfil Portal.
+     *
+     * @return array{user: User, sent: bool}
+     */
+    public function invitePortal(User $actor, Association $association, Person $person, string $email): array
+    {
+        $user = $this->createAccount($actor, $association, $person->id, $email, AssociationRoleCatalog::ensure()->only([AssociationRoleCatalog::PORTAL]));
+
+        return ['user' => $user, 'sent' => $this->sendActivation($user, $association)];
+    }
+
+    /** @param  Collection<string, Role>  $roles */
+    private function createAccount(User $actor, Association $association, int $personId, string $email, Collection $roles): User
+    {
+        $email = mb_strtolower(trim($email));
+
+        return DB::transaction(function () use ($actor, $association, $personId, $roles, $email): User {
+            $person = $this->activePeople($association)->lockForUpdate()->find($personId);
             if ($person === null) {
                 throw ValidationException::withMessages(['person_id' => 'Escolha uma pessoa ativa desta associação.']);
             }
@@ -108,8 +130,6 @@ class UserAccountService
 
             return $user;
         });
-
-        return ['user' => $user, 'sent' => $this->sendActivation($user, $association)];
     }
 
     public function updateRoles(User $actor, Association $association, User $user, array $codes): User

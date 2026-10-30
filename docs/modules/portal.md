@@ -4,7 +4,7 @@
 
 O portal funciona como um aplicativo: um início curto e um assunto por subtela.
 
-- Entrada: quem só tem o acesso de aluno ou responsável (`portal.access` sem `dashboard.association|dojo|teacher`) vai do login e do "Início" direto ao portal; professores e gestores continuam no painel de trabalho e chegam pelo link "Meu portal". Em `portal/`, um aluno só vai direto ao início dele; o responsável com mais de um aluno escolhe quem consultar.
+- Entrada (decisão de Fabio em 30/10/2026): o portal abre para quem tem `portal.access` ou, automaticamente, para quem tem o próprio cadastro de aluno ou vínculo vigente de responsável na associação da conta (`PortalAccessService::canEnter`, middleware `portal`). Gestor ou professor que é responsável vê o atalho "Meu(s) dependente(s)" no painel. Quem só tem o acesso de aluno ou responsável (`portal.access` sem `dashboard.association|dojo|teacher`) vai do login e do "Início" direto ao portal; professores e gestores continuam no painel de trabalho e chegam pelo link "Meu portal". Em `portal/`, um aluno só vai direto ao início dele; o responsável com mais de um aluno escolhe quem consultar.
 - Início (`portal/alunos/{student}`): nome, foto, modalidade, faixa e dojo; indicadores de próxima aula, frequência no mês (presença, reposição e experimental sobre as chamadas do mês), mensalidade (em dia, saldo em aberto ou vencidas) e quiz (prova oficial liberada); grade de atalhos.
 - Subtelas (`portal/alunos/{student}/{secao}`, com `turmas`, `frequencia`, `financeiro`, `campeonatos`, `historico`, `documentos` e `dados`) mais o progresso técnico: título, botão "← Início" e só o conteúdo do assunto. "Meus dados" mostra o cadastro e o formulário de contatos.
 - No celular, uma barra inferior fixa leva a Início, Frequência, Financeiro e Mais (janela com os demais atalhos). 
@@ -23,7 +23,7 @@ Não existe cadastro público. Uma conta só acessa o portal quando possui `port
 
 ## Escritas permitidas
 
-O portal atualiza apenas e-mail, telefone, celular, contato de emergência e a opção de esconder o aniversário dos colegas (`PUT portal/alunos/{student}/aniversario`, mesma regra dos contatos: o próprio aluno ou o responsável legal). Nome, CPF, nascimento, matrícula, graduação e situação não são aceitos. A atualização usa transação, lock da pessoa e auditoria que registra apenas os nomes dos campos alterados.
+O portal atualiza apenas e-mail, telefone, celular, contato de emergência, endereço (CEP, logradouro, número, complemento, bairro, cidade e UF, decisão de Fabio em 30/10/2026; `PortalAccessService::EDITABLE_FIELDS`) e a opção de esconder o aniversário dos colegas (`PUT portal/alunos/{student}/aniversario`, mesma regra dos contatos: o próprio aluno ou o responsável legal). Nome, CPF, nascimento, matrícula, graduação e situação não são aceitos. A atualização usa transação, lock da pessoa e auditoria que registra apenas os nomes dos campos alterados.
 
 Inscrições são sempre de competidor. Pessoa, aluno, dojo e tipo de participação são derivados no servidor; `ChampionshipRegistrationService` continua validando janela, modalidade, histórico, filiação e duplicidade.
 

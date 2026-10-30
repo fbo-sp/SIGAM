@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -13,6 +14,14 @@ class StudentGuardian extends Model
     protected function casts(): array
     {
         return ['is_legal_guardian' => 'boolean', 'is_financial_guardian' => 'boolean', 'is_primary' => 'boolean', 'can_receive_notifications' => 'boolean', 'start_date' => 'date', 'end_date' => 'date'];
+    }
+
+    /** Vínculo vigente na data (hoje por padrão): já começou e não terminou. */
+    public function scopeCurrent(Builder $query, ?string $date = null): Builder
+    {
+        $date ??= today()->toDateString();
+
+        return $query->whereDate('start_date', '<=', $date)->where(fn (Builder $end) => $end->whereNull('end_date')->orWhereDate('end_date', '>=', $date));
     }
 
     public function student(): BelongsTo

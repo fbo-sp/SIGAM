@@ -20,7 +20,7 @@
 <a class="card portal-shortcut" href="{{ route('operation.index') }}">@include('portal.partials.icon', ['name' => 'historico'])<span>Meus dojos</span></a>
 <a class="card portal-shortcut" href="{{ route('notifications.index') }}">@include('portal.partials.icon', ['name' => 'avisos'])<span>Avisos</span></a>
 <a class="card portal-shortcut" href="{{ route('account.show') }}">@include('portal.partials.icon', ['name' => 'documentos'])<span>Minha conta e senha</span></a>
-@if(auth()->user()->hasPermission('portal.access', auth()->user()->association_id))<a class="card portal-shortcut" href="{{ route('portal.index') }}">@include('portal.partials.icon', ['name' => 'dados'])<span>Meu portal</span></a>@endif
+@if(app(\App\Services\Portal\PortalAccessService::class)->canEnter(auth()->user()))<a class="card portal-shortcut" href="{{ route('portal.index') }}">@include('portal.partials.icon', ['name' => 'dados'])<span>Meu portal</span></a>@endif
 </nav>
 @php($openChampionships = \App\Models\Championship::query()->where('association_id', auth()->user()->association_id)->where('status', 'open')->where('registration_close_at', '>=', now())->orderBy('start_date')->limit(5)->get())
 @if($openChampionships->isNotEmpty())<h3 class="modal-subtitle">Campeonatos com inscrição aberta</h3><ul class="plain-list">@foreach($openChampionships as $championship)<li>{{ $championship->name }} · {{ $championship->start_date->format('d/m/Y') }}</li>@endforeach</ul>@endif

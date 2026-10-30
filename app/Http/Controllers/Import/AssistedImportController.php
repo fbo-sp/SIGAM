@@ -85,7 +85,7 @@ class AssistedImportController extends Controller
     public function template(Request $request, string $type, string $format): BinaryFileResponse
     {
         validator(compact('type', 'format'), [
-            'type' => ['required', Rule::in(['students', 'attendance', 'complete'])],
+            'type' => ['required', Rule::in(['students', 'attendance', 'guardians', 'complete'])],
             'format' => ['required', Rule::in(['csv', 'xlsx'])],
         ])->validate();
         abort_if($format === 'xlsx' && $type !== 'complete', 404);

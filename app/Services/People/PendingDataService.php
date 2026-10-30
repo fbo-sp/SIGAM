@@ -21,7 +21,7 @@ class PendingDataService
     /** Pendência => [rótulo, rótulo curto para o portal, alta gravidade] */
     public const ITEMS = [
         'birth' => ['Sem nascimento', 'data de nascimento', true],
-        'guardian' => ['Menor sem responsável', 'responsável legal', true],
+        'guardian' => ['Sem responsável legal', 'responsável legal', true],
         'emergency' => ['Sem contato de emergência', 'contato de emergência', false],
         'phone' => ['Sem telefone', 'telefone ou celular', false],
         'class' => ['Sem turma', 'turma', false],
@@ -113,7 +113,9 @@ class PendingDataService
         $items = [];
         if ($person->birth_date === null) {
             $items[] = 'birth';
-        } elseif ($person->birth_date->age < 18 && ! $guardians->contains('is_legal_guardian', true)) {
+        }
+        // Menor de 18 anos ou aluno marcado como "precisa de responsável" (decisão de Fabio em 30/10/2026).
+        if ($student->needsGuardian() && ! $guardians->contains('is_legal_guardian', true)) {
             $items[] = 'guardian';
         }
         if (blank($person->emergency_contact_name) || blank($person->emergency_contact_phone)) {
@@ -139,7 +141,7 @@ class PendingDataService
     {
         return $query->with([
             'person',
-            'guardians' => fn ($guardians) => $guardians->where(fn ($g) => $g->whereNull('end_date')->orWhereDate('end_date', '>=', today()))->with('person:id,phone,mobile'),
+            'guardians' => fn ($guardians) => $guardians->current()->with('person:id,phone,mobile'),
             'enrollments' => fn ($enrollment) => $this->current($enrollment)->when($classIds, fn ($scoped) => $scoped->whereIn('class_group_id', $classIds))->with('classGroup:id,name'),
             'dojoHistory' => fn ($history) => $history->whereDate('start_date', '<=', today())
                 ->where(fn ($end) => $end->whereNull('end_date')->orWhereDate('end_date', '>=', today()))->with('dojo:id,name'),

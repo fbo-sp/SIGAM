@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\AddSecurityHeaders;
+use App\Http\Middleware\EnsurePortalAccess;
 use App\Http\Middleware\EnsureUserIsActive;
 use App\Http\Middleware\RequirePermission;
 use App\Http\Middleware\ResolveAssociationContext;
@@ -21,6 +22,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'active' => EnsureUserIsActive::class,
             'association.context' => ResolveAssociationContext::class,
             'permission' => RequirePermission::class,
+            'portal' => EnsurePortalAccess::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
