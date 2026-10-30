@@ -79,6 +79,10 @@ Convites exigem `teacher.manage` associativo na rota e novamente no serviço. O 
 
 `report.export` libera a tela Relatórios e os downloads (`modules/reports.md`). Na associação vem do perfil Gestor; no dojo está nos papéis `dojo_operator` (todo o dojo) e `dojo_teacher` (só as turmas em que é principal ou auxiliar vigente). O alcance é montado por `ReportScope`; filtros do pedido só restringem. A lista de alunos do professor não traz CPF nem e-mail.
 
+## Exames de graduação (`exam.manage`, `exam.grade`)
+
+`exam.manage` cria, edita, escolhe participantes, organiza grupos, abre e cancela exames (`modules/exams.md`). Na associação vem do perfil Gestor; no dojo está no papel `dojo_operator`, que não cria exame do nível associação. `exam.grade` (papéis `dojo_operator` e `dojo_teacher`) dá acesso a `/professor/exames` para quem tem perfil de professor ativo: vê só os exames em que está na banca e só desmarca itens e justifica. O alcance é montado por `ExamScope`.
+
 ## Aniversariantes
 
 Sem permissão nova. A tela da associação exige `student.view` na associação; a do dojo, `student.view` pela regra do dojo (`OperationalScope::canDojo`); a do professor, ser principal ou auxiliar vigente de turma que ele consegue abrir. O aviso do portal segue `PortalAccessService` e mostra só nome e turma dos colegas.

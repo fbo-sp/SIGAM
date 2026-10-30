@@ -20,6 +20,7 @@ use App\Http\Controllers\Classes\TeacherStudyController;
 use App\Http\Controllers\Classes\TeacherWorkspaceController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Documents\DocumentController;
+use App\Http\Controllers\Exams\ExamController;
 use App\Http\Controllers\Federation\FederationController;
 use App\Http\Controllers\Finance\ChargeController;
 use App\Http\Controllers\Finance\FinanceController;
@@ -101,6 +102,29 @@ Route::middleware(['auth', 'active', 'association.context'])->group(function ():
             Route::get('/{announcement}', 'show')->whereNumber('announcement')->name('show');
         });
     }
+    foreach (['/associacoes/{association}/exames' => ['associations.exams.', 'association'], '/operacao/dojos/{dojo}/exames' => ['operation.exams.', 'dojo']] as $path => [$name, $level]) {
+        Route::prefix($path)->name($name)->controller(ExamController::class)->group(function () use ($level): void {
+            Route::get('/', $level.'Index')->name('index');
+            Route::get('/novo', $level.'Create')->name('create');
+            Route::post('/', $level.'Store')->middleware('throttle:20,1')->name('store');
+            Route::get('/{exam}', $level.'Show')->whereNumber('exam')->name('show');
+            Route::get('/{exam}/editar', $level.'Edit')->whereNumber('exam')->name('edit');
+            Route::put('/{exam}', $level.'Update')->whereNumber('exam')->name('update');
+            Route::get('/{exam}/participantes', $level.'Participants')->whereNumber('exam')->name('participants');
+            Route::put('/{exam}/participantes', $level.'ParticipantsSave')->whereNumber('exam')->name('participants.save');
+            Route::get('/{exam}/conteudo/{rank?}', $level.'Content')->whereNumber(['exam', 'rank'])->name('content');
+            Route::put('/{exam}/conteudo/{rank}', $level.'ContentSave')->whereNumber(['exam', 'rank'])->name('content.save');
+            Route::post('/{exam}/conteudo/{rank}/grupos', $level.'Group')->whereNumber(['exam', 'rank'])->name('groups.store');
+            Route::post('/{exam}/abrir', $level.'Open')->whereNumber('exam')->name('open');
+            Route::post('/{exam}/cancelar', $level.'Cancel')->whereNumber('exam')->name('cancel');
+        });
+    }
+    Route::prefix('/professor/exames')->name('teacher.exams.')->controller(ExamController::class)->group(function (): void {
+        Route::get('/', 'teacherIndex')->name('index');
+        Route::get('/{exam}', 'teacherShow')->whereNumber('exam')->name('show');
+        Route::get('/{exam}/conteudo/{rank?}', 'teacherContent')->whereNumber(['exam', 'rank'])->name('content');
+        Route::put('/{exam}/conteudo/{rank}', 'teacherContentSave')->whereNumber(['exam', 'rank'])->name('content.save');
+    });
     Route::prefix('/operacao/dojos/{dojo}')->name('operation.')->controller(OperationalController::class)->group(function (): void {
         Route::get('/', 'show')->name('home');
         Route::get('/alunos', 'students')->name('students');

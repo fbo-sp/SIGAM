@@ -79,6 +79,8 @@ class DatabaseSeeder extends Seeder
             'audit.view' => 'Visualizar auditoria',
             'announcement.send' => 'Enviar avisos às turmas e pessoas do próprio alcance',
             'report.export' => 'Exportar relatórios em Excel e PDF no próprio alcance',
+            'exam.manage' => 'Criar e organizar exames de graduação',
+            'exam.grade' => 'Participar da banca dos exames de graduação',
         ])->map(fn (string $description, string $code) => Permission::query()->updateOrCreate(
             ['code' => $code],
             ['description' => $description],

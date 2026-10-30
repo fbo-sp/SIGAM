@@ -1,0 +1,1 @@
+<label class="exam-group-select"><span>Grupo</span><select name="items[{{ $item->id }}][group]">@foreach($content['groups'] as $option)<option value="{{ $option['group']->id }}" @selected((int) old('items.'.$item->id.'.group', $item->rank_exam_group_id) === $option['group']->id)>{{ $option['group']->name }}</option>@endforeach</select></label>
