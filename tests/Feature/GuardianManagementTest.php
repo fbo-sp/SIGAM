@@ -170,6 +170,42 @@ class GuardianManagementTest extends TestCase
         $this->get(route('dashboard'))->assertOk()->assertSee('Meu portal')->assertSee('Meu dependente')->assertSee('Filho · abrir o portal');
     }
 
+    public function test_person_edit_lists_and_links_dependents_and_shows_guardians_of_a_student(): void
+    {
+        $manager = $this->associationManager();
+        $marta = $this->person('Marta Ribeiro');
+        $clara = $this->student('Clara Ribeiro', '2016-05-01');
+        $pedro = $this->student('Pedro Ribeiro', '2018-05-01');
+        $edit = route('associations.people.edit', [$this->association, $marta]);
+
+        $this->actingAs($manager)->get($edit)->assertOk()->assertSee('Dependentes')->assertSee('Nenhum dependente vigente')
+            ->assertSee('Adicionar dependente')->assertSee('Clara Ribeiro')->assertDontSee('id="responsaveis"', false);
+        $this->from($edit)->post(route('associations.people.dependents.store', [$this->association, $marta]), [
+            'form_key' => 'dep-add', 'student_id' => $clara->id, 'relationship_type' => 'mother', 'start_date' => '2026-10-30', 'is_legal_guardian' => '1', 'can_receive_notifications' => '1',
+        ])->assertRedirect($edit)->assertSessionHas('status', 'Clara Ribeiro agora é dependente de Marta Ribeiro.');
+        $this->post(route('associations.people.dependents.store', [$this->association, $marta]), ['student_id' => $clara->id, 'relationship_type' => 'mother', 'start_date' => '2026-10-30'])
+            ->assertSessionHasErrors('guardian_person_id');
+        $this->from($edit)->post(route('associations.people.dependents.store', [$this->association, $marta]), ['form_key' => 'dep-add', 'student_id' => $pedro->id, 'relationship_type' => 'mother', 'start_date' => '2026-11-02'])
+            ->assertSessionHasErrors('start_date');
+        $this->get($edit)->assertOk()->assertSee('value="Marta Ribeiro"', false)->assertSee('O vínculo não pode começar depois de hoje.');
+
+        $link = StudentGuardian::query()->sole();
+        $this->assertSame([$marta->id, true], [$link->guardian_person_id, $link->is_legal_guardian]);
+        $this->get($edit)->assertOk()->assertSeeInOrder(['Dependentes', 'Clara Ribeiro', 'Mãe · ', 'Legal', 'Recebe avisos', 'Ficha do aluno']);
+        $this->from($edit)->post(route('associations.students.guardians.end', [$this->association, $clara, $link]))->assertRedirect($edit);
+        $this->assertNotNull($link->fresh()->end_date);
+
+        // Pessoa que também é aluno: o bloco Responsáveis aparece na edição.
+        $this->get(route('associations.people.edit', [$this->association, $clara->person]))->assertOk()->assertSee('id="responsaveis"', false)->assertSee('Precisa de responsável mesmo sendo maior de idade');
+
+        $outsider = User::factory()->create(['association_id' => $this->association->id]);
+        $role = Role::query()->create(['association_id' => $this->association->id, 'name' => 'Pessoas', 'code' => 'pessoas_'.Str::random(6), 'scope_type' => 'association']);
+        $role->permissions()->sync([Permission::query()->firstOrCreate(['code' => 'person.manage'], ['description' => 'person.manage'])->id]);
+        $outsider->roles()->attach($role, ['association_id' => $this->association->id]);
+        $this->actingAs($outsider)->get($edit)->assertOk()->assertDontSee('Adicionar dependente');
+        $this->post(route('associations.people.dependents.store', [$this->association, $marta]), ['student_id' => $pedro->id, 'relationship_type' => 'mother', 'start_date' => '2026-10-30'])->assertForbidden();
+    }
+
     private function associationManager(): User
     {
         $user = User::factory()->create(['association_id' => $this->association->id]);

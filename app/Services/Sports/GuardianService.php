@@ -93,6 +93,33 @@ class GuardianService
         ];
     }
 
+    /**
+     * Dependentes vigentes de uma pessoa na associação, para o bloco Dependentes da edição de pessoas.
+     *
+     * @return Collection<int, StudentGuardian>
+     */
+    public function dependents(Association $association, Person $person): Collection
+    {
+        return StudentGuardian::query()->current()->where('guardian_person_id', $person->id)
+            ->whereHas('student', fn (Builder $student) => $student->where('association_id', $association->id)->whereIn('status', ['active', 'pre_registration']))
+            ->with(['student.person', 'student.primaryDojo:id,name'])->orderByDesc('is_primary')->orderBy('start_date')->get();
+    }
+
+    /**
+     * Alunos ativos e em pré-cadastro da associação que podem virar dependentes da pessoa: sem ela como responsável
+     * vigente e sem ser a própria pessoa.
+     *
+     * @return Collection<int, Student>
+     */
+    public function dependentCandidates(Association $association, Person $person): Collection
+    {
+        return Student::query()->where('association_id', $association->id)->whereIn('status', ['active', 'pre_registration'])
+            ->where('person_id', '!=', $person->id)
+            ->whereNotIn('id', StudentGuardian::query()->current()->where('guardian_person_id', $person->id)->select('student_id'))
+            ->with(['person:id,full_name,social_name,birth_date', 'primaryDojo:id,name'])
+            ->get()->sortBy(fn (Student $student) => mb_strtolower($student->person->social_name ?: $student->person->full_name))->values();
+    }
+
     /** @return array{link: StudentGuardian, reused: bool, portal: ?string} */
     public function add(User $actor, Association $association, Student $student, array $data, ?Dojo $dojo = null): array
     {

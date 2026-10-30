@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-10-30 — Dependentes na edição de pessoas
+
+- a edição de pessoas (`associacoes/{association}/pessoas/{person}/editar`) ganhou o bloco Dependentes para quem tem `student.manage`: lista os alunos pelos quais a pessoa responde, com Editar, Encerrar vínculo e Ficha do aluno, e "Adicionar dependente" em janela (busca do aluno, parentesco, início e marcações); `POST .../pessoas/{person}/dependentes`;
+- quando a pessoa também é aluno, o bloco Responsáveis da ficha aparece na mesma tela;
+- os vínculos são os mesmos da ficha do aluno (`GuardianService`); sem migration; `GuardianManagementTest` ampliado.
+
 ## 2026-10-30 — Responsáveis dos alunos
 
 - bloco Responsáveis na ficha do aluno (associação) e na nova tela `operacao/dojos/{dojo}/alunos/{student}/responsaveis` (gestor do dojo e professor das turmas do aluno, principal ou auxiliar), para aluno ativo e em pré-cadastro: adicionar em janela (pessoa nova ou já cadastrada; CPF, ou nome com o mesmo celular, reaproveita o cadastro), editar parentesco e marcações, encerrar vínculo (grava a data de fim, nunca apaga) e liberar o portal (convite só com o perfil Portal);

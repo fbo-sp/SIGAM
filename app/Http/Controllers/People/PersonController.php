@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\People\PersonRequest;
 use App\Models\Association;
 use App\Models\Person;
+use App\Models\Student;
 use App\Services\People\PersonService;
+use App\Services\Sports\GuardianService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -71,7 +73,16 @@ class PersonController extends Controller
         $this->ensureBelongsToAssociation($association, $person);
         $returnTo = $this->returnPath($request->query('voltar'));
 
-        return view('people.form', compact('association', 'person', 'returnTo'));
+        $guardians = app(GuardianService::class);
+        $canLink = $request->user()->hasPermission('student.manage', $association->id);
+        $student = $canLink ? Student::query()->where('association_id', $association->id)->where('person_id', $person->id)->whereIn('status', ['active', 'pre_registration'])->first() : null;
+
+        return view('people.form', [
+            ...compact('association', 'person', 'returnTo', 'canLink', 'student'),
+            'dependentLinks' => $canLink ? $guardians->dependents($association, $person) : collect(),
+            'dependentCandidates' => $canLink ? $guardians->dependentCandidates($association, $person) : collect(),
+            ...($student ? $guardians->viewData($request->user(), $student) : []),
+        ]);
     }
 
     public function update(PersonRequest $request, Association $association, Person $person, PersonService $service): RedirectResponse

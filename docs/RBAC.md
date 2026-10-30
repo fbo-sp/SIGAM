@@ -89,7 +89,7 @@ Sem permissão nova: o mesmo alcance dos aniversariantes. O professor vê as pen
 
 ## Responsáveis dos alunos
 
-Sem permissão nova (decisão de Fabio em 30/10/2026). Associação: `student.manage`. Dojo: `student.manage` pela regra do dojo, só alunos com vínculo vigente no dojo. Professor: só alunos com matrícula vigente em turma ativa em que é principal ou auxiliar vigente, no dojo em que entra. Todos adicionam, editam, encerram e liberam o portal (`GuardianService::canManage`). O portal abre para `portal.access` ou para quem tem o próprio cadastro de aluno ou vínculo vigente de responsável; só o próprio aluno e o responsável legal alteram dados por lá.
+Sem permissão nova (decisão de Fabio em 30/10/2026). Associação: `student.manage`. Dojo: `student.manage` pela regra do dojo, só alunos com vínculo vigente no dojo. Professor: só alunos com matrícula vigente em turma ativa em que é principal ou auxiliar vigente, no dojo em que entra. Todos adicionam, editam, encerram e liberam o portal (`GuardianService::canManage`). Na edição de pessoas, os blocos Dependentes e Responsáveis exigem `person.manage` (rota) e `student.manage`. O portal abre para `portal.access` ou para quem tem o próprio cadastro de aluno ou vínculo vigente de responsável; só o próprio aluno e o responsável legal alteram dados por lá.
 
 ## Avisos (`announcement.send`)
 

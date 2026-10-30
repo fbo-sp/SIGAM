@@ -8,11 +8,13 @@ use App\Http\Requests\Sports\GuardianRequest;
 use App\Http\Requests\Sports\GuardianUpdateRequest;
 use App\Models\Association;
 use App\Models\Dojo;
+use App\Models\Person;
 use App\Models\Student;
 use App\Models\StudentGuardian;
 use App\Services\Sports\GuardianService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 /**
@@ -43,6 +45,24 @@ class GuardianController extends Controller
         $this->authorizeDojo($request, $dojo, $student);
 
         return $this->added($this->guardians->add($request->user(), $dojo->association, $student, $request->validated(), $dojo));
+    }
+
+    /** Edição de pessoas: vincula a pessoa como responsável de um aluno da associação (decisão de Fabio em 30/10/2026). */
+    public function storeDependent(Request $request, Association $association, Person $person): RedirectResponse
+    {
+        abort_unless($person->associations()->whereKey($association->id)->exists(), 404);
+        $data = $request->merge(collect(['is_legal_guardian', 'is_financial_guardian', 'is_primary', 'can_receive_notifications'])
+            ->mapWithKeys(fn (string $flag) => [$flag => $request->boolean($flag)])->all())->validate([
+                'student_id' => ['required', 'integer'],
+                'relationship_type' => ['required', Rule::in(array_keys(GuardianService::RELATIONSHIPS))],
+                'start_date' => ['required', 'date_format:Y-m-d', 'before_or_equal:today'],
+                'is_legal_guardian' => ['boolean'], 'is_financial_guardian' => ['boolean'], 'is_primary' => ['boolean'], 'can_receive_notifications' => ['boolean'],
+            ], ['student_id.required' => 'Escolha o aluno.', 'start_date.before_or_equal' => 'O vínculo não pode começar depois de hoje.']);
+        $student = Student::query()->where('association_id', $association->id)->findOrFail($data['student_id']);
+        $this->authorizeAssociation($request, $association, $student);
+        $this->guardians->add($request->user(), $association, $student, [...$data, 'mode' => 'existing', 'guardian_person_id' => $person->id]);
+
+        return back()->with('status', "{$student->person->full_name} agora é dependente de {$person->full_name}.");
     }
 
     public function update(GuardianUpdateRequest $request, Association $association, Student $student, StudentGuardian $guardian): RedirectResponse
