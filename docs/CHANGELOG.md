@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-10-30 — Exames de graduação (etapa 1)
+
+- nova área Exames nos três níveis: associação (`/associacoes/{association}/exames`), dojo (`/operacao/dojos/{dojo}/exames`) e banca do professor (`/professor/exames`), com as permissões `exam.manage` e `exam.grade` (aplicadas pelo `db:seed`);
+- exame com nome, modalidade, nível (associação, dojo, turma ou aluno com justificativa), período, média mínima (padrão 7,0), banca e prova teórica em quiz opcional;
+- participantes: alunos do nível com próxima faixa, aptos já marcados (idade e tempo mínimo na faixa atual); quem não está apto entra com motivo; retirar não apaga; um aluno por exame ativo da modalidade;
+- conteúdo por faixa de destino a partir do currículo: novo e elevado marcados, herdado desmarcado, grupos de nota (catálogo e Teoria), indicador "N/M aulas" desde a última graduação, justificativa obrigatória para item sem aula, item do quiz com o tamanho do banco;
+- abrir com conferência e cancelar com motivo; notas, resultado, painel e certificado vêm nas próximas etapas;
+- 1 migration (`000035`, cinco tabelas); ADR-016; `RankExamsTest` novo.
+
 ## 2026-10-30 — Dependentes na edição de pessoas
 
 - a edição de pessoas (`associacoes/{association}/pessoas/{person}/editar`) ganhou o bloco Dependentes para quem tem `student.manage`: lista os alunos pelos quais a pessoa responde, com Editar, Encerrar vínculo e Ficha do aluno, e "Adicionar dependente" em janela (busca do aluno, parentesco, início e marcações); `POST .../pessoas/{person}/dependentes`;

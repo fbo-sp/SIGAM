@@ -29,6 +29,8 @@ class OperationalRolesSeeder extends Seeder
                 'announcement.send' => 'Enviar avisos às turmas e pessoas do próprio alcance',
                 'report.export' => 'Exportar relatórios em Excel e PDF no próprio alcance',
                 'import.manage' => 'Importar alunos e presenças por planilha',
+                'exam.manage' => 'Criar e organizar exames de graduação',
+                'exam.grade' => 'Participar da banca dos exames de graduação',
                 'charge.view' => 'Consultar cobranças do dojo',
                 'student_plan.manage' => 'Vincular planos aos alunos do dojo',
                 'payment.manage' => 'Registrar pagamentos das cobranças do dojo',
