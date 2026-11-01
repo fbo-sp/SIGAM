@@ -9,6 +9,7 @@ Este documento é um índice de manutenção. `routes/web.php`, `routes/console.
 | `/entrar` | criação de sessão | CSRF, throttle, regeneração e mensagem genérica |
 | `/recuperar-senha`, `/redefinir-senha` | recuperação não enumerável | throttle e token descartável |
 | `/minha-conta` e `PUT /minha-conta/senha` | `AccountController`: dados da conta e troca da própria senha | conta logada e ativa; exige a senha atual; limite de 5 por minuto; encerra as outras sessões |
+| `/instalar-app` | `Route::view` `app.install`: passos para instalar o app (PWA) no iPhone e no Android, com "Instalar agora" quando o navegador oferece | conta logada e ativa |
 | `/convites/professor/{token}` | visualizar, aceitar ou recusar convite | throttle, GET sem mutação e POST transacional |
 | `/ativar-conta/{token}` | definir a senha de conta criada pela tela de usuários | somente visitante, throttle, token de 72 h de uso único e conta pendente |
 | `/up` | saúde do processo | não substitui teste de banco/SMTP |

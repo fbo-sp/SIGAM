@@ -13,6 +13,7 @@
     'avisos-novo' => 'M15 5.6A6 6 0 0 0 6 11v5l-2 2h16l-2-2v-4M10 21h4M19 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z',
     'estudar' => 'M3 5h6a3 3 0 0 1 3 3v12a2 2 0 0 0-2-2H3zM21 5h-6a3 3 0 0 0-3 3v12a2 2 0 0 1 2-2h7z',
     'video' => 'M3 6h13v12H3zM16 10l5-3v10l-5-3z',
+    'app' => 'M7 2h10v20H7zM11 18h2',
     'mais' => 'M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z',
 ])
 <svg class="portal-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="{{ $paths[$name] ?? $paths['mais'] }}"/></svg>

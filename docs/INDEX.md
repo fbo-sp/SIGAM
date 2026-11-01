@@ -46,6 +46,7 @@ As especificações originais permanecem em `../Especificação/` como baseline 
 | Pagamentos e relatórios | Implementado | `modules/payments-reports.md` |
 | Relatórios exportáveis | Etapa 1: lista de alunos em Excel nos três níveis | `modules/reports.md`, `adr/ADR-015-relatorios-exportaveis.md` |
 | Exames de graduação | Etapa 1: exame, banca, participantes e conteúdo com cobertura | `modules/exams.md`, `adr/ADR-016-exames-de-graduacao.md` |
+| App instalável (PWA) | Manifesto, ícones, service worker só de estáticos, aviso e tela de instalação | `adr/ADR-017-app-instalavel-pwa.md` |
 | Federações e filiações | Implementado | `modules/federations-memberships.md` |
 | Campeonatos | Compartilhado entre associação e operação local | `modules/championships.md` |
 | Portal do aluno e responsável | Implementado | `modules/portal.md` |

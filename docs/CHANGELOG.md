@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-11-01 — App instalável (PWA)
+
+- o JUDOMA pode ser instalado no celular como app (ícone na tela inicial e tela cheia), sem loja: `manifest.json`, ícones com o logo do quimono em `public/icons`, `sw.js` e página `offline.html`;
+- o service worker guarda só CSS, JS e ícones; páginas com dados sempre vêm da rede e, sem conexão, aparece "Sem conexão"; o cache troca a cada atualização (`sw.js?v=`, `PwaVersion`) e é apagado ao sair;
+- aviso "Instalar JUDOMA" no topo das telas logadas no celular (botão do navegador no Android, "Ver como" no iPhone; "×" esconde por 30 dias) e nova tela `/instalar-app` com os passos, no Mais do portal e do professor;
+- CSP com `manifest-src 'self'` e `worker-src 'self'`; sem migration; ADR-017; `PwaTest` novo.
+
 ## 2026-10-30 — Exames de graduação (etapa 1)
 
 - nova área Exames nos três níveis: associação (`/associacoes/{association}/exames`), dojo (`/operacao/dojos/{dojo}/exames`) e banca do professor (`/professor/exames`), com as permissões `exam.manage` e `exam.grade` (aplicadas pelo `db:seed`);
