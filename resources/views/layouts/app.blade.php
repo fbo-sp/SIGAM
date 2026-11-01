@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'JUDOMA')</title>
+    <meta name="theme-color" content="#43a9e8">
+    <meta name="apple-mobile-web-app-title" content="JUDOMA">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="judoma-sw" content="{{ asset('sw.js') }}?v={{ \App\Support\Pwa\PwaVersion::current() }}">
+    <link rel="manifest" href="{{ asset('manifest.json') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('icons/favicon-32.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('icons/apple-touch-icon.png') }}">
     <link rel="stylesheet" href="{{ asset('css/sigam.css') }}">
     <link rel="stylesheet" href="{{ asset('css/direct-registration.css') }}">
     <link rel="stylesheet" href="{{ asset('css/modules.css') }}">
@@ -37,7 +45,7 @@
                         <small>{{ ($currentAssociation ?? null)?->trade_name ? $currentAssociation->trade_name.' · ' : '' }}{{ $accountStudent ? 'Meus dados' : 'Minha conta' }}</small>
                     </span>
                 </a>
-                <form method="post" action="{{ route('logout') }}">
+                <form method="post" action="{{ route('logout') }}" data-pwa-logout>
                     @csrf
                     <button class="button button-secondary" type="submit">Sair</button>
                 </form>
@@ -47,6 +55,15 @@
 
     <main id="conteudo" class="page-shell">
         @if($teacherNav)@include('teacher.partials.tabbar')@endif
+        @auth
+            <aside class="pwa-banner" data-pwa-banner hidden aria-label="Instalar o app">
+                <img src="{{ asset('icons/icon-192.png') }}" alt="" width="48" height="48">
+                <div><strong>Instalar JUDOMA</strong><span>Abra como app.</span></div>
+                <button class="button button-primary" type="button" data-pwa-install hidden>Instalar</button>
+                <a class="button button-primary" href="{{ route('app.install') }}" data-pwa-howto>Ver como</a>
+                <button class="pwa-banner-close" type="button" data-pwa-dismiss aria-label="Agora não">×</button>
+            </aside>
+        @endauth
         @if(session('status'))
             <div class="alert alert-success" role="status">{{ session('status') }}</div>
         @endif

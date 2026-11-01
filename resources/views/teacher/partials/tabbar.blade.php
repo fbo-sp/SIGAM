@@ -21,6 +21,7 @@
 <a class="card portal-shortcut" href="{{ route('operation.index') }}">@include('portal.partials.icon', ['name' => 'historico'])<span>Meus dojos</span></a>
 <a class="card portal-shortcut" href="{{ route('notifications.index') }}">@include('portal.partials.icon', ['name' => 'avisos'])<span>Avisos</span></a>
 <a class="card portal-shortcut" href="{{ route('account.show') }}">@include('portal.partials.icon', ['name' => 'documentos'])<span>Minha conta e senha</span></a>
+<a class="card portal-shortcut" href="{{ route('app.install') }}">@include('portal.partials.icon', ['name' => 'app'])<span>Instalar o app</span></a>
 @if(app(\App\Services\Portal\PortalAccessService::class)->canEnter(auth()->user()))<a class="card portal-shortcut" href="{{ route('portal.index') }}">@include('portal.partials.icon', ['name' => 'dados'])<span>Meu portal</span></a>@endif
 </nav>
 @php($openChampionships = \App\Models\Championship::query()->where('association_id', auth()->user()->association_id)->where('status', 'open')->where('registration_close_at', '>=', now())->orderBy('start_date')->limit(5)->get())

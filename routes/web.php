@@ -78,6 +78,7 @@ Route::post('/convites/professor/{token}/recusar', [TeacherInvitationController:
 
 Route::middleware(['auth', 'active', 'association.context'])->group(function (): void {
     Route::get('/minha-conta', [AccountController::class, 'show'])->name('account.show');
+    Route::view('/instalar-app', 'app.install')->name('app.install');
     Route::put('/minha-conta/senha', [AccountController::class, 'updatePassword'])->middleware('throttle:5,1')->name('account.password.update');
     Route::get('/fotos/{person}/{size}', [PersonPhotoController::class, 'show'])->middleware('signed:relative')->name('people.photo');
     Route::get('/meus-dojos', [OperationalController::class, 'index'])->name('operation.index');
